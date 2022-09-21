@@ -1,0 +1,31 @@
+%reset -f
+from gshs_AS_20220917 import gshs
+import numpy as np
+SC = np.load('/home/wslvivek/Desktop/level2/Spyder/SC_numpy.npy')
+field = SC[0]
+quant = 'water' 
+grd = 'cell'
+n = 180 
+h = 0 
+jflag = 0
+
+
+a = a.T
+b = b.T
+
+
+
+gfilter = np.empty([97,1])
+from gaussian_5hk import gaussian
+gfilter = gaussian(96,175)
+
+shfil = np.empty([97,193])
+shfil[:,0:192] = gfilter*(np.array(field[:,0:192]))
+
+
+
+f = gshs(shfil,quant,grd,n,h,jflag)[0]
+
+f = f*1000
+
+

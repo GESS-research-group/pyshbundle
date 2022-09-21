@@ -1,0 +1,73 @@
+%reset -f
+from plm import plm
+import numpy as np
+l = np.array([np.arange(0,97,1)], dtype='longdouble')
+m = 0
+thetaRAD = np.array([0,0.25,0.5,0.75,1], dtype='longdouble')
+nargin = 3
+nargout = 1
+p = plm(l,m,thetaRAD,3,1)[:,:,0]
+
+import scipy.io
+plm_dict = {"plm": p}
+scipy.io.savemat('plm.mat', plm_dict)
+
+import scipy.io
+from gaussian_5hk import gaussian
+gg = gaussian(96,500)
+import scipy.io
+gg_dict = {"gg": gg}
+scipy.io.savemat('gg.mat', gg_dict)
+
+fg = np.load('/home/wslvivek/Desktop/level2/Spyder/SC_numpy.npy')
+ff = fg[0,:,:]
+ff_dict = {"ff": ff}
+scipy.io.savemat('ff.mat', ff_dict)
+
+shfil = np.zeros([97,193])
+for i in range(0,193,1):
+        shfil[:,i] = gg[:,0] * ff[:,i]
+import scipy.io
+shfil_dict = {"shfil": shfil}
+scipy.io.savemat('shfil.mat', shfil_dict)
+#####################################
+
+clear all
+close all
+clc
+
+l = 0:5;
+m = [1];
+thetaRAD = [0];
+p = plm(l,m,thetaRAD);
+load('\\wsl.localhost\Ubuntu\home\wslvivek\Desktop\level2\Spyder\rawSC.mat');
+load('\\wsl.localhost\Ubuntu\home\wslvivek\Desktop\level2\Spyder\mSC.mat');
+a(:,:) = mean(rawSC(27:86,:,:));
+SC(:,:) = rawSC(1,:,:);
+f = SC - a;
+g = gaussian(96,500);
+sfil(:,1:193) = g.*f(:,1:193);
+
+load('\\wsl.localhost\Ubuntu\home\wslvivek\Desktop\Downscaling_mini\plm.mat');
+load('\\wsl.localhost\Ubuntu\home\wslvivek\Desktop\Downscaling_mini\gg.mat');
+load('\\wsl.localhost\Ubuntu\home\wslvivek\Desktop\Downscaling_mini\ff.mat');
+load('\\wsl.localhost\Ubuntu\home\wslvivek\Desktop\Downscaling_mini\shfil.mat');
+
+dp = (plm-p);
+dg = (gg-g);
+df = (f-ff);
+dshfil = (shfil - sfil);
+
+
+
+####################################
+
+
+    if nargout == 1: return np.round(p,decimals =4)
+    if nargout == 2: return np.round(p,decimals =4),np.round(dp,decimals =4)
+    if nargout == 3: return np.round(p,decimals =4),np.round(dp,decimals =4),np.round(ddp,decimals =4)
+
+
+    if nargout == 1: return np.double(p)
+    if nargout == 2: return np.double(p),return np.double(dp)
+    if nargout == 3: return np.double(p),return np.double(dp),return np.double(ddp)
