@@ -94,10 +94,15 @@ Use the other code for debug for now
 ##f = SC[0]
 #f = f1['f'][0]
 '''
-#import scipy.io
-#f1 = scipy.io.loadmat('/home/bramha/Desktop/5hk/Papers/01_IISc/Bramha/Data_Nature/Downscaling_implementation_scripts/Rb_GDDC_gsha_20220826.mat')
-#f = f1['Rb']
 
+'''
+import scipy.io
+f1 = scipy.io.loadmat('/home/bramha/Desktop/5hk/Papers/01_IISc/Bramha/Data_Nature/Downscaling_implementation_scripts/Rb_GDDC_gsha_20220826.mat')
+f = f1['Rb']
+method = 'mean'
+grid = None
+lmax = 720/2
+'''
 
 def gsha(f, method, grid = None, lmax = -9999):
     rows, cols = f.shape
@@ -339,7 +344,7 @@ def gsha(f, method, grid = None, lmax = -9999):
         
     #Double check steps here
     slm = np.fliplr(slm)
-    cs = sc2cs(np.concatenate((slm[:, np.arange(L)], clm), axis = 1), dtype='longdouble')
+    cs = sc2cs(np.concatenate((slm[:, np.arange(L)], clm), axis = 1))
     cs = cs[:int(lmax+1), :int(lmax+1)]
     return cs
     
