@@ -240,7 +240,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     
     
     if np.remainder(n,lmax) == 0:               #Case without zero-padding
-        b[:,abcols-1] = np.zeros(nlat)
+        b[:,int(abcols-1)] = np.zeros(nlat)
     
     #Code for ispec
 #    '''
