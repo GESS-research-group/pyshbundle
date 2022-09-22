@@ -163,7 +163,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     l = np.arange(0, lmax+1)
     transf = np.array([eigengrav(lmax, quant, h)]).T
     
-    field = field * np.matmul(transf, np.ones((1, 2*lmax+1)), dtype='longdouble')
+    field = field * np.matmul(transf[0], np.ones((1, 2*lmax+1)), dtype='longdouble') 
     
     
     '''
