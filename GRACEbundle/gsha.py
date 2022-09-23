@@ -97,10 +97,10 @@ Use the other code for debug for now
 
 '''
 import scipy.io
-f1 = scipy.io.loadmat('/home/bramha/Desktop/5hk/Papers/01_IISc/Bramha/Data_Nature/Downscaling_implementation_scripts/Rb_GDDC_gsha_20220826.mat')
+f1 = scipy.io.loadmat('/home/bramha/Desktop/5hk/Papers/01_IISc/Bramha/Data_Nature/Downscaling_implementation_scripts/Rb_GDDC_gsha_20220826.mat', mat_dtype= 1)
 f = f1['Rb']
 method = 'mean'
-grid = None
+grid = 'block'
 lmax = 720/2
 '''
 
@@ -346,5 +346,9 @@ def gsha(f, method, grid = None, lmax = -9999):
     slm = np.fliplr(slm)
     cs = sc2cs(np.concatenate((slm[:, np.arange(L)], clm), axis = 1))
     cs = cs[:int(lmax+1), :int(lmax+1)]
+    
+    '''
+    np.save('/mnt/Data/5hk/Project_STC/Mat2Py/mat2py/test/gddc_csRb_r0/csRb_20220922a.npy',cs)
+    '''
     return cs
     

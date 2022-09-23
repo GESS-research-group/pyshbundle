@@ -45,6 +45,11 @@ GRACE_sh = scipy.io.loadmat('/home/bramha/Desktop/5hk/Papers/01_IISc/Bramha/Data
 field1 = GRACE_sh["GRACE_SH"]
 field = field1.T[2][0]
 F = field1
+cf = 3
+GaussianR = 400
+
+example_data = scipy.io.loadmat('/home/bramha/Desktop/5hk/Papers/01_IISc/Bramha/Data_Nature/example_data.mat')
+basins = example_data["mask_10_catchments"]
 '''
 
     
@@ -136,7 +141,7 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
         #Code checked till here on July 15; looks ok till here; need gshs to be converted before we can proceed
         #Code checked till here on Aug 26, 2022; for l == cfield and flag_cs == 0, the code is working well.
             
-            fFld__, _, _ = gshs(Ft * filter_, qty, 'cell', int(180/deg), 0, 0) #This line shows error 2022-08-29
+            fFld__, _, _ = gshs(Ft * filter_, qty, 'cell', int(180/deg), 0, 0) #This line shows error 2022-08-29 #Resolved on 2022-09-22
             ffFld__, _, _ = gshs((Ft * filter_ * filter_), qty, 'cell', int(180/deg), 0, 0)
             
             if m == 0:
@@ -173,7 +178,7 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
     leakager = np.zeros([r, cid])   
     
     
-    
+    #gshs not working in this loop 2022-09-22
     for rbasin in range(0, cid):
         #Get the basin functions ready
     #Start timer to be added later, if required
@@ -182,13 +187,13 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
         Rb = basins[rbasin][0] #looks good; double check later 2022-08-23
         csRb = gsha(Rb, 'mean', 'block', long/2)
         csF = cs2sc(csRb[0:l, 0:l]) #seems to be working 2022-08-23
-        filRb_ = gshs(csF * filter_, 'none', 'cell', int(long/2), 0, 0)
+        filRb_ = gshs(csF * filter_, 'none', 'cell', int(long/2), 0, 0) #This line not working 2022-09-22
         filRb = filRb_[0]
         kappa = (1-Rb) * filRb
     
     
-        fF = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype = float)
-        ffF = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype = float)
+        fF = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble')
+        ffF = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble')
         
         fF = np.concatenate((fFld[:,:,int(fF.shape[2]/2):], fFld[:,:,:int(fF.shape[2]/2)]), axis=2)
         ffF = np.concatenate((ffFld[:,:,int(ffF.shape[2]/2):], ffFld[:,:,:int(ffF.shape[2]/2)]), axis=2)
@@ -222,8 +227,12 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
                 #Deviation integral timeseries
                 bfDevRegAv[m][rbasin] = np.sum(np.sum(fF * Rb - FilteredTS[m][rbasin]) * filRb * Area) / np.sum(Rb * Area)
                 bbfDevRegAv[m][rbasin] = np.sum(np.sum(ffF * Rb - filfilts[m][rbasin]) * filRb * Area) / np.sum(Rb * Area)
+                
+                
         #End of time, if required
     #Looks to be working till here; bar gsha script 2022-08-23
+    #Looks to be working till here; needs to crosscheck with matlab codes 2022-09-22
+    #Double-check np.nan lines 2022-09-22
     
     
     b = list()
@@ -232,7 +241,7 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
         # A = np.ones([r,1]), naninterp(bbfDevRegAv[:, i]) #This line needs to be reconfigured to generate a 60*2 array 2022-09-06
         
         A = np.ones([60,2])
-        A[:,1] = naninterp(bbfDevRegAv[:, i])
+        A[:,1] = naninterp(bbfDevRegAv[:, i]) #Pchip interpolate should contain atleast two elements
         
         lssol_ = sc.linalg.lstsq(A, naninterp(bbfDevRegAv[:, i])) #returns a tuple of solution "x", residue and rank of matrix A; for A x = B
         lssol = lssol_[0]
