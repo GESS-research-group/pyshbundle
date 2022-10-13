@@ -248,8 +248,8 @@ def gsha(f, method, grid = None, lmax = -9999):
             
             p = plm(l,m,theRAD, 3,1)
             p = p[:,:,0]
-            ai = a[:,m+1]
-            bi = b[:,m+1]
+            ai = a[:,m]
+            bi = b[:,m]
             
             clm[m+1:L+2, m+1] = linalg.lstsq(p, ai)
             slm[m+1:L+2, m+1] = linalg.lstsq(p, bi)
@@ -282,8 +282,8 @@ def gsha(f, method, grid = None, lmax = -9999):
             
             p = plm(l,m,theRAD, 3,1)
             
-            ai = a[:,m+1]
-            bi = b[:,m+1]
+            ai = a[:,m]
+            bi = b[:,m]
                         
             clm[m:L+1, m] = (1 + (m==0))/ 4 * p.T @ (si * ai)
             slm[m:L+1, m] = (1 + (m==0))/ 4 * p.T @ (si * bi)
@@ -297,8 +297,8 @@ def gsha(f, method, grid = None, lmax = -9999):
             
             p = plm(l,m,theRAD, 3,1)
             
-            ai = a[:,m+1]
-            bi = b[:,m+1]
+            ai = a[:,m]
+            bi = b[:,m]
                         
             clm[m:L+1, m] = (1 + (m==0))/ 4 * p.T @ (w * ai)
             slm[m:L+1, m] = (1 + (m==0))/ 4 * p.T @ (w * bi)
@@ -310,8 +310,8 @@ def gsha(f, method, grid = None, lmax = -9999):
             
             p = plm(l,m,theRAD, 3,1)
             
-            ai = a[:,m+1]
-            bi = b[:,m+1]
+            ai = a[:,m]
+            bi = b[:,m]
             
             clm[m:L+1, m] = (1 + (m==0))/ 4 * p.T @ (gw * ai)
             slm[m:L+1, m] = (1 + (m==0))/ 4 * p.T @ (gw * bi)
