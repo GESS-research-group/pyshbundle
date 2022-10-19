@@ -45,6 +45,7 @@ GRACE_sh = scipy.io.loadmat('/home/bramha/Desktop/5hk/Papers/01_IISc/Bramha/Data
 field1 = GRACE_sh["GRACE_SH"]
 field = field1.T[2][0]
 F = field1
+#F = GRACE_sh
 cf = 3
 GaussianR = 400
 
@@ -134,19 +135,21 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
     if l == cfield:
         for m in range(r):
             if flag_cs == 0:
-                Ft = cs2sc(f[m][0]) #In matlab, cs2sc is defined with 2 params; the second optional parameter being backval; not considered in the python script
+                Ft = cs2sc(f[m][0]).astype('longdouble') #In matlab, cs2sc is defined with 2 params; the second optional parameter being backval; not considered in the python script
             else:
-                Ft = f[m][0] #In matlab F[m][cf] is the definition; double check conversion in case of error
+                Ft = f[m][0].astype('longdouble') #In matlab F[m][cf] is the definition; double check conversion in case of error
                 
         #Code checked till here on July 15; looks ok till here; need gshs to be converted before we can proceed
         #Code checked till here on Aug 26, 2022; for l == cfield and flag_cs == 0, the code is working well.
             
-            fFld__, _, _ = gshs(Ft * filter_, qty, 'cell', int(180/deg), 0, 0) #This line shows error 2022-08-29 #Resolved on 2022-09-22
+            fFld__, _, _ = gshs(Ft * filter_, qty, 'cell', int(180/deg), 0, 0) 
             ffFld__, _, _ = gshs((Ft * filter_ * filter_), qty, 'cell', int(180/deg), 0, 0)
             
             if m == 0:
-                fFld = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype = float)
-                ffFld = np.zeros((r, ffFld__.shape[0], ffFld__.shape[1]), dtype = float)
+                fFld = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble') #Value not matching with matlab; datatype changed to longdouble 2022-10-17
+                ffFld = np.zeros((r, ffFld__.shape[0], ffFld__.shape[1]), dtype = 'longdouble')
+                # fFld = np.zeros((r), dtype = 'longdouble') #Value not matching with matlab; datatype changed to longdouble 2022-10-17
+                # ffFld = np.zeros((r), dtype = 'longdouble')
             fFld[m] = fFld__
             ffFld[m] = ffFld__
             
@@ -160,43 +163,47 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
         
     #Declaration of size of the vectors:
     cid = len(basins) #Here basins is a dictionary with each element storing nd array
-    tsleaktotalf = np.zeros([r, cid])
-    tsleaktotalff = np.zeros([r, cid])
+    tsleaktotalf = np.zeros([r, cid], dtype = 'longdouble')
+    tsleaktotalff = np.zeros([r, cid], dtype = 'longdouble')
     
-    ftsleaktotal = np.zeros([r, cid])
-    fftsleaktotal = np.zeros([r, cid])
+    ftsleaktotal = np.zeros([r, cid], dtype = 'longdouble')
+    fftsleaktotal = np.zeros([r, cid], dtype = 'longdouble')
     
-    lhat = np.zeros([r, cid])
+    lhat = np.zeros([r, cid], dtype = 'longdouble')
     
-    bfDevRegAv = np.zeros([r, cid])
-    bbfDevRegAv = np.zeros([r, cid])
+    bfDevRegAv = np.zeros([r, cid], dtype = 'longdouble')
+    bbfDevRegAv = np.zeros([r, cid], dtype = 'longdouble')
 
-    FilteredTS = np.zeros([r, cid])
-    filfilts = np.zeros([r, cid])
+    FilteredTS = np.zeros([r, cid], dtype = 'longdouble')
+    filfilts = np.zeros([r, cid], dtype = 'longdouble')
 
-    leakage = np.zeros([r, cid])
-    leakager = np.zeros([r, cid])   
+    leakage = np.zeros([r, cid], dtype = 'longdouble')
+    leakager = np.zeros([r, cid], dtype = 'longdouble')   
+    
+    
     
     
     #gshs not working in this loop 2022-09-22
+    # fF = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble')
+    # ffF = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble')
+    
+    # fF = np.concatenate((fFld[:,:,int(fF.shape[2]/2):], fFld[:,:,:int(fF.shape[2]/2)]), axis=2)
+    # ffF = np.concatenate((ffFld[:,:,int(ffF.shape[2]/2):], ffFld[:,:,:int(ffF.shape[2]/2)]), axis=2)
+    
     for rbasin in range(0, cid):
         #Get the basin functions ready
     #Start timer to be added later, if required
     
     #Basin functions, filtered basin function and transfer function Kappa
         Rb = basins[rbasin][0] #looks good; double check later 2022-08-23
-        csRb = gsha(Rb, 'mean', 'block', long/2)
+        csRb = gsha(Rb, 'mean', 'block', long/2) #csRb values not matching with csRb in matlab 2022-10-17
         csF = cs2sc(csRb[0:l, 0:l]) #seems to be working 2022-08-23
         filRb_ = gshs(csF * filter_, 'none', 'cell', int(long/2), 0, 0) #This line not working 2022-09-22
         filRb = filRb_[0]
         kappa = (1-Rb) * filRb
     
     
-        fF = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble')
-        ffF = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble')
         
-        fF = np.concatenate((fFld[:,:,int(fF.shape[2]/2):], fFld[:,:,:int(fF.shape[2]/2)]), axis=2)
-        ffF = np.concatenate((ffFld[:,:,int(ffF.shape[2]/2):], ffFld[:,:,:int(ffF.shape[2]/2)]), axis=2)
         
     #Checked till here on 2022-08-23; everything above seems to work fine; csRb requires gsha; gsha not yet coded
     #Checked till here on 2022-08-29; looks to be working good
@@ -204,8 +211,13 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
         for m in range(0,r):
 #            fF  = fFld[m][0][:, 360:], fFld[m][0][:, 0:360]
 #            ffF = ffFld[m][0][:, 360:], ffFld[m][0][:, 0:360]
-        
-            if np.isnan(fF[:20,:20]).all(): #if there is a gap in time series, fill it with NaNs; logic looks to be working
+            fF = np.zeros((fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble')
+            ffF = np.zeros((fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble')
+            
+            fF = np.concatenate((fFld[m,:,int(fF.shape[1]/2):], fFld[m,:,:int(fF.shape[1]/2)]), axis=1)
+            ffF = np.concatenate((ffFld[m,:,int(ffF.shape[1]/2):], ffFld[m,:,:int(ffF.shape[1]/2)]), axis=1)
+            #if False:    
+            if np.isnan(fF[:20,:20]).any(): #if there is a gap in time series, fill it with NaNs; logic looks to be working
                                                 #maybe the logic is not working afterall; should items be selectively nan? Pls doublecheck 2022-08-29
 #                m, rbasin = np.nan
                 tsleaktotalf[m][rbasin] = np.nan
@@ -259,6 +271,7 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
     devint = bfDevRegAv * multp
     multp = npm.repmat(bl, r, 1)
     leakLS = tsleaktotalf * multp
+    #Checked till here 2022-10-13 needs some debugging above as well
     
     ps = Phase_calc(tsleaktotalf,tsleaktotalff)
     #Checked till here on 2022-09-06

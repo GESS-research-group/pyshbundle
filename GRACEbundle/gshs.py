@@ -92,8 +92,8 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     import numpy as np
     from os import chdir, getcwd
     
-    wd = getcwd()
-    chdir(wd)
+    # wd = getcwd()
+    # chdir(wd)
 
     from cs2sc import cs2sc
     from normalklm import normalklm
@@ -161,9 +161,9 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
         field = field - cs2sc(normalklm(lmax+1))
         
     l = np.arange(0, lmax+1)
-    transf = np.array([eigengrav(lmax, quant, h)]).T
+    transf = np.array([eigengrav(lmax, quant, h)], dtype='longdouble').T
     
-    field = field * np.matmul(transf[0], np.ones((1, 2*lmax+1)), dtype='longdouble') 
+    field = field * np.matmul(transf, np.ones((1, 2*lmax+1), dtype = 'longdouble'), dtype='longdouble') #removed transf[0] 20221019
     
     
     '''
@@ -228,7 +228,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     
     
     
-    #This code has not yet been converted
+
     if grd =='block' or grd == 'cell': 
       m      = np.arange(0,abcols,1)
       cshift = np.array([np.ones(nlat)], dtype='longdouble').T * np.array([np.cos(m*np.pi/2/n)], dtype='longdouble');	# cshift/sshift describe the 
