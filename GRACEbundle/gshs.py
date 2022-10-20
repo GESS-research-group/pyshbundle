@@ -191,7 +191,10 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     '''
     
     m = 0
-    c = field[m:lmax+1, lmax+m] 
+    if len(field.shape) == 3: #handle cases where field is a tuple
+        c = field[0,m:lmax+1, lmax+m] 
+    else:
+        c = field[m:lmax+1, lmax+m] 
     l = np.array([np.arange(m,lmax+1)])
     p = plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
     a[:, m] = np.dot(p,c) 
@@ -206,8 +209,12 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     '''
     
     for m in range(1,lmax+1,1):
-        c = field[m:lmax+1,lmax+m]
-        s = field[m:lmax+1,lmax-m]
+        if len(field.shape) == 3:
+            c = field[0,m:lmax+1,lmax+m]
+            s = field[0,m:lmax+1,lmax-m]
+        else:
+            c = field[m:lmax+1,lmax+m]
+            s = field[m:lmax+1,lmax-m]
         
         l = np.array([np.arange(m,lmax+1)])
         p = plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
