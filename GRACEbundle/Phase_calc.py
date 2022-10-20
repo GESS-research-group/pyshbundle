@@ -18,21 +18,33 @@ Created on Thu Jul 14 09:10:27 2022
 
 def Phase_calc(fts, ffts):
     import scipy as sc
+    from scipy import signal as signal
     import numpy as np
     
     c = fts.shape[1]
     
     ps = np.zeros((1, c))
     
-    fts = fts[-np.isnan(fts), :] #Extract values and leave Nan
-    ffts = ffts[-np.isnan(ffts), :] #Extract values and leave Nan
+    filter_ = ~np.isnan(fts)
+    filter__ = ~np.isnan(ffts)
+    
+    fts_ = fts[filter_] #Extract values and leave Nan
+    ffts_ = ffts[filter__] #Extract values and leave Nan
+    
+    fts = fts_.reshape(int(fts_.shape[0]/c),c)
+    ffts = ffts_.reshape(int(ffts_.shape[0]/c),c)
     
     rn = fts.shape[0]
     
     for i in range(c):
-        A = np.ones(rn,1), np.real(sc.signal.hilbert(ffts[:, i])), np.imag(sc.signal.hilbert(ffts[:, i])) #design matrix
+        # A = np.concatenate(np.ones((rn,1)), np.real(signal.hilbert(ffts[:, i])), np.imag(signal.hilbert(ffts[:, i]))) #design matrix
         
-        abc = np.linalg.lstsq(A.T * A, A.T * fts[:i])
+        A = np.array((np.ones((rn)), np.real(signal.hilbert(ffts[:, i])), np.imag(signal.hilbert(ffts[:, i])))).T
         
-        ps[i] = np.atan2(abc[3-1,1-1],abc[2-1,1-1])*(180/pi) #check indices and degree/radian
+        A = A.astype('double')
+        B = fts[:,i]
+        B = B.astype('double')
+        abc = np.linalg.lstsq(A.T @ A, A.T @ B)[0]
+        
+        ps[0,i] = np.arctan2(abc[3-1],abc[2-1])*(180/np.pi) #check indices and degree/radian
     return ps
