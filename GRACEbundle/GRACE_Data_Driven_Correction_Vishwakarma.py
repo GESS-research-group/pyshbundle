@@ -159,7 +159,7 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
         raise Exception("enter CS coefficients")
         
 #        Checked till here on Aug 22, 2022 12.15pm
-        
+#Working till here 2022-10-19 16.00pm
         
     #Declaration of size of the vectors:
     cid = len(basins) #Here basins is a dictionary with each element storing nd array
@@ -198,7 +198,7 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
         Rb = basins[rbasin][0] #looks good; double check later 2022-08-23
         csRb = gsha(Rb, 'mean', 'block', long/2) #csRb values not matching with csRb in matlab 2022-10-17
         csF = cs2sc(csRb[0:l, 0:l]) #seems to be working 2022-08-23
-        filRb_ = gshs(csF * filter_, 'none', 'cell', int(long/2), 0, 0) #This line not working 2022-09-22
+        filRb_ = gshs(csF * filter_, 'none', 'cell', int(long/2), 0, 0) #This line not working 2022-09-22 2022-10-19
         filRb = filRb_[0]
         kappa = (1-Rb) * filRb
     
@@ -208,11 +208,12 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
     #Checked till here on 2022-08-23; everything above seems to work fine; csRb requires gsha; gsha not yet coded
     #Checked till here on 2022-08-29; looks to be working good
         #Please double check how the nan definitions are being enforced ~5hk 2022-08-30
+        fF = np.zeros((fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble')
+        ffF = np.zeros((fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble')
         for m in range(0,r):
 #            fF  = fFld[m][0][:, 360:], fFld[m][0][:, 0:360]
 #            ffF = ffFld[m][0][:, 360:], ffFld[m][0][:, 0:360]
-            fF = np.zeros((fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble')
-            ffF = np.zeros((fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble')
+            
             
             fF = np.concatenate((fFld[m,:,int(fF.shape[1]/2):], fFld[m,:,:int(fF.shape[1]/2)]), axis=1)
             ffF = np.concatenate((ffFld[m,:,int(ffF.shape[1]/2):], ffFld[m,:,:int(ffF.shape[1]/2)]), axis=1)
@@ -237,14 +238,13 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
                 filfilts[m][rbasin] = np.sum(ffF * Rb * Area) / np.sum(Rb * Area)
                 
                 #Deviation integral timeseries
-                bfDevRegAv[m][rbasin] = np.sum(np.sum(fF * Rb - FilteredTS[m][rbasin]) * filRb * Area) / np.sum(Rb * Area)
-                bbfDevRegAv[m][rbasin] = np.sum(np.sum(ffF * Rb - filfilts[m][rbasin]) * filRb * Area) / np.sum(Rb * Area)
+                bfDevRegAv[m][rbasin] = np.sum((fF * Rb - FilteredTS[m][rbasin]) * filRb * Area) / np.sum(Rb * Area) #working 2022-10-20
+                bbfDevRegAv[m][rbasin] = np.sum((ffF * Rb - filfilts[m][rbasin]) * filRb * Area) / np.sum(Rb * Area)
+                print(m)
                 
                 
-        #End of time, if required
-    #Looks to be working till here; bar gsha script 2022-08-23
-    #Looks to be working till here; needs to crosscheck with matlab codes 2022-09-22
-    #Double-check np.nan lines 2022-09-22
+       #bfDevRegAv and bbfDevRegAv working as required 2022-10-20 12pm
+       #Code working till here as required 2022-10-20 12pm
     
     
     b = list()
@@ -255,8 +255,8 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
         A = np.ones([60,2])
         A[:,1] = naninterp(bbfDevRegAv[:, i]) #Pchip interpolate should contain atleast two elements
         
-        lssol_ = sc.linalg.lstsq(A, naninterp(bbfDevRegAv[:, i])) #returns a tuple of solution "x", residue and rank of matrix A; for A x = B
-        lssol = lssol_[0]
+        lssol_ = sc.linalg.lstsq(A, naninterp(bfDevRegAv[:, i])) #returns a tuple of solution "x", residue and rank of matrix A; for A x = B
+        lssol = lssol_[0] 
         
         b.append(lssol[2-1])
         
@@ -266,26 +266,28 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
         lssol_ = sc.linalg.lstsq(A, naninterp(tsleaktotalf[:, i])) #returns a tuple of solution "x", residue and rank of matrix A; for A x = B
         lssol = lssol_[0]
         bl.append(lssol[2-1])
+        #Working till here 2022-10-21 1530pm
     
-    multp = npm.repmat(b, r, 1)
+    multp = npm.repmat(b, r, 1) 
     devint = bfDevRegAv * multp
     multp = npm.repmat(bl, r, 1)
     leakLS = tsleaktotalf * multp
-    #Checked till here 2022-10-13 needs some debugging above as well
+    #Checked till here 2022-10-21 looks to be working well
     
     ps = Phase_calc(tsleaktotalf,tsleaktotalff)
-    #Checked till here on 2022-09-06
-    #Till line 95 (matlab), matlab values were imported from file '/home/bramha/Desktop/5hk/Papers/01_IISc/Bramha/Data_Nature/Downscaling_implementation_scripts/GDDC_run_line95_20220902.mat'
-    #Double check everything after gsha and gshs are fixed
-    #Further, double check Phase_calc using values from matlab as input in the Phase_calc code
+    #Checked till here on 2022-10-20; phase_calc gives nearly same values between matlab and python
+    #Checked till here on 2022-10-21; phase_calc gives nearly same values between matlab and python
     
+    
+    #Compute the near true leakage
+    #Check here tomorrow 2022-10-20
     for i in range(0, cid):   
         ftsleaktotal[:,i] = naninterp(tsleaktotalf[:,i]) #Replaces gaps (NaN values) with an itnerpolated value in the leakage time series from once filtered fields
         fftsleaktotal[:,i] = naninterp(tsleaktotalff[:,i]) #replace the gaps (NaN values) with an interpolated value in leakage time series from twice filtered fields
         
-        X = sc.fft.fft(ftsleaktotal[:i].T) #take fast Fourier transform
-        p = -ps[i] / r #compute the fraction of the time period by which the time series is to be shiftes
-        Y = np.exp(li * np.pi * p * ((np.arange(r)) - r/2) / r) #compute the Conjugate-Symmetric shift
+        X = sc.fft.fft(ftsleaktotal[:,i]) #take fast Fourier transform #check shape of X 2022-10-21
+        p = -ps[0,i] / r #compute the fraction of the time period by which the time series is to be shiftes
+        Y = np.exp(1j * np.pi * p * ((np.arange(r)) - r/2) / r) #compute the Conjugate-Symmetric shift #Working 2022-10-21
         Z = X * Y #Apply the shift
         
         a = sc.fft.ifft(Z) #apply inverse fft
@@ -296,12 +298,12 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
         
         z = s/2
         
-        leakage[:i] = z #shifted timeseries
+        leakage[:,i] = z #shifted timeseries
         
         
         #Shift timeseriecs from once filtered fields in the direction of the time series from twice filtered fields, to later compute the amplitude ratio
-        p = ps[i] / r #Fraction of a time period to shift data
-        Y = np.exp(li * np.pi * p * ((np.arange(r)) - r/2) / r) #compute the Conjugate-Symmetric shift
+        p = ps[0,i] / r #Fraction of a time period to shift data
+        Y = np.exp(1j * np.pi * p * ((np.arange(r)) - r/2) / r) #compute the Conjugate-Symmetric shift
         Z = X * Y
         
         a = sc.fft.ifft(Z) #apply inverse fft
@@ -312,21 +314,19 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
         
         z = s/2
         
-        leakage[:i] = z #shifted timeseries
-        
+        leakager[:,i] = z #shifted timeseries
+        #Working till here 2022-10-21
     
     
     #compute the ratio between the amplitude of the shifted leakage from once filtered fields and leakage from twice filtered fields
     rfn=leakage/fftsleaktotal
     rfn[(rfn)>=2] = 1
     rfn[(rfn)<=-2] = -1
-    rfn = np.sum(np.absabs(rfn))
+    rfn = np.sum(np.abs(rfn), axis = 0)
     rfn=rfn/r # amplitude ratio
     
     
-    for i in range(r):
-        lhat[i,:] = leakager[i,:] #apply the amplitude ratio to the shifted leakage timeseries from the once filtered fields to get the near true leakage
-    
+    lhat = leakager * rfn #apply the amplitude ratio to the shifted leakage timeseries from the once filtered fields to get the near true leakage
     lhat[np.isnan(FilteredTS)] = np.nan #reintroduce nan for data gaps
     leakLS[np.isnan(FilteredTS)] = np.nan
     RecoveredTWS = FilteredTS - leakLS - devint
