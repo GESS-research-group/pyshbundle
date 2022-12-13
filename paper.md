@@ -1,5 +1,5 @@
 ---
-title: 'Gala: A Python package for galactic dynamics'
+title: 'PySHbundle: A Python implementation of MATLAB codes SHbundle'
 tags:
   - Python
   - astronomy
