@@ -1,6 +1,6 @@
 # PySHbundle <br>
 
-##How to install <br>
+## How to install <br>
 We recommend using Mamba to install required packages <br>
 `conda create pysh` <br>
 `conda activate pysh` <br>
