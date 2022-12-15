@@ -1,7 +1,7 @@
-# PySHbundle
+# PySHbundle <br>
 
-##How to install
-We recommend using Mamba to install required packages
+##How to install <br>
+We recommend using Mamba to install required packages <br>
 `conda create pysh` <br>
 `conda activate pysh` <br>
 `conda install -c conda-forge mamba` <br>
