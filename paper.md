@@ -32,63 +32,60 @@ aas-journal:
 
 # Summary
 
-This is the summary
+This is the summary - to be included later.
 
 # Introduction
 
-GRACE stands for the Gravity Recovery and Climate Experiment, a joint satellite mission by NASA, the National Aeronautics and Space Administration and DLR, the German Aerospace Center. Basic stats: (do I need to add reference links?)
+GRACE stands for the Gravity Recovery and Climate Experiment, a joint satellite mission by NASA, the National Aeronautics and Space Administration and DLR, the German Aerospace Center. 
 
-| Parameter        |    Answer      | 
+| Parameter        |    Details      | 
 | -------------    |:--------------:| 
 | Start of Mission | 17 March 2002  | 
 | End of Mission   | 27 October 2017| 
 | Inclination      | 89.0°          | 
 | Period           | 94.5 minutes   |  
 
-The operating principle is as follows: 
-GRACE has a successor, GRACE-FO, which was successfully launched on 22 May 2018. 
+GRACE consists of two identical satellites orbiting around the earth on the same orbital path. The basic principal of the GRACE satellite operation consists of the monitoring of the intersatellite distance between the twin satellites. When the satellite system comes across a mass anomaly, each satellite accelerates or decelerates with a phase lag and the intersatellite distance changes. This change in intersatellite distance is later processed to obtain the magnitude of the mass anamoly. When it comes to the continental land surface, the hydrological processes consist of a major component of the mass anamoly over it. Thus, after making necessary post-processing and substracting different mass anomaly components, such as atmospheric changes, etc, the `total water storage anomaly` (`TWSA`) component can be estimated. The `TWSA` is the sum of the total water components over a vertical extention of the grid area through the earth. Conventionally, it is represented in terms of the `equivalent water height` (`m`)<br>
+GRACE has a successor, GRACE-FO, which was successfully launched on 22 May 2018.<br>
 
-References: <br>
-1. 
-2. 
-3. 
+`To be included:` Some descriptions on the GRACE data products - L1, L2, mascons, etc. GRACE data access sources - JPL, CSR, etc. Some descriptions of GRACE L2 data formats, `cs` and `sc` format, and reference to codes `cs2sc` and `sc2cs`.<br>
 
 # Statement of need
-
-This is the statement of need. Python enables wrapping low-level languages (e.g., C) for speed without losing
-flexibility or ease-of-use in the user-interface. The API for `Gala` was
-designed to provide a class-based and user-friendly interface to fast (C or
-Cython-optimized) implementations of common operations such as gravitational
-potential and force evaluation, orbit integration, dynamical transformations,
-and chaos indicators for nonlinear dynamics. `Gala` also relies heavily on and
-interfaces well with the implementations of physical units and astronomical
-coordinate systems in the `Astropy` package [@astropy] (`astropy.units` and
-`astropy.coordinates`).
-
-`Gala` was designed to be used by both astronomical researchers and by
-students in courses on gravitational dynamics or astronomy. It has already been
-used in a number of scientific publications [@Pearson:2017] and has also been
-used in graduate courses on Galactic dynamics to, e.g., provide interactive
-visualizations of textbook material [@Binney:2008]. The combination of speed,
-design, and support for Astropy functionality in `Gala` will enable exciting
-scientific explorations of forthcoming data releases from the *Gaia* mission
-[@gaia] by students and experts alike.
+A MATLAB code bundle already exists called `SHbundle` developed by `@Sneew:2018` and distributed under the GNU license. The code bundle can be freely used and modified by anyone giving proper credit to the original developers. However, MATLAB being a proprietary software may have some limitations in terms of accessibility. On the other hand, a strong community of programmers also exists for Python, an open-source programming language. In this contribution, we have translated the MATLAB codes from the SHbundle into the Python programming language.<br>
+It is hoped the contribution will make GRACE L2 data processing more accessible to a wider audience of programmers. Our python package is titled `PySHbundle` and the working code can be accessed in GitHub : [https://github.com/mn5hk/pyshbundle](https://github.com/mn5hk/pyshbundle)
 
 # Methodology
 
-We have implemented the matlab codes `SHbundle` into the python programming language. More details on the `SHbundle` package may be refered to at `@Sneew:2018`. The naming of the modules and the workflow between the modules has been preserved as much as possible in the `PySHbundle` python implementation. This is to ensure smooth communication between user communitities of the two packages and/or the two different programming language communities. Further, our results have been tested using the `SHbundle` implementation results as the validation data.
+We have implemented the matlab codes `SHbundle` into the python programming language. More details on the `SHbundle` package may be refered to at `@Sneew:2018`. The naming of the modules and the workflow between the modules has been preserved as much as possible in the `PySHbundle` python implementation. This is to ensure smooth communication between user communitities of the two packages and/or the two different programming language communities. Further, our code has been tested using the `SHbundle` implementation results for validation.
 
 # Implementation
 A schematic diagram of the code workflow is presented in the figure below. <br>
+![Schematic diagram of code workflow.\label{fig:code_workflow}](pic\flowchart_draft_20221227.png)<br>
+<i>Fig 01: Schematic Diagram of the Code Workflow</i><br>
 
-The key module for the package is the `gsha.py` module. This module inputs the GRACE L2 spherical harmonic coefficients and performs the `GRACE Spherical Harmonics Analysis (GSHA)` algorithm. The algorithm converts the input L2 spherical harmonic coefficients into gridded values at the user-desired grid resolution. An inverse module is also provided, called the `gshs.py` module. This module performs the `GRACE Spherical Harmonics Synthesis (GSHS)` algorithm. The algorithm converts the gridded total water storage anomaly (TWSA) values into the GRACE L2 spherical harmonics coefficients.<br>
+The key module for the package is the `gsha.py` module. This module inputs the GRACE L2 spherical harmonic coefficients and performs the `GRACE Spherical Harmonics Analysis (GSHA)` algorithm. The algorithm converts the input L2 spherical harmonic coefficients into gridded values at the user-desired grid resolution. An inverse module is also provided, called the `gshs.py` module. This module performs the `GRACE Spherical Harmonics Synthesis (GSHS)` algorithm. The algorithm converts the gridded `TWSA` values into the GRACE L2 spherical harmonics coefficients.<br>
 
-An important part of the `GSHS` algorithm implementation is the implementation of the `PLM` algorithm, as shown in the following figure. The `PLM` algorithm inputs degree, order and co-latitude values and computes the Legendre functions. The `plm.py` module can also provide the first and second derivatives of the Legendre functions. The implementation of the integrals of the Legendre functions is also done; this is available through the `iplm.py` module. `IPLM` inputs the degree, order and colatitude, and returns the integrated Legendre functions.<br>
+An important part of the `GSHS` algorithm implementation is the implementation of the `PLM` algorithm, as shown in the following figure \autoref{fig:code_workflow}. The `PLM` algorithm inputs degree, order and co-latitude values and computes the Legendre functions. The `plm.py` module can also provide the first and second derivatives of the Legendre functions. The implementation of the integrals of the Legendre functions is also done; this is available through the `iplm.py` module. `IPLM` inputs the degree, order and co-latitude, and returns the integrated Legendre functions.<br>
 
-Briefly also describe `eigengrav.py` here.<br>
+Some important modules for the spherical harmonic synthesis step are `normalklm`, `eigengrav`, and `ispec`. `normalklm.py` returns the hydrostatic equilibrium ellipsoid for the earth surface based on `Lambeck (1988) "Geophysical Geodesy", p.18`. `eigengrav.py` provides the isotrophic spectral transfer to obtain the equivalent water thickness (m). Lastly, `ispec.py` inputs the sine and cosine coefficients and returns the field function `F`. <br>
 
-Another important module available in the package is the `gddc` module. This module implements the GRACE data driven corrections.
+The `Global Spherical Harmonic Analysis` code depends upon `neumann` along with the `IPLM` and `sc2cs`. `neumann.py` returns the weights and nodes for Neumann's numerical integration scheme on the sphere. The `gshs.py` code provides options for spehrical harmonic synthesis to compute the sine and cosine components of the Legendre function. These include `least squares`, `weighted least squares`, `approximate quadrature`, `first neumann method`, `second neumann method` and `block mean values`. The `neumann.py` code is required for the implementation of the `first neumann method` and `second neumann method`.<br>
 
+An addition to the `SHbundle` matlab package is the inclusion of the GRACE Data Driven Correction function, detailed and first coded in matlab as per the `following paper`. The implementation is done via the `gddc` module. More details on the `gddc` implementation can be refered to in the paper cited above.<br>
+
+# Features
+
+# Validation
+
+# Acknowledgements
+
+# References
+# End of draft
+
+References: <br>
+1. <br>
+2. 
+3. 
 # Mathematics
 
 Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$
@@ -132,10 +129,4 @@ Figure sizes can be customized by adding an optional second parameter:
 
 
 
-# Features
 
-# Acknowledgements
-
-
-
-# References
