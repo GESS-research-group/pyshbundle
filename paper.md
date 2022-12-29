@@ -30,6 +30,7 @@ aas-doi:
 aas-journal: 
 ---
 
+<p style='text-align: justify;'>
 # Summary
 
 This is the summary - to be included later.
@@ -88,6 +89,8 @@ References: <br>
 1. <br>
 2. 
 3. 
+
+</p>
 # Mathematics
 
 Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$
