@@ -62,7 +62,7 @@ We have implemented the matlab codes `SHbundle` into the python programming lang
 
 # Implementation
 A schematic diagram of the code workflow is presented in the figure below. <br>
-![Schematic diagram of code workflow.\label{fig:code_workflow}](pic\flowchart_draft_20221227.png)<br>
+![Schematic diagram of code workflow.\label{fig:code_workflow}](https://github.com/mn5hk/pyshbundle/blob/main/pic/flowchart_draft_20221227.png)<br>
 <i>Fig 01: Schematic Diagram of the Code Workflow</i><br>
 
 The key module for the package is the `gsha.py` module. This module inputs the GRACE L2 spherical harmonic coefficients and performs the `GRACE Spherical Harmonics Analysis (GSHA)` algorithm. The algorithm converts the input L2 spherical harmonic coefficients into gridded values at the user-desired grid resolution. An inverse module is also provided, called the `gshs.py` module. This module performs the `GRACE Spherical Harmonics Synthesis (GSHS)` algorithm. The algorithm converts the gridded `TWSA` values into the GRACE L2 spherical harmonics coefficients.<br>
