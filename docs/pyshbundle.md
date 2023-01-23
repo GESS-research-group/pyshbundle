@@ -1,0 +1,4 @@
+ 
+# pyshbundle module
+
+::: pyshbundle.pyshbundle
