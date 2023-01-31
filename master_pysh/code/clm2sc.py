@@ -8,11 +8,7 @@ Created on Fri Dec  9 10:14:32 2022
 # CLM to /S|C\
 def clm2sc(data):
     import numpy as np
-    
-    ''' Load data '''
-    #data = np.load(path+str('saved_as_num.npy'), allow_pickle=True)
-    #data = np.load('/home/wslvivek/Desktop/level2/preprocess/output/saved_as_num.npy', allow_pickle=True)
-    
+
     ''' Read variables '''
     no_of_years = len(data[0])
     degree = data[0]
@@ -40,7 +36,4 @@ def clm2sc(data):
             
     "delete order 0 column"
     sc_mat = np.delete(sc_mat, Lmax, 2)
-    ''' Calculation of long-term mean '''
-    #SH_long_mean = sc_mat[26:98].mean(0)
-    #np.save('/home/wslvivek/Desktop/level2/preprocess/output/SH_long_mean',SH_long_mean)            
     return sc_mat
