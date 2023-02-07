@@ -48,7 +48,7 @@ GRACE stands for the Gravity Recovery and Climate Experiment, a joint satellite 
 
 GRACE consists of two identical satellites orbiting around the earth on the same orbital path. The basic principal of the GRACE satellite operation consists of the monitoring of the intersatellite distance between the twin satellites using microwave ranging system. When the satellite system comes across a mass anomaly, each satellite accelerates or decelerates with a phase lag and the intersatellite distance changes. This change in intersatellite distance is later processed to obtain the magnitude of the mass anamoly. When it comes to the continental land surface, the hydrological processes consist of a major component of the mass anamoly over it. Thus, after making necessary post-processing and substracting different mass anomaly components, such as atmospheric changes, etc, the `total water storage anomaly` (`TWSA`) component can be estimated. The `TWSA` is the sum of the total water components over a vertical extention of the grid area through the earth. Conventionally, it is represented in terms of the `equivalent water height` (`m`). GRACE has a successor, GRACE-FO, which was successfully launched on 22 May 2018.<br>
 
-Three different research centres provide GRACE data. These are the University of Texas Center for Space Research (`CSR`), Jet Propulsion Laboratory (`JPL`), and the German Research Center for Geosciences (GFZ). Further, GRACE data is available at different levels of processing. `Level 1` data refers to the raw satellite data. These are further available as `Level 1A` and `Level 1B`, based on the level of processsing done to the raw data. `Level 2` are the spherical harmonic coefficients for the geospatial potential estimates. These may be accessed through the JPL's Physical Oceanography Distributed Active Archive Center (`PO.DAAC`) or through the Information System and Data Center (`ISDC`). `Level 3` consists of mass anomalies or other standardized products, such as the Monthly Ocean/Land Water Equivalent Thickness Surface-Mass Anomaly. Similarly, mass concentration blocks or `mascons` are also availble. These directly provide the total water storage anomaly over gridded regions, and are available through the three GRACE data centers. The mascon products from the various data centers have some differences, attributed to the difference in post-processing steps and corrections applied by the different data centers. While the mascon results make application of GRACE data easier to a wider audience, use of Level 2 data gives the user the freedom and the flexibility to choose their own post-processing algorithms. The choice of application of mascon data product or Level 2 data product may depend upon the purpose of the exercise and the expertise level of the user on the GRACE data post-processing. In this contribtion, we enable the user to obtain the gridded `TWSA` data over a shapefile from Level 2 data.<br>
+Three different research centres provide GRACE data. These are the University of Texas Center for Space Research (`CSR`), Jet Propulsion Laboratory (`JPL`), and the German Research Center for Geosciences (GFZ). Further, GRACE data is available at different levels of processing. `Level 1` data refers to the raw satellite data. These are further available as `Level 1A` and `Level 1B`, based on the level of processsing done to the raw data. `Level 2` are the spherical harmonic coefficients for the geospatial potential estimates. These may be accessed through the JPL's Physical Oceanography Distributed Active Archive Center (`PO.DAAC`) or through the Information System and Data Center (`ISDC`). `Level 3` consists of mass anomalies or other standardized products, such as the Monthly Ocean/Land Water Equivalent Thickness Surface-Mass Anomaly. Similarly, mass concentration blocks or `mascons` are also availble. These directly provide the total water storage anomaly over gridded regions, and are available through the three GRACE data centers. More details on the mascon approaches for studying gravity fields and the approaches used by the different data centers for generating mascon products may be referred to in `Antoni (2022)`. The mascon products from the various data centers have some differences, attributed to the difference in post-processing steps and corrections applied by the different data centers. An online tool exists developed by the `Colorado Center for Astrodynamics Research` (https://ccar.colorado.edu/grace). This tool can be used for a quick visualization of the `CSR` and `GSFC` mascon products over all regions of the globe. While the mascon results make application of GRACE data easier to a wider audience, use of Level 2 data gives the user the freedom and the flexibility to choose their own post-processing algorithms. The choice of application of mascon data product or Level 2 data product may depend upon the purpose of the exercise and the expertise level of the user on the GRACE data post-processing. In this contribtion, we enable the user to obtain the gridded `TWSA` data over a shapefile from Level 2 data.<br>
 
 `Level 2` GRACE data products may be stored in various data formats. These include `|C\S|`, `/S|C\`, `clm`, vector, and `Colombo` format. Our contribution in its current version can only handle the `|C\S\` and `/S|C\` data formats. In `|C\S|` format, the `Clm` and `Slm` coefficient are stored as lower triangle and upper triangle, respectively, in a matrix of dimention <i>(l + 1) x (l + 1)</i>. In `/S|C\` format, the coefficients are stored in amatrix of dimension <i>(l + 1) x (2 l + 1)</i> with horizontally flipped triangular matrix of `Slm` coefficients on the left half, triangular matrix of `Clm` on the right half, and zeros on the rest of the matrix elements. In our contribution, conversion between the two data formats is made possible with the modules `cs2sc` and `sc2cs`.<br>
 
@@ -63,6 +63,153 @@ It is hoped the contribution will make GRACE L2 data processing more accessible 
 # Methodology
 
 We have implemented the matlab codes `SHbundle` into the python programming language. More details on the `SHbundle` package may be refered to at `Sneew et al. (2021)`. The naming of the modules and the workflow between the modules has been preserved as much as possible in the `PySHbundle` python implementation. This is to ensure smooth communication between user communitities of the two packages and/or the two different programming language communities. Further, our code has been tested using the `SHbundle` implementation results for validation.
+
+# Mathematics
+
+In this section, we present a mathematical representation of the spherical harmonics analysis. According to potential theory, the gravitational field of a body fulfils the Laplace equation $\nabla^2\phi = 0$. Laplace's equation in spherical coordinates can be written as follows: 
+
+$$
+\begin{equation}
+\frac{1}{r^2}\frac{\partial}{\partial r}\bigg( r^2\frac{\partial \phi}{\partial r}\bigg)  
++
+\frac{1}{r^2\sin\vartheta}\frac{\partial}{\partial \vartheta}\bigg(\sin\vartheta\frac{\partial \phi}{\partial \vartheta}\bigg) 
++
+\frac{1}{r^2\sin^2\vartheta}\frac{\partial^2 \phi}{\partial \lambda^2}
+ = 0 ,
+\end{equation}\\
+$$
+
+where 
+$\phi$ is the potential, 
+$r$ is the radius, 
+$\vartheta$ is the co-latitude and 
+$\lambda$ is the longitude. 
+
+We perform a separation of variables and insert $\phi(r,\vartheta,\lambda) =f(r)g(\vartheta)h(\lambda)$ into the Laplace equation to get three independent equations:
+
+$$
+\begin{equation}
+r^2\frac{d^2f}{dr^2}+2r\frac{df}{dr} - n(n+1)f = 0,
+\end{equation}
+$$
+$$
+\begin{equation}
+\frac{d^2g}{d\vartheta^2}
++
+\frac{dg}{d\vartheta}\cot\vartheta
++
+\bigg(  n(n+1) - \frac{m^2}{\sin^2\vartheta}   \bigg) g = 0 ,
+\end{equation}
+$$
+$$
+\begin{equation}
+\frac{d^2h}{d\lambda^2} + m^2h = 0,
+\end{equation}
+$$
+
+where $m$ and $n$ are the degree and order respectively. Solving $(2), (3)$ and $(4)$, we obtain: 
+
+$$
+\begin{equation}
+f(r) \in \{r^n, r^{-(n+1)}\},
+\end{equation}
+$$
+$$
+\begin{equation}
+g(\vartheta) \in \{P_{n,m}(\cos \vartheta), Q_{n,m}(\cos \vartheta)\} ,
+\end{equation}
+$$
+$$
+\begin{equation}
+h(\lambda) \in \{\cos m\lambda, \sin m\lambda\}.
+\end{equation}\\
+$$
+
+Thus, the Laplace equation's solution takes the following form: 
+
+$$
+\begin{equation}
+\phi(r, \vartheta, \lambda) = \sum_{n=0}^{\infty} \sum_{m=0}^{n} 
+\alpha_{n,m}
+\begin{Bmatrix}
+P_{n,m}(\cos\vartheta)\\
+Q_{n,m}(\cos\vartheta)\\
+\end{Bmatrix}
+\dot{•}
+\begin{Bmatrix}
+\cos m\lambda\\
+\sin m\lambda\\
+\end{Bmatrix}
+\dot{•}
+\begin{Bmatrix}
+r^n\\
+r^{(n+1)}\\
+\end{Bmatrix}
+.
+\end{equation}
+$$
+
+Solutions for $f(r)$ and $h(\lambda)$ are fairly straightforward. Eq - (3) for $g(\vartheta)$ is in the form of a Legendre differential equation and its solutions are $P_{n,m}(\cos \vartheta)$ and $Q_{n,m}(\cos \vartheta)$, the associated Legendre functions of the first and second kind. We now apply two constraints to the solution:
+
+* $\phi \rightarrow 0$ when $r \rightarrow \infty$,
+* $\phi$ is limited on the sphere,
+
+which leads us to eliminate $Q_{n,m}(\cos \vartheta)$ and $r^n$.The $4\pi$ normalization of the Associated Legendre functions [8] is utilized in our package and is given by: 
+
+$$
+\begin{equation}
+\bar{P}_{n,m}(\cos\vartheta) = P_{n,m}(\cos\vartheta)\sqrt{(2-\delta_{m0})(2n+1)\frac{(n-m)!}{(n+m)!}},
+\end{equation}
+$$
+where $\delta_{m0}$ is the Kronecker delta function,
+$$
+\begin{equation}
+P_{n,m}(t) = (1-t^2)^{\frac{m}{2}}\frac{d^mP_n(t)}{dt^m},
+\end{equation}
+$$
+and 
+$$
+\begin{equation}
+nP_n(t)=-(n-1)P_{n-2}(t) + (2n-1)tP_{n-1}(t).
+\end{equation}
+$$
+
+Spherical harmonics are the angular portion of a set of solutions to Laplace's equation. They take into account $\vartheta$ and $\lambda$. They are functions modelled on the surface of a sphere, denoted by $Y_{n,m}(\vartheta,\lambda)$. They are of three kinds: 
+
+* Zonal harmonics: $m=0$ - they are only latitude dependent,
+* Tesseral harmonics: $0<m<n$, and 
+* Sectorial harmonics: $m=n$.
+
+Quantities like the gravitational potential, height of water column, gravity anomaly and so on are the functionals of the gravity field which are obtained by differentiating the potential $\phi$ with respect to the spherical coordinates. 
+
+The gravitational potential anomaly $V$ is given by:
+$$
+\begin{equation}
+    V(r, \vartheta, \lambda) = 
+    \frac{GM}{r} \sum_{n=0}^{N_{max}} \sum_{m=0}^{n} 
+    \left(\frac{R}{r}\right)^{n+1}
+    \bar{P}_{n,m}(\cos \vartheta)[C_{n,m}\cos m\lambda+S_{n,m}\sin m\lambda].
+\end{equation}
+$$
+
+Here, $R$ refers to the radius of the Earth,
+$\bar{P}_{n,m}$ refers to the Associated Legendre functions with $4\pi$ normalization,
+$C_{lm}$ and  $S_{lm}$ refer to the spherical harmonic coefficients. Similarly, another functional, the change in surface mass density, is represented by:
+
+$$
+\begin{equation}
+    \Delta\sigma(\vartheta,\lambda) = 
+    \frac{a\rho_{ave}}{3} 
+    \sum_{n=0}^{N_{max}} \sum_{m=0}^{n} 
+    \left(\frac{R}{r}\right)^{n+1} 
+    \bar{P}_{n,m}(\cos \vartheta)
+    \frac{2n+1}{1+k_l}
+    [C_{n,m}\cos m\lambda+S_{n,m}\sin m\lambda],
+\end{equation}
+$$
+where
+$\rho_{ave}$ refers to the average density of the Earth in $g/cm^3$ and
+$k_n$ refers to the load Love number of degree $n$.
 
 # Features
 <i>`[Maybe not necessary; can be covered in the implementation section]`</i><br>
@@ -113,6 +260,7 @@ and refer to \autoref{eq:fourier} from text.
 
 # Citations
 
+- Antoni, M. (2022). A review of different mascon approaches for regional gravity field modelling since 1968. History of Geo-and Space Sciences, 13(2), 205-217.
 - Feng, W. GRAMAT: a comprehensive Matlab toolbox for estimating global mass variations from GRACE satellite data. Earth Sci Inform 12, 389–404 (2019). https://doi.org/10.1007/s12145-018-0368-0
 - Kusche, J., Schmidt, R., Petrovic, S., & Rietbroek, R. (2009). Decorrelated GRACE time-variable gravity solutions by GFZ, and their validation using a hydrological model. Journal of geodesy, 83, 903-913.
 - Lambeck, K. (1988). Geophysical geodesy (p. 718). Oxford: Clarendon.
