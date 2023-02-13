@@ -3,34 +3,41 @@ title: 'PySHbundle: A Python implementation of MATLAB codes SHbundle'
 tags:
   - Python
   - GRACE
+  - Spherical Harmonic Analysis
+  - Spherical Harmonic Synthesis
+  - GRACE Data Driven Correction
 authors:
-  - name: ABCD
-    orcid: 0000-0000-0000-0000
-    equal-contrib: true
-    affiliation: "1, 2" # (Multiple affiliations must be quoted)
-  - name: Author Without ORCID
+  - name: Amin Shakya
+    orcid: 0000-0002-4706-826X
     equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
+    affiliation: 1
+  - name: Vivek Yadav
+    equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
+    affiliation: 1
+  - name: Tsungrojungla Walling
     affiliation: 2
-  - name: Author with no affiliation
+  - name: Maya Suryawanshi
+    affiliation: 1
+  - name: Bramha Dutt Vishwakarma
+    orcid: 0000-0003-4787-8470
     corresponding: true # (This is how to denote the corresponding author)
-    affiliation: 3
+    affiliation: "1,3" # (Multiple affiliations must be quoted)
 affiliations:
- - name: Lyman Spitzer, Jr. Fellow, Princeton University, USA
+ - name: Interdisciplinary Centre for Water Research, Indian Institute of Science, India
    index: 1
- - name: Institution Name, Country
+ - name: Undergraduate Program, Indian Institute of Science, India
    index: 2
- - name: Independent Researcher, Country
+ - name: Centre of Earth Science, Indian Institute of Science, India
    index: 3
-date: 13 August 2017
+date: 13 February 2023
 bibliography: paper.bib
 
 # Optional fields if submitting to a AAS journal too, see this blog post:
 # https://blog.joss.theoj.org/2018/12/a-new-collaboration-with-aas-publishing
-aas-doi: 
-aas-journal: 
+# aas-doi: 
+# aas-journal: 
 ---
 
-<p style='text-align: justify;'>
 # Summary
 
 This is the summary - to be included later.
