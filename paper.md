@@ -25,7 +25,7 @@ authors:
 affiliations:
  - name: Interdisciplinary Centre for Water Research, Indian Institute of Science, India
    index: 1
- - name: Undergraduate Program, Indian Institute of Science, India
+ - name: Undergraduate Programme, Indian Institute of Science, India
    index: 2
  - name: Centre of Earth Science, Indian Institute of Science, India
    index: 3
@@ -184,7 +184,7 @@ $$
 Spherical harmonics are the angular portion of a set of solutions to Laplace's equation. They take into account $\vartheta$ and $\lambda$. They are functions modelled on the surface of a sphere, denoted by $Y_{n,m}(\vartheta,\lambda)$. They are of three kinds: 
 
 * Zonal harmonics: $m=0$ - they are only latitude dependent,
-* Tesseral harmonics: $0<m<n$, and 
+* Tesseral harmonics: $0 < m < n$, and 
 * Sectorial harmonics: $m=n$.
 
 Quantities like the gravitational potential, height of water column, gravity anomaly and so on are the functionals of the gravity field which are obtained by differentiating the potential $\phi$ with respect to the spherical coordinates. 
