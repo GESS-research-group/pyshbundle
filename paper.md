@@ -193,8 +193,8 @@ The gravitational potential anomaly $V$ is given by:
 $
 \begin{equation}
     V(r, \vartheta, \lambda) = 
-    \frac{GM}{r} \sum_{n=0}^{N_{max}} \sum_{m=0}^{n} 
-    \left(\frac{R}{r}\right)^{n+1}
+    \frac{GM}{r} \sum_{n=0} ^ {N_{max}} \sum_{m=0} ^ {n} 
+    \left(\frac{R}{r}\right) ^ {n+1}
     \bar{P}_{n,m}(\cos \vartheta)[C_{n,m}\cos m\lambda+S_{n,m}\sin m\lambda].
 \end{equation}
 $
@@ -207,11 +207,11 @@ $
 \begin{equation}
     \Delta\sigma(\vartheta,\lambda) = 
     \frac{a\rho_{ave}}{3} 
-    \sum_{n=0}^{N_{max}} \sum_{m=0}^{n} 
-    \left(\frac{R}{r}\right)^{n+1} 
+    \sum_{n=0} ^ {N_{max}} \sum_{m=0} ^ {n} 
+    \left(\frac{R}{r}\right) ^ {n+1} 
     \bar{P}_{n,m}(\cos \vartheta)
     \frac{2n+1}{1+k_l}
-    [C_{n,m}\cos m\lambda+S_{n,m}\sin m\lambda],
+    [C_{n,m}\cos m\lambda + S_{n,m}\sin m\lambda],
 \end{equation}
 $
 where
