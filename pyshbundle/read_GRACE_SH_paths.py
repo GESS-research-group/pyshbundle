@@ -50,7 +50,7 @@ def read_GRACE_SH_paths(use_sample_files = 0):
             print("Successfully loaded preloaded TN13 and TN14 replacement files for ITSG")
         else:
             path_tn13 = str(input("Enter the path to the file for tn13 replacement in .txt format"))
-            path_tn14 = str(input("Enter the path to the file for tn14 replacement in .txt format"))\
+            path_tn14 = str(input("Enter the path to the file for tn14 replacement in .txt format"))
             print("Successfully loaded TN13 and TN14 replacement files for ITSG")
     else:
         raise Exception("Source selection is incorrect. Please select between JPL, CSR or gfz")
