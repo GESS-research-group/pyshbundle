@@ -40,7 +40,7 @@ setup(
         'Programming Language :: Python :: 3.10',
     ],
     description="A python package to process GRACE spherical harmonics",
-    package_data={"my_package": ["longmean/*.npy"]},
+    package_data={"my_package": ["data/*"]},
     install_requires=install_requires,
     dependency_links=dependency_links,
     license="GNU General Public License v3",
@@ -54,6 +54,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/mn5hk/pyshbundle',
-    version='0.0.1.11',
+    version='0.0.1.12',
     zip_safe=False,
 )
