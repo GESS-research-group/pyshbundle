@@ -12,14 +12,14 @@ def tws_cal(data,lmax,gs,r,m,path_functions):
     from gaussian import gaussian
     from gshs import gshs
     import numpy as np
-
+    from tqdm import tqdm
     SC = data
     
     gfilter = gaussian(lmax,r)
     grid_y = int(180/gs)
     grid_x = int(360/gs)
     tws_f = np.zeros([m,grid_y,grid_x], dtype ='longdouble')
-    for i in range(0,m,1):
+    for i in tqdm(range(0,m,1)):
         field = SC[i,0:lmax+1,96-lmax:96+lmax+1]
         shfil = np.zeros([lmax+1,2*lmax+1])
         for j in range(0,2*lmax+1,1):
