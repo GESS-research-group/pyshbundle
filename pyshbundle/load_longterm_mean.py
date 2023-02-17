@@ -30,6 +30,8 @@ def load_longterm_mean(source = "", use_sample_mean = 0):
             raise Exception("Incorrect selection of source")
         print("Successfully loaded preloaded longterm means")
     else:
+        print("Please download and provide the longterm GRACE SH mean values")
+        print("Instructions to download the longterm GRACE SH mean values may be referred to in https://github.com/mn5hk/pyshbundle/blob/main/docs/index.md#how-to-download-data")
         long_mean = str(input("Enter the longterm mean for the SH values in the numpy (.npy) format"))
         print("Successfully loaded path to long term mean:", long_mean)
 
