@@ -4,7 +4,7 @@
 [![image](https://img.shields.io/pypi/v/pyshbundle.svg)](https://pypi.python.org/pypi/pyshbundle)
 
 
-**A python package to process GRACE spherical harmonics**
+**PySHbundle: A Python implementation of MATLAB codes SHbundle**
 
 
 -   Free software: GNU General Public License v3
