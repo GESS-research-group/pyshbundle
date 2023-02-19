@@ -74,7 +74,7 @@ We have implemented the matlab codes `SHbundle` into the python programming lang
 
 # Implementation
 A schematic diagram of the code workflow is presented in the Fig 01. <br>
-![Schematic diagram of code workflow. \label{fig:code_workflow}](https://github.com/mn5hk/pyshbundle/blob/main/pic/flowchart_draft_20221227.png)<br>
+![Schematic diagram of code workflow. \label{fig:code_workflow}](./pic/flowchart_draft_20221227.png)<br>
 <i>Fig 01: Schematic Diagram of the Code Workflow</i><br>
 
 The key module for the package is the `gsha.py` module. This module inputs the GRACE L2 spherical harmonic coefficients and performs the `GRACE Spherical Harmonics Analysis (GSHA)` algorithm. The algorithm converts the input L2 spherical harmonic coefficients into gridded values at the user-desired grid resolution. An inverse module is also provided, called the `gshs.py` module. This module performs the `GRACE Spherical Harmonics Synthesis (GSHS)` algorithm. The algorithm converts the gridded `TWSA` values into the GRACE L2 spherical harmonics coefficients.<br>
@@ -89,7 +89,7 @@ In addition to the translation of the `SHbundle` matlab package, this contributi
 
 # Validation
 The results of the PySHbundle TWS computation has been validated with respect to TWS computation using SHbundle and presented in Fig 02. The NRMSE values are in the order of e<sup>-8</sup> while the TWS values are in the order of e<sup>2</sup>. As such, the errors are likely computational artifacts. Thus, the python package PySHbundle is deemed to give the desired performance in the processing of GRACE L2 Spherical Harmonics to obtain L3 TWS anomalies over land grids.
-![Fig 02: RMSE and NRMSE of TWS computation for PySHbundle with respect to SHbundle results.  \label{fig:error_validation}](https://github.com/mn5hk/pyshbundle/blob/main/pic/02_error_plots.png)<br>
+![Fig 02: RMSE and NRMSE of TWS computation for PySHbundle with respect to SHbundle results.  \label{fig:error_validation}](./pic/02_error_plots.png)<br>
 <i>Fig 02: RMSE and NRMSE of TWS computation for PySHbundle with respect to SHbundle results.</i><br>
 
 # Acknowledgements
