@@ -7,7 +7,7 @@ Created on Mon Aug 29 09:47:38 2022
 
 def tws_cal(data,lmax,gs,r,m,path_functions):
     import os
-    os.chdir(path_functions)
+    #os.chdir(path_functions)
     from gaussian import gaussian
     from gshs import gshs
     import numpy as np
