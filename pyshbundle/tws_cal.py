@@ -5,11 +5,11 @@ Created on Mon Aug 29 09:47:38 2022
 @author: wslvivek
 """
 
-def tws_cal(data,lmax,gs,r,m,path_functions):
+def tws_cal(data,lmax,gs,r,m):
     import os
     #os.chdir(path_functions)
-    from gaussian import gaussian
-    from gshs import gshs
+    from . import gaussian
+    from . import gshs
     import numpy as np
     from tqdm import tqdm
     SC = data
