@@ -20,3 +20,4 @@ matplotlib
 rasterio
 salem
 shapely
+tqdm
