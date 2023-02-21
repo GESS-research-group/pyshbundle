@@ -105,7 +105,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     
     if rows == cols:                    #field in CS-format 
         lmax = rows - 1
-        field = cs2sc(field)
+        field = cs2sc.cs2sc(field)
     elif cols - 2 * rows == -1:         #field in SC-format already
         lmax = rows - 1
     else:
@@ -158,10 +158,10 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     '''
     
     if jflag:
-        field = field - cs2sc(normalklm(lmax+1))
+        field = field - cs2sc.cs2sc(normalklm(lmax+1))
         
     l = np.arange(0, lmax+1)
-    transf = np.array([eigengrav(lmax, quant, h)], dtype='longdouble').T
+    transf = np.array([eigengrav.eigengrav(lmax, quant, h)], dtype='longdouble').T
     
     field = field * np.matmul(transf, np.ones((1, 2*lmax+1), dtype = 'longdouble'), dtype='longdouble') #removed transf[0] 20221019
     
@@ -196,7 +196,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     else:
         c = field[m:lmax+1, lmax+m] 
     l = np.array([np.arange(m,lmax+1)])
-    p = plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
+    p = plm.plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
     a[:, m] = np.dot(p,c) 
     b[:, m] = np.zeros(nlat) 
     
@@ -217,7 +217,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
             s = field[m:lmax+1,lmax-m]
         
         l = np.array([np.arange(m,lmax+1)])
-        p = plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
+        p = plm.plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
         a[:, m] = np.dot(p,c)
         b[:, m] = np.dot(p,s)
         
