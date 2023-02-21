@@ -74,7 +74,7 @@ We have implemented the matlab codes `SHbundle` into the python programming lang
 
 # Implementation
 A schematic diagram of the code workflow is presented in the Fig 01. <br>
-![Schematic diagram of code workflow. \label{fig:code_workflow}](https://github.com/mn5hk/pyshbundle/blob/main/pic/flowchart_draft_20221227.png)<br>
+![Schematic diagram of code workflow. \label{fig:code_workflow}](./pic/flowchart_draft_20221227.png)<br>
 <i>Fig 01: Schematic Diagram of the Code Workflow</i><br>
 
 The key module for the package is the `gsha.py` module. This module inputs the GRACE L2 spherical harmonic coefficients and performs the `GRACE Spherical Harmonics Analysis (GSHA)` algorithm. The algorithm converts the input L2 spherical harmonic coefficients into gridded values at the user-desired grid resolution. An inverse module is also provided, called the `gshs.py` module. This module performs the `GRACE Spherical Harmonics Synthesis (GSHS)` algorithm. The algorithm converts the gridded `TWSA` values into the GRACE L2 spherical harmonics coefficients.<br>
@@ -88,9 +88,19 @@ The `Global Spherical Harmonic Analysis` code depends upon `neumann` along with 
 In addition to the translation of the `SHbundle` matlab package, this contribution further includes the GRACE Data Driven Correction function, detailed and first coded in matlab in `Vishwakarma et al.  (2017)`. The implementation is done via the `gddc` module. More details on the `gddc` implementation can be refered to in the paper cited above.<br>
 
 # Validation
-The results of the PySHbundle TWS computation has been validated with respect to TWS computation using SHbundle and presented in Fig 02. The NRMSE values are in the order of e<sup>-8</sup> while the TWS values are in the order of e<sup>2</sup>. As such, the errors are likely computational artifacts. Thus, the python package PySHbundle is deemed to give the desired performance in the processing of GRACE L2 Spherical Harmonics to obtain L3 TWS anomalies over land grids.
-![Fig 02: RMSE and NRMSE of TWS computation for PySHbundle with respect to SHbundle results.  \label{fig:error_validation}](https://github.com/mn5hk/pyshbundle/blob/main/pic/02_error_plots.png)<br>
+The results of the PySHbundle TWS computation has been validated with respect to TWS computation using SHbundle and presented in Fig 02. The NRMSE values are in the order of e<sup>-8</sup>. Timeseries plots for the Amazon and the Ganges basins have been protted in Fig 03 and Fig 04, respectively. In both the cases, the order of magnitude of the signal is e<sup>2</sup>, while the error is in the order of e<sup>-6</sup>. Additionally, water budget closure timeseries for the world is provided in Fig 05. The magnitude of difference between the errors and the signal is of the order e<sup>-4. As such, the errors are likely computational artifacts. Thus, the python package PySHbundle is deemed to give the desired performance in the processing of GRACE L2 Spherical Harmonics to obtain L3 TWS anomalies over land grids.
+![Fig 02: RMSE and NRMSE of TWS computation for PySHbundle with respect to SHbundle results.  \label{fig:error_validation}](./pic/02_error_plots.png)<br>
 <i>Fig 02: RMSE and NRMSE of TWS computation for PySHbundle with respect to SHbundle results.</i><br>
+
+![Fig 03: Timeseries plot of TWS signal from pyshbundle, shbundle and error signal for the Amazon basin](./pic/03_basin_avg_tws_Amazon.png)<br>
+<i>Fig 03: Timeseries plot of TWS signal from pyshbundle, shbundle and error signal for the Amazon basin</i><br>
+
+![Fig 04: Timeseries plot of TWS signal from pyshbundle, shbundle and error signal for the Ganges basin](./pic/04_basin_avg_tws_Ganges.png)<br>
+<i>Fig 04: Timeseries plot of TWS signal from pyshbundle, shbundle and error signal for the Ganges basin</i><br>
+
+![Fig 05: Water budget closure timeseries plot of TWS signal from pyshbundle, shbundle and error signal](./pic/04_basin_avg_tws_Ganges.png)<br>
+<i>Fig 05: Water budget closure timeseries plot of TWS signal from pyshbundle, shbundle and error signal</i><br>
+
 
 # Acknowledgements
 
