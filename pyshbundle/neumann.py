@@ -66,10 +66,10 @@ from . import grule
 from . import plm
 def neumann(inn):
     try: #if input is an integer
-        x, w = grule(inn)
+        x, w = grule.grule(inn)
     except: #if input is an array
         if(len(inn)==1): #2nd Neumann method
-            x,w = grule(inn)
+            x,w = grule.grule(inn)
             if(np.not_equal(np.mod(x, 1), 0)): #Not integer
                 raise Exception("Integer input argument required")
             
@@ -79,7 +79,7 @@ def neumann(inn):
             x = inn
             theRAD = np.arccos(x) #x in radian
             l = np.array(list(range(len(x))))
-            pp = plm(l, therad)
+            pp = plm.plm(l, therad)
             
             rr = list([2])
             for i in len(x-1):

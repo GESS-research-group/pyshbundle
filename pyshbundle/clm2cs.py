@@ -41,5 +41,5 @@ def clm2cs(data):
                     j = j + 1
                 j = j + 1
             month = month + 1
-             
+    print('Conversion into clm format complete')        
     #np.save('/home/wslvivek/Desktop/level2/preprocess/output/SH_coeff_cs.npy', cs_mat)
