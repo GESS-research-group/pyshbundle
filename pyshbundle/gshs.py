@@ -251,7 +251,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     
     #Code for ispec
 #    '''
-    f = ispec(a.T,b.T).T
+    f = ispec.ispec(a.T,b.T).T
     if dlam > 1: 
         f = f[:,np.arange(1,dlam*nlon+1,dlam)]
                                               #This line needs to be worked on
