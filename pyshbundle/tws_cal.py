@@ -14,7 +14,7 @@ def tws_cal(data,lmax,gs,r,m):
     from tqdm import tqdm
     SC = data
     
-    gfilter = gaussian(lmax,r)
+    gfilter = gaussian.gaussian(lmax,r)
     grid_y = int(180/gs)
     grid_x = int(360/gs)
     tws_f = np.zeros([m,grid_y,grid_x], dtype ='longdouble')
@@ -30,7 +30,7 @@ def tws_cal(data,lmax,gs,r,m):
         jflag = 0
         
         
-        ff = gshs(shfil,quant,grd,n,h,jflag)[0]
+        ff = gshs.gshs(shfil,quant,grd,n,h,jflag)[0]
         
         ff = ff*1000
         tws_f[i,:,0:int(grid_x/2)] = ff[:,int(grid_x/2):]
