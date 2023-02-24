@@ -190,33 +190,36 @@ Spherical harmonics are the angular portion of a set of solutions to Laplace's e
 Quantities like the gravitational potential, height of water column, gravity anomaly and so on are the functionals of the gravity field which are obtained by differentiating the potential $\phi$ with respect to the spherical coordinates. 
 
 The gravitational potential anomaly $V$ is given by:
-$
+
+$$
 \begin{equation}
     V(r, \vartheta, \lambda) = 
-    \frac{GM}{r} \sum_{n=0} ^ {N_{max}} \sum_{m=0} ^ {n} 
-    \left(\frac{R}{r}\right) ^ {n+1}
-    \bar{P}_{n,m}(\cos \vartheta)[C_{n,m}\cos m\lambda+S_{n,m}\sin m\lambda].
+    \frac{GM}{r} \sum_{n=0} ^{N_{max}} \sum_{m=0} ^{n} 
+    \left(\frac{R}{r}\right) ^{n+1}
+    \bar{P}_{n,m}(\cos \vartheta)\[C_{n,m}\cos m\lambda+S_{n,m}\sin m\lambda\].
 \end{equation}
-$
+$$
 
 Here, $R$ refers to the radius of the Earth,
-$\bar{P}_{n,m}$ refers to the Associated Legendre functions with $4\pi$ normalization,
+$\bar{P}_ {n,m}$ refers to the Associated Legendre functions with $4\pi$ normalization,
 $C_{lm}$ and  $S_{lm}$ refer to the spherical harmonic coefficients. Similarly, another functional, the change in surface mass density, is represented by:
 
-$
+$$
 \begin{equation}
-    \Delta\sigma(\vartheta,\lambda) = 
+    \Delta\sigma(\vartheta, \lambda) = 
     \frac{a\rho_{ave}}{3} 
-    \sum_{n=0} ^ {N_{max}} \sum_{m=0} ^ {n} 
-    \left(\frac{R}{r}\right) ^ {n+1} 
-    \bar{P}_{n,m}(\cos \vartheta)
+    \sum_{n=0}^{N_{max}}\sum_{m=0}^{n} 
+    \left(\frac{R}{r}\right)^{n+1} 
+    \bar{P}_{n,m}(\cos\vartheta)
     \frac{2n+1}{1+k_l}
-    [C_{n,m}\cos m\lambda + S_{n,m}\sin m\lambda],
+    \[C_{n,m}\cos m\lambda + S_{n,m}\sin m\lambda\],
 \end{equation}
-$
+$$
+
 where
 $\rho_{ave}$ refers to the average density of the Earth in $g/cm^3$ and
 $k_n$ refers to the load Love number of degree $n$.
+
 
 # Implementation
 A schematic diagram of the code workflow is presented in the Fig 01. <br>
