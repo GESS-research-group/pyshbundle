@@ -95,42 +95,29 @@ $\lambda$ is the longitude.
 We perform a separation of variables and insert $\phi(r,\vartheta,\lambda) =f(r)g(\vartheta)h(\lambda)$ into the Laplace equation to get three independent equations:
 
 $$
-\begin{equation}
-r^2\frac{d^2f}{dr^2}+2r\frac{df}{dr} - n(n+1)f = 0,
-\end{equation}
-$$
-$$
-\begin{equation}
-\frac{d^2g}{d\vartheta^2}
-+
-\frac{dg}{d\vartheta}\cot\vartheta
-+
-\bigg(  n(n+1) - \frac{m^2}{\sin^2\vartheta}   \bigg) g = 0 ,
-\end{equation}
-$$
-$$
-\begin{equation}
-\frac{d^2h}{d\lambda^2} + m^2h = 0,
-\end{equation}
+\begin{aligned}
+ r^2\frac{d^2f}{dr^2}+2r\frac{df}{dr} - n(n+1)f = 0, \\ 
+ \frac{d^2g}{d\vartheta^2}+\frac{dg}{d\vartheta}\cot\vartheta+\bigg(  n(n+1) - \frac{m^2}{\sin^2\vartheta}   \bigg) g = 0 , \\ 
+ \frac{d^2h}{d\lambda^2} + m^2h = 0,\\
+\end{aligned}
 $$
 
-where $m$ and $n$ are the degree and order respectively. Solving $(2), (3)$ and $(4)$, we obtain: 
+where $m$ and $n$ are the degree and order respectively. We obtain three independent equations
+
+
+
+The solutions to these are
 
 $$
-\begin{equation}
-f(r) \in \{r^n, r^{-(n+1)}\},
-\end{equation}
+\begin{aligned}
+ f(r) \in \lbrace r^n, r^{-(n+1)}\rbrace \\ 
+ g(\vartheta) \in \lbrace P_{n,m}(\cos \vartheta), Q_{n,m}(\cos \vartheta) \rbrace \\ 
+ h(\lambda) \in \lbrace \cos m\lambda, \sin m\lambda\rbrace \\
+\end{aligned}
 $$
-$$
-\begin{equation}
-g(\vartheta) \in \{P_{n,m}(\cos \vartheta), Q_{n,m}(\cos \vartheta)\} ,
-\end{equation}
-$$
-$$
-\begin{equation}
-h(\lambda) \in \{\cos m\lambda, \sin m\lambda\}.
-\end{equation}\\
-$$
+
+respectively. 
+
 
 Thus, the Laplace equation's solution takes the following form: 
 
