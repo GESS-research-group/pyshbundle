@@ -92,20 +92,20 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     import numpy as np
     from os import chdir, getcwd
     
-    # wd = getcwd()
-    # chdir(wd)
+    wd = getcwd()
+    chdir(wd)
 
-    from . import cs2sc
-    from . import normalklm
-    from . import plm
-    from . import eigengrav
-    from . import ispec
+    from cs2sc import cs2sc
+    from normalklm import normalklm
+    from plm import plm
+    from eigengrav import eigengrav
+    from ispec import ispec
     
     rows, cols = field.shape
     
     if rows == cols:                    #field in CS-format 
         lmax = rows - 1
-        field = cs2sc.cs2sc(field)
+        field = cs2sc(field)
     elif cols - 2 * rows == -1:         #field in SC-format already
         lmax = rows - 1
     else:
@@ -158,12 +158,12 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     '''
     
     if jflag:
-        field = field - cs2sc.cs2sc(normalklm(lmax+1))
+        field = field - cs2sc(normalklm(lmax+1))
         
     l = np.arange(0, lmax+1)
-    transf = np.array([eigengrav.eigengrav(lmax, quant, h)], dtype='longdouble').T
+    transf = np.array([eigengrav(lmax, quant, h)]).T
     
-    field = field * np.matmul(transf, np.ones((1, 2*lmax+1), dtype = 'longdouble'), dtype='longdouble') #removed transf[0] 20221019
+    field = field * np.matmul(transf, np.ones((1, 2*lmax+1)), dtype='longdouble')
     
     
     '''
@@ -176,8 +176,8 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
 % -------------------------------------------------------------------------
     '''
     
-    dlam = np.ceil(lmax/n) #longitude step size
-    abcols = dlam*n + 1 #columns required in A and B
+    dlam = int(np.ceil(lmax/n))             #longitude step size
+    abcols = dlam*n + 1                     #columns required in A and B
     a = np.zeros((nlat, int(abcols)), dtype='longdouble')
     b = np.zeros((nlat, int(abcols)), dtype='longdouble')
     
@@ -191,12 +191,9 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     '''
     
     m = 0
-    if len(field.shape) == 3: #handle cases where field is a tuple
-        c = field[0,m:lmax+1, lmax+m] 
-    else:
-        c = field[m:lmax+1, lmax+m] 
+    c = field[m:lmax+1, lmax+m] 
     l = np.array([np.arange(m,lmax+1)])
-    p = plm.plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
+    p = plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
     a[:, m] = np.dot(p,c) 
     b[:, m] = np.zeros(nlat) 
     
@@ -209,15 +206,11 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     '''
     
     for m in range(1,lmax+1,1):
-        if len(field.shape) == 3:
-            c = field[0,m:lmax+1,lmax+m]
-            s = field[0,m:lmax+1,lmax-m]
-        else:
-            c = field[m:lmax+1,lmax+m]
-            s = field[m:lmax+1,lmax-m]
+        c = field[m:lmax+1,lmax+m]
+        s = field[m:lmax+1,lmax-m]
         
         l = np.array([np.arange(m,lmax+1)])
-        p = plm.plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
+        p = plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
         a[:, m] = np.dot(p,c)
         b[:, m] = np.dot(p,s)
         
@@ -232,9 +225,6 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
 % For N=L this corresponds to setting SLL=0!
 % -------------------------------------------------------------------------
     '''
-    
-    
-    
 
     if grd =='block' or grd == 'cell': 
       m      = np.arange(0,abcols,1)
@@ -247,15 +237,14 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     
     
     if np.remainder(n,lmax) == 0:               #Case without zero-padding
-        b[:,int(abcols-1)] = np.zeros(nlat)
+        b[:,abcols-1] = np.zeros(nlat)
     
     #Code for ispec
-#    '''
-    f = ispec.ispec(a.T,b.T).T
+    
+    f = ispec(a.T,b.T).T
     if dlam > 1: 
         f = f[:,np.arange(1,dlam*nlon+1,dlam)]
-                                              #This line needs to be worked on
-#'''
+
     return f, theRAD, lamRAD
     
 

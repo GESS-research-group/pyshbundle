@@ -52,11 +52,12 @@ Created on Thu Aug 11 10:48:53 2022
 % -------------------------------------------------------------------------
 @author: Amin Shakya, ICWAR, Indian Institute of Science
 """
-import numpy as np
-import scipy
-import scipy.fft
 
 def ispec(a,b = -9999):
+    import numpy as np
+    import scipy
+    import scipy.fft
+    
     '''
     if (b == -9999).all():                          #Only one input
         if min(a.shape) == 2 and a.shape[1] == 2:
@@ -68,7 +69,7 @@ def ispec(a,b = -9999):
             raise Exception("If one input argument, number of columns must be even")
         
         b = a[:, m/2 : m + 1]     
-        a = a[:, 0:m/2]     
+        a = a[:, 0:m/2+1]     
     else:
         if (a.shape[0] != b.shape[0]) or (a.shape[1] != b.shape[1]):
             raise Exception("Size of a and b do not match")
@@ -84,26 +85,17 @@ def ispec(a,b = -9999):
     
     if (np.absolute(b[n2-1,:]) < 1e-10).all():
         n = 2 * n2 - 2     
-        a[n2-1,:] = a[n2-1,:] * 2               #Simulate 100% aliasing
+        a[n2-1,:] = a[n2-1,:] * 2            
         fs = (a - 1j * b)/2
         fs  = (np.concatenate((fs,np.conj(fs[np.arange(n2-2,0,-1),:])), axis = 0))*max(n,1)
 
     else:
-        n = 2 * n2 - 1                          #Double check this
+        n = 2 * n2 - 1                        
         fs = (a - 1j * b)/2
         fs = (np.concatenate((fs,np.conj(fs[np.arange(n2-1,0,-1),:])), axis = 0))*n
-    
-        
-    
-    #fs = np.csingle(fs)
+
     f = np.real(scipy.fft.ifft(fs.T).T)
     return f
-
-# import scipy.io
-# err_dict = {"fsf": np.imag(fs)}
-# scipy.io.savemat('fsf.mat', err_dict)
-
-
 
 
         

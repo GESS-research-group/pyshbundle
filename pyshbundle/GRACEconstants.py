@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sat May  9 18:49:45 2020
-
+# This file contains some basic constants:
+#  - physical
+#  - geodetic (GRS80)
 @author: bv18488
 """
 clight = 2.99792458e8	      # speed of light [m/s]

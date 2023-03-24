@@ -76,10 +76,6 @@ def grule(n):
     if ((m)+(m)) != (n):
         m = m-1
     
-    #jj = np.arange(1,m+1)
-    #nlj = n+1 - jj
-    #bp[nlj-1] = -bp[jj-1]
-    
     for i in range(1,int(m+1)):
         bp[-i]=-bp[i-1]
         wf[-i] = wf[i-1] 
