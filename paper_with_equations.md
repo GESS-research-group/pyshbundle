@@ -95,25 +95,21 @@ $\lambda$ is the longitude.
 We perform a separation of variables and insert $\phi(r,\vartheta,\lambda) =f(r)g(\vartheta)h(\lambda)$ into the Laplace equation to get three independent equations:
 
 $$
-\begin{aligned}
+\begin{align*}
  r^2\frac{d^2f}{dr^2}+2r\frac{df}{dr} - n(n+1)f = 0, \\ 
  \frac{d^2g}{d\vartheta^2}+\frac{dg}{d\vartheta}\cot\vartheta+\bigg(  n(n+1) - \frac{m^2}{\sin^2\vartheta}   \bigg) g = 0 , \\ 
  \frac{d^2h}{d\lambda^2} + m^2h = 0,\\
-\end{aligned}
+\end{align*}
 $$
 
-where $m$ and $n$ are the degree and order respectively. We obtain three independent equations
-
-
-
-The solutions to these are
+where $m$ and $n$ are the order and degree respectively. The solutions to these are
 
 $$
-\begin{aligned}
- f(r) \in \lbrace r^n, r^{-(n+1)}\rbrace \\ 
- g(\vartheta) \in \lbrace P_{n,m}(\cos \vartheta), Q_{n,m}(\cos \vartheta) \rbrace \\ 
- h(\lambda) \in \lbrace \cos m\lambda, \sin m\lambda\rbrace \\
-\end{aligned}
+\begin{align}
+ f(r) \in \lbrace r^n, r^{-(n+1)}\rbrace, \\
+ g(\vartheta) \in \lbrace P_{n,m}(\cos \vartheta), Q_{n,m}(\cos \vartheta) \rbrace, \\
+ h(\lambda) \in \lbrace \cos m\lambda, \sin m\lambda\rbrace, 
+\end{align}
 $$
 
 respectively. 
@@ -129,42 +125,38 @@ $$
 P_{n,m}(\cos\vartheta)\\
 Q_{n,m}(\cos\vartheta)\\
 \end{Bmatrix}
-\dot{•}
+\cdot
 \begin{Bmatrix}
 \cos m\lambda\\
 \sin m\lambda\\
 \end{Bmatrix}
-\dot{•}
+\cdot
 \begin{Bmatrix}
 r^n\\
-r^{(n+1)}\\
+r^{-(n+1)}\\
 \end{Bmatrix}
 .
 \end{equation}
 $$
 
-Solutions for $f(r)$ and $h(\lambda)$ are fairly straightforward. Eq - (3) for $g(\vartheta)$ is in the form of a Legendre differential equation and its solutions are $P_{n,m}(\cos \vartheta)$ and $Q_{n,m}(\cos \vartheta)$, the associated Legendre functions of the first and second kind. We now apply two constraints to the solution:
+Solutions for $f(r)$ and $h(\lambda)$ are fairly straightforward. $g(\vartheta)$ is in the form of a Legendre differential equation and its solutions are $P_{n,m}(\cos \vartheta)$ and $Q_{n,m}(\cos \vartheta)$, the associated Legendre functions of the first and second kind. We now apply two constraints to the solution:
 
 * $\phi \rightarrow 0$ when $r \rightarrow \infty$,
 * $\phi$ is limited on the sphere,
 
-which leads us to eliminate $Q_{n,m}(\cos \vartheta)$ and $r^n$.The $4\pi$ normalization of the Associated Legendre functions [8] is utilized in our package and is given by: 
+which leads us to eliminate $Q_{n,m}(\cos \vartheta)$ and $r^n$.The $4\pi$ normalization of the Associated Legendre functions is utilized in our package and is given by: 
 
 $$
 \begin{equation}
 \bar{P}_{n,m}(\cos\vartheta) = P_{n,m}(\cos\vartheta)\sqrt{(2-\delta_{m0})(2n+1)\frac{(n-m)!}{(n+m)!}},
 \end{equation}
 $$
-where $\delta_{m0}$ is the Kronecker delta function,
+
+where $\delta_{m0}$ is the Kronecker delta function and 
+
 $$
 \begin{equation}
-P_{n,m}(t) = (1-t^2)^{\frac{m}{2}}\frac{d^mP_n(t)}{dt^m},
-\end{equation}
-$$
-and 
-$$
-\begin{equation}
-nP_n(t)=-(n-1)P_{n-2}(t) + (2n-1)tP_{n-1}(t).
+P_{n,m}(t) = (1-t^2)^{\frac{m}{2}}\frac{d^{m+n}}{dt^{m+n}} \frac{(t^2-1)^n}{2^nn!}. 
 \end{equation}
 $$
 
@@ -181,15 +173,14 @@ The gravitational potential anomaly $V$ is given by:
 $$
 \begin{equation}
     V(r, \vartheta, \lambda) = 
-    \frac{GM}{r} \sum_{n=0} ^{N_{max}} \sum_{m=0} ^{n} 
+    \frac{GM}{R} \sum_{n=0} ^{N_{max}} \sum_{m=0} ^{n} 
     \left(\frac{R}{r}\right) ^{n+1}
     \bar{P}_{n,m}(\cos \vartheta)\[C_{n,m}\cos m\lambda+S_{n,m}\sin m\lambda\].
 \end{equation}
 $$
 
-Here, $R$ refers to the radius of the Earth,
-$\bar{P}_ {n,m}$ refers to the Associated Legendre functions with $4\pi$ normalization,
-$C_{lm}$ and  $S_{lm}$ refer to the spherical harmonic coefficients. Similarly, another functional, the change in surface mass density, is represented by:
+Here, $R$ refers to the radius of the Earth, $N_{max}$ refers to the maximum degree taken for the computation and truncated, $\bar{P}_ {n,m}$ refers to the Associated Legendre functions with $4\pi$ normalization,
+$C_{lm}$ and  $S_{lm}$ refer to the spherical harmonic coefficients. Similarly, another functional, the change in surface mass density (mass anomaly) used to find the Equivalent Water Height, is represented by:
 
 $$
 \begin{equation}
@@ -198,8 +189,8 @@ $$
     \sum_{n=0}^{N_{max}}\sum_{m=0}^{n} 
     \left(\frac{R}{r}\right)^{n+1} 
     \bar{P}_{n,m}(\cos\vartheta)
-    \frac{2n+1}{1+k_l}
-    \[C_{n,m}\cos m\lambda + S_{n,m}\sin m\lambda\],
+    \frac{2n+1}{1+k_n}
+    \[\Delta C_{n,m}\cos m\lambda + \Delta S_{n,m}\sin m\lambda\],
 \end{equation}
 $$
 
