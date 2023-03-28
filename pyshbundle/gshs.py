@@ -95,17 +95,17 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     wd = getcwd()
     chdir(wd)
 
-    from cs2sc import cs2sc
-    from normalklm import normalklm
-    from plm import plm
-    from eigengrav import eigengrav
-    from ispec import ispec
+    from . import cs2sc
+    from . import normalklm
+    from . import plm
+    from . import eigengrav
+    from . import ispec
     
     rows, cols = field.shape
     
     if rows == cols:                    #field in CS-format 
         lmax = rows - 1
-        field = cs2sc(field)
+        field = cs2sc.cs2sc(field)
     elif cols - 2 * rows == -1:         #field in SC-format already
         lmax = rows - 1
     else:
@@ -158,10 +158,10 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     '''
     
     if jflag:
-        field = field - cs2sc(normalklm(lmax+1))
+        field = field - cs2sc.cs2sc(normalklm(lmax+1))
         
     l = np.arange(0, lmax+1)
-    transf = np.array([eigengrav(lmax, quant, h)]).T
+    transf = np.array([eigengrav.eigengrav(lmax, quant, h)]).T
     
     field = field * np.matmul(transf, np.ones((1, 2*lmax+1)), dtype='longdouble')
     
@@ -193,7 +193,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     m = 0
     c = field[m:lmax+1, lmax+m] 
     l = np.array([np.arange(m,lmax+1)])
-    p = plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
+    p = plm.plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
     a[:, m] = np.dot(p,c) 
     b[:, m] = np.zeros(nlat) 
     
@@ -210,7 +210,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
         s = field[m:lmax+1,lmax-m]
         
         l = np.array([np.arange(m,lmax+1)])
-        p = plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
+        p = plm.plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
         a[:, m] = np.dot(p,c)
         b[:, m] = np.dot(p,s)
         
@@ -241,7 +241,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     
     #Code for ispec
     
-    f = ispec(a.T,b.T).T
+    f = ispec.ispec(a.T,b.T).T
     if dlam > 1: 
         f = f[:,np.arange(1,dlam*nlon+1,dlam)]
 

@@ -22,8 +22,8 @@ Created on Mon May 11 00:20:49 2020
 # --------------------------------------------------------------------------
 def eigengrav(lmax,fstr, h):
     import numpy
-    import GRACEpy as GB
-    import GRACEconstants as GC
+    from . import GRACEpy as GB
+    from . import GRACEconstants as GC
     
     if type(lmax) == int:
         rows = 1
