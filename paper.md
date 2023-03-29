@@ -40,11 +40,11 @@ bibliography: paper.bib
 
 # Summary
 
-`GRACE` or Gravity Recovery and Climate Experiment<sup>1</sup>, is a gravimetric satellite mission that can detect the Total Water Storage Anomaly (`TWSA`) in the earth system. The data from the satellite system has been used for various hydrological studies related to groundwater depletion, floods, droughts, etc. GRACE satellite products are typically released in different product levels. In this contribution, we have translated the exisitng matlab codes SHbundle into the python programming language. SHbundle is a Matlab code that converts GRACE level 2 (`L2`) Spherical Harmonics data products into Level 3 (`L3`) `TWSA` products. In addition, a GRACE data driven correction algorithm, firstly coded in Matlab, has also been translated into Python. With this contribution, we hope to enable further work on GRACE data analytics using the Python programming language. Further, we hope to develop synergies within the geodesy community using different programming languages to better collaborate with one-another through this common framework of SHbundle and PySHbundle packages in Matlab and Python programming languages respectively.
+`GRACE` or the Gravity Recovery and Climate Experiment<sup>1</sup>, is a gravimetric satellite mission that can detect the Total Water Storage Anomaly (`TWSA`) in the earth system. The data from the satellite system has been used for various hydrological studies related to groundwater depletion, floods, droughts, etc. GRACE satellite products are typically released in different product levels. In this contribution, we have translated the exisitng matlab codes SHbundle into the python programming language. SHbundle is a Matlab code that converts GRACE level 2 (`L2`) Spherical Harmonics data products into Level 3 (`L3`) `TWSA` products. In addition, a GRACE data driven correction algorithm, firstly coded in Matlab, has also been translated into Python. With this contribution, we hope to enable further work on GRACE data analytics using the Python programming language. Further, we hope to develop synergies within the geodesy community using different programming languages to better collaborate with one-another through this common framework of SHbundle and PySHbundle packages in Matlab and Python programming languages respectively.
 
 # Introduction
 
-GRACE stands for the Gravity Recovery and Climate Experiment, a joint satellite mission by NASA, the National Aeronautics and Space Administration and DLR, the German Aerospace Centre. Some detailsof the GRACE mission is provided in Table 1.
+GRACE stands for the Gravity Recovery and Climate Experiment, a joint satellite mission by NASA, the National Aeronautics and Space Administration and DLR, the German Aerospace Centre. Some details of the GRACE mission is provided in Table 1.
 
 <i>Table 1: Summary of GRACE satellite mission</i>
 | Parameter        |    Details      | 
@@ -68,9 +68,93 @@ A MATLAB code bundle already exists called `SHbundle` developed by `Sneew et al.
 On the other hand, a strong community of programmers also exists for Python, an open-source programming language. In this contribution, we have translated the MATLAB codes from the SHbundle into the Python programming language. In addition to the SHBundle codes, we have further translated the `GRACE Data Driven Correction (GDDC)` codes from Matlab to Python. `GDDC` allows the correction of filtered GRACE `Level 2` products and restore the signal loss, independent of the catchment size `(Vishwakarma et al., 2017)`.<br>
 It is hoped the contribution will make GRACE L2 data processing more accessible to a wider audience of programmers. Our python package is titled `PySHbundle` and the working code can be accessed in GitHub : [https://github.com/mn5hk/pyshbundle](https://github.com/mn5hk/pyshbundle)
 
+# Mathematic Backround
+
+GRACE works on the principal of gravimetric changes. Level 2 GRACE data consists of the spherical harmonic coefficients  <i>$C_{l,m}$</i> and <i>$S_{l,m}$</i>. Gravimetric potential function <i>V ( r, θ, λ )</i> can be represented by the spherical harmonic coefficients in the frequency domain with the help of the following relation `(Vishwakarma, 2017; Kaula, 1996; Chao & Gross, 1987; Wahr et. al., 1998)`:
+
+$
+\begin{equation}
+    V(r, \theta, \lambda) = 
+    \frac{GM}{r} \sum_{l=0} ^ {\infty} 
+    \left(\frac{a}{r}\right) ^ {l}
+    \sum_{m=0} ^ {l} 
+    \bar{P}_{l,m}(\cos \theta)[C_{l,m}\cos m\lambda+S_{l,m}\sin m\lambda],
+\end{equation}
+$
+
+where <i>G</i> is the Gravitational constant, <i>M</i> represents the total Earth mass, <i>a</i> is the average radius of the Earth, <i>$P_{l,m}$</i>  represents the the fully normalized Legendre functions of the first kind, <i>$C_{l,m}$</i> and <i>$S_{l,m}$</i> represent the fully normalized spherical harmonic coefficients, and <i>l</i> and <i>m</i> represent the degree and order, respectively.
+
+It should be noted that <i>equation 1</i> does not deal with the variability of gravimetric potential function over time. However, a major application of the GRACE satellite system is to retrieve the time-variable gravity information. This is acheived by taking the variation of the spherical harmonic coefficients over time. To obtain this, a long-term mean of the monthly values of the spherical harmonic coefficients is removed from the monthly spherical harmonic coefficients obtained from GRACE L2 data. This can be denoted by <i>$ \Delta C_{l,m}$</i> and <i>$ \Delta P_{l,m}$</i>. Thus, <i>equation 1</i> can be modified to obtain the change in gravimetric potential function over time.
+
+Since we are interested in the change in mass in our system, we need to obtain the change in density from the change in gravity potential function. It is further assumed that the redistribution of the mass of the earth takes place within a thin layer close to the surface of the Earth. Furthermore, this mass redistribution takes place with a deformation. The mass deformation is accounted for by the load Love numbers <i>k<sub>l</sub></i> `(Wahr et. al., 1998)`. As such, <i>equation 1</i> further resolves to:
+
+$
+\begin{equation}
+    \Delta \sigma (\theta, \lambda) = 
+    \frac{a \rho_{avg}}{3} \sum_{l=0} ^ {\infty} 
+    \sum_{m=0} ^ {l} 
+    \bar{P}_{l,m}(\cos \theta)
+    \frac{2 l + 1}{1 + k_{l}}
+    [\Delta C_{l,m}\cos m\lambda+ \Delta S_{l,m}\sin m\lambda],
+\end{equation}
+$
+
+Here, <i>$\Delta \sigma (\theta, \lambda)$</i> represents the change in surface density of the Earth, and <i>$\rho_{avg}$</i> represents the average density of the Earth (<i>5517 kg / m<sup>3</sup></i>). As the mass redistribution on Earth over a monthly time scale is dominated by the hydroogical processes, the density change <i>$\Delta \sigma (\theta, \lambda)$</i> relates to the <i>Equivalent Water Height (EWH)</i> by: <i>$\Delta \sigma (\theta, \lambda) = EWH (\theta, \lambda) . \rho_{water}$</i>. Thus, <i>equation 2</i> can be rewritten in terms of <i>EWH</i> as:
+
+$
+\begin{equation}
+    EWH (\theta, \lambda) = 
+    \frac{a \rho_{avg}}{3 \rho_{water}} 
+    \sum_{l, m}
+    \bar{P}_{l,m}(\cos \theta)
+    \frac{2 l + 1}{1 + k_{l}}
+    [\Delta C_{l,m}\cos m\lambda+ \Delta S_{l,m}\sin m\lambda],
+\end{equation}
+$
+
+Thus, we can obtain the hydrological parameter <i>EWH</i> from GRACE Level 2 data using <i>equation 3</i>. The accuracy and precision of the <i>EWH</i> computed depends upon the accuracy and precision of the <i>$\Delta C_{l,m}$</i> and <i>$\Delta P_{l,m}$</i>, obtained from GRACE. However, these GRACE products are both noisy and coarse in resolution `(Wahr et. al., 1998)`. A tradeoff exists between the noise and resolution of the spherical harmonic products. To capture the spherical harmonic products at a higher spatial resolution, their values at higher degree and order needs to be used. However, noise increases with the increase in degree and order, making the computed <i>EWH</i> also noisy. Similarly, if the spherical harmonics are truncated at a lower degree and order, the noise in the computed <i>EWH</i> decreases, however, the spatial resolution of the obtained <i>EWH</i> also reduces.
+
+To improve the signal-to-noise ratio of the obtained <i>EWH</i>, various filtering techniques have been used. An ideal filter retains all of the signal while filtering out all of the noise. A popular filter used for GRACE applications is the Gaussian filter. The weights, <i>w</i>, for the Gaussian spatial averaging is given by:
+
+$
+\begin{equation}
+    \omega (\psi) = 
+    \frac{\beta}{2 \pi} 
+    \frac{exp [-\beta (1 - \cos \psi)]}{1 - \exp ^ {-2 \beta}},
+\end{equation}
+$
+
+where, $\beta = \frac{\ln (2)}{(1 - \cos(\frac{r_{fil}}{a}))'}$. Here, $r_{fil}$ is the averaging radius of the filter. Thus, the Gaussian filter obtained in the spectral domain is written as `(Wahr et. a., 1998)`:
+
+$$
+\begin{equation}
+\bar{\sigma}(\theta, \lambda) = 
+\frac{2 a \rho_{avg} \pi}{3} 
+    \sum_{l, m} W_l
+    \bar{P}_{l,m}(\cos \theta)
+    \frac{2 l + 1}{1 + k_{l}}
+    [\Delta C_{l,m}\cos m\lambda+ \Delta S_{l,m}\sin m\lambda],
+\end{equation}
+$$
+
+<i>Equation 5</i> is similar to <i>equation 3</i>, but for an additional multiplication factor, <i>$W_l$</i>, defined as <i>$W_l = \int_0^\pi w (\psi) P_l (\cos \psi) \sin \psi d\psi$</i> and <i>$P_l = \frac{\bar{P_l}}{\sqrt {2l + 1}}$</i>. <i>Equation 5</i> defines a Gaussian filter that decays with only degree. However, for our GRACE spherical harmonics, the decay occurs with the location as well as with the degrees and orders. Thus, <i>equation 5</i> is further generalized as `(Wahr et. al., 1998; Devaraju, 2015)`:
+$$
+\begin{equation}
+\bar{\sigma}(\theta, \lambda) = 
+\frac{a \rho_{avg}}{12 \pi} 
+    \sum_{l, m}
+    \sum_{n, k} W_{lm}^{nk}
+    \bar{P}_{l,m}(\cos \theta)
+    \frac{2 l + 1}{1 + k_{l}}
+    [\Delta C_{l,m}\cos m\lambda+ \Delta S_{l,m}\sin m\lambda],
+\end{equation}
+$$
+
+where <i>$W_{lm}^{nk}$</i> represents the spectral weight in its general form. <i>Equation 6</i> is the final result we obtain after spectral harmonic analysis and application of Gaussian filter. More details on the mathematical description presented in this section can be referred to in `Vishwakarma (2017)`.
+
 # Methodology
 
-We have implemented the matlab codes `SHbundle` into the python programming language. More details on the `SHbundle` package may be refered to at `Sneew et al. (2021)`. In addition, `GRACE Data Driven Corrections` algorithm has also been translated from matlab to python. The naming of the modules and the workflow between the modules has been preserved as much as possible in the `PySHbundle` python implementation. This is to ensure smooth communication between user communitities of the two packages and/or the two different programming language communities. Further, our code has been tested using the `SHbundle` implementation results for validation.
+In this contribution, tools to implement the spherical harmonic analysis and filtering application has been developed in the python programming language. In addition, complementary analytical tools such as spherical harmonic synthesis and GRACE data driven correction have also been included. To achieve this, we have implemented the preexisting matlab codes `SHbundle` into the python programming language. More details on the `SHbundle` package may be refered to at `Sneew et al. (2021)`. In addition, `GRACE Data Driven Corrections` algorithm `(Vishwakarma et. a., 2017)` has also been translated from matlab to python. The naming of the modules and the workflow between the modules has been preserved as much as possible in the `PySHbundle` python implementation. This is to ensure smooth communication between user communitities of the two packages and/or the two different programming language communities. Further, our code has been tested using the `SHbundle` implementation results for validation.
 
 # Implementation
 A schematic diagram of the code workflow is presented in the Fig 01. <br>
@@ -116,20 +200,24 @@ The results of the PySHbundle TWS computation has been validated with respect to
 
 # Citations
 
-- Antoni, M. (2022). A review of different mascon approaches for regional gravity field modelling since 1968. History of Geo-and Space Sciences, 13(2), 205-217.
-- Darbeheshti, N., Wöske, F., Weigelt, M., Mccullough, C., & Wu, H. (2018). GRACETOOLS—GRACE Gravity Field Recovery Tools. Geosciences, 8(9), 350.
+- Antoni, M. (2022). A review of different mascon approaches for regional gravity field modelling since 1968. History of Geo-and Space Sciences, 13(2), 205-217. https://hgss.copernicus.org/articles/13/205/2022/ 
+- Chao, B. F., & Gross, R. S. (1987). Changes in the Earth's rotation and low-degree gravitational field induced by earthquakes. Geophysical Journal International, 91(3), 569-596. DOI 10.1111/j.1365-246X.197.tb01659.x 
+- Darbeheshti, N., Wöske, F., Weigelt, M., Mccullough, C., & Wu, H. (2018). GRACETOOLS—GRACE Gravity Field Recovery Tools. Geosciences, 8(9), 350. https://www.mdpi.com/2076-3263/8/9/350 
+- Devaraju B (2015) Understanding filtering on the sphere – Experiences from filtering GRACE data. PhD thesis, Universität Stuttgart, https://elib.uni-stuttgart.de/bitstream/11682/4002/1/BDevarajuPhDThesis.pdf 
 - Feng, W. GRAMAT: a comprehensive Matlab toolbox for estimating global mass variations from GRACE satellite data. Earth Sci Inform 12, 389–404 (2019). https://doi.org/10.1007/s12145-018-0368-0
-- Humphrey, V., Rodell, M., & Eicker, A. (2023). Using Satellite-Based Terrestrial Water Storage Data: A Review. Surveys in Geophysics, 1-29.
-- Kusche, J., Schmidt, R., Petrovic, S., & Rietbroek, R. (2009). Decorrelated GRACE time-variable gravity solutions by GFZ, and their validation using a hydrological model. Journal of geodesy, 83, 903-913.
+- Humphrey, V., Rodell, M., & Eicker, A. (2023). Using Satellite-Based Terrestrial Water Storage Data: A Review. Surveys in Geophysics, 1-29. https://link.springer.com/article/10.1007/s10712-022-09754-9 
+- Kaula, W. M. (1966). Theory of satellite geodesy, Blaisdell Publ. Co., Waltham, Mass, 345.
+- Kusche, J., Schmidt, R., Petrovic, S., & Rietbroek, R. (2009). Decorrelated GRACE time-variable gravity solutions by GFZ, and their validation using a hydrological model. Journal of geodesy, 83, 903-913. https://link.springer.com/article/10.1007/s00190-009-0308-3 
 - Lambeck, K. (1988). Geophysical geodesy (p. 718). Oxford: Clarendon.
 - Li (2020). Gg-tools. https://pypi.org/project/ggtools.
 - Nico Sneeuw, Matthias Weigelt, Markus Antoni, Matthias Roth, Balaji Devaraju, et. al. (2021). SHBUNDLE 2021. http://www.gis.uni-stuttgart.de/research/projects/Bundles.
-- Piretzidis, D., & Sideris, M. G. (2018). SHADE: A MATLAB toolbox and graphical user interface for the empirical de-correlation of GRACE monthly solutions. Computers & Geosciences, 119, 137-150.
+- Piretzidis, D., & Sideris, M. G. (2018). SHADE: A MATLAB toolbox and graphical user interface for the empirical de-correlation of GRACE monthly solutions. Computers & Geosciences, 119, 137-150. https://www.sciencedirect.com/science/article/pii/S0098300418302760 
 - Rietbroek. GRACE filter. https://github.com/strawpants/GRACE-filter.
 - Sutterley (2023). Gravity-toolkit. https://github.com/tsutterley/gravity-toolkit. 
-- Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). A data‐driven approach for repairing the hydrological catchment signal damage due to filtering of GRACE products. Water Resources Research, 53(11), 9824-9844.
-- Wahr, J., Molenaar, M., & Bryan, F. (1998). Time variability of the Earth's gravity field: Hydrological and oceanic effects and their possible detection using GRACE. Journal of Geophysical Research: Solid Earth, 103(B12), 30205-30229.
-- Wieczorek, M. A., & Meschede, M. (2018). SHTools: Tools for working with spherical harmonics. Geochemistry, Geophysics, Geosystems, 19(8), 2574-2592.
+- Vishwakarma, B. D. (2017). Understanding and repairing the signal damage due to filtering of mass change estimates from the GRACE satellite mission. https://elib.uni-stuttgart.de/handle/11682/9210 
+- Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). A data‐driven approach for repairing the hydrological catchment signal damage due to filtering of GRACE products. Water Resources Research, 53(11), 9824-9844. https://agupubs.onlinelibrary.wiley.com/doi/full/10.1002/2017WR021150 
+- Wahr, J., Molenaar, M., & Bryan, F. (1998). Time variability of the Earth's gravity field: Hydrological and oceanic effects and their possible detection using GRACE. Journal of Geophysical Research: Solid Earth, 103(B12), 30205-30229. https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/98jb02844 
+- Wieczorek, M. A., & Meschede, M. (2018). SHTools: Tools for working with spherical harmonics. Geochemistry, Geophysics, Geosystems, 19(8), 2574-2592. https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018GC007529 
 </p>
 
 
