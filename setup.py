@@ -39,7 +39,7 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
     ],
-    description="A Python implementation of MATLAB codes SHbundle",
+    description="PySHbundle: A Python implementation of MATLAB codes SHbundle",
     package_data={"my_package": ["data/*"]},
     install_requires=install_requires,
     dependency_links=dependency_links,

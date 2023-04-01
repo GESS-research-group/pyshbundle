@@ -1,7 +1,7 @@
 GNU GENERAL PUBLIC LICENSE
                       Version 3, 29 June 2007
 
-    A python package to process GRACE spherical harmonics
+    PySHbundle: A Python implementation of MATLAB codes SHbundle
     Copyright (C) 2023  Amin Shakya
 
     This program is free software: you can redistribute it and/or modify
