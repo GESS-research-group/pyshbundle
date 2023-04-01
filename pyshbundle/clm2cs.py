@@ -47,8 +47,8 @@ def clm2cs(data):
     
     
     ''' Load data '''
-    #data = np.load(path, allow_pickle=True)
-    #data = np.load('/home/wslvivek/Desktop/level2/preprocess/output/saved_as_num.npy', allow_pickle=True)
+    # data = np.load(path, allow_pickle=True)
+    # data needs to be loaded in numpy format
     
     ''' Read variables '''
     no_of_years = len(data[0])
@@ -78,4 +78,4 @@ def clm2cs(data):
                 j = j + 1
             month = month + 1
     print('Conversion into clm format complete')        
-    #np.save('/home/wslvivek/Desktop/level2/preprocess/output/SH_coeff_cs.npy', cs_mat)
+    #np.save('/path/SH_coeff_cs.npy', cs_mat)

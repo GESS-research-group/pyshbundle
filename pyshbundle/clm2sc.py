@@ -45,8 +45,8 @@ Key Papers Referred:
 def clm2sc(data):
     import numpy as np
     # import pickle
-    # data=np.load("/home/wslvivek/Desktop/level2/pysh_v2/output/saved_as-num.npy",allow_pickle=True)
-    # with open("/home/wslvivek/Desktop/level2/pysh_v2/output/saved_as_num", "rb") as pk:
+    # data=np.load("/path/saved_as-num.npy",allow_pickle=True)
+    # with open("/path/saved_as_num", "rb") as pk:
     #     data=pickle.load(pk)
     ''' Read variables '''
     no_of_years = len(data[0])

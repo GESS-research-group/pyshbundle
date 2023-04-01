@@ -124,22 +124,6 @@ from scipy import sparse
 from scipy import linalg
 from . import iplm
 from . import sc2cs
-'''
-Use the other code for debug for now
-##SC = np.load("SC_numpy.npy")
-#f1 = scipy.io.loadmat('/home/bramha/Desktop/5hk/Papers/01_IISc/Bramha/Data_Nature/f_gsha_20220825.mat')
-##f = SC[0]
-#f = f1['f'][0]
-'''
-
-'''
-import scipy.io
-f1 = scipy.io.loadmat('/home/bramha/Desktop/5hk/Papers/01_IISc/Bramha/Data_Nature/Downscaling_implementation_scripts/Rb_GDDC_gsha_20220826.mat', mat_dtype= 1)
-f = f1['Rb']
-method = 'mean'
-grid = 'block'
-lmax = 720/2
-'''
 
 def gsha(f, method, grid = None, lmax = -9999):
     rows, cols = f.shape
@@ -214,11 +198,6 @@ def gsha(f, method, grid = None, lmax = -9999):
     '''
     
     
-    
-    
-    
-#    if len(theta.shape) == 1:
-#        theta = theta.reshape(theta.shape[0],1)
         
     if len(lam.shape) == 1:
         lam = lam.reshape(1,lam.shape[0])
@@ -251,9 +230,9 @@ def gsha(f, method, grid = None, lmax = -9999):
             c[:,0] = dl / 360
             m = np.arange(1, L+1)
             ms = 2 / m * np.sin(m * dl/2 * np.pi/180) / np.pi
-            c[:,1:(L+1)+1] = c[:,1:(L+1)+1] * ms  #Double check how to run these lines 2022-08-26
+            c[:,1:(L+1)+1] = c[:,1:(L+1)+1] * ms  
             s[:,1:(L+1)+1] = s[:,1:(L+1)+1] * ms
-#            raise Exception("This use case is not yet fully developed")
+
         else:
             c = c/L
             s = s/L
@@ -264,8 +243,8 @@ def gsha(f, method, grid = None, lmax = -9999):
     else:
         c = c/L
         s = s/L
-        c[:,[0, L]] = c[:,[0, L]]/2	#% / (1 + dm0 + dmL)
-        s[:,[0, L]] = np.zeros((2*n,2))	#% / (1 - dm0 - dmL), Sl0 & SLL unestimable  
+        c[:,[0, L]] = c[:,[0, L]]/2	
+        s[:,[0, L]] = np.zeros((2*n,2))	  
     
     
     a = f @ c
@@ -291,23 +270,6 @@ def gsha(f, method, grid = None, lmax = -9999):
             clm[m+1:L+2, m+1] = linalg.lstsq(p, ai)
             slm[m+1:L+2, m+1] = linalg.lstsq(p, bi)
             
-#    elif method == 'wls': #wls method not yet checked
-#        si = np.sin(theRAD)
-#        si = 2 * si / np.sum(si)
-#        
-#        for m in range(L+1):
-#            l = np.arange(m,L+1).reshape(L+1-m,1)
-#            l = l.T
-#            
-#            p = plm(l,m,theRAD, 3,1)
-#            ai = a[:,m+1]
-#            bi = b[:,m+1]
-#            d = np.arange(len(theRAD))
-#            pts = p.T @ sparse.coo_matrix((si,(d,d))
-#                
-##            How to write a sparse:     sparse.coo_matrix((data,(row,col)),shape=(lmax,lmax)).toarray()
-#            clm[m+1:L+2, m+1] = linalg.lstsq(pts @ p, pts @ ai)
-#            slm[m+1:L+2, m+1] = linalg.lstsq(pts @ p, pts @ bi)
             
     elif method == 'aq': #Approximate Quadrature
         si = np.sin(theRAD)
@@ -385,7 +347,7 @@ def gsha(f, method, grid = None, lmax = -9999):
     cs = cs[:int(lmax+1), :int(lmax+1)]
     
     '''
-    np.save('/mnt/Data/5hk/Project_STC/Mat2Py/mat2py/test/gddc_csRb_r0/csRb_20220922a.npy',cs)
+    np.save('/path/csRb.npy',cs)
     '''
     return cs
     

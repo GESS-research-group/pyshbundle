@@ -21,7 +21,6 @@ Created on Wed Aug 10 15:55:22 2022
 %              - 'pole', 'mesh' ..... (default), equi-angular (n+1)*2n, including 
 %                                     poles and Greenwich meridian.
 %              - 'block', 'cell' .... equi-angular block midpoints. n*2n
-%              - 'neumann', 'gauss' . Gauss-grid (n+1)*2n
 %     n ...... grid size parameter n. (default: n = lmax, determined from field)
 %              #longitude samples: 2*n
 %              #latitude samples n ('blocks') or n+1.
@@ -86,6 +85,42 @@ Created on Wed Aug 10 15:55:22 2022
 % A lot of checking is done by EIGENGRAV as well.
 % -------------------------------------------------------------------------
 
+This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+Acknowledgement Statement:
+    Please note that PySHbundle has adapted the following code packages, 
+    both licensed under GNU General Public License
+    1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
+
+    2. Downscaling GRACE Total Water Storage Change using 
+    Partial Least Squares Regression
+    https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
+    
+Key Papers Referred:
+    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
+    A data‐driven approach for repairing the hydrological catchment signal damage 
+    due to filtering of GRACE products. Water Resources Research, 
+    53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
+
+    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
+    Downscaling GRACE total water storage change using 
+    partial least squares regression. Scientific data, 8(1), 95.
+    https://doi.org/10.1038/s41597-021-00862-6 
+
 @author: Amin Shakya, ICWaR, IISc Bangalore
 """
 def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
@@ -136,11 +171,6 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     elif grd == 'block' or grd == 'cell':
         theRAD = np.arange(dt/2, np.pi + dt*0.5, dt, dtype='longdouble')
         lamRAD = np.arange(dt/2, 2*np.pi + dt*0.5, dt, dtype='longdouble')
-    #The elif below does not work
-#    elif grd == 'neumann' or grd == 'gauss':
-#        gx, _ = grule(n+1)
-#        theRAD = np.flipud(np.cosh(np.standing(gx)))
-#        lamRAD = np.arange(0, 2*np.pi-0.5*dt, dt)
     else:
         raise Exception("Incorrect grid type input")
     
@@ -180,16 +210,9 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     abcols = dlam*n + 1                     #columns required in A and B
     a = np.zeros((nlat, int(abcols)), dtype='longdouble')
     b = np.zeros((nlat, int(abcols)), dtype='longdouble')
-    
-    '''
-    %hwb    = waitbar(0, 'Percentage of orders m ready ...');
-%set(hwb, 'NumberTitle', 'off', 'Name', 'GSHS')
+     
 
-% -------------------------------------------------------------------------
-% Treat m = 0 separately
-% -------------------------------------------------------------------------
-    '''
-    
+
     m = 0
     c = field[m:lmax+1, lmax+m] 
     l = np.array([np.arange(m,lmax+1)])
@@ -197,13 +220,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     a[:, m] = np.dot(p,c) 
     b[:, m] = np.zeros(nlat) 
     
-    '''
-    %waitbar((m+1) / (lmax+1)) 			% Update the waitbar
-
-% -------------------------------------------------------------------------
-% Do loop m = 1 to lmax
-% -------------------------------------------------------------------------
-    '''
+    
     
     for m in range(1,lmax+1,1):
         c = field[m:lmax+1,lmax+m]
