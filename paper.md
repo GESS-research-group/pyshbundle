@@ -29,7 +29,7 @@ affiliations:
    index: 2
  - name: Centre of Earth Science, Indian Institute of Science, India
    index: 3
-date: 24 February 2023
+date: 04 April 2023
 bibliography: paper.bib
 
 # Optional fields if submitting to a AAS journal too, see this blog post:
