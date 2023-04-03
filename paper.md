@@ -80,7 +80,7 @@ $$
     \sum_{m=0} ^ {l} 
     \bar{P}_{l,m}(\cos \theta)[C_{l,m}\cos m\lambda+S_{l,m}\sin m\lambda],
 \end{equation}
-$$
+$$ (1)
 
 where <i>G</i> is the Gravitational constant, <i>M</i> represents the total Earth mass, <i>a</i> is the average radius of the Earth, <i>$P_{l,m}$</i>  represents the the fully normalized Legendre functions of the first kind, <i>$C_{l,m}$</i> and <i>$S_{l,m}$</i> represent the fully normalized spherical harmonic coefficients, and <i>l</i> and <i>m</i> represent the degree and order, respectively.
 
@@ -97,7 +97,7 @@ $$
     \frac{2 l + 1}{1 + k_{l}}
     [\Delta C_{l,m}\cos m\lambda+ \Delta S_{l,m}\sin m\lambda],
 \end{equation}
-$$
+$$ (2)
 
 Here, <i>$\Delta \sigma (\theta, \lambda)$</i> represents the change in surface density of the Earth, and <i>$\rho_{avg}$</i> represents the average density of the Earth (<i>5517 kg / m<sup>3</sup></i>). As the mass redistribution on Earth over a monthly time scale is dominated by the hydroogical processes, the density change <i>$\Delta \sigma (\theta, \lambda)$</i> relates to the <i>Equivalent Water Height (EWH)</i> by: <i>$\Delta \sigma (\theta, \lambda) = EWH (\theta, \lambda) . \rho_{water}$</i>. Thus, <i>equation 2</i> can be rewritten in terms of <i>EWH</i> as:
 
@@ -110,7 +110,7 @@ $$
     \frac{2 l + 1}{1 + k_{l}}
     [\Delta C_{l,m}\cos m\lambda+ \Delta S_{l,m}\sin m\lambda],
 \end{equation}
-$$
+$$ (3)
 
 Thus, we can obtain the hydrological parameter <i>EWH</i> from GRACE Level 2 data using <i>equation 3</i>. The accuracy and precision of the <i>EWH</i> computed depends upon the accuracy and precision of the <i>$\Delta C_{l,m}$</i> and <i>$\Delta P_{l,m}$</i>, obtained from GRACE. However, these GRACE products are both noisy and coarse in resolution `(Wahr et. al., 1998)`. A tradeoff exists between the noise and resolution of the spherical harmonic products. To capture the spherical harmonic products at a higher spatial resolution, their values at higher degree and order needs to be used. However, noise increases with the increase in degree and order, making the computed <i>EWH</i> also noisy. Similarly, if the spherical harmonics are truncated at a lower degree and order, the noise in the computed <i>EWH</i> decreases, however, the spatial resolution of the obtained <i>EWH</i> also reduces.
 
@@ -122,7 +122,7 @@ $$
     \frac{\beta}{2 \pi} 
     \frac{exp [-\beta (1 - \cos \psi)]}{1 - \exp ^ {-2 \beta}},
 \end{equation}
-$$
+$$ (4)
 
 where, $\beta = \frac{\ln (2)}{(1 - \cos(\frac{r_{fil}}{a}))'}$. Here, $r_{fil}$ is the averaging radius of the filter. Thus, the Gaussian filter obtained in the spectral domain is written as `(Wahr et. a., 1998)`:
 
@@ -135,7 +135,7 @@ $$
     \frac{2 l + 1}{1 + k_{l}}
     [\Delta C_{l,m}\cos m\lambda+ \Delta S_{l,m}\sin m\lambda],
 \end{equation}
-$$
+$$ (5)
 
 <i>Equation 5</i> is similar to <i>equation 3</i>, but for an additional multiplication factor, <i>$W_l$</i>, defined as <i>$W_l = \int_0^\pi w (\psi) P_l (\cos \psi) \sin \psi d\psi$</i> and <i>$P_l = \frac{\bar{P_l}}{\sqrt {2l + 1}}$</i>. <i>Equation 5</i> defines a Gaussian filter that decays with only degree. However, for our GRACE spherical harmonics, the decay occurs with the location as well as with the degrees and orders. Thus, <i>equation 5</i> is further generalized as `(Wahr et. al., 1998; Devaraju, 2015)`:
 
@@ -149,7 +149,7 @@ $$
     \frac{2 l + 1}{1 + k_{l}}
     [\Delta C_{l,m}\cos m\lambda+ \Delta S_{l,m}\sin m\lambda],
 \end{equation}
-$$
+$$ (6)
 
 where <i>$W_{lm}^{nk}$</i> represents the spectral weight in its general form. <i>Equation 6</i> is the final result we obtain after spectral harmonic analysis and application of Gaussian filter. More details on the mathematical description presented in this section can be referred to in `Vishwakarma (2017)`.
 
