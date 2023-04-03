@@ -42,8 +42,9 @@ This file is part of PySHbundle. <br>
     Downscaling GRACE total water storage change using 
     partial least squares regression. Scientific data, 8(1), 95.
     https://doi.org/10.1038/s41597-021-00862-6 
-    """
+    
 
 ## Visitor count
-![](https://visitor-badge.glitch.me/badge?page_id=mn5hk.mat2py) 
+
+![](https://visitor-badge.glitch.me/badge?page_id=mn5hk.mat2py) <br>
 [Geodesy for Earth system science (GESS) research Group at ICWaR, IISc](https://ultra-pluto-7f6d1.netlify.app/)
