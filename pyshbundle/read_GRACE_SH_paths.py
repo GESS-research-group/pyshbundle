@@ -1,6 +1,6 @@
 """
 Created on Fri Feb  17 2023
-@author: Amin Shakya
+@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
 The purpose of this script is to,
     firstly read what the data source is (JPL, CSR or ITSG)

@@ -1,6 +1,20 @@
 # -*- coding: utf-8 -*-
 
 '''
+"""
+    
+     SC2CS(FIELD) converts the rectangular (L+1)x(2L+1) matrix FIELD, containing
+     spherical harmonics coefficients in /S|C\ storage format into a 
+     square (L+1)x(L+1) matrix in |C\S| format.
+    
+     IN:
+        field .... the rectangular (L+1)x(2L+1) matrix FIELD, containing
+                   spherical harmonics coefficients in /S|C\ storage format
+    
+     OUT: 
+        cs ....... square (L+1)x(L+1) matrix in |C\S| format
+    
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 This file is part of PySHbundle. 
     PySHbundle is free software: you can redistribute it and/or modify
@@ -38,31 +52,14 @@ Key Papers Referred:
     partial least squares regression. Scientific data, 8(1), 95.
     https://doi.org/10.1038/s41597-021-00862-6 
     
+@author: 
+    Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+    Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     '''
 
 import numpy
 
 def sc2cs(field):
-    """
-    Created on Thu May  7 18:51:20 2020
-    % SC2CS(FIELD) converts the rectangular (L+1)x(2L+1) matrix FIELD, containing
-    % spherical harmonics coefficients in /S|C\ storage format into a 
-    % square (L+1)x(L+1) matrix in |C\S| format.
-    %
-    % IN:
-    %    field .... the rectangular (L+1)x(2L+1) matrix FIELD, containing
-    %               spherical harmonics coefficients in /S|C\ storage format
-    %
-    % OUT: 
-    %    cs ....... square (L+1)x(L+1) matrix in |C\S| format
-    
-    % ----------------------------------------------------------------------------
-    % project: GRACEpy 
-    % ----------------------------------------------------------------------------
-    % author: Bramha Dutt Vishwakarma, University of Bristol
-    @author: bv18488
-    """
-
     rows = len(field)
     cols = len(field[0])
 

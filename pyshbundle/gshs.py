@@ -3,87 +3,42 @@
 """
 Created on Wed Aug 10 15:55:22 2022
 
-% GSHS global spherical harmonic synthesis 
-% f = gshs(field)
-%
-% IN:
-%    field ... set of SH coefficients, either in SC-triangle or CS-square format 
-%    quant ... optional string argument, defining the field quantity:
-%              - 'none' ............. (default), coefficients define the output
-%              - 'geoid' ............ geoid height [m],
-%              - 'potential' ........ potential [m^2/s^2],
-%              - 'dg', 'gravity' .... gravity anomaly [mGal], 
-%              - 'tr' ............... grav. disturbance, 1st rad. derivative [mGal],
-%              - 'trr' .............. 2nd rad. derivative [1/s^2],
-%              - 'water' ............ equiv. water height [m],
-%              - 'smd' .............. surface mass density [kg/m^2]. 
-%     grd .... optional string argument, defining the grid:
-%              - 'pole', 'mesh' ..... (default), equi-angular (n+1)*2n, including 
-%                                     poles and Greenwich meridian.
-%              - 'block', 'cell' .... equi-angular block midpoints. n*2n
-%     n ...... grid size parameter n. (default: n = lmax, determined from field)
-%              #longitude samples: 2*n
-%              #latitude samples n ('blocks') or n+1.
-%     h ...... (default: 0), height above Earth mean radius [m].
-%     jflag .. (default: true), determines whether to subtract GRS80.
-%
-% OUT:
-%    f ....... the global field
-%    theRAD .. vector of co-latitudes [rad] 
-%    lamRAD .. vector of longitudes [rad]
-%
-% EXAMPLE: see SHBUNDLE/examples/example_gshs.m
-%
-% USES:
-%    vec2cs, cs2sc, eigengrav, plm, normalklm, 
-%    uberall/grule, uberall/standing, uberall/isint, uberall/ispec
-% 
-% SEE ALSO:
-%    GSHSAG, RSHS, GSHA
+ GSHS global spherical harmonic synthesis 
+ f = gshs(field)
 
-% -------------------------------------------------------------------------
-% project: SHBundle 
-% -------------------------------------------------------------------------
-% authors:
-%    Nico SNEEUW (NS), IAPG, TU-Munich
-%    Matthias WEIGELT (MW), DoGE, UofC  
-%    Markus ANTONI (MA), GI, Uni Stuttgart 
-%    Matthias ROTH (MR), GI, Uni Stuttgart
-%    Balaji DEVARAJU (BD), GI, Uni Stuttgart
-%    <bundle@gis.uni-stuttgart.de>
-% -------------------------------------------------------------------------
-% revision history:
-%    2014-03-09: BD, changed the variable 'grid' to 'grd' as 'grid' conflicts
-%                    with the function 'grid'
-%    2014-01-14: MR, brush up help text, beautify code, exchange deprecated
-%                    'isstr' by 'ischar'
-%    2013-02-13: MR, change function names, brush up comments
-%    2013-01-30: MA, comments/removing of smoothing option
-%    2013-01-23: MA, output in radian
-%    2013-01-18: MA, replacement: isscal -> isscalar
-%    1998-08-28: NS, brushing up and redefinition of checks
-%    1994-??-??: NS, initial version
-% -------------------------------------------------------------------------
-% license:
-%    This program is free software; you can redistribute it and/or modify
-%    it under the terms of the GNU General Public License as published by
-%    the  Free  Software  Foundation; either version 3 of the License, or
-%    (at your option) any later version.
-%  
-%    This  program is distributed in the hope that it will be useful, but 
-%    WITHOUT   ANY   WARRANTY;  without  even  the  implied  warranty  of 
-%    MERCHANTABILITY  or  FITNESS  FOR  A  PARTICULAR  PURPOSE.  See  the
-%    GNU General Public License for more details.
-%  
-%    You  should  have  received a copy of the GNU General Public License
-%    along with Octave; see the file COPYING.  
-%    If not, see <http://www.gnu.org/licenses/>.
-% -------------------------------------------------------------------------
+ IN:
+    field ... set of SH coefficients, either in SC-triangle or CS-square format 
+    quant ... optional string argument, defining the field quantity:
+              - 'none' ............. (default), coefficients define the output
+              - 'geoid' ............ geoid height [m],
+              - 'potential' ........ potential [m^2/s^2],
+              - 'dg', 'gravity' .... gravity anomaly [mGal], 
+              - 'tr' ............... grav. disturbance, 1st rad. derivative [mGal],
+              - 'trr' .............. 2nd rad. derivative [1/s^2],
+              - 'water' ............ equiv. water height [m],
+              - 'smd' .............. surface mass density [kg/m^2]. 
+     grd .... optional string argument, defining the grid:
+              - 'block', 'cell' .... equi-angular block midpoints. n*2n
+     n ...... grid size parameter n. (default: n = lmax, determined from field)
+              #longitude samples: 2*n
+              #latitude samples n ('blocks') or n+1.
+     h ...... (default: 0), height above Earth mean radius [m].
+     jflag .. (default: true), determines whether to subtract GRS80.
 
-% -------------------------------------------------------------------------
-% Some checking, default settings and further preliminaries.
-% A lot of checking is done by EIGENGRAV as well.
-% -------------------------------------------------------------------------
+ OUT:
+    f ....... the global field
+    theRAD .. vector of co-latitudes [rad] 
+    lamRAD .. vector of longitudes [rad]
+
+ 
+
+ USES:
+    vec2cs, cs2sc, eigengrav, plm, normalklm, grule, ispec
+ 
+ SEE ALSO:
+    gsha
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 This file is part of PySHbundle. 
     PySHbundle is free software: you can redistribute it and/or modify
@@ -121,7 +76,7 @@ Key Papers Referred:
     partial least squares regression. Scientific data, 8(1), 95.
     https://doi.org/10.1038/s41597-021-00862-6 
 
-@author: Amin Shakya, ICWaR, IISc Bangalore
+@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 """
 def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     import numpy as np
@@ -233,14 +188,14 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
         
     del field
     '''
-    % -------------------------------------------------------------------------
-% The second synthesis step consists of an inverse Fourier transformation
-% over the rows of a and b. 
-% In case of 'block', the spectrum has to be shifted first.
-% When no zero-padding has been applied, the last b-coefficients must be set to
-% zero. Otherwise the number of longitude samples will be 2N+1 instead of 2N.
-% For N=L this corresponds to setting SLL=0!
-% -------------------------------------------------------------------------
+     -------------------------------------------------------------------------
+ The second synthesis step consists of an inverse Fourier transformation
+ over the rows of a and b. 
+ In case of 'block', the spectrum has to be shifted first.
+ When no zero-padding has been applied, the last b-coefficients must be set to
+ zero. Otherwise the number of longitude samples will be 2N+1 instead of 2N.
+ For N=L this corresponds to setting SLL=0!
+ -------------------------------------------------------------------------
     '''
 
     if grd =='block' or grd == 'cell': 

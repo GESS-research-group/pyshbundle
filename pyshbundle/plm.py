@@ -1,4 +1,47 @@
 '''
+PLM Fully normalized associated Legendre functions for a selected order M
+Input as:
+      l = np.array([np.arange(0,97,1)])            
+      m = 0                                        
+      thetaRAD = np.array([0,0.25,0.5,0.75,1])     
+
+ HOW: 
+     p            = plm(l, m, thetaRAD,3,1)[:,:,0]			
+    dp           = plm(l, m, thetaRAD,3,2)[1][:,:,0]
+    ddp          = plm(l, m, thetaRAD,3,3)[2][:,:,0]
+   
+
+ IN:
+    l ........ degree (vector). Integer, but not necessarily monotonic.
+               For l < m a vector of zeros will be returned.
+    m ........ order (scalar). If absent, m = 0 is assumed.
+    thetaRAD . co-latitude [rad] (vector)
+
+ OUT:
+    p ........ Matrix with Legendre functions. The matrix has length(thetaRAD) 
+               rows and length(l) columns, unless l or thetaRAD is scalar. 
+               Then the output vector follows the shape of respectively l or 
+               thetaRAD. 
+    dp ....... Matrix with first derivative of Legendre functions. The matrix 
+               has length(thetaRAD) rows and length(l) columns, unless l or 
+               thetaRAD is scalar. Then the output vector follows the shape of
+               respectively l or thetaRAD. 
+    ddp ...... Matrix with second derivative of Legendre functions. The matrix 
+               has length(thetaRAD) rows and length(l) columns, unless l or 
+               thetaRAD is scalar. Then the output vector follows the shape of 
+               respectively l or thetaRAD. 
+
+ SEE ALSO:
+    iplm
+
+ REMARKS:
+    Previous versions calculated the derivatives towards the latitude, 
+    i. e. dP/d\phi are calculated. Please check your code in order to get 
+    the derivatives correctly towards the co-latitude!
+      ->  dP/d\thetaRAD      =   -dP/d\phi
+      ->  d^2P/d\thetaRAD^2  =  d^2P/d\phi^2
+
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 This file is part of PySHbundle. 
     PySHbundle is free software: you can redistribute it and/or modify
@@ -35,89 +78,11 @@ Key Papers Referred:
     Downscaling GRACE total water storage change using 
     partial least squares regression. Scientific data, 8(1), 95.
     https://doi.org/10.1038/s41597-021-00862-6 
+
+@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     
 '''
-def plm(l,m,thetaRAD,nargin,nargout):
-
-    
- # PLM Fully normalized associated Legendre functions for a selected order M
-# Input as------
-    '   l = np.array([np.arange(0,97,1)])            '
-    '   m = 0                                        '
-    '   thetaRAD = np.array([0,0.25,0.5,0.75,1])     '
-
- # HOW: 
- # '    p            = plm(l, m, thetaRAD,3,1)[:,:,0]		'	
- #    dp           = plm(l, m, thetaRAD,3,2)[1][:,:,0]
- #    ddp          = plm(l, m, thetaRAD,3,3)[2][:,:,0]
- #   
-
- # IN:
- #    l ........ degree (vector). Integer, but not necessarily monotonic.
- #               For l < m a vector of zeros will be returned.
- #    m ........ order (scalar). If absent, m = 0 is assumed.
- #    thetaRAD . co-latitude [rad] (vector)
-
- # OUT:
- #    p ........ Matrix with Legendre functions. The matrix has length(thetaRAD) 
- #               rows and length(l) columns, unless l or thetaRAD is scalar. 
- #               Then the output vector follows the shape of respectively l or 
- #               thetaRAD. 
- #    dp ....... Matrix with first derivative of Legendre functions. The matrix 
- #               has length(thetaRAD) rows and length(l) columns, unless l or 
- #               thetaRAD is scalar. Then the output vector follows the shape of
- #               respectively l or thetaRAD. 
- #    ddp ...... Matrix with second derivative of Legendre functions. The matrix 
- #               has length(thetaRAD) rows and length(l) columns, unless l or 
- #               thetaRAD is scalar. Then the output vector follows the shape of 
- #               respectively l or thetaRAD. 
-
- # SEE ALSO:
- #    LEGPOL, YLM, IPLM
-
- # REMARKS:
- #    Previous versions calculated the derivatives towards the latitude, 
- #    i. e. dP/d\phi are calculated. Please check your code in order to get 
- #    the derivatives correctly towards the co-latitude!
- #      ->  dP/d\thetaRAD      =   -dP/d\phi
- #      ->  d^2P/d\thetaRAD^2  =  d^2P/d\phi^2
-
- # -------------------------------------------------------------------------
- # project: SHBundle 
- # -------------------------------------------------------------------------
- # authors:
- #    Nico SNEEUW (NS), IAPG, TU-Munich
- #    Matthias WEIGELT (MW), DoGE, UofC
- #    Markus ANTONI (MA), GI, Uni Stuttgart 
- #    <bundle@gis.uni-stuttgart.de>
- # -------------------------------------------------------------------------
- # revision history:
- #    2013-01-29: MA, comments
- #    2013-01-23: MA, input argument thetaRAD [deg -> radian]
- #    2008-04-04: MW, extension for second derivative
- #    2004-11-24: MW, speed up calculation
- #    2004-08-13: MW, extension for first derivative
- #    1998-07-13: NS, Pmm non-recursive anymore
- #    1997-06-09: NS, help text brushed up
- #    1994-08-08: NS, initial version
- # -------------------------------------------------------------------------
- # license:
- #    This program is free software; you can redistribute it and/or modify
- #    it under the terms of the GNU General Public License as published by
- #    the  Free  Software  Foundation; either version 3 of the License, or
- #    (at your option) any later version.
-  
- #    This  program is distributed in the hope that it will be useful, but 
- #    WITHOUT   ANY   WARRANTY;  without  even  the  implied  warranty  of 
- #    MERCHANTABILITY  or  FITNESS  FOR  A  PARTICULAR  PURPOSE.  See  the
- #    GNU General Public License for more details.
-  
- #    You  should  have  received a copy of the GNU General Public License
- #    along with Octave; see the file COPYING.  
- #    If not, see <http://www.gnu.org/licenses/>.
-    '@author: wslvivek'
- # -------------------------------------------------------------------------
- 
+def plm(l,m,thetaRAD,nargin,nargout): 
     import sys
     import numpy as np
     if  min(l.shape) !=1:

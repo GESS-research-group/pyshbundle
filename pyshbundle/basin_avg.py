@@ -3,7 +3,7 @@
 """
 Created on Wed Dec 14 22:37:19 2022
 
-@author: wslvivek
+@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
 PySHbundle: A Python implementation of MATLAB codes SHbundle
 

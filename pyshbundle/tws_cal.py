@@ -39,7 +39,7 @@ Key Papers Referred:
     partial least squares regression. Scientific data, 8(1), 95.
     https://doi.org/10.1038/s41597-021-00862-6 
     
-@author: wslvivek
+@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 """
 
 def tws_cal(data,lmax,gs,r,m):

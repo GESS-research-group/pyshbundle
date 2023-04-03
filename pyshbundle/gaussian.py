@@ -2,17 +2,17 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Jun 30 13:47:51 2022
-% GAUSSIAN delivers the spherical harmonic coefficients of a gaussian
-% smoothing filter. The coefficients are calculates according to Wahr et.
-% al. (1998) equation (34) and Swenson and Wahr equation (34)
-%
-% How:      Wl = gaussian(L,cap)
-%
-% Input:    L    integer    maximum degree
-%           cap  integer    half width of Gaussian smoothing function [km]
-%
-% Output:   Wl   [L+1 x 1]  smoothing coefficients
-@author: Amin Shakya
+gaussian(L, cap): The program delivers the spherical harmonic coefficients of a gaussian
+smoothing filter. The coefficients are calculates according to Wahr et.
+al. (1998) equation (34) and Swenson and Wahr equation (34)
+
+How:      Wl = gaussian(L,cap)
+
+Input:    L    integer    maximum degree
+          cap  integer    half width of Gaussian smoothing function [km]
+Output:   Wl   [L+1 x 1]  smoothing coefficients
+
+@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
 This file is part of PySHbundle. 
     PySHbundle is free software: you can redistribute it and/or modify

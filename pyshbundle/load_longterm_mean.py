@@ -37,7 +37,8 @@ Key Papers Referred:
     partial least squares regression. Scientific data, 8(1), 95.
     https://doi.org/10.1038/s41597-021-00862-6 
     
-@author: Amin Shakya
+@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+"""
 
 The purpose of this script is to,
     load longterm mean for our GRACE SH data

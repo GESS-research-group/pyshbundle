@@ -44,7 +44,7 @@ from . import GRACEconstants as GC
 
 def upwcon(degree,height):
     '''
-    Created on Sat May  9 18:49:45 2020
+    Created on Sat May  9 18:49:45 2022
     % UPWCON(degree,height,const) returns the upward continuation (R/r)^l, in which
 
     % uc = upwcon(degree,height)
@@ -66,9 +66,9 @@ def upwcon(degree,height):
 #-------------------------------------------------------------------------
 def lovenr(lmax):
     """
-    Created on Mon May 11 11:09:28 2020
+    Created on Mon May 11 11:09:28 2022
     
-    @author: bv18488
+    @author: Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
     l  = [0,  1,    2,    3,    4,    5,   6,   7,   8,   9,  10,  12,  15,  20,  30,  40,  50,  70, 100, 150, 200]
     kl = numpy.divide([0,270,-3030,-1940,-1320,-1040,-890,-810,-760,-720,-690,-640,-580,-510,-400,-330,-270,-200,-140,-100, -700],1e4)
@@ -78,9 +78,9 @@ def lovenr(lmax):
 #--------------------------------------------------------------------------
 def lovenrPREM(lmax,frame):
     """
-    Created on Mon May 11 11:51:29 2020
+    Created on Mon May 11 11:51:29 2022
     
-    @author: bv18488
+    @author:  Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
     
     data = numpy.array([[ 1,  -0.28476,   0.00000,   0.10462],

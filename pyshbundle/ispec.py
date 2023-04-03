@@ -2,54 +2,31 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Aug 11 10:48:53 2022
-% ISPEC(A,B) returns the function F from the spectra A and B.
-%
-%IN:
-%    a ...... cosine coefficients 
-%    b ...... sine coefficients          
-%             
-%             a and b are defined by:
-%             f(t) = a_0 + SUM_(i=1)^n2 a_i*cos(iwt) + b_i*sin(iwt)
-%   
-%             with w = ground-frequency and n2 half the number of samples (+1).
-%             Note that no factor 2 appears in front of the sum.
-% 
-% OUT:
-%    F = ISPEC(A,B) considers A the cosine- and B the sine-spectrum.
-%    F = ISPEC(S) assumes S = [A B].
-%    If  A and B are matrices, Fourier operations are columnwise.
-% 
-% USES: 
-%    spec
-%
-% SEE ALSO:
-%    SPEC, FFT
+ ispec(a,b) returns the function F from the spectra A and B.
 
-% -------------------------------------------------------------------------
-% project: SHBundle 
-% -------------------------------------------------------------------------
-% authors:
-%    Nico SNEEUW (NS), IAPG, TU-Munich
-%    <bundle@gis.uni-stuttgart.de>
-% -------------------------------------------------------------------------
-% revision history:
-%    1994-06-29: NS, initial version
-% -------------------------------------------------------------------------
-% license:
-%    This program is free software; you can redistribute it and/or modify
-%    it under the terms of the GNU General Public License as published by
-%    the  Free  Software  Foundation; either version 3 of the License, or
-%    (at your option) any later version.
-%  
-%    This  program is distributed in the hope that it will be useful, but 
-%    WITHOUT   ANY   WARRANTY;  without  even  the  implied  warranty  of 
-%    MERCHANTABILITY  or  FITNESS  FOR  A  PARTICULAR  PURPOSE.  See  the
-%    GNU General Public License for more details.
-%  
-%    You  should  have  received a copy of the GNU General Public License
-%    along with Octave; see the file COPYING.  
-%    If not, see <http://www.gnu.org/licenses/>.
-% -------------------------------------------------------------------------
+IN:
+    a ...... cosine coefficients 
+    b ...... sine coefficients          
+             
+             a and b are defined by:
+             f(t) = a_0 + SUM_(i=1)^n2 a_i*cos(iwt) + b_i*sin(iwt)
+   
+             with w = ground-frequency and n2 half the number of samples (+1).
+             Note that no factor 2 appears in front of the sum.
+ 
+ OUT:
+    f = ispec(a,b) considers A the cosine- and B the sine-spectrum.
+    f = ispec(S) assumes S = [a b].
+    If  a and b are matrices, Fourier operations are columnwise.
+ 
+ USES: 
+    spec
+
+ SEE ALSO:
+    spec
+
+
+ -------------------------------------------------------------------------
 
 
 This file is part of PySHbundle. 
@@ -88,7 +65,7 @@ Key Papers Referred:
     partial least squares regression. Scientific data, 8(1), 95.
     https://doi.org/10.1038/s41597-021-00862-6 
 
-@author: Amin Shakya, ICWAR, Indian Institute of Science
+@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 """
 
 def ispec(a,b = -9999):

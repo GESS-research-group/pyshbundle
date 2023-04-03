@@ -3,22 +3,24 @@
 """
 Created on Fri Jun 17 15:31:15 2022
 
-% This function computes Gauss base points and weight factors
-% using the algorithm given by Davis and Rabinowitz in 'Methods
-% of Numerical Integration', page 365, Academic Press, 1975.
+ This function computes Gauss base points and weight factors
+ using the algorithm given by Davis and Rabinowitz in 'Methods
+ of Numerical Integration', page 365, Academic Press, 1975.
 
-% [bp, wf] = grule(n)
-
-
-% IN:
-%    n ....... number of base points required. 
-%
-% OUT:
-%    bp ...... cosine of the base points
-%    wf ...... weight factors for computing integrals and such 
+ bp, wf = grule(n)
 
 
-@author: 5hk
+ IN:
+    n ....... number of base points required. 
+
+ OUT:
+    bp ...... cosine of the base points
+    wf ...... weight factors for computing integrals and such 
+
+
+@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 This file is part of PySHbundle. 
     PySHbundle is free software: you can redistribute it and/or modify

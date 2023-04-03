@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-% This function uses cubic interpolation to replace NaNs
-% See INTERP1 for more info
+This function uses cubic interpolation to replace NaNs
+@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+
 
 This file is part of PySHbundle. 
     PySHbundle is free software: you can redistribute it and/or modify

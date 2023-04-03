@@ -2,29 +2,26 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Jun 28 14:17:50 2022
-%% data-driven approach for leakage and attenuation control
-% by Bramha Dutt Vishwakarma, University of Bristol, UK
-% date: 18/11/2019
-% the function uses data-driven approach published and explained in
-% Vishwakarma et al. 2017, AGU WRR paper. doi:10.1002/2017WR021150.
-%   Detailed explanation goes here
+@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
-% Input: F, a cell matrix with one column containing SH coefficients
-%      : cf, the column in F that contains SH coefficients from GRACE
-%      : GaussianR, radius of the Gaussian filter (recommened = 400)
-%      : basins, mask functions of basin, a cell data format with one
-%      column and each entry is a 360 x 720 matrix with 1 inside the
-%      catchment and 0 outside
+Data-driven approach for leakage and attenuation control
+based on Vishwakarma et. al., (2021)
 
-% Output : every output has a size (number of months x basins)
-%        : RecoveredTWS, corrected data-driven time-series (Least Squares fit method)
-%        : RecoveredTWS2, corrected data-driven time-series (shift and amplify method)
-%        : FilteredTS, gaussian filtered GRACE TWS time-series for all the basins. 
+   Detailed explanation goes here
 
-%% Further details are below:
+ Input: F, a cell matrix with one column containing SH coefficients
+      : cf, the column in F that contains SH coefficients from GRACE
+      : GaussianR, radius of the Gaussian filter (recommened = 400)
+      : basins, mask functions of basin, a cell data format with one
+      column and each entry is a 360 x 720 matrix with 1 inside the
+      catchment and 0 outside
 
-%% create area matrix
-@author: Amin Shakya
+ Output : every output has a size (number of months x basins)
+        : RecoveredTWS, corrected data-driven time-series (Least Squares fit method)
+        : RecoveredTWS2, corrected data-driven time-series (shift and amplify method)
+        : FilteredTS, gaussian filtered GRACE TWS time-series for all the basins. 
+        
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 This file is part of PySHbundle. 
     PySHbundle is free software: you can redistribute it and/or modify

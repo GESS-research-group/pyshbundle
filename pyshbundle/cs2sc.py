@@ -36,45 +36,25 @@ Key Papers Referred:
     Downscaling GRACE total water storage change using 
     partial least squares regression. Scientific data, 8(1), 95.
     https://doi.org/10.1038/s41597-021-00862-6 
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+    cs2sc(field) converts the square (L+1)x(L+1) matrix 'field', containing
+    spherical harmonics coefficients in |C\S| storage format into a 
+    rectangular (L+1)x(2L+1) matrix in  /S|C\format.
     
+    IN:
+    field .... the square (L+1)x(L+1) numpy matrix field , containing
+                   spherical harmonics coefficients in |C\S| storage format
+    OUT: 
+    sc ....... rectangular (L+1)x(2L+1) numpy matrix in  /S|C\format
+
+    @author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+
 '''
 import numpy
 
 def cs2sc(field):
-
-#     Created on Thu May  7 18:51:20 2020
-#     CS2SC(FIELD) converts the square (L+1)x(L+1) matrix FIELD, containing
-#     spherical harmonics coefficients in |C\S| storage format into a 
-#     rectangular (L+1)x(2L+1) matrix in  /S|C\format.
-    
-#     IN:
-#     field .... the square (L+1)x(L+1) matrix FIELD , containing
-#                    spherical harmonics coefficients in |C\S| storage format
-#     OUT: 
-#     sc ....... rectangular (L+1)x(2L+1) matrix in  /S|C\format
-    
-# ----------------------------------------------------------------------------
-#      project: GRACEpy
-# ----------------------------------------------------------------------------
-#     % author: Bramha Dutt Vishwakarma, University of Bristol
-#     @author: bv18488
-# ----------------------------------------------------------------------------
-# license:
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the  Free  Software  Foundation; either version 3 of the License, or
-#    (at your option) any later version.
-#  
-#    This  program is distributed in the hope that it will be useful, but 
-#    WITHOUT   ANY   WARRANTY;  without  even  the  implied  warranty  of 
-#    MERCHANTABILITY  or  FITNESS  FOR  A  PARTICULAR  PURPOSE.  See  the
-#    GNU General Public License for more details.
-#  
-#    You  should  have  received a copy of the GNU General Public License
-#    along with Octave; see the file COPYING.  
-#    If not, see <http://www.gnu.org/licenses/>.
-# --------------------------------------------------------------------------
-
     rows = len(field)
     cols = len(field[0])
 

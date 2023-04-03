@@ -3,82 +3,41 @@
 """
 Created on Wed Aug 24 09:26:32 2022
 
-% GSHA global spherical harmonic analysis
-%
-% IN:
-%    f ....... global field of size (lmax+1)*2*lmax or lmax*2*lmax
-%    method .. string argument, defining the analysis method:
-%              - 'ls' ..... least squares
-%              - 'wls' .... weighted least squares 
-%              - 'aq' ..... approximate quadrature 
-%              - 'fnm' .... first neumann method
-%              - 'snm' .... second neumann method
-%              - 'mean' ... block mean values (use of integrated Plm)
-%    grid .... optional string argument, defining the grid:
-%              - 'pole', 'mesh' ...... (default if lmax+1), equi-angular (lmax+1)*2*lmax, 
-%                                      including poles and Greenwich meridian.
-%              - 'block', 'cell' ..... (default if lmax), equi-angular block midpoints lmax*2lmax
-%              - 'neumann', 'gauss' .. Gauss-Neumann grid (lmax+1)*2*lmax
-%    lmax .... maximum degree of development
-%
-% OUT:
-%    cs ...... Clm, Slm in |C\S| format
-%
-% USES:
-%    plm, iplm, neumann, sc2cs 
-%
-% SEE ALSO:
-%    GSHS
-%
-% REMARKS:
-%    TBD - Zlm-functions option
-%        - eigengrav, GRS80
-%        - When 'pole' grid, m = 1 yields singular Plm-matrix!
+ GSHA global spherical harmonic analysis
 
-% -------------------------------------------------------------------------
-% project: SHBundle 
-% -------------------------------------------------------------------------
-% authors:
-%    Dimitris TSOULIS (DT), IAPG, TU-Munich
-%    Nico SNEEUW (NS), IAGP, TU Munich
-%    Markus ANTONI (MA), GI, Uni Stuttgart 
-%    Matthias ROTH (MR), GI, Uni Stuttgart 
-%    <bundle@gis.uni-stuttgart.de>
-% -------------------------------------------------------------------------
-% revision history:
-%    2014-01-15: MR, revise help text, beautify code
-%    2012-01-23: MA, input of plm in radian
-%    1999-02-01: NS, brush up (help text, layout, removal of unused commands, ...)
-%                    restructuring of 'mean' method over 1st and 2nd analysis
-%                    'mean' method as quadrature instead of LS in 2nd step 
-%    1998-11-??: DT, initial version
-% -------------------------------------------------------------------------
-% license:
-%    This program is free software; you can redistribute it and/or modify
-%    it under the terms of the GNU General Public License as published by
-%    the  Free  Software  Foundation; either version 3 of the License, or
-%    (at your option) any later version.
-%  
-%    This  program is distributed in the hope that it will be useful, but 
-%    WITHOUT   ANY   WARRANTY;  without  even  the  implied  warranty  of 
-%    MERCHANTABILITY  or  FITNESS  FOR  A  PARTICULAR  PURPOSE.  See  the
-%    GNU General Public License for more details.
-%  
-%    You  should  have  received a copy of the GNU General Public License
-%    along with Octave; see the file COPYING.  
-%    If not, see <http://www.gnu.org/licenses/>.
-% -------------------------------------------------------------------------
+ IN:
+    f ....... global field of size (lmax+1)*2*lmax or lmax*2*lmax
+    method .. string argument, defining the analysis method:
+              - 'ls' ..... least squares
+              - 'wls' .... weighted least squares 
+              - 'aq' ..... approximate quadrature 
+              - 'fnm' .... first neumann method
+              - 'snm' .... second neumann method
+              - 'mean' ... block mean values (use of integrated Plm)
+    grid .... optional string argument, defining the grid:
+              - 'pole', 'mesh' ...... (default if lmax+1), equi-angular (lmax+1)*2*lmax, 
+                                      including poles and Greenwich meridian.
+              - 'block', 'cell' ..... (default if lmax), equi-angular block midpoints lmax*2lmax
+              - 'neumann', 'gauss' .. Gauss-Neumann grid (lmax+1)*2*lmax
+    lmax .... maximum degree of development
 
-%--------------------------------------------------------------------------
-% diagnostics and preliminaries
-%--------------------------------------------------------------------------
-%narginchk(2, 4) % error(nargchk(2, 4, nargin))
+ OUT:
+    cs ...... Clm, Slm in |C\S| format
 
-%--------------------------------------------------------------------------
-% Grid definition
-%--------------------------------------------------------------------------
+ USES:
+    plm, iplm, neumann, sc2cs 
 
-@author: Amin Shakya
+ SEE ALSO:
+    GSHS
+
+ REMARKS:
+    TBD - Zlm-functions option
+        - eigengrav, GRS80
+        - When 'pole' grid, m = 1 yields singular Plm-matrix!
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
 This file is part of PySHbundle. 
     PySHbundle is free software: you can redistribute it and/or modify
@@ -341,7 +300,7 @@ def gsha(f, method, grid = None, lmax = -9999):
 %--------------------------------------------------------------------------
     '''
         
-    #Double check steps here
+    
     slm = np.fliplr(slm)
     cs = sc2cs(np.concatenate((slm[:, np.arange(L)], clm), axis = 1))
     cs = cs[:int(lmax+1), :int(lmax+1)]

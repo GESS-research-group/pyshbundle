@@ -2,38 +2,21 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Jun 30 14:34:55 2022
-% NORMALKLM returns an ellipsoidal normal field
-% consisting of normalized -Jn, n=0,2,4,6,8
-%
-% IN:
-%    lmax ....... maximum degree
-%    typ ........ either 'wgs84' (equipotential ellipsoid), default,
-%                        'grs80',
-%                 or     'he' (hydrostatic equilibrium ellipsoid)
-% OUT:
-%    nklm ....... normal field in CS-format (sparse)
-%
-% REMARKS:
-%    .J2,J4 values for hydrostatic equilibrium ellipsoid from Lambeck (1988)
-%    "Geophysical Geodesy", p.18
+ NORMALKLM returns an ellipsoidal normal field
+ consisting of normalized -Jn, n=0,2,4,6,8
 
-% -------------------------------------------------------------------------
-% project: SHBundle 
+ IN:
+    lmax ....... maximum degree
+    typ ........ either 'wgs84' (equipotential ellipsoid), default,
+                        'grs80',
+                 or     'he' (hydrostatic equilibrium ellipsoid)
+ OUT:
+    nklm ....... normal field in CS-format (sparse)
 
-This file is part of PySHbundle. 
-    PySHbundle is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
+ REMARKS:
+    .J2,J4 values for hydrostatic equilibrium ellipsoid from Lambeck (1988)
+    "Geophysical Geodesy", p.18
+   
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 Acknowledgement Statement:
@@ -56,7 +39,7 @@ Key Papers Referred:
     partial least squares regression. Scientific data, 8(1), 95.
     https://doi.org/10.1038/s41597-021-00862-6 
     
-@author: Amin Shakya
+@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 """
 
 def normalklm(lmax, typ = 'wgs84'):

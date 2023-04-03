@@ -3,7 +3,7 @@
 """
 Created on Fri Dec  9 10:14:32 2022
 
-@author: wslvivek
+@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
 This file is part of PySHbundle. 
     PySHbundle is free software: you can redistribute it and/or modify

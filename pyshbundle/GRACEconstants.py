@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat May  9 18:49:45 2020
+Created on Sat May  9 18:49:45 2022
 # This file contains some basic constants:
 #  - physical
 #  - geodetic (GRS80)
-@author: bv18488
+@author: Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
 This file is part of PySHbundle. 
     PySHbundle is free software: you can redistribute it and/or modify

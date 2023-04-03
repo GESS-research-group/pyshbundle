@@ -2,18 +2,15 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Jul 14 09:10:27 2022
-%UNTITLED3 Summary of this function goes here
-% calculates the phase difference between two time series based on the
-% hilbert transform method explained by Phillip et al.
+Summary of this function goes here
+calculates the phase difference between two time series based on the
+Hilbert transform method explained by Phillip et al.
 
-% Phillips, T., R. S. Nerem, B. Fox-Kemper, J. S. Famiglietti, and B. Rajagopalan (2012),
-% The influence of ENSO on global terrestrial water storage using GRACE, Geophysical
-% Research Letters, 39 (16), L16,705, doi:10.1029/2012GL052495.
-%--------------------------------------------------------------------------------
-% written by Bramha Dutt Vishwakarma, Institute of Geodesy, University of
-% Stuttgart.      ----- 12 July 2015 ----
-%--------------------------------------------------------------------------------%%
+Phillips, T., R. S. Nerem, B. Fox-Kemper, J. S. Famiglietti, and B. Rajagopalan (2012),
+The influence of ENSO on global terrestrial water storage using GRACE, Geophysical
+Research Letters, 39 (16), L16,705, doi:10.1029/2012GL052495.
 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 This file is part of PySHbundle. 
     PySHbundle is free software: you can redistribute it and/or modify
@@ -51,7 +48,7 @@ Key Papers Referred:
     partial least squares regression. Scientific data, 8(1), 95.
     https://doi.org/10.1038/s41597-021-00862-6 
     
-@author: Amin Shakya
+@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 """
 
 def Phase_calc(fts, ffts):

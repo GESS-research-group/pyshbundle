@@ -2,7 +2,7 @@
 """
 Created on Mon May 11 00:20:49 2020
 
-@author: bv18488
+@author: Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
 This file is part of PySHbundle. 
     PySHbundle is free software: you can redistribute it and/or modify

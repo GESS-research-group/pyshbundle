@@ -1,4 +1,5 @@
 '''
+@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
 This file is part of PySHbundle. 
     PySHbundle is free software: you can redistribute it and/or modify
@@ -36,70 +37,39 @@ Key Papers Referred:
     partial least squares regression. Scientific data, 8(1), 95.
     https://doi.org/10.1038/s41597-021-00862-6 
     
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+ IPLM Integrals of the fully normalized associated Legendre functions
+ over blocks for a selected order M. 
+
+ HOW: p = iplm(l,m,theRAD)		- assumes dt = theRAD(2)-theRAD(1)
+      p = iplm(l,m,theRAD,dt)
+
+ IN:
+    l ........ degree (vector). Integer, but not necessarily monotonic.
+               For l < m a vector of zeros will be returned.
+    m ........ order (scalar)
+    theRAD ... co-latitude [rad] (vector)
+    dt ....... integration block-size [rad] (scalar). Default: dt = theRAD(2)-theRAD(1)
+
+ OUT: 
+    p ........ Matrix with integrated Legendre functions.
+               Functions are integrated from theRAD(i)-dt/2 till theRAD(i)+dt/2.
+               The matrix has length(TH) rows and length(L) columns, unless L 
+               or TH is scalar. Then the output vector follows the shape of 
+               respectively L or TH. 
+ 
+ USES:
+    plm
+
+ REMARKS:
+    The blocks at the pole might become too large under circumstances.
+    This is not treated separately, i.e. unwanted output may appear.
+    In case TH is scalar, dt will be 1 (arbitrarily).
+
+
 '''
-# % IPLM Integrals of the fully normalized associated Legendre functions
-# % over blocks for a selected order M. 
-# %
-# % HOW: p = iplm(l,m,theRAD)		- assumes dt = theRAD(2)-theRAD(1)
-# %      p = iplm(l,m,theRAD,dt)
-# %
-# % IN:
-# %    l ........ degree (vector). Integer, but not necessarily monotonic.
-# %               For l < m a vector of zeros will be returned.
-# %    m ........ order (scalar)
-# %    theRAD ... co-latitude [rad] (vector)
-# %    dt ....... integration block-size [rad] (scalar). Default: dt = theRAD(2)-theRAD(1)
-# %
-# % OUT: 
-# %    p ........ Matrix with integrated Legendre functions.
-# %               Functions are integrated from theRAD(i)-dt/2 till theRAD(i)+dt/2.
-# %               The matrix has length(TH) rows and length(L) columns, unless L 
-# %               or TH is scalar. Then the output vector follows the shape of 
-# %               respectively L or TH. 
-# % 
-# % USES:
-# %    PLM
-# %
-# % REMARKS:
-# %    The blocks at the pole might become too large under circumstances.
-# %    This is not treated separately, i.e. unwanted output may appear.
-# %    In case TH is scalar, dt will be 1 (arbitrarily).
-
-# % -------------------------------------------------------------------------
-# % project: SHBundle 
-# % -------------------------------------------------------------------------
-# % authors:
-# %    Dimitris TSOULIS (DT), IAPG, TU-Munich  
-# %    Nico SNEEUW (NS), IAPG, TU-Munich
-# %    Markus ANTONI (MA), GI, Uni Stuttgart
-# %    <bundle@gis.uni-stuttgart.de>
-# % -------------------------------------------------------------------------
-# % revision history:
-# %    2012-01-23: MR, input of plm in radian
-# %    1999-02-??: NS, brush-up (layout, help text, inactive lines,...)
-# %                    output variable (column extraction)
-# %                    Plm's BEFORE for-loop -> large speed-up
-# %                    variable redefinition (e.g. loop variable l)
-# %    1998-12-??: DT, initial version 
-# %----------------------------------------------------------------------------
-# % license:
-# %    This program is free software; you can redistribute it and/or modify
-# %    it under the terms of the GNU General Public License as published by
-# %    the  Free  Software  Foundation; either version 3 of the License, or
-# %    (at your option) any later version.
-# %  
-# %    This  program is distributed in the hope that it will be useful, but 
-# %    WITHOUT   ANY   WARRANTY;  without  even  the  implied  warranty  of 
-# %    MERCHANTABILITY  or  FITNESS  FOR  A  PARTICULAR  PURPOSE.  See  the
-# %    GNU General Public License for more details.
-# %  
-# %    You  should  have  received a copy of the GNU General Public License
-# %    along with Octave; see the file COPYING.  
-# %    If not, see <http://www.gnu.org/licenses/>.
-# % ----------------------------------------------------------------------------
-
-# % diagnostics and preliminaries
-# %narginchk(3, 4) % error(nargchk(3,4,nargin))
 
 def iplm(l,m,theRAD,dt=-9999):
     import numpy as np
