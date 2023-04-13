@@ -124,7 +124,7 @@ $$
 \end{equation}
 $$
 
-where, $\beta = \frac{\ln (2)}{(1 - \cos(\frac{r_{fil}}{a}))'}$. Here, $r_{fil}$ is the averaging radius of the filter. Thus, the Gaussian filter obtained in the spectral domain is written as `(Wahr et. a., 1998)`:
+where, $\beta = \frac{\ln (2)}{(1 - \cos(\frac{r_{fil}}{a}))}$. Here, $r_{fil}$ is the averaging radius of the filter. Thus, the Gaussian filter obtained in the spectral domain is written as `(Wahr et. a., 1998)`:
 
 $$
 \begin{equation}
