@@ -72,14 +72,14 @@ It is hoped the contribution will make GRACE L2 data processing more accessible 
 
 GRACE works on the principal of gravimetric changes. Level 2 GRACE data consists of the spherical harmonic coefficients  <i>$C_{l,m}$</i> and <i>$S_{l,m}$</i>. Gravimetric potential function <i>V ( r, θ, λ )</i> can be represented by the spherical harmonic coefficients in the frequency domain with the help of the following relation `(Vishwakarma, 2017; Kaula, 1996; Chao & Gross, 1987; Wahr et. al., 1998)`:
 
-$$
+$$ 
 \begin{equation}
     V(r, \theta, \lambda) = 
     \frac{GM}{r} \sum_{l=0} ^ {\infty} 
     \left(\frac{a}{r}\right) ^ {l}
     \sum_{m=0} ^ {l} 
     \bar{P}_{l,m}(\cos \theta)[C_{l,m}\cos m\lambda+S_{l,m}\sin m\lambda],
-\end{equation}
+\end{equation} 
 $$
 
 where <i>G</i> is the Gravitational constant, <i>M</i> represents the total Earth mass, <i>a</i> is the average radius of the Earth, <i>$P_{l,m}$</i>  represents the the fully normalized Legendre functions of the first kind, <i>$C_{l,m}$</i> and <i>$S_{l,m}$</i> represent the fully normalized spherical harmonic coefficients, and <i>l</i> and <i>m</i> represent the degree and order, respectively.
@@ -155,7 +155,7 @@ where <i>$W_{lm}^{nk}$</i> represents the spectral weight in its general form. <
 
 # Methodology
 
-In this contribution, tools to implement the spherical harmonic analysis and filtering application has been developed in the python programming language. In addition, complementary analytical tools such as spherical harmonic synthesis and GRACE data driven correction have also been included. To achieve this, we have implemented the preexisting matlab codes `SHbundle` into the python programming language. More details on the `SHbundle` package may be refered to at `Sneew et al. (2021)`. In addition, `GRACE Data Driven Corrections` algorithm `(Vishwakarma et. a., 2017)` has also been translated from matlab to python. The naming of the modules and the workflow between the modules has been preserved as much as possible in the `PySHbundle` python implementation. This is to ensure smooth communication between user communitities of the two packages and/or the two different programming language communities. Further, our code has been tested using the `SHbundle` implementation results for validation.
+In this contribution, tools to implement the spherical harmonic analysis and filtering application has been developed in the python programming language. In addition, complementary analytical tools such as spherical harmonic synthesis and GRACE data driven correction have also been included. To achieve this, we have implemented the preexisting matlab codes `SHbundle` into the python programming language. More details on the `SHbundle` package may be refered to at `Sneew et al. (2021)`. In addition, `GRACE Data Driven Corrections` algorithm `(Vishwakarma et. al., 2017)` has also been translated from matlab to python. The naming of the modules and the workflow between the modules has been preserved as much as possible in the `PySHbundle` python implementation. This is to ensure smooth communication between user communitities of the two packages and/or the two different programming language communities. Further, our code has been tested using the `SHbundle` implementation results for validation.
 
 # Implementation
 A schematic diagram of the code workflow is presented in the Fig 01. <br>
