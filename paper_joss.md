@@ -47,12 +47,12 @@ bibliography: paper.bib
 GRACE stands for the Gravity Recovery and Climate Experiment, a joint satellite mission by NASA, the National Aeronautics and Space Administration and DLR, the German Aerospace Centre. Some details of the GRACE mission is provided in Table 1.
 
 <i>Table 1: Summary of GRACE satellite mission</i>
-| Parameter        |    Details      | 
-| -------------    |:--------------:| 
-| Start of Mission | 17 March 2002  | 
-| End of Mission   | 27 October 2017| 
-| Inclination      | $89.0^\circ$   | 
-| Period           | 94.5 minutes   |  
+| Parameter           |    Details     | 
+| -----------------   |:--------------:| 
+| Start of Mission    | 17 March 2002  | 
+| End of Mission      | 27 October 2017| 
+| Inclination         | $89.0 ^ \circ$ | 
+| Period              | 94.5 minutes   |  
 
 GRACE consists of two identical satellites orbiting around the earth on the same orbital path. The basic principal of the GRACE satellite operation consists of the monitoring of the intersatellite distance between the twin satellites using microwave pulse measurements [@wahr1998time]. When the satellite system comes across a mass anomaly, each satellite accelerates or decelerates with a phase lag and the intersatellite distance changes. This change in intersatellite distance is later processed to obtain the magnitude of the mass anamoly. When it comes to the continental land surface, the hydrological processes consist of a major component of the mass anamoly over it. However various other signals such as oceanic and atmospheric variations, systemic correlated errors, etc. are also part of the obtained GRACE signals. These unwanted signals and errors necessitate application of various filtering and post-processing techniques. These post-processing steps however also introduce some errors as well as deteorate the qualtiy of the hydrological product [@humphrey2023using]. The hydrological signal estimated after the post-processing steps is the  `total water storage anomaly` (`TWSA`). `TWSA` is the sum of the total water components over a vertical extention of the grid area through the earth. Conventionally, it is represented in terms of the `equivalent water height` (`m`). GRACE has a successor, GRACE-FO, which was successfully launched on 22 May 2018.<br>
 
@@ -159,7 +159,7 @@ In this contribution, tools to implement the spherical harmonic analysis and fil
 
 # Implementation
 A schematic diagram of the code workflow is presented in the Fig 01. <br>
-![Schematic diagram of code workflow. \label{fig:code_workflow}](./pic/01_flowchart_without_background.png)<br>
+![Schematic diagram of code workflow. \label{fig:code_workflow}](./pic/01_flowchart_without_background.png){ width=50% }<br>
 <i>Fig 01: Schematic Diagram of the Code Workflow</i><br>
 
 The module codes can be categorized into four categories: load data, convert data formats, core functionality and auxillary codes. The <i>load data</i> codes can read data from either of the `JPL`, `ITSG` or `CSR` GRACE data centers. The codes further performs the necessary preprocessing, including the conversion of data formats, replacement of some Legendre coefficients as well as removing the longterm mean. The <i>convert data format</i> codes can convert `L2` GRACE Spherical Harmonics data from one format to another. These codes are invoked by the  <i>load data</i> codes for data format conversion. Further, these codes can be independently invoked as well by the user for their needs.
