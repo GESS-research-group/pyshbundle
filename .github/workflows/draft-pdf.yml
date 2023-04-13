@@ -16,8 +16,8 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v1
         with:
-          name: paper_joss.pdf
+          name: paper_joss
           # This is the output path where Pandoc will write the compiled
           # PDF. Note, this should be the same directory as the input
           # paper.md
-          path: 
+          path: ${{ github.workspace }}/paper_joss.pdf
