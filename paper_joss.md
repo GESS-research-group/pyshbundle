@@ -159,8 +159,13 @@ In this contribution, tools to implement the spherical harmonic analysis and fil
 
 # Implementation
 A schematic diagram of the code workflow is presented in the Fig 01. <br>
-![Schematic diagram of code workflow. \label{fig:code_workflow}](./pic/01_flowchart_without_background.png){ width=50% }<br>
-<i>Fig 01: Schematic Diagram of the Code Workflow</i><br>
+
+<figure>
+    <img src="./pic/01_flowchart_without_background.png" alt="code_workflow">
+    <figcaption><i>Fig 01: Schematic Diagram of the Code Workflow</i></figcaption>
+</figure>
+
+
 
 The module codes can be categorized into four categories: load data, convert data formats, core functionality and auxillary codes. The <i>load data</i> codes can read data from either of the `JPL`, `ITSG` or `CSR` GRACE data centers. The codes further performs the necessary preprocessing, including the conversion of data formats, replacement of some Legendre coefficients as well as removing the longterm mean. The <i>convert data format</i> codes can convert `L2` GRACE Spherical Harmonics data from one format to another. These codes are invoked by the  <i>load data</i> codes for data format conversion. Further, these codes can be independently invoked as well by the user for their needs.
 
