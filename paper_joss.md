@@ -19,7 +19,7 @@ authors:
   - name: Maya Suryawanshi
     affiliation: 1
   - name: Abhishek Mhamane
-  - affiliation: 4
+    affiliation: 4
   - name: Bramha Dutt Vishwakarma
     orcid: 0000-0003-4787-8470
     corresponding: true # (This is how to denote the corresponding author)
@@ -32,7 +32,7 @@ affiliations:
  - name: Centre of Earth Science, Indian Institute of Science, India
    index: 3
  - name: MS-Research Geoinformtics, Indian Institute of Technology Kanpur, India
- - index: 4
+   index: 4
 date: 04 April 2023
 bibliography: paper.bib
 
