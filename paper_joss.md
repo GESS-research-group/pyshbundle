@@ -1,5 +1,5 @@
 ---
-title: 'PySHbundle: A Python implementation of MATLAB based SHbundle'
+title: 'PySHbundle: A Python implementation of MATLAB codes SHbundle'
 tags:
   - Python
   - GRACE
@@ -10,14 +10,14 @@ authors:
   - name: Amin Shakya
     orcid: 0000-0002-4706-826X
     equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
-    affiliation: 1
+    affiliation: "1,5"
   - name: Vivek Yadav
     equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
     affiliation: 1
   - name: Tsungrojungla Walling
     affiliation: 2
   - name: Abhishek Mhamane
-    affiliation: 4
+    affiliation: 3
   - name: Maya Suryawanshi
     affiliation: 1
   - name: Bramha Dutt Vishwakarma
@@ -29,10 +29,13 @@ affiliations:
    index: 1
  - name: Undergraduate Programme, Indian Institute of Science, India
    index: 2
- - name: Centre of Earth Science, Indian Institute of Science, India
+ - name: Geoinformatics Laboratory, Indian Institute of Technology Kanpur, India
    index: 3
- - name: Geoinformtics, Indian Institute of Technology, Kanpur, India
+ - name: Centre of Earth Science, Indian Institute of Science, India
    index: 4
+ - name: Faculty of Geo-information and Earth Observation, University of Twente, the Netherlands
+   index: 5
+
 date: 04 April 2023
 bibliography: paper.bib
 
