@@ -21,4 +21,5 @@ jobs:
       - run: pip install mkdocstrings
       - run: pip install mkdocs-pymdownx-material-extras
       - run: pip install mkdocs-git-revision-date-plugin 
+      - run: pip install mkdocs-jupyter
       - run: mkdocs gh-deploy --force
