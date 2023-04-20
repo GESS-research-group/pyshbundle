@@ -35,25 +35,23 @@ Currently we are upgrading (under process) the package to be implementable on bi
 
 In this section, we present a mathematical representation of the spherical harmonics analysis. According to potential theory, the gravitational field of a body fulfils the Laplace equation $\nabla^2\phi = 0$. Laplace's equation in spherical coordinates can be written as follows: 
 
-```
 \begin{equation}
-\frac{1}{r^2}\frac{\partial}{\partial r}\bigg( r^2\frac{\partial \phi}{\partial r}\bigg)  
-+
-\frac{1}{r^2\sin\vartheta}\frac{\partial}{\partial \vartheta}\bigg(\sin\vartheta\frac{\partial \phi}{\partial \vartheta}\bigg) 
-+
-\frac{1}{r^2\sin^2\vartheta}\frac{\partial^2 \phi}{\partial \lambda^2}
- = 0 ,
-\end{equation}\\
-```
+    \frac{1}{r^2}\frac{\partial}{\partial r}\bigg( r^2\frac{\partial \phi}{\partial r}\bigg)  
+    +
+    \frac{1}{r^2\sin\vartheta}\frac{\partial}{\partial \vartheta}\bigg(\sin\vartheta\frac{\partial \phi}{\partial \vartheta}\bigg) 
+    +
+    \frac{1}{r^2\sin^2\vartheta}\frac{\partial^2 \phi}{\partial \lambda^2}
+    = 0 ,
+\end{equation}
 
 
 where 
-$`\phi`$ is the potential, 
+$\phi$ is the potential, 
 $r$ is the radius, 
-$`\vartheta`$ is the co-latitude and 
-$`\lambda`$ is the longitude. 
+$\vartheta$ is the co-latitude and 
+$\lambda$ is the longitude. 
 
-We perform a separation of variables and insert $`\phi(r,\vartheta,\lambda) =f(r)g(\vartheta)h(\lambda)`$ into the Laplace equation to get three independent equations:
+We perform a separation of variables and insert $\phi(r, \vartheta, \lambda) =f(r)g(\vartheta)h(\lambda)$ into the Laplace equation to get three independent equations:
 
 
 \begin{equation}
@@ -161,7 +159,7 @@ The gravitational potential anomaly $V$ is given by:
     V(r, \vartheta, \lambda) = 
     \frac{GM}{r} \sum_{n=0} ^{N_{max}} \sum_{m=0} ^{n} 
     \left(\frac{R}{r}\right) ^{n+1}
-    \bar{P}_{n,m}(\cos \vartheta)\[C_{n,m}\cos m\lambda+S_{n,m}\sin m\lambda\].
+    \bar{P}_{n,m}(\cos \vartheta) [C_{n,m}\cos m\lambda+S_{n,m}\sin m\lambda].
 \end{equation}
 
 
@@ -177,7 +175,7 @@ $C_{lm}$ and  $S_{lm}$ refer to the spherical harmonic coefficients. Similarly, 
     \left(\frac{R}{r}\right)^{n+1} 
     \bar{P}_{n,m}(\cos\vartheta)
     \frac{2n+1}{1+k_l}
-    \[C_{n,m}\cos m\lambda + S_{n,m}\sin m\lambda\],
+    [C_{n,m}\cos m\lambda + S_{n,m}\sin m\lambda],
 \end{equation}
 
 
