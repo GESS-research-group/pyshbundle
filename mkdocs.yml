@@ -4,18 +4,7 @@ site_url: https://mn5hk.github.io/pyshbundle
 
 repo_url: https://github.com/mn5hk/pyshbundle
 
-theme:
-    palette:
-        scheme: preference
-    name: material
-    icon:
-        repo: fontawesome/brands/github
-    features:
-        - navigation.instant
-        - search.highlight
-        # - navigation.expand
-        # - navigation.tabs
-    custom_dir: "docs/overrides"
+theme: readthedocs
 
 plugins:
     - search
@@ -32,11 +21,16 @@ markdown_extensions:
     - pymdownx.superfences
     - pymdownx.highlight:
           linenums: true
+    - pymdownx.arithmatex:
+           generic: true
     - toc:
           permalink: true
 
-# extra:
-#     analytics:
+extra_javascript:
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+# extra
 #         provider: google
 #         property: UA-XXXXXXXXX-X
 
