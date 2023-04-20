@@ -17,5 +17,8 @@ jobs:
         with:
           key: ${{ github.ref }}
           path: .cache
-      - run: pip install mkdocs 
+      - run: pip install mkdocs
+      - run: pip install mkdocstrings
+      - run: pip install mkdocs-pymdownx-material-extras
+      - run: pip install mkdocs-git-revision-date-plugin 
       - run: mkdocs gh-deploy --force
