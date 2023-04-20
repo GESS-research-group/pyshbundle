@@ -10,31 +10,36 @@ authors:
   - name: Amin Shakya
     orcid: 0000-0002-4706-826X
     equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
-    affiliation: "1,5"
-  - name: Vivek Yadav
+    affiliation: "1,2"
+  - name: Vivek Kumar Yadav
+    orcid: 0009-0000-7156-4450
     equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
     affiliation: 1
   - name: Tsungrojungla Walling
-    affiliation: 2
-  - name: Abhishek Mhamane
+    orcid: 0009-0006-9323-1191
     affiliation: 3
+  - name: Abhishek Mhamane
+    orcid: 0000-0001-9788-0371
+    affiliation: 4
   - name: Maya Suryawanshi
+    orcid: 0009-0008-5701-7504
     affiliation: 1
   - name: Bramha Dutt Vishwakarma
     orcid: 0000-0003-4787-8470
     corresponding: true # (This is how to denote the corresponding author)
-    affiliation: "1,3" # (Multiple affiliations must be quoted)
+    affiliation: "1,5" # (Multiple affiliations must be quoted)
 affiliations:
  - name: Interdisciplinary Centre for Water Research, Indian Institute of Science, India
    index: 1
- - name: Undergraduate Programme, Indian Institute of Science, India
-   index: 2
- - name: Geoinformatics Laboratory, Indian Institute of Technology Kanpur, India
-   index: 3
- - name: Centre of Earth Science, Indian Institute of Science, India
-   index: 4
  - name: Faculty of Geo-information and Earth Observation, University of Twente, the Netherlands
+   index: 2
+ - name: Undergraduate Programme, Indian Institute of Science, India
+   index: 3
+ - name: Geoinformatics Laboratory, Indian Institute of Technology Kanpur, India
+   index: 4
+ - name: Centre of Earth Science, Indian Institute of Science, India
    index: 5
+
 
 date: 04 April 2023
 bibliography: paper.bib
