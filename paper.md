@@ -58,6 +58,7 @@ bibliography: paper.bib
 GRACE stands for the Gravity Recovery and Climate Experiment, a joint satellite mission by NASA, the National Aeronautics and Space Administration and DLR, the German Aerospace Centre. Some details of the GRACE mission is provided in Table 1.
 
 <i>Table 1: Summary of GRACE satellite mission</i>
+
 | Parameter        |     Details     |
 |------------------+:---------------:|
 | Start of Mission |  17 March 2002  |
