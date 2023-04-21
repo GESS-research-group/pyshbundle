@@ -4,8 +4,7 @@ site_url: https://abhimhamane.github.io/pyshbundle
 
 repo_url: https://github.com/mn5hk/pyshbundle
 
-theme:
-  name: material
+theme: readthedocs
 
 
 plugins:
