@@ -10,25 +10,36 @@ authors:
   - name: Amin Shakya
     orcid: 0000-0002-4706-826X
     equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
-    affiliation: 1
-  - name: Vivek Yadav
+    affiliation: "1,2"
+  - name: Vivek Kumar Yadav
+    orcid: 0009-0000-7156-4450
     equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
+    corresponding: true # (This is how you can denote equal contributions between multiple authors)
     affiliation: 1
   - name: Tsungrojungla Walling
-    affiliation: 2
+    orcid: 0009-0006-9323-1191
+    affiliation: 3
+  - name: Abhishek Mhamane
+    orcid: 0000-0001-9788-0371
+    affiliation: 4
   - name: Maya Suryawanshi
+    orcid: 0009-0008-5701-7504
     affiliation: 1
   - name: Bramha Dutt Vishwakarma
     orcid: 0000-0003-4787-8470
     corresponding: true # (This is how to denote the corresponding author)
-    affiliation: "1,3" # (Multiple affiliations must be quoted)
+    affiliation: "1,5" # (Multiple affiliations must be quoted)
 affiliations:
  - name: Interdisciplinary Centre for Water Research, Indian Institute of Science, India
    index: 1
- - name: Undergraduate Programme, Indian Institute of Science, India
+ - name: Faculty of Geo-information and Earth Observation, University of Twente, the Netherlands
    index: 2
- - name: Centre of Earth Science, Indian Institute of Science, India
+ - name: Undergraduate Programme, Indian Institute of Science, India
    index: 3
+ - name: Geoinformatics Laboratory, Indian Institute of Technology Kanpur, India
+   index: 4
+ - name: Centre of Earth Science, Indian Institute of Science, India
+   index: 5
 date: 04 April 2023
 bibliography: paper.bib
 
@@ -47,18 +58,18 @@ bibliography: paper.bib
 GRACE stands for the Gravity Recovery and Climate Experiment, a joint satellite mission by NASA, the National Aeronautics and Space Administration and DLR, the German Aerospace Centre. Some details of the GRACE mission is provided in Table 1.
 
 <i>Table 1: Summary of GRACE satellite mission</i>
-| Parameter        |    Details      | 
-| -------------    |:--------------:| 
-| Start of Mission | 17 March 2002  | 
-| End of Mission   | 27 October 2017| 
-| Inclination      | 89.0°          | 
-| Period           | 94.5 minutes   |  
+| Parameter        |     Details     |
+|------------------+:---------------:|
+| Start of Mission |  17 March 2002  |
+| End of Mission   | 27 October 2017 |
+| Inclination      |      89.0°      |
+| Period           |  94.5 minutes   |
 
 GRACE consists of two identical satellites orbiting around the earth on the same orbital path. The basic principal of the GRACE satellite operation consists of the monitoring of the intersatellite distance between the twin satellites using microwave pulse measurements `(Wahr & Molenaar, 1998)`. When the satellite system comes across a mass anomaly, each satellite accelerates or decelerates with a phase lag and the intersatellite distance changes. This change in intersatellite distance is later processed to obtain the magnitude of the mass anamoly. When it comes to the continental land surface, the hydrological processes consist of a major component of the mass anamoly over it. However various other signals such as oceanic and atmospheric variations, systemic correlated errors, etc. are also part of the obtained GRACE signals. These unwanted signals and errors necessitate application of various filtering and post-processing techniques. These post-processing steps however also introduce some errors as well as deteorate the qualtiy of the hydrological product `(Humphrey et al., 2023)`. The hydrological signal estimated after the post-processing steps is the  `total water storage anomaly` (`TWSA`). `TWSA` is the sum of the total water components over a vertical extention of the grid area through the earth. Conventionally, it is represented in terms of the `equivalent water height` (`m`). GRACE has a successor, GRACE-FO, which was successfully launched on 22 May 2018.<br>
 
 Three different research centres provide GRACE data. These are the University of Texas Center for Space Research (`CSR`), Jet Propulsion Laboratory (`JPL`), and the German Research Center for Geosciences (`GFZ`). Further, GRACE data is available at different levels of processing. `Level 1` data refers to the raw satellite data. These are further available as `Level 1A` and `Level 1B`, based on the level of processsing done to the raw data. `Level 2` are the spherical harmonic coefficients for the geospatial potential estimates. These may be accessed through the JPL's Physical Oceanography Distributed Active Archive Center (`PO.DAAC`)<sup>2</sup> or through the Information System and Data Center (`ISDC`)<sup>3</sup>. `Level 3` consists of mass anomalies or other standardized products, such as the Monthly Ocean/Land Water Equivalent Thickness Surface-Mass Anomaly. Similarly, mass concentration blocks or `mascons` are also availble. These directly provide the `TWSA` over gridded regions, and are available through the three GRACE data centers. More details on the mascon approaches for studying gravity fields and the approaches used by the different data centers for generating mascon products may be referred to in `Antoni (2022)`. The mascon products from the various data centers have some differences, attributed to the difference in post-processing steps and corrections applied by the different data centers. An online tool exists developed by the `Colorado Center for Astrodynamics Research` <sup>4</sup>. This tool can be used for a quick visualization of the `CSR` and `GSFC` mascon products over all regions of the globe. While the mascon results make application of GRACE data easier to a wider audience, use of `Level 2` data gives the user the freedom and the flexibility to choose their own post-processing algorithms. The choice of application of mascon data product or Level 2 data product may depend upon the purpose of the exercise and the expertise level of the user on the GRACE data post-processing. In this contribtion, we enable the user to obtain the gridded `TWSA` data from `Level 2` data.<br>
 
-`Level 2` GRACE data products may be stored in various data formats. These include `|C\S|`, `/S|C\`, `clm`, `klm`, vector, and `Colombo` format (`Sneew et al., 2021`). Our contribution in its current version can handle the `|C\S|`, `/S|C\`,  `clm`, and `klm` data formats. A such, our contribution can be applied using `L2` Spherical Harmonics data from any of the three research centers previously mentioned. In `|C\S|` format, the `Clm` and `Slm` coefficient are stored as lower triangle and upper triangle, respectively, in a matrix of dimention <i>(l + 1) x (l + 1)</i>. In `/S|C\` format, the coefficients are stored in amatrix of dimension <i>(l + 1) x (2 l + 1)</i> with horizontally flipped triangular matrix of `Slm` coefficients on the left half, triangular matrix of `Clm` on the right half, and zeros on the rest of the matrix elements. In our contribution, conversion between the three data formats is made possible with the modules `cs2sc`, `sc2cs`, `clm2sc`, `clm2cs`, and `klm2sc`.<br>
+`Level 2` GRACE data products may be stored in various data formats. These include `|C\S|`, `/S|C\`, `clm`, `klm`, vector, and `Colombo` format (`Sneew et al., 2021`). Our contribution in its current version can handle the `|C\S|`, `/S|C\`,  `clm`, and `klm` data formats. A such, our contribution can be applied using `L2` Spherical Harmonics data from any of the three research centers previously mentioned. In `|C\S|` format, the `Clm` and `Slm` coefficient are stored as lower triangle and upper triangle, respectively, in a matrix of dimention <i>$(l + 1) \times (l + 1)$</i>. In `/S|C\` format, the coefficients are stored in amatrix of dimension <i>$(l + 1) \times (2 l + 1)$</i> with horizontally flipped triangular matrix of `Slm` coefficients on the left half, triangular matrix of `Clm` on the right half, and zeros on the rest of the matrix elements. In our contribution, conversion between the three data formats is made possible with the modules `cs2sc`, `sc2cs`, `clm2sc`, `clm2cs`, and `klm2sc`.<br>
 
 `Level 3` products are the catchment average hydrological estimates of `TWSA`. These are obtained through the further processing of `Level 2` products. `Level 3` products may further be processed to obtain catchment average timeseries data, labelled as `Level 4` products. Various tools exist in the literature to process GRACE data and to analyze it. Some of these available in the `Matlab` programming language are: `SHbundle` (`Sneew et al., 2021`), GRACE Data Driven Correction (`GDDC`) (`Vishwakarma et al., 2017`), `GRAMAT` (`Feng, 2019`), `SHADE` (`Piretzidis, D., & Sideris, M. G., 2018`), `GRACETOOLS` (`Darbeheshti et al., 2018`), etc. Similarly, some GRACE data processing tools are also available based on the python programming language. These include `gravity-toolkit` `(Sutterley, 2023)`, `ggtools` `(Li, 2020)` and `GRACE-filter` `(Rietbroek, n.a.)`. General tools for spheric harmonic analysis are also available, such as SHTools (`Wieczorek, M. A., & Meschede, M., 2018`). `SHBundle` provides MATLAB-tools for `spheric harmonic synthesis` and `spheric harmonic analysis`. The earliest version of the code were developed in 1994 while the latest version with upgrades can be found dated 2018. `GRAMAT` provides a similar MATLAB-based tools for processing GRACE spherical harmonics data to obtain spatiotemporal global mass variations. The GRAMAT toolbox includes Gaussian smoothening filter to remove North-South stripes, spherical harmonic analysis and synthesis routines, leakage effect reduction routines, harmonic analysis of times series over regions, and uncertainty analysis of GRACE estimates (`Feng, 2019`). `SHADE` provides a matlab-based toolbox for the empirical de-correlation of GRACE monthly spherical harmonics (`Piretzidis, D., & Sideris, M. G., 2018`). `Gravity-toolkit` is a python-based package meant to handle GRACE L2 data products. Its functionalities include visualization of GRACE and GRACE-FO L2 data products, and the estimation of GRACE and GRACE-FO L2 data product errors. `Gg-tools` too contain similar tools for signal correction and for conversion of GRACE L2 products to L3. `GRACE-filter` provides tool for filtering of GRACE L2 product using DDK filter based on `Kusche et al. (2009)`.
  
@@ -70,9 +81,8 @@ It is hoped the contribution will make GRACE L2 data processing more accessible 
 
 # Mathematic Backround
 
-GRACE works on the principal of gravimetric changes. Level 2 GRACE data consists of the spherical harmonic coefficients  <i>$C_{l,m}$</i> and <i>$S_{l,m}$</i>. Gravimetric potential function <i>V ( r, θ, λ )</i> can be represented by the spherical harmonic coefficients in the frequency domain with the help of the following relation `(Vishwakarma, 2017; Kaula, 1996; Chao & Gross, 1987; Wahr et. al., 1998)`:
+GRACE works on the principal of gravimetric changes. Level 2 GRACE data consists of the spherical harmonic coefficients  <i>$C_{l,m}$</i> and <i>$S_{l,m}$</i>. Gravimetric potential function <i>$V ( r, θ, λ )$</i> can be represented by the spherical harmonic coefficients in the frequency domain with the help of the following relation `(Vishwakarma, 2017; Kaula, 1996; Chao & Gross, 1987; Wahr et. al., 1998)`:
 
-$$
 \begin{equation}
     V(r, \theta, \lambda) = 
     \frac{GM}{r} \sum_{l=0} ^ {\infty} 
@@ -80,15 +90,14 @@ $$
     \sum_{m=0} ^ {l} 
     \bar{P}_{l,m}(\cos \theta)[C_{l,m}\cos m\lambda+S_{l,m}\sin m\lambda],
 \end{equation}
-$$
 
-where <i>G</i> is the Gravitational constant, <i>M</i> represents the total Earth mass, <i>a</i> is the average radius of the Earth, <i>$P_{l,m}$</i>  represents the the fully normalized Legendre functions of the first kind, <i>$C_{l,m}$</i> and <i>$S_{l,m}$</i> represent the fully normalized spherical harmonic coefficients, and <i>l</i> and <i>m</i> represent the degree and order, respectively.
+where <i>$G$</i> is the Gravitational constant, <i>$M$</i> represents the total Earth mass, <i>$a$</i> is the average radius of the Earth, <i>$P_{l,m}$</i>  represents the the fully normalized Legendre functions of the first kind, <i>$C_{l,m}$</i> and <i>$S_{l,m}$</i> represent the fully normalized spherical harmonic coefficients, and <i>l</i> and <i>m</i> represent the degree and order, respectively.
 
 It should be noted that <i>equation 1</i> does not deal with the variability of gravimetric potential function over time. However, a major application of the GRACE satellite system is to retrieve the time-variable gravity information. This is acheived by taking the variation of the spherical harmonic coefficients over time. To obtain this, a long-term mean of the monthly values of the spherical harmonic coefficients is removed from the monthly spherical harmonic coefficients obtained from GRACE L2 data. This can be denoted by <i>$\Delta C_{l,m}$</i> and <i>$\Delta P_{l,m}$</i>. Thus, <i>equation 1</i> can be modified to obtain the change in gravimetric potential function over time.
 
-Since we are interested in the change in mass in our system, we need to obtain the change in density from the change in gravity potential function. It is further assumed that the redistribution of the mass of the earth takes place within a thin layer close to the surface of the Earth. Furthermore, this mass redistribution takes place with a deformation. The mass deformation is accounted for by the load Love numbers <i>k<sub>l</sub></i> `(Wahr et. al., 1998)`. As such, <i>equation 1</i> further resolves to:
+Since we are interested in the change in mass in our system, we need to obtain the change in density from the change in gravity potential function. It is further assumed that the redistribution of the mass of the earth takes place within a thin layer close to the surface of the Earth. Furthermore, this mass redistribution takes place with a deformation. The mass deformation is accounted for by the load Love numbers <i>$k_l$</i> `(Wahr et. al., 1998)`. As such, <i>equation 1</i> further resolves to:
 
-$$
+
 \begin{equation}
     \Delta \sigma (\theta, \lambda) = 
     \frac{a \rho_{avg}}{3} \sum_{l=0} ^ {\infty} 
@@ -97,11 +106,10 @@ $$
     \frac{2 l + 1}{1 + k_{l}}
     [\Delta C_{l,m}\cos m\lambda+ \Delta S_{l,m}\sin m\lambda],
 \end{equation}
-$$
 
-Here, <i>$\Delta \sigma (\theta, \lambda)$</i> represents the change in surface density of the Earth, and <i>$\rho_{avg}$</i> represents the average density of the Earth (<i>5517 kg / m<sup>3</sup></i>). As the mass redistribution on Earth over a monthly time scale is dominated by the hydroogical processes, the density change <i>$\Delta \sigma (\theta, \lambda)$</i> relates to the <i>Equivalent Water Height (EWH)</i> by: <i>$\Delta \sigma (\theta, \lambda) = EWH (\theta, \lambda) . \rho_{water}$</i>. Thus, <i>equation 2</i> can be rewritten in terms of <i>EWH</i> as:
 
-$$
+Here, <i>$\Delta \sigma (\theta, \lambda)$</i> represents the change in surface density of the Earth, and <i>$\rho_{avg}$</i> represents the average density of the Earth (<i>5517 \: {kg} / {m^3}</i>). As the mass redistribution on Earth over a monthly time scale is dominated by the hydroogical processes, the density change <i>$\Delta \sigma (\theta, \lambda)$</i> relates to the <i>Equivalent Water Height (EWH)</i> by: <i>$\Delta \sigma (\theta, \lambda) = EWH (\theta, \lambda) . \rho_{water}$</i>. Thus, <i>equation 2</i> can be rewritten in terms of <i>$EWH$</i> as:
+
 \begin{equation}
     EWH (\theta, \lambda) = 
     \frac{a \rho_{avg}}{3 \rho_{water}} 
@@ -110,23 +118,19 @@ $$
     \frac{2 l + 1}{1 + k_{l}}
     [\Delta C_{l,m}\cos m\lambda+ \Delta S_{l,m}\sin m\lambda],
 \end{equation}
-$$
 
-Thus, we can obtain the hydrological parameter <i>EWH</i> from GRACE Level 2 data using <i>equation 3</i>. The accuracy and precision of the <i>EWH</i> computed depends upon the accuracy and precision of the <i>$\Delta C_{l,m}$</i> and <i>$\Delta P_{l,m}$</i>, obtained from GRACE. However, these GRACE products are both noisy and coarse in resolution `(Wahr et. al., 1998)`. A tradeoff exists between the noise and resolution of the spherical harmonic products. To capture the spherical harmonic products at a higher spatial resolution, their values at higher degree and order needs to be used. However, noise increases with the increase in degree and order, making the computed <i>EWH</i> also noisy. Similarly, if the spherical harmonics are truncated at a lower degree and order, the noise in the computed <i>EWH</i> decreases, however, the spatial resolution of the obtained <i>EWH</i> also reduces.
+Thus, we can obtain the hydrological parameter <i>$EWH$</i> from GRACE Level 2 data using <i>equation 3</i>. The accuracy and precision of the <i>$EWH$</i> computed depends upon the accuracy and precision of the <i>$\Delta C_{l,m}$</i> and <i>$\Delta P_{l,m}$</i>, obtained from GRACE. However, these GRACE products are both noisy and coarse in resolution `(Wahr et. al., 1998)`. A tradeoff exists between the noise and resolution of the spherical harmonic products. To capture the spherical harmonic products at a higher spatial resolution, their values at higher degree and order needs to be used. However, noise increases with the increase in degree and order, making the computed <i>$EWH$</i> also noisy. Similarly, if the spherical harmonics are truncated at a lower degree and order, the noise in the computed <i>$EWH$</i> decreases, however, the spatial resolution of the obtained <i>$EWH$</i> also reduces.
 
-To improve the signal-to-noise ratio of the obtained <i>EWH</i>, various filtering techniques have been used. An ideal filter retains all of the signal while filtering out all of the noise. A popular filter used for GRACE applications is the Gaussian filter. The weights, <i>w</i>, for the Gaussian spatial averaging is given by:
+To improve the signal-to-noise ratio of the obtained <i>$EWH$</i>, various filtering techniques have been used. An ideal filter retains all of the signal while filtering out all of the noise. A popular filter used for GRACE applications is the Gaussian filter. The weights, <i>$w$</i>, for the Gaussian spatial averaging is given by:
 
-$$
 \begin{equation}
     \omega (\psi) = 
     \frac{\beta}{2 \pi} 
     \frac{exp [-\beta (1 - \cos \psi)]}{1 - \exp ^ {-2 \beta}},
 \end{equation}
-$$
 
-where, $\beta = \frac{\ln (2)}{(1 - \cos(\frac{r_{fil}}{a}))'}$. Here, $r_{fil}$ is the averaging radius of the filter. Thus, the Gaussian filter obtained in the spectral domain is written as `(Wahr et. a., 1998)`:
+where, $\beta = \frac{\ln (2)}{(1 - \cos(\frac{r_{fil}}{a}))}$. Here, $r_{fil}$ is the averaging radius of the filter. Thus, the Gaussian filter obtained in the spectral domain is written as `(Wahr et. a., 1998)`:
 
-$$
 \begin{equation}
 \bar{\sigma}(\theta, \lambda) = 
 \frac{2 a \rho_{avg} \pi}{3} 
@@ -135,11 +139,9 @@ $$
     \frac{2 l + 1}{1 + k_{l}}
     [\Delta C_{l,m}\cos m\lambda+ \Delta S_{l,m}\sin m\lambda],
 \end{equation}
-$$
 
 <i>Equation 5</i> is similar to <i>equation 3</i>, but for an additional multiplication factor, <i>$W_l$</i>, defined as <i>$W_l = \int_0^\pi w (\psi) P_l (\cos \psi) \sin \psi d\psi$</i> and <i>$P_l = \frac{\bar{P_l}}{\sqrt {2l + 1}}$</i>. <i>Equation 5</i> defines a Gaussian filter that decays with only degree. However, for our GRACE spherical harmonics, the decay occurs with the location as well as with the degrees and orders. Thus, <i>equation 5</i> is further generalized as `(Wahr et. al., 1998; Devaraju, 2015)`:
 
-$$
 \begin{equation}
 \bar{\sigma}(\theta, \lambda) = 
 \frac{a \rho_{avg}}{12 \pi} 
@@ -149,7 +151,6 @@ $$
     \frac{2 l + 1}{1 + k_{l}}
     [\Delta C_{l,m}\cos m\lambda+ \Delta S_{l,m}\sin m\lambda],
 \end{equation}
-$$
 
 where <i>$W_{lm}^{nk}$</i> represents the spectral weight in its general form. <i>Equation 6</i> is the final result we obtain after spectral harmonic analysis and application of Gaussian filter. More details on the mathematical description presented in this section can be referred to in `Vishwakarma (2017)`.
 
@@ -159,6 +160,7 @@ In this contribution, tools to implement the spherical harmonic analysis and fil
 
 # Implementation
 A schematic diagram of the code workflow is presented in the Fig 01. <br>
+
 ![Schematic diagram of code workflow. \label{fig:code_workflow}](./pic/01_flowchart_without_background.png)<br>
 <i>Fig 01: Schematic Diagram of the Code Workflow</i><br>
 
@@ -175,7 +177,7 @@ The `Global Spherical Harmonic Analysis` code depends upon `neumann` along with 
 <br>
 
 # Validation
-The results of the PySHbundle TWS computation has been validated with respect to TWS computation using SHbundle and presented in Fig 02. The NRMSE values are in the order of e<sup>-8</sup>. Timeseries plots for the Amazon and the Ganges basins have been plotted in Fig 03 and Fig 04, respectively. In both the cases, the order of magnitude of the signal is e<sup>2</sup>, while the error is in the order of e<sup>-6</sup>. Additionally, water budget closure timeseries for the world is provided in Fig 05. The magnitude of difference between the errors and the signal is of the order e<sup>-4</sup>. As such, the errors are likely computational artifacts; and of very small order that can be neglected. Thus, the python package PySHbundle is deemed to give the desired performance in the processing of GRACE L2 Spherical Harmonics to obtain L3 TWS anomalies over land grids.
+The results of the PySHbundle TWS computation has been validated with respect to TWS computation using SHbundle and presented in Fig 02. The NRMSE values are in the order of $e^{-8}$. Timeseries plots for the Amazon and the Ganges basins have been plotted in Fig 03 and Fig 04, respectively. In both the cases, the order of magnitude of the signal is $e^{2}$, while the error is in the order of $e^{-6}$. Additionally, water budget closure timeseries for the world is provided in Fig 05. The magnitude of difference between the errors and the signal is of the order $e^{-4}$. As such, the errors are likely computational artifacts; and of very small order that can be neglected. Thus, the python package PySHbundle is deemed to give the desired performance in the processing of GRACE L2 Spherical Harmonics to obtain L3 TWS anomalies over land grids.
 ![Fig 02: NRMSE of TWS computation for PySHbundle with respect to SHbundle results.  \label{fig:error_validation}](./pic/02_error_nrmse.png)<br>
 <i>Fig 02: RMSE and NRMSE of TWS computation for PySHbundle with respect to SHbundle results.</i><br>
 
