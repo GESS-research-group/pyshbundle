@@ -1,0 +1,26 @@
+name: ci-docs-gh-pages
+on:
+  push:
+    branches: 
+      - main
+permissions:
+  contents: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+      - uses: actions/cache@v2
+        with:
+          key: ${{ github.ref }}
+          path: .cache
+      - run: pip install mkdocs
+      - run: pip install mkdocstrings
+      - run: pip install mkdocs-pymdownx-material-extras
+      - run: pip install mkdocs-git-revision-date-plugin 
+      - run: pip install mkdocs-jupyter
+      - run: pip install mkdocstrings-python
+      - run: mkdocs gh-deploy --force
