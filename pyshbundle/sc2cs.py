@@ -40,11 +40,7 @@
 #    Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 #    Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
-""" sc2cs - format conversion tool from rectangular sc format to a square cs format
-"""
-
 import numpy
-
 
 def sc2cs(field):
     """converts the rectangular $(L+1) \times (2L+1)$ matrix FIELD, containing

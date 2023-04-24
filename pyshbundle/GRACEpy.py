@@ -1,48 +1,47 @@
-'''
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-This file is part of PySHbundle. 
-    PySHbundle is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+# License:
+#    This file is part of PySHbundle.
+#    PySHbundle is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
     
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-Acknowledgement Statement:
-    Please note that PySHbundle has adapted the following code packages, 
-    both licensed under GNU General Public License
-    1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
+# Acknowledgement Statement:
+#    Please note that PySHbundle has adapted the following code packages, 
+#    both licensed under GNU General Public License
+#       1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
 
-    2. Downscaling GRACE Total Water Storage Change using 
-    Partial Least Squares Regression
-    https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
+#       2. Downscaling GRACE Total Water Storage Change using Partial Least Squares Regression
+#          https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
     
-Key Papers Referred:
-    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
-    A data‐driven approach for repairing the hydrological catchment signal damage 
-    due to filtering of GRACE products. Water Resources Research, 
-    53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
+# Key Papers Referred:
+#    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
+#       A data‐driven approach for repairing the hydrological catchment signal damage 
+#       due to filtering of GRACE products. Water Resources Research, 
+#       53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
 
-    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
-    Downscaling GRACE total water storage change using 
-    partial least squares regression. Scientific data, 8(1), 95.
-    https://doi.org/10.1038/s41597-021-00862-6 
-    
-'''
+#    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
+#       Downscaling GRACE total water storage change using 
+#       partial least squares regression. Scientific data, 8(1), 95.
+#       https://doi.org/10.1038/s41597-021-00862-6
 
 import numpy
 from . import GRACEconstants as GC
 
 
-def upwcon(degree,height):
+def upwcon(degree: int, height):
     '''
     Created on Sat May  9 18:49:45 2022
     % UPWCON(degree,height,const) returns the upward continuation (R/r)^l, in which
@@ -59,16 +58,33 @@ def upwcon(degree,height):
     % uc    - Upward continuation terms.
     % ----------------------------------------------------------------------------
     '''
+    """returns the upward continuation $(R/r)^l$
+
+    Args:
+        degree (int): Spherical harmonic degree
+        height (int): Height above mean Earth radius [m] [scalar/vector]
+    
+    Returns:
+        uc (_type_): Upward continuation terms
+    
+    Todo:
+        + Add input checking functionality and raise exceptions
+        + Add reference to formula
+    """
+
     rr = numpy.divide(GC.ae, numpy.add(GC.ae,height))
     uc = numpy.power(rr, degree)
 
     return(uc)    
 #-------------------------------------------------------------------------
-def lovenr(lmax):
+def lovenr(lmax: int):
     """
     Created on Mon May 11 11:09:28 2022
+
+    Todo:
+        + Add type and input checking functionality
     
-    @author: Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+    _author_: Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
     l  = [0,  1,    2,    3,    4,    5,   6,   7,   8,   9,  10,  12,  15,  20,  30,  40,  50,  70, 100, 150, 200]
     kl = numpy.divide([0,270,-3030,-1940,-1320,-1040,-890,-810,-760,-720,-690,-640,-580,-510,-400,-330,-270,-200,-140,-100, -700],1e4)
@@ -76,7 +92,7 @@ def lovenr(lmax):
     kn = numpy.interp(n,l,kl)
     return(kn)
 #--------------------------------------------------------------------------
-def lovenrPREM(lmax,frame):
+def lovenrPREM(lmax:int, frame):
     """
     Created on Mon May 11 11:51:29 2022
     

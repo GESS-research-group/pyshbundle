@@ -1,50 +1,75 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Jun 30 14:34:55 2022
- NORMALKLM returns an ellipsoidal normal field
- consisting of normalized -Jn, n=0,2,4,6,8
+#-*- coding: utf-8 -*-
 
- IN:
-    lmax ....... maximum degree
-    typ ........ either 'wgs84' (equipotential ellipsoid), default,
-                        'grs80',
-                 or     'he' (hydrostatic equilibrium ellipsoid)
- OUT:
-    nklm ....... normal field in CS-format (sparse)
+# Created on Thu Jun 30 14:34:55 2022
+# NORMALKLM returns an ellipsoidal normal field
+# consisting of normalized -Jn, n=0,2,4,6,8
 
- REMARKS:
-    .J2,J4 values for hydrostatic equilibrium ellipsoid from Lambeck (1988)
-    "Geophysical Geodesy", p.18
+# IN:
+#    lmax ....... maximum degree
+#    typ ........ either 'wgs84' (equipotential ellipsoid), default,
+#                        'grs80',
+#                 or     'he' (hydrostatic equilibrium ellipsoid)
+# OUT:
+#    nklm ....... normal field in CS-format (sparse)
+
+# REMARKS:
+#    .J2,J4 values for hydrostatic equilibrium ellipsoid from Lambeck (1988)
+#    "Geophysical Geodesy", p.18
    
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-Acknowledgement Statement:
-    Please note that PySHbundle has adapted the following code packages, 
-    both licensed under GNU General Public License
-    1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
+# Acknowledgement Statement:
+#    Please note that PySHbundle has adapted the following code packages, 
+#    both licensed under GNU General Public License
+#       1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
 
-    2. Downscaling GRACE Total Water Storage Change using 
-    Partial Least Squares Regression
-    https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
+#       2. Downscaling GRACE Total Water Storage Change using Partial Least Squares Regression
+#          https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
     
-Key Papers Referred:
-    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
-    A data‐driven approach for repairing the hydrological catchment signal damage 
-    due to filtering of GRACE products. Water Resources Research, 
-    53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
+# Key Papers Referred:
+#    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
+#       A data‐driven approach for repairing the hydrological catchment signal damage 
+#       due to filtering of GRACE products. Water Resources Research, 
+#       53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
 
-    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
-    Downscaling GRACE total water storage change using 
-    partial least squares regression. Scientific data, 8(1), 95.
-    https://doi.org/10.1038/s41597-021-00862-6 
+#    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
+#       Downscaling GRACE total water storage change using 
+#       partial least squares regression. Scientific data, 8(1), 95.
+#       https://doi.org/10.1038/s41597-021-00862-6 
+
+# @author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+
+import numpy as np 
+from scipy import sparse
+
+
+def normalklm(lmax: int, typ: str = 'wgs84'):
+    """ NORMALKLM returns an ellipsoidal normal field
+    consisting of normalized -Jn, n=0,2,4,6,8
+
+    Args:
+        lmax (int): maximum degree
+        typ (str): Ellipsoids can be either 
+                    'wgs84' - World Geodetic System 84, 
+                    'grs80' - , 
+                    'he' - hydrostatic equilibrium ellipsoid
     
-@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
-"""
+    Returns:
+        nklm (np.): normal field in CS-format (sparse)
+    
+    TODO: Find type of nklm; I think raising TypeError, VlueError or NameError instad of general Exception
 
-def normalklm(lmax, typ = 'wgs84'):
-    import numpy as np 
-    from scipy import sparse
+    Raises:
+        Exception: lmax should be an integer
+        Exception: lmax should be positive
+        Exception: Unknown type of ellipsoid, supports 'wgs84', `GRS80` and 'he'
+    
+    References:
+        .J2,J4 values for hydrostatic equilibrium ellipsoid from Lambeck (1988)
+        "Geophysical Geodesy", p.18    
+    """
+    
     if type(lmax) != int:
         raise Exception("lmax should be integer")
         

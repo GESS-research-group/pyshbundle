@@ -80,11 +80,21 @@ Key Papers Referred:
     https://doi.org/10.1038/s41597-021-00862-6 
 
 @author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
-    
 '''
-def plm(l,m,thetaRAD,nargin,nargout): 
-    import sys
-    import numpy as np
+import sys
+import numpy as np
+
+def plm(l:int, m:int, thetaRAD, nargin, nargout): 
+    """_summary_
+
+    Args:
+        l (_type_): _description_
+        m (_type_): _description_
+        thetaRAD (_type_): _description_
+        nargin (_type_): _description_
+        nargout (_type_): _description_
+    """
+    
     if  min(l.shape) !=1:
         print('Degree l must be a vector (or scalar)') 
         sys.exit([])
