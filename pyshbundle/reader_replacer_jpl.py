@@ -81,13 +81,13 @@ def TIME(year_start,file_name,time_axes):
     Returns:
         _type_: _description_
     """
-        if  year_start == file_name[-39:-35]:
-            time_axes = time_axes
-            year_start = year_start
-        else:
-            time_axes = time_axes + 1  
-            year_start = file_name[-39:-35]
-        return year_start, time_axes
+    if  year_start == file_name[-39:-35]:
+        time_axes = time_axes
+        year_start = year_start
+    else:
+        time_axes = time_axes + 1  
+        year_start = file_name[-39:-35]
+    return year_start, time_axes
 # Main code
 def reader_replacer_jpl(path, path_tn14, path_tn13):
     """_summary_
