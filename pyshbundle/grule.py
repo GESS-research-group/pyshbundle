@@ -1,77 +1,87 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Jun 17 15:31:15 2022
 
- This function computes Gauss base points and weight factors
- using the algorithm given by Davis and Rabinowitz in 'Methods
- of Numerical Integration', page 365, Academic Press, 1975.
+#Created on Fri Jun 17 15:31:15 2022
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# SHBundle original Code
 
- bp, wf = grule(n)
+# This function computes Gauss base points and weight factors
+# using the algorithm given by Davis and Rabinowitz in 'Methods
+# of Numerical Integration', page 365, Academic Press, 1975.
 
+# bp, wf = grule(n)
 
- IN:
-    n ....... number of base points required. 
+# IN:
+#    n ....... number of base points required. 
 
- OUT:
-    bp ...... cosine of the base points
-    wf ...... weight factors for computing integrals and such 
+# OUT:
+#    bp ...... cosine of the base points
+#    wf ...... weight factors for computing integrals and such 
 
+#@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
-@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# License:
+#    This file is part of PySHbundle.
+#    PySHbundle is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
 
-This file is part of PySHbundle. 
-    PySHbundle is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# Acknowledgement Statement:
+#    Please note that PySHbundle has adapted the following code packages, 
+#    both licensed under GNU General Public License
+#       1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#       2. Downscaling GRACE Total Water Storage Change using Partial Least Squares Regression
+#          https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
     
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# Key Papers Referred:
+#    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
+#       A data‐driven approach for repairing the hydrological catchment signal damage 
+#       due to filtering of GRACE products. Water Resources Research, 
+#       53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
 
-Acknowledgement Statement:
-    Please note that PySHbundle has adapted the following code packages, 
-    both licensed under GNU General Public License
-    1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
-
-    2. Downscaling GRACE Total Water Storage Change using 
-    Partial Least Squares Regression
-    https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
-    
-Key Papers Referred:
-    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
-    A data‐driven approach for repairing the hydrological catchment signal damage 
-    due to filtering of GRACE products. Water Resources Research, 
-    53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
-
-    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
-    Downscaling GRACE total water storage change using 
-    partial least squares regression. Scientific data, 8(1), 95.
-    https://doi.org/10.1038/s41597-021-00862-6 
-"""
+#    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
+#       Downscaling GRACE total water storage change using 
+#       partial least squares regression. Scientific data, 8(1), 95.
+#       https://doi.org/10.1038/s41597-021-00862-6
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 import numpy as np
 
-def grule(n):
+def grule(n: int):
+    """This function computes Gauss base points and weight factors
+    using the algorithm-see Reference
+
+    Args:
+        n (int): number of base points required
+
+    Returns:
+        _type_: cosine of the base points
+        _type_: weight factors for computing integrals and such
+    
+    References:
+         'Methods of Numerical Integration' by Davis and Rabinowitz, page 365, Academic Press, 1975.
+    """
     bp = np.zeros((n,1))
     wf = bp
-    iter=2
+    iter = 2
     m = np.floor((n+1)/2)
     e1 = n * (n+1)
     
     
     mm = 4*m - 1
     t = (np.pi / (4*n + 2)) * np.arange(3,mm+4,4)
-    nn = (1 - (1-1/n)/(8*n*n))
+    nn = (1 - (1 - 1/n)/(8*n*n))
     x0 = nn * np.cos(t)
     
     
@@ -82,7 +92,7 @@ def grule(n):
         for kk in range(n-1):
             k = kk+2
             t1 = x0 * pk
-            pkp1 = t1-pkm1-(t1-pkm1)/k +t1
+            pkp1 = t1 - pkm1 - (t1-pkm1)/k  + t1
             pkm1=pk
             pk=pkp1
             

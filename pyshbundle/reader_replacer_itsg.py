@@ -1,52 +1,70 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Feb  6 18:43:02 2023
 
+# Created on Mon Feb  6 18:43:02 2023
 
-This file is part of PySHbundle. 
-    PySHbundle is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+# License:
+#    This file is part of PySHbundle.
+#    PySHbundle is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
     
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-Acknowledgement Statement:
-    Please note that PySHbundle has adapted the following code packages, 
-    both licensed under GNU General Public License
-    1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
+# Acknowledgement Statement:
+#    Please note that PySHbundle has adapted the following code packages, 
+#    both licensed under GNU General Public License
+#       1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
 
-    2. Downscaling GRACE Total Water Storage Change using 
-    Partial Least Squares Regression
-    https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
+#       2. Downscaling GRACE Total Water Storage Change using Partial Least Squares Regression
+#          https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
     
-Key Papers Referred:
-    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
-    A data‐driven approach for repairing the hydrological catchment signal damage 
-    due to filtering of GRACE products. Water Resources Research, 
-    53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
+# Key Papers Referred:
+#    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
+#       A data‐driven approach for repairing the hydrological catchment signal damage 
+#       due to filtering of GRACE products. Water Resources Research, 
+#       53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
 
-    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
-    Downscaling GRACE total water storage change using 
-    partial least squares regression. Scientific data, 8(1), 95.
-    https://doi.org/10.1038/s41597-021-00862-6 
+#    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
+#       Downscaling GRACE total water storage change using 
+#       partial least squares regression. Scientific data, 8(1), 95.
+#       https://doi.org/10.1038/s41597-021-00862-6
 
-@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
-"""
+# @author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
+import re
+import os
+import numpy as np
+import julian
+import math
+import datetime
 
 # Function to read files & extract data
 def reader(file_name,line_num,degree,order,clm,slm,clm_std,slm_std,start_date,year_start,time_axes):
-    import re
+    """_summary_
+
+    Args:
+        file_name (_type_): _description_
+        line_num (_type_): _description_
+        degree (_type_): _description_
+        order (_type_): _description_
+        clm (_type_): _description_
+        slm (_type_): _description_
+        clm_std (_type_): _description_
+        slm_std (_type_): _description_
+        start_date (_type_): _description_
+        year_start (_type_): _description_
+        time_axes (_type_): _description_
+    """
     with open(file_name,"r") as file:
         stuff = file.readlines()
         stuff
@@ -68,13 +86,13 @@ def reader(file_name,line_num,degree,order,clm,slm,clm_std,slm_std,start_date,ye
            
 # Function for yearwise            
 def TIME(year_start,file_name,time_axes):
-        if  year_start == file_name[-11:-7]:
-            time_axes = time_axes
-            year_start = year_start
-        else:
-            time_axes = time_axes + 1  
-            year_start = file_name[-11:-7]
-        return year_start, time_axes
+    if  year_start == file_name[-11:-7]:
+        time_axes = time_axes
+        year_start = year_start
+    else:
+        time_axes = time_axes + 1  
+        year_start = file_name[-11:-7]
+    return year_start, time_axes
     
     
 # path = r"/home/wslvivek/Desktop/level2/pysh_v2/ITSG_input/"    
@@ -84,10 +102,16 @@ def TIME(year_start,file_name,time_axes):
 
 # Main code
 def reader_replacer_itsg(path, path_tn14, path_tn13):
-    import os
-    import numpy as np
-    import julian
-    import re
+    """_summary_
+
+    Args:
+        path (_type_): _description_
+        path_tn14 (_type_): _description_
+        path_tn13 (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     file_list = os.listdir(path)
     def last_4chars(x):
         #print(x[-39:-32])
@@ -172,8 +196,7 @@ def reader_replacer_itsg(path, path_tn14, path_tn13):
             count = count + 1
             
     # Actual replacement    
-    import math
-    import datetime
+    
     index = 0
     margin=datetime.timedelta(days = 23)
     for year in range(0,time_axes+1,1):

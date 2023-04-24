@@ -1,80 +1,101 @@
-'''
-@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-This file is part of PySHbundle. 
-    PySHbundle is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+# @author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# License:
+#    This file is part of PySHbundle.
+#    PySHbundle is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
     
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# Acknowledgement Statement:
+#    Please note that PySHbundle has adapted the following code packages, 
+#    both licensed under GNU General Public License
+#       1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
 
-Acknowledgement Statement:
-    Please note that PySHbundle has adapted the following code packages, 
-    both licensed under GNU General Public License
-    1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
-
-    2. Downscaling GRACE Total Water Storage Change using 
-    Partial Least Squares Regression
-    https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
+#       2. Downscaling GRACE Total Water Storage Change using Partial Least Squares Regression
+#          https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
     
-Key Papers Referred:
-    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
-    A data‐driven approach for repairing the hydrological catchment signal damage 
-    due to filtering of GRACE products. Water Resources Research, 
-    53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
+# Key Papers Referred:
+#    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
+#       A data‐driven approach for repairing the hydrological catchment signal damage 
+#       due to filtering of GRACE products. Water Resources Research, 
+#       53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
 
-    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
-    Downscaling GRACE total water storage change using 
-    partial least squares regression. Scientific data, 8(1), 95.
-    https://doi.org/10.1038/s41597-021-00862-6 
+#    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
+#       Downscaling GRACE total water storage change using 
+#       partial least squares regression. Scientific data, 8(1), 95.
+#       https://doi.org/10.1038/s41597-021-00862-6
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# Original Codes
+
+# IPLM Integrals of the fully normalized associated Legendre functions
+# over blocks for a selected order M. 
+
+#    HOW: p = iplm(l,m,theRAD)		- assumes dt = theRAD(2)-theRAD(1)
+#        p = iplm(l,m,theRAD,dt)
+
+#    IN:
+#       l ........ degree (vector). Integer, but not necessarily monotonic.
+#                For l < m a vector of zeros will be returned.
+#       m ........ order (scalar)
+#       theRAD ... co-latitude [rad] (vector)
+#       dt ....... integration block-size [rad] (scalar). Default: dt = theRAD(2)-theRAD(1)
+
+#    OUT: 
+#       p ........ Matrix with integrated Legendre functions.
+#                Functions are integrated from theRAD(i)-dt/2 till theRAD(i)+dt/2.
+#                The matrix has length(TH) rows and length(L) columns, unless L 
+#                or TH is scalar. Then the output vector follows the shape of 
+#                respectively L or TH. 
+
+#    USES:
+#       plm
+
+#    REMARKS:
+#       The blocks at the pole might become too large under circumstances.
+#       This is not treated separately, i.e. unwanted output may appear.
+#       In case TH is scalar, dt will be 1 (arbitrarily).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+import numpy as np
+import sys
+from . import plm
+
+def iplm(l, m:int, theRAD, dt=-9999):
+    """IPLM Integrals of the fully normalized associated Legendre functions
+        over blocks for a selected order M. 
+
+    Args:
+        l (_type_): degree (vector). Integer, but not necessarily monotonic.
+                For l < m a vector of zeros will be returned.
+        m (int): order (scalar)
+        theRAD (_type_): co-latitude [rad] (vector)
+        dt (int, optional): integration block-size [rad] (scalar). Defaults to -9999.
     
-
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
- IPLM Integrals of the fully normalized associated Legendre functions
- over blocks for a selected order M. 
-
- HOW: p = iplm(l,m,theRAD)		- assumes dt = theRAD(2)-theRAD(1)
-      p = iplm(l,m,theRAD,dt)
-
- IN:
-    l ........ degree (vector). Integer, but not necessarily monotonic.
-               For l < m a vector of zeros will be returned.
-    m ........ order (scalar)
-    theRAD ... co-latitude [rad] (vector)
-    dt ....... integration block-size [rad] (scalar). Default: dt = theRAD(2)-theRAD(1)
-
- OUT: 
-    p ........ Matrix with integrated Legendre functions.
-               Functions are integrated from theRAD(i)-dt/2 till theRAD(i)+dt/2.
-               The matrix has length(TH) rows and length(L) columns, unless L 
-               or TH is scalar. Then the output vector follows the shape of 
-               respectively L or TH. 
- 
- USES:
-    plm
-
- REMARKS:
-    The blocks at the pole might become too large under circumstances.
-    This is not treated separately, i.e. unwanted output may appear.
-    In case TH is scalar, dt will be 1 (arbitrarily).
-
-
-'''
-
-def iplm(l,m,theRAD,dt=-9999):
-    import numpy as np
-    import sys
-    from . import plm
+    Returns:
+        _type_: Matrix with integrated Legendre functions.
+                Functions are integrated from theRAD(i)-dt/2 till theRAD(i)+dt/2.
+                The matrix has length(TH) rows and length(L) columns, unless L 
+                or TH is scalar. Then the output vector follows the shape of 
+                respectively L or TH.
+    
+    Notes:
+        The blocks at the pole might become too large under circumstances.
+        This is not treated separately, i.e. unwanted output may appear.
+        In case TH is scalar, dt will be 1 (arbitrarily).
+    """
     if dt==-9999:
         if len(theRAD) == 1:
             dt = np.pi/180;
