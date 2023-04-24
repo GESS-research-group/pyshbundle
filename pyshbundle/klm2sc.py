@@ -42,8 +42,17 @@ Key Papers Referred:
 @author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 """
 
+import numpy as np
+
 def klm2sc(data):
-    import numpy as np
+    """_summary_
+
+    Args:
+        data (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     # import pickle
     # with open("/path/saved_as_num", "rb") as pk:
     #     data=pickle.load(pk)

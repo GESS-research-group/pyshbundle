@@ -1,81 +1,80 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Aug 24 09:26:32 2022
+#-*- coding: utf-8 -*-
 
- GSHA global spherical harmonic analysis
+#Created on Wed Aug 24 09:26:32 2022
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# SHBundle original Docs
+# GSHA global spherical harmonic analysis
 
- IN:
-    f ....... global field of size (lmax+1)*2*lmax or lmax*2*lmax
-    method .. string argument, defining the analysis method:
-              - 'ls' ..... least squares
-              - 'wls' .... weighted least squares 
-              - 'aq' ..... approximate quadrature 
-              - 'fnm' .... first neumann method
-              - 'snm' .... second neumann method
-              - 'mean' ... block mean values (use of integrated Plm)
-    grid .... optional string argument, defining the grid:
-              - 'pole', 'mesh' ...... (default if lmax+1), equi-angular (lmax+1)*2*lmax, 
-                                      including poles and Greenwich meridian.
-              - 'block', 'cell' ..... (default if lmax), equi-angular block midpoints lmax*2lmax
-              - 'neumann', 'gauss' .. Gauss-Neumann grid (lmax+1)*2*lmax
-    lmax .... maximum degree of development
+# IN:
+#    f ....... global field of size (lmax+1)*2*lmax or lmax*2*lmax
+#    method .. string argument, defining the analysis method:
+#              - 'ls' ..... least squares
+#              - 'wls' .... weighted least squares 
+#              - 'aq' ..... approximate quadrature 
+#              - 'fnm' .... first neumann method
+#              - 'snm' .... second neumann method
+#              - 'mean' ... block mean values (use of integrated Plm)
+#    grid .... optional string argument, defining the grid:
+#              - 'pole', 'mesh' ...... (default if lmax+1), equi-angular (lmax+1)*2*lmax, 
+#                                      including poles and Greenwich meridian.
+#              - 'block', 'cell' ..... (default if lmax), equi-angular block midpoints lmax*2lmax
+#              - 'neumann', 'gauss' .. Gauss-Neumann grid (lmax+1)*2*lmax
+#    lmax .... maximum degree of development
 
- OUT:
-    cs ...... Clm, Slm in |C\S| format
+# OUT:
+#    cs ...... Clm, Slm in |C\S| format
 
- USES:
-    plm, iplm, neumann, sc2cs 
+# USES:
+#    plm, iplm, neumann, sc2cs 
 
- SEE ALSO:
-    GSHS
+# SEE ALSO:
+#    GSHS
 
- REMARKS:
-    TBD - Zlm-functions option
-        - eigengrav, GRS80
-        - When 'pole' grid, m = 1 yields singular Plm-matrix!
+# REMARKS:
+#    TBD - Zlm-functions option
+#        - eigengrav, GRS80
+#        - When 'pole' grid, m = 1 yields singular Plm-matrix!
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# License:
+#    This file is part of PySHbundle.
+#    PySHbundle is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
 
-@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
 
-This file is part of PySHbundle. 
-    PySHbundle is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
     
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-Acknowledgement Statement:
-    Please note that PySHbundle has adapted the following code packages, 
-    both licensed under GNU General Public License
-    1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
+# Acknowledgement Statement:
+#    Please note that PySHbundle has adapted the following code packages, 
+#    both licensed under GNU General Public License
+#       1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
 
-    2. Downscaling GRACE Total Water Storage Change using 
-    Partial Least Squares Regression
-    https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
+#       2. Downscaling GRACE Total Water Storage Change using Partial Least Squares Regression
+#          https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
     
-Key Papers Referred:
-    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
-    A data‐driven approach for repairing the hydrological catchment signal damage 
-    due to filtering of GRACE products. Water Resources Research, 
-    53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
+# Key Papers Referred:
+#    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
+#       A data‐driven approach for repairing the hydrological catchment signal damage 
+#       due to filtering of GRACE products. Water Resources Research, 
+#       53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
 
-    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
-    Downscaling GRACE total water storage change using 
-    partial least squares regression. Scientific data, 8(1), 95.
-    https://doi.org/10.1038/s41597-021-00862-6 
-    
-"""
+#    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
+#       Downscaling GRACE total water storage change using 
+#       partial least squares regression. Scientific data, 8(1), 95.
+#       https://doi.org/10.1038/s41597-021-00862-6
+
+# @author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+
 import numpy as np
 from . import neumann
 from . import plm
@@ -85,6 +84,17 @@ from . import iplm
 from . import sc2cs
 
 def gsha(f, method, grid = None, lmax = -9999):
+    """ GSHA - Global Spherical Harmonic Analysis
+
+    Args:
+        f (_type_): global field of size $(l_{max} + 1) * 2 * l_{max}$ or $l_{max} * 2 * l_{max}$
+        method (_type_): _description_
+        grid (_type_, optional): _description_. Defaults to None.
+        lmax (int, optional): maximum degree of development. Defaults to -9999.
+
+    Raises:
+        Exception: _description_
+    """
     rows, cols = f.shape
     
     if cols == 2 * rows: #Check conditions
@@ -155,8 +165,6 @@ def gsha(f, method, grid = None, lmax = -9999):
     '''
     Reshape variables as required
     '''
-    
-    
         
     if len(lam.shape) == 1:
         lam = lam.reshape(1,lam.shape[0])
@@ -207,10 +215,7 @@ def gsha(f, method, grid = None, lmax = -9999):
     
     
     a = f @ c
-    b = f @ s
-    
-    
-    
+    b = f @ s    
     
     '''
     Second step of analysis: Clm and Slm
@@ -291,16 +296,13 @@ def gsha(f, method, grid = None, lmax = -9999):
             
             clm[m:L+1, m] = (1 + (m==0))/ 4 * p.T @ ai
             slm[m:L+1, m] = (1 + (m==0))/ 4 * p.T @ bi
-            
-            
-            
+                
     '''
     %--------------------------------------------------------------------------
 % Write the coefficients Clm & Slm in |C\S| format
 %--------------------------------------------------------------------------
     '''
-        
-    
+
     slm = np.fliplr(slm)
     cs = sc2cs(np.concatenate((slm[:, np.arange(L)], clm), axis = 1))
     cs = cs[:int(lmax+1), :int(lmax+1)]

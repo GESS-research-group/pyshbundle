@@ -1,87 +1,116 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Aug 10 15:55:22 2022
 
- GSHS global spherical harmonic synthesis 
- f = gshs(field)
+# Created on Wed Aug 10 15:55:22 2022
 
- IN:
-    field ... set of SH coefficients, either in SC-triangle or CS-square format 
-    quant ... optional string argument, defining the field quantity:
-              - 'none' ............. (default), coefficients define the output
-              - 'geoid' ............ geoid height [m],
-              - 'potential' ........ potential [m^2/s^2],
-              - 'dg', 'gravity' .... gravity anomaly [mGal], 
-              - 'tr' ............... grav. disturbance, 1st rad. derivative [mGal],
-              - 'trr' .............. 2nd rad. derivative [1/s^2],
-              - 'water' ............ equiv. water height [m],
-              - 'smd' .............. surface mass density [kg/m^2]. 
-     grd .... optional string argument, defining the grid:
-              - 'block', 'cell' .... equi-angular block midpoints. n*2n
-     n ...... grid size parameter n. (default: n = lmax, determined from field)
-              #longitude samples: 2*n
-              #latitude samples n ('blocks') or n+1.
-     h ...... (default: 0), height above Earth mean radius [m].
-     jflag .. (default: true), determines whether to subtract GRS80.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+## SHBundle original docs
 
- OUT:
-    f ....... the global field
-    theRAD .. vector of co-latitudes [rad] 
-    lamRAD .. vector of longitudes [rad]
+# GSHS global spherical harmonic synthesis 
+# f = gshs(field)
 
+# IN:
+#    field ... set of SH coefficients, either in SC-triangle or CS-square format 
+#    quant ... optional string argument, defining the field quantity:
+#              - 'none' ............. (default), coefficients define the output
+#              - 'geoid' ............ geoid height [m],
+#              - 'potential' ........ potential [m^2/s^2],
+#              - 'dg', 'gravity' .... gravity anomaly [mGal], 
+#              - 'tr' ............... grav. disturbance, 1st rad. derivative [mGal],
+#              - 'trr' .............. 2nd rad. derivative [1/s^2],
+#              - 'water' ............ equiv. water height [m],
+#              - 'smd' .............. surface mass density [kg/m^2]. 
+#     grd .... optional string argument, defining the grid:
+#              - 'block', 'cell' .... equi-angular block midpoints. n*2n
+#     n ...... grid size parameter n. (default: n = lmax, determined from field)
+#              #longitude samples: 2*n
+#              #latitude samples n ('blocks') or n+1.
+#     h ...... (default: 0), height above Earth mean radius [m].
+#     jflag .. (default: true), determines whether to subtract GRS80.
+
+# OUT:
+#    f ....... the global field
+#    theRAD .. vector of co-latitudes [rad] 
+#    lamRAD .. vector of longitudes [rad]
+
+# USES:
+#    vec2cs, cs2sc, eigengrav, plm, normalklm, grule, ispec
  
+# SEE ALSO:
+#    gsha
 
- USES:
-    vec2cs, cs2sc, eigengrav, plm, normalklm, grule, ispec
- 
- SEE ALSO:
-    gsha
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# License:
+#    This file is part of PySHbundle.
+#    PySHbundle is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
 
-This file is part of PySHbundle. 
-    PySHbundle is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
     
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-Acknowledgement Statement:
-    Please note that PySHbundle has adapted the following code packages, 
-    both licensed under GNU General Public License
-    1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
+# Acknowledgement Statement:
+#    Please note that PySHbundle has adapted the following code packages, 
+#    both licensed under GNU General Public License
+#       1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
 
-    2. Downscaling GRACE Total Water Storage Change using 
-    Partial Least Squares Regression
-    https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
+#       2. Downscaling GRACE Total Water Storage Change using Partial Least Squares Regression
+#          https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
     
-Key Papers Referred:
-    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
-    A data‐driven approach for repairing the hydrological catchment signal damage 
-    due to filtering of GRACE products. Water Resources Research, 
-    53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
+# Key Papers Referred:
+#    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
+#       A data‐driven approach for repairing the hydrological catchment signal damage 
+#       due to filtering of GRACE products. Water Resources Research, 
+#       53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
 
-    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
-    Downscaling GRACE total water storage change using 
-    partial least squares regression. Scientific data, 8(1), 95.
-    https://doi.org/10.1038/s41597-021-00862-6 
+#    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
+#       Downscaling GRACE total water storage change using 
+#       partial least squares regression. Scientific data, 8(1), 95.
+#       https://doi.org/10.1038/s41597-021-00862-6
 
-@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
-"""
+# @author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+
+import numpy as np
+from os import chdir, getcwd
+
 def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
-    import numpy as np
-    from os import chdir, getcwd
+    """GSHS - Global Spherical Harmonic Synthesis
+
+    Args:
+        field (_type_): set of SH coefficients, either in SC-triangle or CS-square format
+        quant (str, optional): defining the field quantity. Defaults to 'none'.
+        grd (str, optional): defining the grid. Defaults to 'mesh'.
+        n (int, optional): _description_. Defaults to -9999.
+        h (int, optional): _description_. Defaults to 0.
+        jflag (int, optional): _description_. Defaults to 1.
     
+    Returns:
+        f (): the global field
+        theRAD (): vector of co-latitudes [rad]
+        lamRAD (): vector of longitudes [rad]
+
+    Raises:
+        Exception: Check format of the field
+        Exception: n must be scalar
+        Exception: n must be integer
+        Exception: Grid argument must be string
+        Exception: _description_
+    
+    Todo: 
+        * Change general exceptions to specific and descriptive built-in ones
+        + using the not and then check is not always advisable
+        + Check how to document valid options
+    """
+
     wd = getcwd()
     chdir(wd)
 
