@@ -45,5 +45,9 @@ nav:
     - FAQ: faq.md
     - Changelog: changelog.md
     - Report Issues: https://github.com/mn5hk/pyshbundle/issues
-    - API Reference:
-          - pyshbundle module: pyshbundle.md
+    - Reference Manual:
+            - pyshbundle Introduction: pyshbundle.md
+            - Load Data: load_data.md
+            - Convert Data Formats: convert_data_formats.md
+            - Core Functionality: core_functionality.md
+            - Auxillary Codes: auxillary_codes.md
