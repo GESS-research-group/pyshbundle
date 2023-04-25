@@ -51,3 +51,5 @@ nav:
             - Convert Data Formats: convert_data_formats.md
             - Core Functionality: core_functionality.md
             - Auxillary Codes: auxillary_codes.md
+    - Acknowledgement: acknowledgement.md
+    - License: license.md
