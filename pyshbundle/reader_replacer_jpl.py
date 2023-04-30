@@ -89,6 +89,10 @@ def TIME(year_start,file_name,time_axes):
         year_start = file_name[-39:-35]
     return year_start, time_axes
 # Main code
+def last_4chars(x):
+        #print(x[-39:-32])
+        return(x[-39:-32])
+
 def reader_replacer_jpl(path, path_tn14, path_tn13):
     """_summary_
 
@@ -96,16 +100,12 @@ def reader_replacer_jpl(path, path_tn14, path_tn13):
         path (_type_): _description_
         path_tn14 (_type_): _description_
         path_tn13 (_type_): _description_
-
+    
     Returns:
         _type_: _description_
     """
     file_list = os.listdir(path)
-    def last_4chars(x):
-        #print(x[-39:-32])
-        return(x[-39:-32])
-    
-    
+
     filenames = os.listdir(path)       #Names of files in folder    
     # Identify the data product source
     if 'GFZ' in str(filenames[0]):

@@ -75,11 +75,13 @@ def basin_avg(data,path,c_rs,m,gs):
     lat_shape, lon_shape = data.tws.shape[1],data.tws.shape[2]
     
     # Calculation of area of each corresponding to  the latitudes and longitudes
-    deg = gs;
-    x = np.linspace(0, 359+(1-deg), int(360/deg), dtype='double');
-    y = np.linspace(0, 179+(1-deg), int(180/deg), dtype='double');
-    x1 = np.linspace(1*deg, 360, int(360/deg), dtype='double');
-    y1 = np.linspace(1*deg, 180, int(180/deg), dtype='double');
+    # not sure if ';' is proper syntax may be the octave residu
+
+    deg = gs
+    x = np.linspace(0, 359+(1-deg), int(360/deg), dtype='double')
+    y = np.linspace(0, 179+(1-deg), int(180/deg), dtype='double')
+    x1 = np.linspace(1*deg, 360, int(360/deg), dtype='double')
+    y1 = np.linspace(1*deg, 180, int(180/deg), dtype='double')
     lambd,theta = np.meshgrid(x,y)  
     lambd1,theta1 = np.meshgrid(x1,y1)  
     a = np.sin(np.deg2rad(90-theta))-np.sin(np.deg2rad(90-theta1))

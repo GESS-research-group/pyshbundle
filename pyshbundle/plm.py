@@ -87,11 +87,11 @@
 import sys
 import numpy as np
 
-def plm(l:np.array(), m:int, thetaRAD, nargin, nargout): 
+def plm(l: np.array, m:int, thetaRAD, nargin, nargout): 
     """PLM Fully normalized associated Legendre functions for a selected order M
 
     Args:
-        l (np.array()): Degree, but not necessarily monotonic.
+        l (np.array): Degree, but not necessarily monotonic.
                For l < m a vector of zeros will be returned.
         m (int): order (scalar). If absent, m = 0 is assumed.
         thetaRAD (_type_): co-latitude [rad] (vector)
@@ -99,7 +99,7 @@ def plm(l:np.array(), m:int, thetaRAD, nargin, nargout):
         nargout (_type_): _description_
     """
     
-    if  min(l.shape) !=1:
+    if  min(l.shape) != 1:
         print('Degree l must be a vector (or scalar)') 
         sys.exit([])
     if  np.remainder(l,1).all() != 0:
@@ -112,7 +112,6 @@ def plm(l:np.array(), m:int, thetaRAD, nargin, nargout):
         print('Order must be integer')
         sys.exit([])
 
-     
 # PRELIMINARIES
     lcol = len(l)
     trow = len(thetaRAD)
