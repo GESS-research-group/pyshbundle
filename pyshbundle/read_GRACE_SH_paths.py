@@ -75,7 +75,7 @@ def read_GRACE_SH_paths(use_sample_files = 0):
         
         print("You have chosen to use sample replacement files.")
         print("The replacement files for the TN13 and TN14 parameters have been preloaded into the program")
-        print("Due to the size of the GRACE SH files, these have not been preloaded into the program")
+        print("Due to the size of the GRACE SH fifile path for GRACE L2 spherical harmonicsles, these have not been preloaded into the program")
         print("You may download the GRACE SH L2 files from the link below. Please ensure to download the files as per your selection of source in the prior step")
         print("Download sample files from: https://github.com/mn5hk/pyshbundle/tree/main/sample_input_data")
     path_sh = str(input("Enter the path to the folder with SH L2 data"))
