@@ -1,7 +1,7 @@
-"""Main module.
+"""Main module
 
-
-This file is part of PySHbundle. 
+License:
+    This file is part of PySHbundle. 
     PySHbundle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -14,9 +14,8 @@ This file is part of PySHbundle.
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 Acknowledgement Statement:
     Please note that PySHbundle has adapted the following code packages, 
     both licensed under GNU General Public License
@@ -25,7 +24,8 @@ Acknowledgement Statement:
     2. Downscaling GRACE Total Water Storage Change using 
     Partial Least Squares Regression
     https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
-    
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
 Key Papers Referred:
     1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
     A data‐driven approach for repairing the hydrological catchment signal damage 
@@ -37,4 +37,4 @@ Key Papers Referred:
     partial least squares regression. Scientific data, 8(1), 95.
     https://doi.org/10.1038/s41597-021-00862-6 
     
-    """
+"""

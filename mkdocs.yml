@@ -4,7 +4,8 @@ site_url: https://abhimhamane.github.io/pyshbundle
 
 repo_url: https://github.com/abhimhamane/pyshbundle
 
-theme: readthedocs
+theme:
+      name: material
 
 
 plugins:
@@ -28,7 +29,7 @@ markdown_extensions:
           permalink: true
 
 extra_javascript:
-  # - javascripts/mathjax.js
+  - javascripts/mathjax.js
   - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
@@ -44,5 +45,11 @@ nav:
     - FAQ: faq.md
     - Changelog: changelog.md
     - Report Issues: https://github.com/mn5hk/pyshbundle/issues
-    - API Reference:
-          - pyshbundle module: pyshbundle.md
+    - Reference Manual:
+            - pyshbundle Introduction: pyshbundle.md
+            - Load Data: load_data.md
+            - Convert Data Formats: convert_data_formats.md
+            - Core Functionality: core_functionality.md
+            - Auxillary Codes: auxillary_codes.md
+    - Acknowledgement: acknowledgement.md
+    - License: license.md

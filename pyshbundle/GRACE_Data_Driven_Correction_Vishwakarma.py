@@ -1,64 +1,65 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Jun 28 14:17:50 2022
-@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
-Data-driven approach for leakage and attenuation control
-based on Vishwakarma et. al., (2021)
+#Created on Tue Jun 28 14:17:50 2022
+#@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# Original Codes
 
-   Detailed explanation goes here
+#Data-driven approach for leakage and attenuation control
+#based on Vishwakarma et. al., (2021)
 
- Input: F, a cell matrix with one column containing SH coefficients
-      : cf, the column in F that contains SH coefficients from GRACE
-      : GaussianR, radius of the Gaussian filter (recommened = 400)
-      : basins, mask functions of basin, a cell data format with one
-      column and each entry is a 360 x 720 matrix with 1 inside the
-      catchment and 0 outside
+#   Detailed explanation goes here
 
- Output : every output has a size (number of months x basins)
-        : RecoveredTWS, corrected data-driven time-series (Least Squares fit method)
-        : RecoveredTWS2, corrected data-driven time-series (shift and amplify method)
-        : FilteredTS, gaussian filtered GRACE TWS time-series for all the basins. 
-        
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# Input: F, a cell matrix with one column containing SH coefficients
+#      : cf, the column in F that contains SH coefficients from GRACE
+#      : GaussianR, radius of the Gaussian filter (recommened = 400)
+#      : basins, mask functions of basin, a cell data format with one
+#      column and each entry is a 360 x 720 matrix with 1 inside the
+#      catchment and 0 outside
 
-This file is part of PySHbundle. 
-    PySHbundle is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+# Output : every output has a size (number of months x basins)
+#        : RecoveredTWS, corrected data-driven time-series (Least Squares fit method)
+#        : RecoveredTWS2, corrected data-driven time-series (shift and amplify method)
+#        : FilteredTS, gaussian filtered GRACE TWS time-series for all the basins. 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+# License:
+#    This file is part of PySHbundle.
+#    PySHbundle is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+# Acknowledgement Statement:
+#    Please note that PySHbundle has adapted the following code packages, 
+#    both licensed under GNU General Public License
+#       1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
+
+#       2. Downscaling GRACE Total Water Storage Change using Partial Least Squares Regression
+#          https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
     
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# Key Papers Referred:
+#    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
+#       A data‐driven approach for repairing the hydrological catchment signal damage 
+#       due to filtering of GRACE products. Water Resources Research, 
+#       53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
 
-Acknowledgement Statement:
-    Please note that PySHbundle has adapted the following code packages, 
-    both licensed under GNU General Public License
-    1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
+#    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
+#       Downscaling GRACE total water storage change using 
+#       partial least squares regression. Scientific data, 8(1), 95.
+#       https://doi.org/10.1038/s41597-021-00862-6
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-    2. Downscaling GRACE Total Water Storage Change using 
-    Partial Least Squares Regression
-    https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
-    
-Key Papers Referred:
-    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
-    A data‐driven approach for repairing the hydrological catchment signal damage 
-    due to filtering of GRACE products. Water Resources Research, 
-    53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
-
-    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
-    Downscaling GRACE total water storage change using 
-    partial least squares regression. Scientific data, 8(1), 95.
-    https://doi.org/10.1038/s41597-021-00862-6 
-"""
 import numpy as np
 import numpy.matlib as npm
 import scipy as sc
@@ -72,10 +73,42 @@ from . import gsha
 from . import naninterp
 from . import Phase_calc
 
+def deg_to_rad(deg: float):
+    """Converts angle from degree to radian
+
+    Args:
+        deg (float): Angle in degree
+
+    Returns:
+        _type_: Angle in Radian
+    
+    Todo:
+        + Inbuilt function available in numpy module
+    """
+    return deg * np.pi/180
 
 def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
-    def deg_to_rad(deg):
-        return deg * np.pi/180
+    """_summary_
+
+    Args:
+        F (_type_): a cell matrix with one column containing SH coefficients
+        cf (_type_): the column in F that contains SH coefficients from GRACE
+        GaussianR (_type_): radius of the Gaussian filter (recommened = 400)
+        basins (_type_): mask functions of basin, a cell data format with one
+                        column and each entry is a 360 x 720 matrix with 1 inside the
+                        catchment and 0 outside
+
+    Raises:
+        Exception: corrected data-driven time-series (Least Squares fit method)
+        Exception: corrected data-driven time-series (shift and amplify method)
+        Exception: gaussian filtered GRACE TWS time-series for all the basins.
+
+    Returns:
+        _type_: _description_
+    
+    Todo:
+        + TypeError
+    """
     deg = 0.5
     deg_rad = deg_to_rad(deg)
     

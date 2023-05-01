@@ -1,91 +1,105 @@
-'''
-PLM Fully normalized associated Legendre functions for a selected order M
-Input as:
-      l = np.array([np.arange(0,97,1)])            
-      m = 0                                        
-      thetaRAD = np.array([0,0.25,0.5,0.75,1])     
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
- HOW: 
-     p            = plm(l, m, thetaRAD,3,1)[:,:,0]			
-    dp           = plm(l, m, thetaRAD,3,2)[1][:,:,0]
-    ddp          = plm(l, m, thetaRAD,3,3)[2][:,:,0]
+#  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# SHBundle Original Codes
+
+# PLM Fully normalized associated Legendre functions for a selected order M
+# Input as:
+#     l = np.array([np.arange(0,97,1)])            
+#     m = 0                                        
+#      thetaRAD = np.array([0,0.25,0.5,0.75,1])     
+
+# HOW: 
+#     p            = plm(l, m, thetaRAD,3,1)[:,:,0]			
+#    dp           = plm(l, m, thetaRAD,3,2)[1][:,:,0]
+#    ddp          = plm(l, m, thetaRAD,3,3)[2][:,:,0]
    
+#IN:
+#    l ........ degree (vector). Integer, but not necessarily monotonic.
+#               For l < m a vector of zeros will be returned.
+#    m ........ order (scalar). If absent, m = 0 is assumed.
+#    thetaRAD . co-latitude [rad] (vector)
 
- IN:
-    l ........ degree (vector). Integer, but not necessarily monotonic.
+# OUT:
+#    p ........ Matrix with Legendre functions. The matrix has length(thetaRAD) 
+#               rows and length(l) columns, unless l or thetaRAD is scalar. 
+#               Then the output vector follows the shape of respectively l or 
+#               thetaRAD. 
+#    dp ....... Matrix with first derivative of Legendre functions. The matrix 
+#               has length(thetaRAD) rows and length(l) columns, unless l or 
+#               thetaRAD is scalar. Then the output vector follows the shape of
+#               respectively l or thetaRAD. 
+#    ddp ...... Matrix with second derivative of Legendre functions. The matrix 
+#               has length(thetaRAD) rows and length(l) columns, unless l or 
+#               thetaRAD is scalar. Then the output vector follows the shape of 
+#               respectively l or thetaRAD. 
+
+# SEE ALSO:
+#    iplm
+
+# REMARKS:
+#    Previous versions calculated the derivatives towards the latitude, 
+#    i. e. dP/d\phi are calculated. Please check your code in order to get 
+#    the derivatives correctly towards the co-latitude!
+#      ->  dP/d\thetaRAD      =   -dP/d\phi
+#      ->  d^2P/d\thetaRAD^2  =  d^2P/d\phi^2
+
+#  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# License:
+#    This file is part of PySHbundle.
+#    PySHbundle is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# Acknowledgement Statement:
+#    Please note that PySHbundle has adapted the following code packages, 
+#    both licensed under GNU General Public License
+#       1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
+
+#       2. Downscaling GRACE Total Water Storage Change using Partial Least Squares Regression
+#          https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
+    
+# Key Papers Referred:
+#    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
+#       A data‐driven approach for repairing the hydrological catchment signal damage 
+#       due to filtering of GRACE products. Water Resources Research, 
+#       53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
+
+#    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
+#       Downscaling GRACE total water storage change using 
+#       partial least squares regression. Scientific data, 8(1), 95.
+#       https://doi.org/10.1038/s41597-021-00862-6
+
+# @author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+import sys
+import numpy as np
+
+def plm(l: np.array, m:int, thetaRAD, nargin, nargout): 
+    """PLM Fully normalized associated Legendre functions for a selected order M
+
+    Args:
+        l (np.array): Degree, but not necessarily monotonic.
                For l < m a vector of zeros will be returned.
-    m ........ order (scalar). If absent, m = 0 is assumed.
-    thetaRAD . co-latitude [rad] (vector)
-
- OUT:
-    p ........ Matrix with Legendre functions. The matrix has length(thetaRAD) 
-               rows and length(l) columns, unless l or thetaRAD is scalar. 
-               Then the output vector follows the shape of respectively l or 
-               thetaRAD. 
-    dp ....... Matrix with first derivative of Legendre functions. The matrix 
-               has length(thetaRAD) rows and length(l) columns, unless l or 
-               thetaRAD is scalar. Then the output vector follows the shape of
-               respectively l or thetaRAD. 
-    ddp ...... Matrix with second derivative of Legendre functions. The matrix 
-               has length(thetaRAD) rows and length(l) columns, unless l or 
-               thetaRAD is scalar. Then the output vector follows the shape of 
-               respectively l or thetaRAD. 
-
- SEE ALSO:
-    iplm
-
- REMARKS:
-    Previous versions calculated the derivatives towards the latitude, 
-    i. e. dP/d\phi are calculated. Please check your code in order to get 
-    the derivatives correctly towards the co-latitude!
-      ->  dP/d\thetaRAD      =   -dP/d\phi
-      ->  d^2P/d\thetaRAD^2  =  d^2P/d\phi^2
-
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
-This file is part of PySHbundle. 
-    PySHbundle is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+        m (int): order (scalar). If absent, m = 0 is assumed.
+        thetaRAD (_type_): co-latitude [rad] (vector)
+        nargin (_type_): _description_
+        nargout (_type_): _description_
+    """
     
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
-Acknowledgement Statement:
-    Please note that PySHbundle has adapted the following code packages, 
-    both licensed under GNU General Public License
-    1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
-
-    2. Downscaling GRACE Total Water Storage Change using 
-    Partial Least Squares Regression
-    https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
-    
-Key Papers Referred:
-    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
-    A data‐driven approach for repairing the hydrological catchment signal damage 
-    due to filtering of GRACE products. Water Resources Research, 
-    53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
-
-    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
-    Downscaling GRACE total water storage change using 
-    partial least squares regression. Scientific data, 8(1), 95.
-    https://doi.org/10.1038/s41597-021-00862-6 
-
-@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
-    
-'''
-def plm(l,m,thetaRAD,nargin,nargout): 
-    import sys
-    import numpy as np
-    if  min(l.shape) !=1:
+    if  min(l.shape) != 1:
         print('Degree l must be a vector (or scalar)') 
         sys.exit([])
     if  np.remainder(l,1).all() != 0:
@@ -98,7 +112,6 @@ def plm(l,m,thetaRAD,nargin,nargout):
         print('Order must be integer')
         sys.exit([])
 
-     
 # PRELIMINARIES
     lcol = len(l)
     trow = len(thetaRAD)
@@ -179,7 +192,7 @@ def plm(l,m,thetaRAD,nargin,nargout):
     # % If l or thetaRAD is scalar the output matrix p reduces to a vector. It should
     # % have the shape of respectively thetaRAD or l in that case.
     # %--------------------------------------------------------------------
-    lind       = (lvec < m)   #######################################################################################################################	 # index into l < m
+    lind       = (lvec < m)   	 # index into l < m
     pcol       = lvec - m + 0			                                            # index into columns of ptmp
     pcol[lind] = np.ndarray((lmax-m+2-6)*np.ones((sum(sum(lind)),1)))	            # Now l < m points to last col.
     p      = ptmp[:,pcol]			                                                # proper column extraction 
@@ -200,14 +213,25 @@ def plm(l,m,thetaRAD,nargin,nargout):
         if nargout == 3:
             ddp = ddp.T
 
-    if nargout == 1: return p
-    if nargout == 2: return p,dp
-    if nargout == 3: return p.dp.ddp
+    if nargout == 1: 
+        return p
+    if nargout == 2: 
+        return p,dp
+    if nargout == 3: 
+        return p.dp.ddp
     
  # INLINE FUNCTIONS
  # function for the sectorial recursion, non-recursive though
 def secrecur(m,y):
-    import numpy as np
+    """Helper Function: 
+
+    Args:
+        m (_type_): _description_
+        y (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     if m == 0:
        fac = 1
     else:
@@ -219,7 +243,17 @@ def secrecur(m,y):
 
 # % function for the l-recursion
 def lrecur(inn,x,m,lmax):
-    import numpy as np
+    """Helper Function: 
+
+    Args:
+        inn (_type_): _description_
+        x (_type_): _description_
+        m (_type_): _description_
+        lmax (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     for ll in np.arange(int(m)+1,lmax+1,1):
        col   = ll - m +1			                                                # points to the next collumn of ptmp
        root1 = np.sqrt( (2*ll+1)*(2*ll-1)/((ll-m)*(ll+m)) ).real 
@@ -236,7 +270,18 @@ def lrecur(inn,x,m,lmax):
 
 # function to calculate the derivate
 def derivALF(inn,miin,plin,m,lmax):
-    import numpy as np
+    """HelpeFunction
+
+    Args:
+        inn (_type_): _description_
+        miin (_type_): _description_
+        plin (_type_): _description_
+        m (_type_): _description_
+        lmax (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     l = np.arange(m,lmax+2,1)
     #l=l.reshape(l.shape[0],1)
     if m == 0:
