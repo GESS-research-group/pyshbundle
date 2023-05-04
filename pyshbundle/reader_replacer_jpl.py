@@ -33,13 +33,13 @@ import julian
 import math
 # Function to read files & extract data
 def reader(file_name,line_num,degree,order,clm,slm,slm_std,clm_std,start_date,end_date,year_start,time_axes):
-    """_summary_
+    """[Helper function]
 
     Args:
-        file_name (_type_): _description_
-        line_num (_type_): _description_
-        degree (_type_): _description_
-        order (_type_): _description_
+        file_name (str): _description_
+        line_num (int): _description_
+        degree (int): _description_
+        order (int): _description_
         clm (_type_): _description_
         slm (_type_): _description_
         slm_std (_type_): _description_
@@ -71,7 +71,7 @@ def reader(file_name,line_num,degree,order,clm,slm,slm_std,clm_std,start_date,en
            
 # Function for yearwise            
 def TIME(year_start,file_name,time_axes):
-    """_summary_
+    """[Helper function]
 
     Args:
         year_start (_type_): _description_
@@ -94,12 +94,12 @@ def last_4chars(x):
         return(x[-39:-32])
 
 def reader_replacer_jpl(path, path_tn14, path_tn13):
-    """_summary_
+    """Replaces the certain coefficients with other given coeff.
 
     Args:
-        path (_type_): _description_
-        path_tn14 (_type_): _description_
-        path_tn13 (_type_): _description_
+        path (str): _description_
+        path_tn14 (str): _description_
+        path_tn13 (str): _description_
     
     Returns:
         _type_: _description_
@@ -303,4 +303,4 @@ def reader_replacer_jpl(path, path_tn14, path_tn13):
     # with open("/home/wslvivek/Desktop/level2/pysh_v2/output/saved_as_num","wb") as pk:
     #     pickle.dump(saved_as_num, pk)
         
-    return saved_as_num, dates_start,dates_end, no_of_files;
+    return saved_as_num, dates_start,dates_end, no_of_files

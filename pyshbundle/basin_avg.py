@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 
 # Created on Wed Dec 14 22:37:19 2022
 
@@ -48,15 +48,15 @@ from matplotlib import pyplot as plt
 import numpy as np
 import salem
 
-def basin_avg(data,path,c_rs,m,gs):
-    """_summary_
+def basin_avg(data, path: str, c_rs, m, gs):
+    """Computes the TWSA time-series for a given basin shape file, using the SH data.
 
     Args:
-        data (_type_): _description_
-        path (_type_): _description_
-        c_rs (_type_): _description_
-        m (_type_): _description_
-        gs (_type_): _description_
+        data (xarray.Dataset): xarray dataset with format - {coordinates: [time, lat, lon], Data variables: [tws]}
+        path (str): valid path to the basin shape file with extension (.shp)
+        c_rs (crs): the crs into which the dataframe must be transformed (related to salem module)
+        m (int): number of files read
+        gs (_type_): grid size [units to do]
 
     Returns:
         _type_: _description_
