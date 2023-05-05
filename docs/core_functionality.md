@@ -7,7 +7,7 @@ This module has both Spherical Harmonics Analysis and Spherical Harmonics Synthe
 ::: pyshbundle.gshs
 
 ## Intro to Grace Data Driven Correction
-%::: pyshbundle.gddc%
+::: pyshbundle.GRACE_Data_Driven_Correction_Vishwakarma
 
 ## Hydrological Applications with GRACE
 ::: pyshbundle.basin_avg
