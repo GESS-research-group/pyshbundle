@@ -83,17 +83,29 @@ from scipy import linalg
 from . import iplm
 from . import sc2cs
 
-def gsha(f, method, grid = None, lmax = -9999):
+def gsha(f, method: str, grid: str = None, lmax: int = -9999):
     """ GSHA - Global Spherical Harmonic Analysis
 
     Args:
-        f (_type_): global field of size $(l_{max} + 1) * 2 * l_{max}$ or $l_{max} * 2 * l_{max}$
-        method (_type_): _description_
-        grid (_type_, optional): _description_. Defaults to None.
+        f (np.ndarray): global field of size $(l_{max} + 1) * 2 * l_{max}$ or $l_{max} * 2 * l_{max}$
+        method (str): method to be used
+        grid (str, optional): choose between 'block' or 'cell'. Defaults to None.
         lmax (int, optional): maximum degree of development. Defaults to -9999.
 
+    Returns:
+        np.ndarray: Clm, Slm in |C\S| format
+
     Raises:
-        Exception: _description_
+        ValueError: grid argument can only be 'block' or 'cell'
+        ValueError: Grid type entered is not right
+        TypeError: Invalid size of matrix F
+        TypeError: GRID and METHOD must be strings
+        ValueError: 2nd Neumann method ONLY on a ''neumann''/''gauss'' GRID'
+        ValueError: Block mean method ONLY on a ''block''/''cell'' GRID
+        ValueError: Maximum degree of development is higher than number of rows of input.
+    
+    Uses:
+        `plm`, `neumann`, `iplm`, `sc2cs`
     """
     rows, cols = f.shape
     
@@ -105,7 +117,7 @@ def gsha(f, method, grid = None, lmax = -9999):
             grid = 'block'
         
         if (grid != 'block') and (grid != 'cell'):
-            raise Exception("Your GRID variable should be either block or cell")
+            raise ValueError("Your GRID variable should be either block or cell")
         
         n = rows
         dt = 180 / n
@@ -123,9 +135,9 @@ def gsha(f, method, grid = None, lmax = -9999):
         
         if (grid == 'pole') or (grid == 'mesh'):                   
             theta = np.arange(0, 180+(dt/4), dt)
-            lam = np.arange(0, 360+(dt/4)-dt, dt)
+            lam = np.arange(0, 360+(dt/4) - dt, dt)
         elif (grid == 'neumann') or (grid == 'gauss'): 
-#            gw, gx = neumann(n+1) #For some reason, grule does not work for even values
+        # gw, gx = neumann(n+1) #For some reason, grule does not work for even values
             gw, gx = neumann.neumann(n)
             theta = np.arccos(np.flipud(gx)) * 180 / np.pi
             lam = np.arange(0, 360+(dt/4)-dt, dt)
@@ -136,60 +148,50 @@ def gsha(f, method, grid = None, lmax = -9999):
             if len(gx.shape) == 1:
                 gx = gx.reshape(gx.shape[0],1)
         else:
-            raise Exception("Grid type entered is not right")
+            raise ValueError("Grid type entered is not right")
     else:
-        raise Exception("Invalid size of matrix F")
+        raise TypeError("Invalid size of matrix F")
     
     theRAD = theta * np.pi / 180
-#    if len(theRAD.shape) == 1:
-#        theRAD = theRAD.reshape(theRAD.shape[0],1)
+    # if len(theRAD.shape) == 1:
+    # theRAD = theRAD.reshape(theRAD.shape[0],1)
     
-    '''
-    %--------------------------------------------------------------------------
-% further diagnostics
-%--------------------------------------------------------------------------
-    '''
-    
+
+    # further diagnostics
+
     if (type(grid) != str) or (type(method) != str):
-        raise Exception("GRID and METHOD must be strings.")
+        raise TypeError("GRID and METHOD must be strings.")
     
     if (method == 'snm') and ((grid != 'neumann') and (grid != 'gauss')):
-        raise Exception('2nd Neumann method ONLY on a ''neumann''/''gauss'' GRID')
+        raise ValueError('2nd Neumann method ONLY on a ''neumann''/''gauss'' GRID')
     
     if (method == 'mean') and ((grid != 'block') and (grid != 'cell')):
-        raise Exception('Block mean method ONLY on a ''block''/''cell'' GRID')
+        raise ValueError('Block mean method ONLY on a ''block''/''cell'' GRID')
         
     if lmax > n:
-        raise Exception('Maximum degree of development is higher than number of rows of input.')
+        raise ValueError('Maximum degree of development is higher than number of rows of input.')
         
-    '''
-    Reshape variables as required
-    '''
+    # Reshape variables as required
         
     if len(lam.shape) == 1:
         lam = lam.reshape(1,lam.shape[0])
         
-    '''
-    Init
-    '''
+    # Init
     
     L = n
     clm = np.zeros((L+1, L+1), dtype='longdouble')
     slm = np.zeros((L+1, L+1), dtype='longdouble')
     
     
-    '''
-    First step of analysis
-    '''
+    # First step of analysis
+
     m = np.arange(L+1).reshape(1,L+1)
     c = np.cos((lam.T @ m) * np.pi/180)
     s = np.sin((lam.T @ m) * np.pi/180)
     
     
-    '''
-    % preserving the orthogonality (except for 'mean' case)
-% we distinguish between 'block' and 'pole' type grids (in lambda)
-    '''
+    # % preserving the orthogonality (except for 'mean' case)
+    # % we distinguish between 'block' and 'pole' type grids (in lambda)
     
     if (grid == 'block') or (grid == 'cell'):
         if method == 'mean':
@@ -217,19 +219,18 @@ def gsha(f, method, grid = None, lmax = -9999):
     a = f @ c
     b = f @ s    
     
-    '''
-    Second step of analysis: Clm and Slm
-    '''
+    # Second step of analysis: Clm and Slm
+
     if method == 'ls':
         for m in range(L+1):
 #            l = np.arange(m,L+1)
-            l = np.arange(m,L+1).reshape(L+1-m,1)
+            l = np.arange(m,L+1).reshape(L+1-m, 1)
             l = l.T
             
-            p = plm(l,m,theRAD, 3,1)
+            p = plm(l,m,theRAD, 3, 1)
             p = p[:,:,0]
-            ai = a[:,m]
-            bi = b[:,m]
+            ai = a[:, m]
+            bi = b[:, m]
             
             clm[m+1:L+2, m+1] = linalg.lstsq(p, ai)
             slm[m+1:L+2, m+1] = linalg.lstsq(p, bi)
@@ -240,44 +241,44 @@ def gsha(f, method, grid = None, lmax = -9999):
         si = 2 * si / np.sum(si)
         
         for m in range(L+1):
-            l = np.arange(m,L+1).reshape(L+1-m,1)
+            l = np.arange(m, L+1).reshape(L+1-m, 1)
             l = l.T
             
-            p = plm(l,m,theRAD, 3,1)
+            p = plm(l,m,theRAD, 3, 1)
             
-            ai = a[:,m]
-            bi = b[:,m]
+            ai = a[:, m]
+            bi = b[:, m]
                         
-            clm[m:L+1, m] = (1 + (m==0))/ 4 * p.T @ (si * ai)
-            slm[m:L+1, m] = (1 + (m==0))/ 4 * p.T @ (si * bi)
+            clm[m:L+1, m] = (1 + (m == 0))/ 4 * p.T @ (si * ai)
+            slm[m:L+1, m] = (1 + (m == 0))/ 4 * p.T @ (si * bi)
     
     elif method == 'fnm': #1st Neumann method (exact upto L/2)
         w = neumann.neumann(np.cos(theRAD))
         
         for m in range(L+1):
-            l = np.arange(m,L+1).reshape(L+1-m,1)
+            l = np.arange(m, L+1).reshape(L+1-m, 1)
             l = l.T
             
-            p = plm(l,m,theRAD, 3,1)
+            p = plm(l,m,theRAD, 3, 1)
             
-            ai = a[:,m]
-            bi = b[:,m]
+            ai = a[:, m]
+            bi = b[:, m]
                         
-            clm[m:L+1, m] = (1 + (m==0))/ 4 * p.T @ (w * ai)
-            slm[m:L+1, m] = (1 + (m==0))/ 4 * p.T @ (w * bi)
+            clm[m:L+1, m] = (1 + (m == 0))/ 4 * p.T @ (w * ai)
+            slm[m:L+1, m] = (1 + (m == 0))/ 4 * p.T @ (w * bi)
         
     elif method == 'snm': #2nd Neumann method (exact)
         for m in range(L+1):
-            l = np.arange(m,L+1).reshape(L+1-m,1)
+            l = np.arange(m, L+1).reshape(L+1-m, 1)
             l = l.T
             
-            p = plm(l,m,theRAD, 3,1)
+            p = plm(l,m,theRAD, 3, 1)
             
-            ai = a[:,m]
-            bi = b[:,m]
+            ai = a[:, m]
+            bi = b[:, m]
             
-            clm[m:L+1, m] = (1 + (m==0))/ 4 * p.T @ (gw * ai)
-            slm[m:L+1, m] = (1 + (m==0))/ 4 * p.T @ (gw * bi)
+            clm[m:L+1, m] = (1 + (m == 0))/ 4 * p.T @ (gw * ai)
+            slm[m:L+1, m] = (1 + (m == 0))/ 4 * p.T @ (gw * bi)
             
     elif method == 'mean':
         for m in range(L+1):
@@ -286,29 +287,25 @@ def gsha(f, method, grid = None, lmax = -9999):
             #l = l.T
             
             
-            l = np.array([np.arange(m,L+1,1)])
-#            l = np.array([[m]])
+            l = np.array([np.arange(m,L+1, 1)])
+        # l = np.array([[m]])
             
             p = iplm(l,m,theRAD)
-#            p = p[:,-1]
-            ai = a[:,m]
-            bi = b[:,m]
+        # p = p[:,-1]
+            ai = a[:, m]
+            bi = b[:, m]
             
-            clm[m:L+1, m] = (1 + (m==0))/ 4 * p.T @ ai
-            slm[m:L+1, m] = (1 + (m==0))/ 4 * p.T @ bi
+            clm[m:L+1, m] = (1 + (m == 0))/ 4 * p.T @ ai
+            slm[m:L+1, m] = (1 + (m == 0))/ 4 * p.T @ bi
                 
-    '''
-    %--------------------------------------------------------------------------
-% Write the coefficients Clm & Slm in |C\S| format
-%--------------------------------------------------------------------------
-    '''
+    # Write the coefficients Clm & Slm in |C\S| format
 
     slm = np.fliplr(slm)
     cs = sc2cs(np.concatenate((slm[:, np.arange(L)], clm), axis = 1))
     cs = cs[:int(lmax+1), :int(lmax+1)]
     
-    '''
-    np.save('/path/csRb.npy',cs)
-    '''
+    
+    # np.save('/path/csRb.npy',cs)
+    
     return cs
     

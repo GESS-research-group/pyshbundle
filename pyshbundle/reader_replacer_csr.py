@@ -106,12 +106,13 @@ def TIME(year_start,file_name,time_axes):
         year_start = file_name[-39:-35]
     return year_start, time_axes
 
+def last_4chars(x):
+        return(x[-39:-32])
+
 # Main code
 def reader_replacer_csr(path, path_tn14, path_tn13):
     
     file_list = os.listdir(path)
-    def last_4chars(x):
-        return(x[-39:-32])
   
     filenames = os.listdir(path) #Names of files in folder
     # Identify the data product source
@@ -296,4 +297,4 @@ def reader_replacer_csr(path, path_tn14, path_tn13):
     import pickle
     with open("/home/wslvivek/Desktop/level2/pysh_v2/output/saved_as_num","wb") as pk:
         pickle.dump(saved_as_num, pk)
-    return saved_as_num, dates_start,dates_end, no_of_files;
+    return saved_as_num, dates_start,dates_end, no_of_files

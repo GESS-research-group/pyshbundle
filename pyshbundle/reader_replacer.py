@@ -44,8 +44,8 @@
 """_Module_Summary_
 """
 import gzip
-import re
 import os
+import re
 import numpy as np
 import julian
 import math
@@ -100,14 +100,14 @@ def TIME(year_start,file_name,time_axes):
             time_axes = time_axes + 1  
             year_start = file_name[-39:-35]
         return year_start, time_axes
-    
+
 def last_4chars(x):
         #print(x[-39:-32])
         return(x[-39:-32])
-
+    
 # Main code
 def reader_replacer(path, path_tn14, path_tn13):
-        
+
     # Give path to Level2 data
     #path = r"/home/wslvivek/Desktop/level2/Level_2_Data/JPL_GSM_GRACE"
     file_list = os.listdir(path)    

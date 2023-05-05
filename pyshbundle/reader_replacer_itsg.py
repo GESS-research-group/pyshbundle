@@ -99,6 +99,9 @@ def TIME(year_start,file_name,time_axes):
 # path_tn14 = r"/home/wslvivek/Desktop/level2/pysh_v2/ITSG_TN_files/TN-14_C30_C20_SLR_GSFC.txt"
 # path_tn13 = r"/home/wslvivek/Desktop/level2/pysh_v2/ITSG_TN_files/TN-13_GEOC_CSR_RL06.1.txt" 
 
+def last_4chars(x):
+        #print(x[-39:-32])
+        return(x[-11:-4])
 
 # Main code
 def reader_replacer_itsg(path, path_tn14, path_tn13):
@@ -113,10 +116,6 @@ def reader_replacer_itsg(path, path_tn14, path_tn13):
         _type_: _description_
     """
     file_list = os.listdir(path)
-    def last_4chars(x):
-        #print(x[-39:-32])
-        return(x[-11:-4])
-    
     
     filenames = os.listdir(path)       #Names of files in folder    
     # Identify the data product source
@@ -299,4 +298,4 @@ def reader_replacer_itsg(path, path_tn14, path_tn13):
             # dates_end.append(str(end_date[i][j*int(degree_order-3)]))
             j = j + 1
     print("Number of months of data in each year starting", dates_start[0], beta) #dates_end[-1], beta)       
-    return saved_as_num, dates_start, no_of_files;
+    return saved_as_num, dates_start, no_of_files
