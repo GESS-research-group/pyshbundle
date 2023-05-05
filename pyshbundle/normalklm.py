@@ -56,7 +56,7 @@ def normalklm(lmax: int, typ: str = 'wgs84'):
                     'he' - hydrostatic equilibrium ellipsoid
     
     Returns:
-        nklm (np.): normal field in CS-format (sparse)
+        nklm (np.array): normal field in CS-format (sparse)
     
     TODO: Find type of nklm; I think raising TypeError, VlueError or NameError instad of general Exception
 
@@ -66,7 +66,7 @@ def normalklm(lmax: int, typ: str = 'wgs84'):
         Exception: Unknown type of ellipsoid, supports 'wgs84', `GRS80` and 'he'
     
     References:
-        .J2,J4 values for hydrostatic equilibrium ellipsoid from Lambeck (1988)
+        1. J2,J4 values for hydrostatic equilibrium ellipsoid from Lambeck (1988)
         "Geophysical Geodesy", p.18    
     """
     

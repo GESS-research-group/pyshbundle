@@ -81,11 +81,11 @@ def iplm(l, m:int, theRAD, dt=-9999):
         l (_type_): degree (vector). Integer, but not necessarily monotonic.
                 For l < m a vector of zeros will be returned.
         m (int): order (scalar)
-        theRAD (_type_): co-latitude [rad] (vector)
+        theRAD (np.array): co-latitude [rad] (vector)
         dt (int, optional): integration block-size [rad] (scalar). Defaults to -9999.
     
     Returns:
-        _type_: Matrix with integrated Legendre functions.
+        np.ndarray: Matrix with integrated Legendre functions.
                 Functions are integrated from theRAD(i)-dt/2 till theRAD(i)+dt/2.
                 The matrix has length(TH) rows and length(L) columns, unless L 
                 or TH is scalar. Then the output vector follows the shape of 
@@ -95,10 +95,16 @@ def iplm(l, m:int, theRAD, dt=-9999):
         The blocks at the pole might become too large under circumstances.
         This is not treated separately, i.e. unwanted output may appear.
         In case TH is scalar, dt will be 1 (arbitrarily).
+    
+    TO DO:
+        Instead of using sys.exit() we could raise exceptions - that would be a better way of error handling
+    
+    Uses:
+        `plm`
     """
     if dt==-9999:
         if len(theRAD) == 1:
-            dt = np.pi/180;
+            dt = np.pi/180
         else:
             dt = theRAD[1] - theRAD[0]
     if  min(l.shape) !=1:
@@ -151,7 +157,7 @@ def iplm(l, m:int, theRAD, dt=-9999):
         plmplus[:, m] = fgr * np.power(stp, mgr)
         plmmin[:, m] = fgr * np.power(stm, mgr)
     ptmp = np.zeros([n, lmax +2 ])
-    ptmp00 = np.cos(theRAD - dt/2) - ctplus;
+    ptmp00 = np.cos(theRAD - dt/2) - ctplus
     ptmp11 = np.sqrt(3)/2 * (dt - ctplus* stplus + ctmin* stmin)
     ptmp10 = np.sqrt(3)/2 * (np.power(stplus,2) - np.power(stmin,2))
     ptmp[:,0] = ptmp00

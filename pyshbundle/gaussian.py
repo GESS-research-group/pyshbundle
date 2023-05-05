@@ -56,7 +56,9 @@
 import numpy as np
 
 def gaussian(L: int, cap: int):
-    """smoothing filter. The coefficients are calculates according to Wahr et. al.(1998)
+    """The program delivers the spherical harmonic coefficients of a gaussian
+    smoothing filter. The coefficients are calculated according to Wahr et. al.(1998)
+    equation (34) and Swenson and Wahr equation (34)
 
 
     Args:
@@ -64,29 +66,33 @@ def gaussian(L: int, cap: int):
         cap (int): half width of Gaussian smoothing function [km]
 
     Returns:
-        _type_: smoothing coefficients
+        np.ndarray: smoothing coefficients
     
     Raises:
-        Exception: Degree must be integer
-        Exception: Maximum degree must be higher than 2
-        Exception: Cap size must be an integer
-
-    Todo:
-        + TypeError instead of base Exception
+        TypeError: Degree must be integer
+        ValueError: Maximum degree must be higher than 2
+        TypeError: Cap size must be an integer
     
     References:
         Wahr et.al. (1998) equation (34) and Swenson and Wahr equation (34)
+    
+    Example:
+        >>> W = gaussian(L, cap)
+        Write the output here
+    
+    To DO: 
+        Instea of using if statemetn we can make it more consise by using assert statements
     """
     
     #Check input
     if type(L) != int:
-        raise Exception('Degree must be integer')
+        raise TypeError('Degree must be integer')
         
     if L<2:
-        raise Exception('Maximum degree must be higher than 2')
+        raise ValueError('Maximum degree must be higher than 2')
         
     if type(cap) != int:
-        raise Exception('Cap size must be an integer')
+        raise TypeError('Cap size must be an integer')
         
     #Calculations
     W = np.zeros([L+1, 1])
@@ -94,13 +100,13 @@ def gaussian(L: int, cap: int):
     
     #Recursive calculation of the weighting coefficients
     W[0,0] = 1
-    W[1,0] = np.power(10, np.log10( (1+np.exp(-2*b))/(1-np.exp(-2*b)) - (1/b)))
+    W[1,0] = np.power(10, np.log10( (1 + np.exp(-2*b))/(1-np.exp(-2*b)) - (1/b)))
     
     i = 1
-    while i<L:        
+    while i < L:        
         j = i + 1
-        W[i+1][0] = W[i-1][0] - (2 * (j-1) + 1)/b * W[i][0]
-        if W[i+1,0] > W[i] or W[i+1] < 0:
+        W[i+1][0] = W[i-1][0] - (2*(j-1) + 1)/b * W[i][0]
+        if W[i+1, 0] > W[i] or W[i+1] < 0:
             W[i+1] = 0
         i = i + 1
     

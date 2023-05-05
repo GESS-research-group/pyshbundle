@@ -53,27 +53,31 @@ import numpy
 def cs2sc(field):
     """converts the square (L+1)x(L+1) matrix 'field', containing
     spherical harmonics coefficients in |C\S| storage format into a 
-    rectangular (L+1)x(2L+1) matrix in  /S|C\format.
+    rectangular (L+1)x(2L+1) matrix in  /S|C\ format.
 
     Args:
-        field (_type_): the square (L+1)x(L+1) numpy matrix field , containing
+        field (np.ndarray): the square (L+1)x(L+1) numpy matrix field , containing
                    spherical harmonics coefficients in |C\S| storage format
     
     Returns:
-        _type_: Rectangular (L+1)x(2L+1) numpy matrix in  /S|C\format
+        numpy.ndarray: Rectangular (L+1)x(2L+1) numpy matrix in  /S|C\ format
 
     Raises:
-        Exception: Input neither in cs nor in sc format
+        TypeError: Input neither in cs nor in sc format
     
     Todo:
         + Rather use TypeError instead of base Exception
+    
+    Examples:
+        >>> sc_shcoeff = cs2sc(cs_shcoeff)
+        TO DO: write the output
     """
     rows = len(field)
     cols = len(field[0])
 
-    if (rows != cols) and (cols != 2*rows-1):
-        raise Exception("Input neither in cs nor in sc format")
-    elif cols == 2*rows-1:
+    if (rows != cols) and (cols != 2*rows - 1):
+        raise TypeError("Input neither in cs nor in sc format")
+    elif cols == 2*rows - 1:
         sc = field
     else:
         c    = numpy.tril(field)
