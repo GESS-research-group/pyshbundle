@@ -60,8 +60,8 @@ def Phase_calc(fts, ffts):
     Hilbert transform method explained by Phillip et al.
 
     Args:
-        fts (_type_): _description_
-        ffts (_type_): _description_
+        fts (np.ndarray): _description_
+        ffts (np.ndarray): _description_
 
     Returns:
         _type_: _description_

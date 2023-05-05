@@ -107,7 +107,7 @@ def last_4chars(x):
     
 # Main code
 def reader_replacer(path, path_tn14, path_tn13):
-    
+
     # Give path to Level2 data
     #path = r"/home/wslvivek/Desktop/level2/Level_2_Data/JPL_GSM_GRACE"
     file_list = os.listdir(path)    
@@ -189,6 +189,7 @@ def reader_replacer(path, path_tn14, path_tn13):
             count = count + 1
             
     # Actual replacement    
+    
     index = 0
     for year in range(0,21,1):
         for y in range(0,int(len(clm[year])/4750),1):    

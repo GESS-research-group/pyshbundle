@@ -94,9 +94,11 @@ def plm(l: np.array, m:int, thetaRAD, nargin, nargout):
         l (np.array): Degree, but not necessarily monotonic.
                For l < m a vector of zeros will be returned.
         m (int): order (scalar). If absent, m = 0 is assumed.
-        thetaRAD (_type_): co-latitude [rad] (vector)
-        nargin (_type_): _description_
-        nargout (_type_): _description_
+        thetaRAD (np.array): co-latitude [rad] (vector)
+        nargin (int): number of input argument
+        nargout (int): number of output argument
+    Returns:
+        (np.array): PLM fully normalized
     """
     
     if  min(l.shape) != 1:
@@ -243,7 +245,7 @@ def secrecur(m,y):
 
 # % function for the l-recursion
 def lrecur(inn,x,m,lmax):
-    """Helper Function: 
+    """[Helper Function]  
 
     Args:
         inn (_type_): _description_

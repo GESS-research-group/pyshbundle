@@ -66,11 +66,15 @@ def grule(n: int):
         n (int): number of base points required
 
     Returns:
-        _type_: cosine of the base points
-        _type_: weight factors for computing integrals and such
+        np.array: cosine of the base points
+        np.array: weight factors for computing integrals and such
     
     References:
-         'Methods of Numerical Integration' by Davis and Rabinowitz, page 365, Academic Press, 1975.
+        1. 'Methods of Numerical Integration' by Davis and Rabinowitz, page 365, Academic Press, 1975.
+    
+    Example:
+        >>> bp, wf = grule(n)
+        TO DO: write suitable output
     """
     bp = np.zeros((n,1))
     wf = bp
