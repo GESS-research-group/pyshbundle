@@ -44,13 +44,24 @@ import numpy
 from . import GRACEpy as GB
 from . import GRACEconstants as GC
 
-def eigengrav(lmax: int,fstr, h):
+def eigengrav(lmax: int,fstr: str, h: float):
     """_summary_
 
     Args:
-        lmax (_type_): _description_
-        fstr (_type_): _description_
-        h (_type_): _description_
+        lmax (int): Maximum degree of Spherical Coefficients
+        fstr (str): gravity quantity, options: 'None', 'geoid', 'potential', 'gravity', 'tr', 'trr', 'slope'
+                    'water', 'smd', 'height'
+        h (float): _description_
+    
+    Returns:
+        _type_: _description_
+    
+    Raises:
+        TypeError: Enter a valid lmax value
+    
+    TO DO:
+        Can we think about the raising a ValueError instead of instantly terminating the function
+        Adding comments as variable names are not much descriptive
     """
     
     if type(lmax) == int:
@@ -60,11 +71,9 @@ def eigengrav(lmax: int,fstr, h):
 #    rows = len(l)
     
     if rows>1 or lmax<0:
-        raise Exception("please input a valid value for lmax")
-        
-        
+        raise TypeError("Enter a valid lmax value")
+
     r = GC.ae + h
-    
     
     if fstr == 'none':
         tf = numpy.ones((lmax+1, 1))

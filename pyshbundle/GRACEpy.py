@@ -67,6 +67,9 @@ def upwcon(degree: int, height):
     Returns:
         uc (_type_): Upward continuation terms
     
+    Uses:
+        `GRACEconstants.GC`
+    
     Todo:
         + Add input checking functionality and raise exceptions
         + Add reference to formula
