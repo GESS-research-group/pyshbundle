@@ -46,15 +46,16 @@ import os
 from . import gaussian
 from . import gshs
 import numpy as np
+import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-def tws_cal(data, lmax: int, gs, r, m):
+def tws_cal(data, lmax: int, gs: float, r, m):
     """_summary_
 
     Args:
-        data (_type_): _description_
-        lmax (int): _description_
-        gs (_type_): _description_
+        data (np.ndarray): SC coefficients
+        lmax (int): maximum degree
+        gs (float): grid size
         r (_type_): _description_
         m (_type_): _description_
     """
@@ -76,12 +77,11 @@ def tws_cal(data, lmax: int, gs, r, m):
         jflag = 0
         
         
-        ff = gshs.gshs(shfil,quant,grd,n,h,jflag)[0]
+        ff = gshs.gshs(shfil, quant, grd, n, h, jflag)[0]
         
         ff = ff*1000
         tws_f[i,:,0:int(grid_x/2)] = ff[:,int(grid_x/2):]
         tws_f[i,:,int(grid_x/2):] = ff[:,0:int(grid_x/2)]   
     
-    import matplotlib.pyplot as plt
     plt.imshow(tws_f[0,:,:])
     return(tws_f)

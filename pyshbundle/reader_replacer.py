@@ -44,7 +44,11 @@
 """_Module_Summary_
 """
 import gzip
+import os
 import re
+import numpy as np
+import julian
+import math
 
 def reader(file_name: str,line_num, degree: int, order: int, clm,slm,delta_clm,delta_slm,start_date,end_date,year_start,time_axes):
     """Function to read files & extract data
@@ -96,23 +100,17 @@ def TIME(year_start,file_name,time_axes):
             time_axes = time_axes + 1  
             year_start = file_name[-39:-35]
         return year_start, time_axes
-    
-    
-# Main code
-def reader_replacer(path, path_tn14, path_tn13):
-    import os
-    import gzip
-    import re
-    import numpy as np
-    import julian
-    
-    # Give path to Level2 data
-    #path = r"/home/wslvivek/Desktop/level2/Level_2_Data/JPL_GSM_GRACE"
-    file_list = os.listdir(path)
-    def last_4chars(x):
+
+def last_4chars(x):
         #print(x[-39:-32])
         return(x[-39:-32])
     
+# Main code
+def reader_replacer(path, path_tn14, path_tn13):
+
+    # Give path to Level2 data
+    #path = r"/home/wslvivek/Desktop/level2/Level_2_Data/JPL_GSM_GRACE"
+    file_list = os.listdir(path)    
     
     filenames = os.listdir(path)                                                   #Names of files in folder
     
@@ -191,7 +189,7 @@ def reader_replacer(path, path_tn14, path_tn13):
             count = count + 1
             
     # Actual replacement    
-    import math
+    
     index = 0
     for year in range(0,21,1):
         for y in range(0,int(len(clm[year])/4750),1):    
@@ -267,7 +265,7 @@ def reader_replacer(path, path_tn14, path_tn13):
             j = j + 1
     print("Number of months of data in each year starting", dates_start[0], \
           "& ending", dates_end[-1], beta)       
-    return saved_as_num, dates_start,dates_end, no_of_files;
+    return saved_as_num, dates_start,dates_end, no_of_files
 # Saved as numpy array
 # saved_as_num = np.array([np.array(degree),np.array(order),np.array(clm),np.array(slm),np.array(delta_clm),np.array(delta_slm),np.array(start_date),np.array(end_date)])
 # np.save('/home/wslvivek/Desktop/level2/preprocess/saved_as_num', saved_as_num)

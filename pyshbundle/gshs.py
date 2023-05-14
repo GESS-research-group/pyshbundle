@@ -82,6 +82,12 @@
 import numpy as np
 from os import chdir, getcwd
 
+from . import cs2sc
+from . import normalklm
+from . import plm
+from . import eigengrav
+from . import ispec
+
 def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     """GSHS - Global Spherical Harmonic Synthesis
 
@@ -105,6 +111,9 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
         Exception: Grid argument must be string
         Exception: _description_
     
+    Uses:
+        `cs2sc`, `normalklm`, `plm`, `eigengrav`, `ispec`
+
     Todo: 
         * Change general exceptions to specific and descriptive built-in ones
         + using the not and then check is not always advisable
@@ -113,12 +122,6 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
 
     wd = getcwd()
     chdir(wd)
-
-    from . import cs2sc
-    from . import normalklm
-    from . import plm
-    from . import eigengrav
-    from . import ispec
     
     rows, cols = field.shape
     
@@ -162,17 +165,16 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     nlon = len(lamRAD)
     
     
-    '''
-    % -------------------------------------------------------------------------
-% Preprocessing on the coefficients: 
-%    - subtract reference field (if jflag is set)
-%    - specific transfer
-%    - upward continuation
-% -------------------------------------------------------------------------
-    '''
+
+#    % -------------------------------------------------------------------------
+#% Preprocessing on the coefficients: 
+#%    - subtract reference field (if jflag is set)
+#%    - specific transfer
+#%    - upward continuation
+#% -------------------------------------------------------------------------
     
     if jflag:
-        field = field - cs2sc.cs2sc(normalklm(lmax+1))
+        field = field - cs2sc.cs2sc(normalklm.normalklm(lmax+1))
         
     l = np.arange(0, lmax+1)
     transf = np.array([eigengrav.eigengrav(lmax, quant, h)]).T
@@ -231,9 +233,9 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
       m      = np.arange(0,abcols,1)
       cshift = np.array([np.ones(nlat)], dtype='longdouble').T * np.array([np.cos(m*np.pi/2/n)], dtype='longdouble');	# cshift/sshift describe the 
       sshift = np.array([np.ones(nlat)], dtype='longdouble').T * np.array([np.sin(m*np.pi/2/n)], dtype='longdouble');	# half-blocksize lambda shift.
-      atemp  =  cshift*a + sshift*b;
-      b      = -sshift*a + cshift*b;
-      a      = atemp;
+      atemp  =  cshift*a + sshift*b
+      b      = -sshift*a + cshift*b
+      a      = atemp
     
     
     
@@ -242,7 +244,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     
     #Code for ispec
     
-    f = ispec.ispec(a.T,b.T).T
+    f = ispec.ispec(a.T, b.T).T
     if dlam > 1: 
         f = f[:,np.arange(1,dlam*nlon+1,dlam)]
 

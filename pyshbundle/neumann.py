@@ -76,11 +76,11 @@ def neumann(inn):
     """Returns the weights and nodes for Neumann's numerical integration
 
     Args:
-        inn (_type_): base points (nodes) in the interval [-1;1]
+        inn (int, np.array): base points (nodes) in the interval [-1;1]
 
     Raises:
-        Exception: Integer input argument required
-        Exception: _description_
+        TypeError: Integer input argument required
+        ValueError: Error in input dimensions
 
     Returns:
         _type_: quadrature weights
@@ -92,15 +92,21 @@ def neumann(inn):
     
     Todo: 
         + TypeError is more relavant and shape error from numpy
+    
+    Uses:
+        `grule`, `plm`
+
+    Examples:
+        >>> TO DO: write example how to use the function
     """
 
     try: #if input is an integer
         x, w = grule.grule(inn)
     except: #if input is an array
         if(len(inn)==1): #2nd Neumann method
-            x,w = grule.grule(inn)
+            x, w = grule.grule(inn)
             if(np.not_equal(np.mod(x, 1), 0)): #Not integer
-                raise Exception("Integer input argument required")
+                raise TypeError("Integer input argument required")
             
             
         
@@ -117,10 +123,11 @@ def neumann(inn):
                 
             w,resid,rank,s = np.linalg.lstsq(pp,r) #Solve system of equations; Double check this operation
             if(x.shape != w.shape):
-                w=w.T
+                w = w.T
             
         else:
-            raise Exception("Error in input dimensions")
+            raise ValueError("Error in input dimensions")
+            # TO DO: Write more descriptive exception messages
     
     return w, x
         

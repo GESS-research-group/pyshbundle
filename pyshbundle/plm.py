@@ -94,9 +94,11 @@ def plm(l: np.array, m:int, thetaRAD, nargin, nargout):
         l (np.array): Degree, but not necessarily monotonic.
                For l < m a vector of zeros will be returned.
         m (int): order (scalar). If absent, m = 0 is assumed.
-        thetaRAD (_type_): co-latitude [rad] (vector)
-        nargin (_type_): _description_
-        nargout (_type_): _description_
+        thetaRAD (np.array): co-latitude [rad] (vector)
+        nargin (int): number of input argument
+        nargout (int): number of output argument
+    Returns:
+        (np.array): PLM fully normalized
     """
     
     if  min(l.shape) != 1:
@@ -218,11 +220,11 @@ def plm(l: np.array, m:int, thetaRAD, nargin, nargout):
     if nargout == 2: 
         return p,dp
     if nargout == 3: 
-        return p.dp.ddp
+        return p, dp, ddp
     
  # INLINE FUNCTIONS
  # function for the sectorial recursion, non-recursive though
-def secrecur(m,y):
+def secrecur(m, y):
     """Helper Function: 
 
     Args:
@@ -235,15 +237,15 @@ def secrecur(m,y):
     if m == 0:
        fac = 1
     else:
-       mm  = np.array([2*x for x in range(1,m+1)])
+       mm  = np.array([2*x for x in range(1, m+1)])
        fac = np.sqrt(2*np.prod((mm+1)/mm))
     out = fac*np.power(y,m)                                                         # The 1st column of ptmp
     return out
 
 
 # % function for the l-recursion
-def lrecur(inn,x,m,lmax):
-    """Helper Function: 
+def lrecur(inn, x, m, lmax):
+    """[Helper Function]  
 
     Args:
         inn (_type_): _description_
@@ -255,21 +257,21 @@ def lrecur(inn,x,m,lmax):
         _type_: _description_
     """
     for ll in np.arange(int(m)+1,lmax+1,1):
-       col   = ll - m +1			                                                # points to the next collumn of ptmp
+       col   = ll - m+1			                                                # points to the next collumn of ptmp
        root1 = np.sqrt( (2*ll+1)*(2*ll-1)/((ll-m)*(ll+m)) ).real 
        root2 = np.sqrt( (2*ll+1)*(ll+m-1)*(ll-m-1) / ( (2*ll-3)*(ll-m)*(ll+m) ) ).real
     
        # % recursion 
        if ll == m+1:
-           inn[:,col-1] = root1 *x*inn[:,col-2];
+           inn[:, col-1] = root1 *x*inn[:, col-2]
        else:
-           inn[:,col-1] = root1 *x*inn[:,col-2] - root2 *inn[:,col-3] 
+           inn[:, col-1] = root1 *x*inn[:, col-2] - root2 *inn[:, col-3] 
     return inn
 
 
 
 # function to calculate the derivate
-def derivALF(inn,miin,plin,m,lmax):
+def derivALF(inn, miin, plin, m, lmax):
     """HelpeFunction
 
     Args:

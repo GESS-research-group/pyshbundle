@@ -80,14 +80,14 @@ def deg_to_rad(deg: float):
         deg (float): Angle in degree
 
     Returns:
-        _type_: Angle in Radian
+        float: Angle in Radian
     
     Todo:
         + Inbuilt function available in numpy module
     """
     return deg * np.pi/180
 
-def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
+def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
     """_summary_
 
     Args:
@@ -324,9 +324,9 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F,cf,GaussianR, basins):
     
     
     #compute the ratio between the amplitude of the shifted leakage from once filtered fields and leakage from twice filtered fields
-    rfn=leakage/fftsleaktotal
-    rfn[(rfn)>=2] = 1
-    rfn[(rfn)<=-2] = -1
+    rfn = leakage/fftsleaktotal
+    rfn[(rfn) >= 2] = 1
+    rfn[(rfn) <= -2] = -1
     rfn = np.sum(np.abs(rfn), axis = 0)
     rfn=rfn/r # amplitude ratio
     

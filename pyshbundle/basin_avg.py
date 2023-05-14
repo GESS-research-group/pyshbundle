@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 
 # Created on Wed Dec 14 22:37:19 2022
 
@@ -48,15 +48,15 @@ from matplotlib import pyplot as plt
 import numpy as np
 import salem
 
-def basin_avg(data,path,c_rs,m,gs):
-    """_summary_
+def basin_avg(data, path: str, c_rs, m, gs):
+    """Computes the TWSA time-series for a given basin shape file, using the SH data.
 
     Args:
-        data (_type_): _description_
-        path (_type_): _description_
-        c_rs (_type_): _description_
-        m (_type_): _description_
-        gs (_type_): _description_
+        data (xarray.Dataset): xarray dataset with format - {coordinates: [time, lat, lon], Data variables: [tws]}
+        path (str): valid path to the basin shape file with extension (.shp)
+        c_rs (crs): the crs into which the dataframe must be transformed (related to salem module)
+        m (int): number of files read
+        gs (_type_): grid size [units to do]
 
     Returns:
         _type_: _description_
@@ -89,11 +89,11 @@ def basin_avg(data,path,c_rs,m,gs):
     
     
     # Area of each grid (360*720)
-    area = (6378.137**2)*pow(10,6)*(np.multiply(a,b))        # units m^2
+    area = (6378.137**2)*pow(10, 6)*(np.multiply(a, b))        # units m^2
     tot_area = np.sum(np.sum(area))
-    tws_m = np.zeros([m,lat_shape,lon_shape])
+    tws_m = np.zeros([m, lat_shape, lon_shape])
     for i in range(0,m,1):
-        tws_m[i,:,:] = np.multiply(tws_val[i,:,:],area)
+        tws_m[i, :, :] = np.multiply(tws_val[i, :, :],area)
     ds_area_w = xr.Dataset(
     data_vars=dict(
         tws=(["time","lat", "lon"], tws_m)
@@ -108,11 +108,11 @@ def basin_avg(data,path,c_rs,m,gs):
     ds_area_w_clp= ds_area_w.salem.roi(shape=shdf)
     # Time series for the whole basin(shapefile) in user defined range
     alpha = ds_area_w_clp.tws.sum(dim=('lon','lat'))/shdf_area
-    fig,ax=plt.subplots(figsize=(15,5))
-    alpha.plot(ax=ax,color='b');
+    fig,ax = plt.subplots(figsize=(15,5))
+    alpha.plot(ax=ax, color='b');
     ax.set_box_aspect(0.33)
-    ax.set_title('Time series for the basin',size=15)
-    ax.set_ylabel('TWS anomaly in mm ',size=15)
+    ax.set_title('Time series for the basin', size=15)
+    ax.set_ylabel('TWS anomaly in mm ', size=15)
     plt.tight_layout()
     
     return alpha

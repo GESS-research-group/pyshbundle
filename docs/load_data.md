@@ -24,10 +24,10 @@ GRACE data is available at different processing levels:
 ## Pre-Processing of Data
 
 ::: pyshbundle.read_GRACE_SH_paths
-::: pyshbundle.reader_replacer
-::: pyshbundle.reader_replacer_jpl
-::: pyshbundle.reader_replacer_csr
-::: pyshbundle.reader_replacer_itsg
+::: pyshbundle.reader_replacer_jpl.reader_replacer_jpl
+::: pyshbundle.reader_replacer_csr.reader_replacer_csr
+::: pyshbundle.reader_replacer_itsg.reader_replacer_itsg
+::: pyshbundle.reader_replacer.reader
 
 ## Computing Ling Term Mean
 ::: pyshbundle.load_longterm_mean

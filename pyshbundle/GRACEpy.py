@@ -42,22 +42,6 @@ from . import GRACEconstants as GC
 
 
 def upwcon(degree: int, height):
-    '''
-    Created on Sat May  9 18:49:45 2022
-    % UPWCON(degree,height,const) returns the upward continuation (R/r)^l, in which
-
-    % uc = upwcon(degree,height)
-
-    % INPUT
-    % degree - Spherical harmonic degree, must be integer [scalar/vector]
-    % height - Height above mean Earth radius [m] [scalar/vector]
-    
-    load constants in the file GRACEconstants - def: GRS80 constants
-    %
-    % OUTPUT
-    % uc    - Upward continuation terms.
-    % ----------------------------------------------------------------------------
-    '''
     """returns the upward continuation $(R/r)^l$
 
     Args:
@@ -67,16 +51,19 @@ def upwcon(degree: int, height):
     Returns:
         uc (_type_): Upward continuation terms
     
+    Uses:
+        `GRACEconstants.GC`
+    
     Todo:
         + Add input checking functionality and raise exceptions
         + Add reference to formula
     """
-
+    # Created on Sat May  9 18:49:45 2022
     rr = numpy.divide(GC.ae, numpy.add(GC.ae,height))
     uc = numpy.power(rr, degree)
 
     return(uc)    
-#-------------------------------------------------------------------------
+
 def lovenr(lmax: int):
     """
     Created on Mon May 11 11:09:28 2022
@@ -91,7 +78,7 @@ def lovenr(lmax: int):
     n = range(0, lmax+1, 1)
     kn = numpy.interp(n,l,kl)
     return(kn)
-#--------------------------------------------------------------------------
+
 def lovenrPREM(lmax:int, frame):
     """
     Created on Mon May 11 11:51:29 2022
@@ -153,8 +140,8 @@ def lovenrPREM(lmax:int, frame):
     
     l  =  data[:,0]
     hl =  data[:,1]
-    kl =  numpy.divide(data[:,2],l)
-    ll =  numpy.divide(data[:,3],l)
+    kl =  numpy.divide(data[:,2], l)
+    ll =  numpy.divide(data[:,3], l)
     
     if frame == 'CM':
         hl[0] = hl[0] - 1
@@ -182,5 +169,4 @@ def lovenrPREM(lmax:int, frame):
     hn[0] = 0
     ln[0] = 0
     return(kn,hn,ln)
-#-------------------------------------------------------------------------------
     

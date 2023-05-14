@@ -53,8 +53,15 @@ def sc2cs(field):
             spherical harmonics coefficients in /S|C\ storage format
         
     Returns: 
-        cs (numpy.ndarray()): 
+        cs (numpy.ndarray): 
             square (L+1)x(L+1) matrix in |C\S| format
+    
+    References:
+        See the SHBundle docs or PySHBundle docs for more info about SH coeff. storage and retrival formats being implementd.
+
+    Examples:
+        >>> cs_fmt = sc2cs(field)
+        TO DO: show suitable output
     """
 
     rows = len(field)
