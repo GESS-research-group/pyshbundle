@@ -77,7 +77,7 @@ def tws_cal(data, lmax: int, gs: float, r, m):
         jflag = 0
         
         
-        ff = gshs.gshs(shfil,quant,grd,n,h,jflag)[0]
+        ff = gshs.gshs(shfil, quant, grd, n, h, jflag)[0]
         
         ff = ff*1000
         tws_f[i,:,0:int(grid_x/2)] = ff[:,int(grid_x/2):]

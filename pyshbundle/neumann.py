@@ -104,7 +104,7 @@ def neumann(inn):
         x, w = grule.grule(inn)
     except: #if input is an array
         if(len(inn)==1): #2nd Neumann method
-            x,w = grule.grule(inn)
+            x, w = grule.grule(inn)
             if(np.not_equal(np.mod(x, 1), 0)): #Not integer
                 raise TypeError("Integer input argument required")
             
@@ -123,7 +123,7 @@ def neumann(inn):
                 
             w,resid,rank,s = np.linalg.lstsq(pp,r) #Solve system of equations; Double check this operation
             if(x.shape != w.shape):
-                w=w.T
+                w = w.T
             
         else:
             raise ValueError("Error in input dimensions")

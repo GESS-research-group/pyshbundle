@@ -94,7 +94,7 @@ def grule(n: int):
         pk = x0
         
         for kk in range(n-1):
-            k = kk+2
+            k = kk + 2
             t1 = x0 * pk
             pkp1 = t1 - pkm1 - (t1-pkm1)/k  + t1
             pkm1=pk
@@ -113,8 +113,8 @@ def grule(n: int):
         h = -u * (1+(.5*u)*(v+u*(v*v - u*d3pn/(3*dpn))))
         p = pk + h*(dpn+(0.5*h)*(d2pn+(h/3)*(d3pn + 0.25*h*d4pn)))
         dp = dpn + h*(d2pn+(0.5*h)*(d3pn+h*d4pn/3))
-        h=h-p/dp
-        x0=x0+h
+        h = h-p/dp
+        x0 = x0+h
     
     bp = -x0-h
     fx = d1 - h*e1*(pk+(h/2)*(dpn+(h/3)*(d2pn+(h/4)*(d3pn+(0.2*h)*d4pn))))
@@ -129,6 +129,6 @@ def grule(n: int):
         m = m-1
     
     for i in range(1,int(m+1)):
-        bp[-i]=-bp[i-1]
+        bp[-i] = -bp[i-1]
         wf[-i] = wf[i-1] 
     return bp, wf

@@ -56,14 +56,15 @@ def normalklm(lmax: int, typ: str = 'wgs84'):
                     'he' - hydrostatic equilibrium ellipsoid
     
     Returns:
-        nklm (np.array): normal field in CS-format (sparse)
+        nklm (np.array): normal field in CS-format (sparse array - [1, -J2, -J4, -J6, -J8])
     
-    TODO: Find type of nklm; I think raising TypeError, VlueError or NameError instad of general Exception
+    TODO: 
+        Find type of nklm; I think raising TypeError, VlueError or NameError instad of general Exception
 
     Raises:
-        Exception: lmax should be an integer
-        Exception: lmax should be positive
-        Exception: Unknown type of ellipsoid, supports 'wgs84', `GRS80` and 'he'
+        TypeError: lmax should be an integer
+        ValueError: lmax should be positive
+        ValueError: Unknown type of ellipsoid, supports 'wgs84', `GRS80` and 'he'
     
     References:
         1. J2,J4 values for hydrostatic equilibrium ellipsoid from Lambeck (1988)
@@ -71,10 +72,10 @@ def normalklm(lmax: int, typ: str = 'wgs84'):
     """
     
     if type(lmax) != int:
-        raise Exception("lmax should be integer")
+        raise TypeError("lmax should be integer")
         
     if lmax < 0:
-        raise Exception("lmax should be positive")
+        raise ValueError("lmax should be positive")
         
     
     typ_ = typ.lower()
@@ -104,7 +105,7 @@ def normalklm(lmax: int, typ: str = 'wgs84'):
         l.reshape(l.shape[0],1)
         
     else:
-        raise Exception("Unknown type of ellipsoid:   ", typ)
+        raise ValueError("Unknown type of ellipsoid:   ", typ)
     
     coefs = jcoefs[:len(l)].T / np.sqrt(2*l + 1)
 #    coefs.reshape(coefs.shape[0],1)

@@ -324,9 +324,9 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
     
     
     #compute the ratio between the amplitude of the shifted leakage from once filtered fields and leakage from twice filtered fields
-    rfn=leakage/fftsleaktotal
-    rfn[(rfn)>=2] = 1
-    rfn[(rfn)<=-2] = -1
+    rfn = leakage/fftsleaktotal
+    rfn[(rfn) >= 2] = 1
+    rfn[(rfn) <= -2] = -1
     rfn = np.sum(np.abs(rfn), axis = 0)
     rfn=rfn/r # amplitude ratio
     

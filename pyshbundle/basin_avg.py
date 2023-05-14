@@ -89,11 +89,11 @@ def basin_avg(data, path: str, c_rs, m, gs):
     
     
     # Area of each grid (360*720)
-    area = (6378.137**2)*pow(10,6)*(np.multiply(a,b))        # units m^2
+    area = (6378.137**2)*pow(10, 6)*(np.multiply(a, b))        # units m^2
     tot_area = np.sum(np.sum(area))
-    tws_m = np.zeros([m,lat_shape,lon_shape])
+    tws_m = np.zeros([m, lat_shape, lon_shape])
     for i in range(0,m,1):
-        tws_m[i,:,:] = np.multiply(tws_val[i,:,:],area)
+        tws_m[i, :, :] = np.multiply(tws_val[i, :, :],area)
     ds_area_w = xr.Dataset(
     data_vars=dict(
         tws=(["time","lat", "lon"], tws_m)
@@ -108,11 +108,11 @@ def basin_avg(data, path: str, c_rs, m, gs):
     ds_area_w_clp= ds_area_w.salem.roi(shape=shdf)
     # Time series for the whole basin(shapefile) in user defined range
     alpha = ds_area_w_clp.tws.sum(dim=('lon','lat'))/shdf_area
-    fig,ax=plt.subplots(figsize=(15,5))
-    alpha.plot(ax=ax,color='b');
+    fig,ax = plt.subplots(figsize=(15,5))
+    alpha.plot(ax=ax, color='b');
     ax.set_box_aspect(0.33)
-    ax.set_title('Time series for the basin',size=15)
-    ax.set_ylabel('TWS anomaly in mm ',size=15)
+    ax.set_title('Time series for the basin', size=15)
+    ax.set_ylabel('TWS anomaly in mm ', size=15)
     plt.tight_layout()
     
     return alpha

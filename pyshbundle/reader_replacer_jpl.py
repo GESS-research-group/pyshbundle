@@ -31,6 +31,7 @@ import os
 import numpy as np
 import julian
 import math
+
 # Function to read files & extract data
 def reader(file_name,line_num,degree,order,clm,slm,slm_std,clm_std,start_date,end_date,year_start,time_axes):
     """[Helper function]
@@ -49,15 +50,15 @@ def reader(file_name,line_num,degree,order,clm,slm,slm_std,clm_std,start_date,en
         year_start (_type_): _description_
         time_axes (_type_): _description_
     """
-    with gzip.open(file_name,"r") as file:
+    with gzip.open(file_name, "r") as file:
         stuff = file.readlines()
-        stuff
+        # stuff
         for i in range (0,len(stuff),1):
             if str(stuff[i]) == str( b'# End of YAML header\n',):
                 line_num = i+1                                                 #Line number of starting line of data
                 break
         pattern = '\s+'                                                        #Delimiter for splitting                                                          
-        while(line_num<len(stuff)):
+        while(line_num < len(stuff)):
             split = re.split(  pattern, str(stuff[line_num]))                  #split wordwise with Regex
             degree[time_axes].append(  int(split[1])  )
             order[time_axes].append( int(split [2])    )
@@ -88,6 +89,7 @@ def TIME(year_start,file_name,time_axes):
         time_axes = time_axes + 1  
         year_start = file_name[-39:-35]
     return year_start, time_axes
+
 # Main code
 def last_4chars(x):
         #print(x[-39:-32])
@@ -145,23 +147,23 @@ def reader_replacer_jpl(path, path_tn14, path_tn13):
             #print(file_name[-39:-32])
             
             # Save yearwise
-            year_start, time_axes = TIME(year_start,file_name,time_axes)
+            year_start, time_axes = TIME(year_start, file_name, time_axes)
             
             # Call the function 'reader'
-            reader(file_name,line_num,degree,order,clm,slm,slm_std,clm_std,start_date,end_date,year_start,time_axes)
+            reader(file_name, line_num, degree, order, clm, slm, slm_std, clm_std, start_date, end_date, year_start, time_axes)
             no_of_files = no_of_files + 1
     print('Reading into clm format complete!')
     print("Number of files read:", no_of_files)
     
-    Lmax=degree[0][-1]
-    degree_order=int((Lmax+1)*(Lmax+2)/2)
+    Lmax = degree[0][-1]
+    degree_order = int((Lmax+1) * (Lmax+2)/2)
     ''' Replacement '''
     print('Starting replacement')
     ''' Replace deg 2,3 '''
     new_file_TN14 = path_tn14
     
     rep_start_date, rep_end_date, c20, c30, c20_sigma, c30_sigma = [], [], [], [], [], []
-    with open(new_file_TN14,"r") as file:
+    with open(new_file_TN14, "r") as file:
         stuff = file.readlines()
         for i in range(0,len(stuff),1):
             line_num = str('not found')
@@ -173,7 +175,7 @@ def reader_replacer_jpl(path, path_tn14, path_tn13):
             print('Replacement data not found')
         pattern = '\s+'
         count = 0
-        while (line_num<len(stuff)):
+        while (line_num < len(stuff)):
             split = re.split(pattern, str(stuff[line_num]))
             c20.append( float(split [2]) )
             c30.append( float(split[5]) )
@@ -188,8 +190,8 @@ def reader_replacer_jpl(path, path_tn14, path_tn13):
     
     index = 0
     for year in range(0,time_axes+1,1):
-        for y in range(0,round(len(degree[year])/int(degree_order-3)),1):    
-            while(index<len(c20)):
+        for y in range(0,round(len(degree[year])/int(degree_order-3)), 1):    
+            while(index < len(c20)):
                 
                 curr_date = start_date[year][y*degree_order]
                 rep_date_cmp = rep_start_date[index]
@@ -197,10 +199,10 @@ def reader_replacer_jpl(path, path_tn14, path_tn13):
                 if curr_date == rep_date_cmp:
                     print(curr_date, rep_date_cmp, index)
                     clm[year][y*int(degree_order-3)] = c20[index]
-                    clm_std[year][y*int(degree_order-3)]=c20_sigma[index]
+                    clm_std[year][y*int(degree_order-3)] = c20_sigma[index]
                     if math.isnan(c30[index]) == False:
                         clm[year][y*int(degree_order-3)+3] = c30[index]    
-                        clm_std[year][y*int(degree_order-3)+3]=c30_sigma[index]
+                        clm_std[year][y*int(degree_order-3)+3] = c30_sigma[index]
                     index= index + 1
                     break
                 else:   
@@ -267,7 +269,7 @@ def reader_replacer_jpl(path, path_tn14, path_tn13):
     
     
     ''' Add degree 0 coeffs (zeros) '''
-    for year in range(0,time_axes+1,1):
+    for year in range(0,time_axes+1, 1):
         for y in range(0,int(len(degree[year])/int(degree_order-1)),1):
             degree[year].insert(y*degree_order, float(0))
             order[year].insert(y*degree_order, float(0))
@@ -279,7 +281,7 @@ def reader_replacer_jpl(path, path_tn14, path_tn13):
             end_date[year].insert(y*degree_order, end_date[year][y*degree_order+1]) 
     
     ''' Save everything in a list '''
-    saved_as_num=[degree,order,clm,slm,clm_std,slm_std,start_date,end_date]
+    saved_as_num = [degree, order, clm, slm, clm_std, slm_std, start_date, end_date]
     
     ''' Number of years '''
     beta = np.zeros(len(start_date))
@@ -290,7 +292,7 @@ def reader_replacer_jpl(path, path_tn14, path_tn13):
     
     ''' Finding the dates for time bounds of data '''
     dates_start, dates_end = [],[] 
-    for i in range(0,time_axes+1,1):
+    for i in range(0, time_axes+1, 1):
         j = 0
         while j < beta[i]:
             dates_start.append(str(start_date[i][j*degree_order]))
