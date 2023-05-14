@@ -102,12 +102,12 @@ def iplm(l, m:int, theRAD, dt=-9999):
     Uses:
         `plm`
     """
-    if dt==-9999:
+    if dt == -9999:
         if len(theRAD) == 1:
             dt = np.pi/180
         else:
             dt = theRAD[1] - theRAD[0]
-    if  min(l.shape) !=1:
+    if  min(l.shape) != 1:
         print('Degree l must be a vector (or scalar)') 
         sys.exit([])
     if  np.remainder(l,1).all() != 0:
