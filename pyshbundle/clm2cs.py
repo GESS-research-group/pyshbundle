@@ -50,23 +50,26 @@ def clm2cs(data):
 
     Args:
         data (_type_): _description_
+    
+    Suggestion: 
+        Instead of printing "conversion complete" let's show a progress bar
     """
     
-    ''' Load data '''
+    # Load data 
     # data = np.load(path, allow_pickle=True)
     # data needs to be loaded in numpy format
     
-    ''' Read variables '''
+    # Read variables 
     no_of_years = len(data[0])
     degree = data[0]
     clm = data[2]
     slm = data[3]
     
-    ''' Count no of months of data '''
+    # Count no of months of data 
     month_count =0
     for i in range(0,len(data[0]),1):
         month_count= month_count+len(data[0][i])/4750
-    ''' clm >>> cs '''
+    # clm >>> cs 
     month = 0
     Lmax = degree[0][-1]
     cs_mat = np.zeros([int(month_count),Lmax+1,Lmax+1])
@@ -85,3 +88,4 @@ def clm2cs(data):
             month = month + 1
     print('Conversion into clm format complete')        
     #np.save('/path/SH_coeff_cs.npy', cs_mat)
+    return cs_mat
