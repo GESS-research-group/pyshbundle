@@ -264,7 +264,7 @@ def reader_replacer_jpl(path, path_tn14, path_tn13):
                     index = index + 2
                     break
                 else:   
-                    index = index +2                
+                    index = index + 2                
     print('Degree 1 replacement complete!')
     
     
