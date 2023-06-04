@@ -1,0 +1,3160 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="http://127.0.0.1:8000/pyshbundle/pyshbundle/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>pyshbundle module - pyshbundle</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "pyshbundle module";
+        var mkdocs_page_input_path = "pyshbundle.md";
+        var mkdocs_page_url = "/pyshbundle/pyshbundle/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> pyshbundle
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../usage/">Usage</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../contributing/">Contributing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../faq/">FAQ</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../changelog/">Changelog</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="https://github.com/mn5hk/pyshbundle/issues">Report Issues</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Reference</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">pyshbundle module</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#doc-summary">Doc Summary</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#load-data">Load Data</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.read_GRACE_SH_paths">pyshbundle.read_GRACE_SH_paths</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.reader_replacer">pyshbundle.reader_replacer</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.reader_replacer_jpl">pyshbundle.reader_replacer_jpl</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.reader_replacer_csr">pyshbundle.reader_replacer_csr</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.reader_replacer_itsg">pyshbundle.reader_replacer_itsg</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.load_longterm_mean">pyshbundle.load_longterm_mean</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.GRACEconstants">pyshbundle.GRACEconstants</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#convert-data-formats">Convert Data Formats</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.cs2sc">pyshbundle.cs2sc</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.sc2cs">pyshbundle.sc2cs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.sc2cs.sc2cs">sc2cs()</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.clm2cs">pyshbundle.clm2cs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.clm2sc">pyshbundle.clm2sc</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.klm2sc">pyshbundle.klm2sc</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#core-functionality">Core functionality</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.gsha">pyshbundle.gsha</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.gshs">pyshbundle.gshs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.basin_avg">pyshbundle.basin_avg</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.tws_cal">pyshbundle.tws_cal</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#auxillary-codes">Auxillary Codes</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.plm">pyshbundle.plm</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.iplm">pyshbundle.iplm</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.GRACEpy">pyshbundle.GRACEpy</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.GRACEpy.lovenr">lovenr()</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.GRACEpy.lovenrPREM">lovenrPREM()</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.GRACEpy.upwcon">upwcon()</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.Phase_calc">pyshbundle.Phase_calc</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.eigengrav">pyshbundle.eigengrav</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.gaussian">pyshbundle.gaussian</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.grule">pyshbundle.grule</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.ispec">pyshbundle.ispec</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.ispec.ispec">ispec()</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.naninterp">pyshbundle.naninterp</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.neumann">pyshbundle.neumann</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.normalklm">pyshbundle.normalklm</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pyshbundle.normalklm.normalklm">normalklm()</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">pyshbundle</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>API Reference &raquo;</li>
+      <li>pyshbundle module</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/abhimhamane/pyshbundle/edit/master/docs/pyshbundle.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="reference-mannual-pyshbundle">Reference Mannual - PySHBundle<a class="headerlink" href="#reference-mannual-pyshbundle" title="Permanent link">&para;</a></h1>
+<p>The module codes can be categorized into four categories:</p>
+<ul>
+<li>load data</li>
+<li>convert data formats</li>
+<li>core functionality </li>
+<li>auxillary codes</li>
+</ul>
+<p><img alt="Schematic diagram of code workflow" src="../img/01_flowchart_without_background.png" /></p>
+<p>Navigate the Reference Manual based on the following schematic</p>
+<h2 id="doc-summary">Doc Summary<a class="headerlink" href="#doc-summary" title="Permanent link">&para;</a></h2>
+<h2 id="load-data">Load Data<a class="headerlink" href="#load-data" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.read_GRACE_SH_paths"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Fri Feb  17 2023
+@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+<p>The purpose of this script is to,
+    firstly read what the data source is (JPL, CSR or ITSG)
+    read file path for GRACE L2 spherical harmonics inputs,
+    read replacement files for tn13 and tn14
+    source of the SH files (JPL, ITSG or CSR)
+The code returns path of data files, path of tn13 and path of tn14 replacement files</p>
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6</p>
+</li>
+</ol>
+</details>
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.reader_replacer"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Fri Dec  9 10:08:55 2022</p>
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6 </p>
+</li>
+</ol>
+</details>      <p>@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.reader_replacer_jpl"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Fri Dec  9 10:08:55 2022</p>
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6 </p>
+</li>
+</ol>
+</details>      <p>@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.reader_replacer_csr"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Fri Dec  9 10:08:55 2022</p>
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6 </p>
+</li>
+</ol>
+</details>      <p>@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.reader_replacer_itsg"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Mon Feb  6 18:43:02 2023</p>
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6 </p>
+</li>
+</ol>
+</details>      <p>@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.load_longterm_mean"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Fri Feb  17 2023</p>
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6 </p>
+</li>
+</ol>
+</details>      <p>@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.GRACEconstants"></a>
+  <div class="doc doc-contents first">
+  
+      <p>This script contains some of the major relavant Physical and Geodetic(GRS80) constants:</p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div><h2 id="convert-data-formats">Convert Data Formats<a class="headerlink" href="#convert-data-formats" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.cs2sc"></a>
+  <div class="doc doc-contents first">
+  
+      <p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6 </p>
+</li>
+</ol>
+</details>      <hr />
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code>cs2sc(field) converts the square (L+1)x(L+1) matrix &#39;field&#39;, containing
+spherical harmonics coefficients in |C\S| storage format into a 
+rectangular (L+1)x(2L+1) matrix in  /S|Cormat.
+
+IN:
+field .... the square (L+1)x(L+1) numpy matrix field , containing
+               spherical harmonics coefficients in |C\S| storage format
+OUT: 
+sc ....... rectangular (L+1)x(2L+1) numpy matrix in  /S|Cormat
+
+@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+</code></pre></div></td></tr></table></div>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.sc2cs"></a>
+  <div class="doc doc-contents first">
+  
+      <p>sc2cs - format conversion tool from rectangular sc format to a square cs format</p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="pyshbundle.sc2cs.sc2cs" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">sc2cs</span><span class="p">(</span><span class="n">field</span><span class="p">)</span></code>
+
+<a href="#pyshbundle.sc2cs.sc2cs" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>converts the rectangular <span class="arithmatex">\((L+1)         imes (2L+1)\)</span> matrix FIELD, containing
+spherical harmonics coefficients in /S|C\ storage format into a 
+square (L+1)x(L+1) matrix in |C\S| format.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>field</code></td>
+          <td>
+                <code>numpy.<span title="numpy.ndarray">ndarray</span></code>
+          </td>
+          <td><p>the rectangular (L+1)x(2L+1) matrix FIELD, containing
+spherical harmonics coefficients in /S|C\ storage format</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>cs</code></td>          <td>
+                <code>numpy.<span title="numpy.ndarray">ndarray</span>()</code>
+          </td>
+          <td><p>square (L+1)x(L+1) matrix in |C\S| format</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+      <details class="quote">
+        <summary>Source code in <code>pyshbundle/sc2cs.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">sc2cs</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;converts the rectangular $(L+1) \times (2L+1)$ matrix FIELD, containing</span>
+<span class="sd">    spherical harmonics coefficients in /S|C\ storage format into a </span>
+<span class="sd">    square (L+1)x(L+1) matrix in |C\S| format.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        field (numpy.ndarray()):</span>
+<span class="sd">            the rectangular (L+1)x(2L+1) matrix FIELD, containing</span>
+<span class="sd">            spherical harmonics coefficients in /S|C\ storage format</span>
+
+<span class="sd">    Returns: </span>
+<span class="sd">        cs (numpy.ndarray()): </span>
+<span class="sd">            square (L+1)x(L+1) matrix in |C\S| format</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">rows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">rows</span><span class="o">!=</span><span class="n">cols</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">cols</span><span class="o">!=</span><span class="mi">2</span><span class="o">*</span><span class="n">rows</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">sc2cs</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;Input neither in cs nor in sc format&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">cols</span> <span class="o">==</span> <span class="n">rows</span><span class="p">:</span>
+        <span class="n">cs</span> <span class="o">=</span> <span class="n">field</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">c</span>    <span class="o">=</span> <span class="n">field</span><span class="p">[:,</span> <span class="n">rows</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">cols</span><span class="p">]</span>
+        <span class="n">st</span>   <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="n">field</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">rows</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">z</span>    <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="n">rows</span><span class="p">])</span>
+        <span class="n">s</span>    <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">st</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">cs</span>   <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">cs</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.clm2cs"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Fri Dec  9 11:43:15 2022</p>
+<p>@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6</p>
+</li>
+</ol>
+</details>
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.clm2sc"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Fri Dec  9 10:14:32 2022</p>
+<p>@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6</p>
+</li>
+</ol>
+</details>
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.klm2sc"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Tue Jan 24 10:14:27 2023</p>
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6 </p>
+</li>
+</ol>
+</details>      <p>@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div><h2 id="core-functionality">Core functionality<a class="headerlink" href="#core-functionality" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.gsha"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Wed Aug 24 09:26:32 2022</p>
+<p>GSHA global spherical harmonic analysis</p>
+<p>IN:
+    f ....... global field of size (lmax+1)<em>2</em>lmax or lmax<em>2</em>lmax
+    method .. string argument, defining the analysis method:
+              - 'ls' ..... least squares
+              - 'wls' .... weighted least squares 
+              - 'aq' ..... approximate quadrature 
+              - 'fnm' .... first neumann method
+              - 'snm' .... second neumann method
+              - 'mean' ... block mean values (use of integrated Plm)
+    grid .... optional string argument, defining the grid:
+              - 'pole', 'mesh' ...... (default if lmax+1), equi-angular (lmax+1)<em>2</em>lmax, 
+                                      including poles and Greenwich meridian.
+              - 'block', 'cell' ..... (default if lmax), equi-angular block midpoints lmax<em>2lmax
+              - 'neumann', 'gauss' .. Gauss-Neumann grid (lmax+1)</em>2*lmax
+    lmax .... maximum degree of development</p>
+<p>OUT:
+    cs ...... Clm, Slm in |C\S| format</p>
+<p>USES:
+    plm, iplm, neumann, sc2cs </p>
+<p>SEE ALSO:
+    GSHS</p>
+<p>REMARKS:
+    TBD - Zlm-functions option
+        - eigengrav, GRS80
+        - When 'pole' grid, m = 1 yields singular Plm-matrix!</p>
+<hr />
+<p>@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6</p>
+</li>
+</ol>
+</details>
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.gshs"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Wed Aug 10 15:55:22 2022</p>
+<p>GSHS global spherical harmonic synthesis 
+ f = gshs(field)</p>
+<p>IN:
+    field ... set of SH coefficients, either in SC-triangle or CS-square format 
+    quant ... optional string argument, defining the field quantity:
+              - 'none' ............. (default), coefficients define the output
+              - 'geoid' ............ geoid height [m],
+              - 'potential' ........ potential [m^2/s^2],
+              - 'dg', 'gravity' .... gravity anomaly [mGal], 
+              - 'tr' ............... grav. disturbance, 1st rad. derivative [mGal],
+              - 'trr' .............. 2nd rad. derivative [1/s^2],
+              - 'water' ............ equiv. water height [m],
+              - 'smd' .............. surface mass density [kg/m^2]. 
+     grd .... optional string argument, defining the grid:
+              - 'block', 'cell' .... equi-angular block midpoints. n<em>2n
+     n ...... grid size parameter n. (default: n = lmax, determined from field)
+              #longitude samples: 2</em>n
+              #latitude samples n ('blocks') or n+1.
+     h ...... (default: 0), height above Earth mean radius [m].
+     jflag .. (default: true), determines whether to subtract GRS80.</p>
+<p>OUT:
+    f ....... the global field
+    theRAD .. vector of co-latitudes [rad] 
+    lamRAD .. vector of longitudes [rad]</p>
+<p>USES:
+    vec2cs, cs2sc, eigengrav, plm, normalklm, grule, ispec</p>
+<p>SEE ALSO:
+    gsha</p>
+<hr />
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6 </p>
+</li>
+</ol>
+</details>      <p>@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div><p>%::: pyshbundle.gddc%
+</p>
+
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.basin_avg"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Wed Dec 14 22:37:19 2022</p>
+<p>@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+<p>PySHbundle: A Python implementation of MATLAB codes SHbundle</p>
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6</p>
+</li>
+</ol>
+</details>
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.tws_cal"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Mon Aug 29 09:47:38 2022</p>
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6 </p>
+</li>
+</ol>
+</details>      <p>@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div><h2 id="auxillary-codes">Auxillary Codes<a class="headerlink" href="#auxillary-codes" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.plm"></a>
+  <div class="doc doc-contents first">
+  
+      <p>PLM Fully normalized associated Legendre functions for a selected order M</p>
+
+<details class="input-as">
+  <summary>Input as</summary>
+  <p>l = np.array([np.arange(0,97,1)])          <br />
+m = 0                                      <br />
+thetaRAD = np.array([0,0.25,0.5,0.75,1])     </p>
+</details>      <p>HOW: 
+     p            = plm(l, m, thetaRAD,3,1)[:,:,0]                    <br />
+    dp           = plm(l, m, thetaRAD,3,2)[1][:,:,0]
+    ddp          = plm(l, m, thetaRAD,3,3)[2][:,:,0]</p>
+<p>IN:
+    l ........ degree (vector). Integer, but not necessarily monotonic.
+               For l &lt; m a vector of zeros will be returned.
+    m ........ order (scalar). If absent, m = 0 is assumed.
+    thetaRAD . co-latitude [rad] (vector)</p>
+<p>OUT:
+    p ........ Matrix with Legendre functions. The matrix has length(thetaRAD) 
+               rows and length(l) columns, unless l or thetaRAD is scalar. 
+               Then the output vector follows the shape of respectively l or 
+               thetaRAD. 
+    dp ....... Matrix with first derivative of Legendre functions. The matrix 
+               has length(thetaRAD) rows and length(l) columns, unless l or 
+               thetaRAD is scalar. Then the output vector follows the shape of
+               respectively l or thetaRAD. 
+    ddp ...... Matrix with second derivative of Legendre functions. The matrix 
+               has length(thetaRAD) rows and length(l) columns, unless l or 
+               thetaRAD is scalar. Then the output vector follows the shape of 
+               respectively l or thetaRAD. </p>
+<p>SEE ALSO:
+    iplm</p>
+<p>REMARKS:
+    Previous versions calculated the derivatives towards the latitude, 
+    i. e. dP/d\phi are calculated. Please check your code in order to get 
+    the derivatives correctly towards the co-latitude!
+      -&gt;  dP/d  hetaRAD      =   -dP/d\phi
+      -&gt;  d^2P/d        hetaRAD^2  =  d^2P/d\phi^2</p>
+<hr />
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6 </p>
+</li>
+</ol>
+</details>      <p>@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.iplm"></a>
+  <div class="doc doc-contents first">
+  
+      <p>@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6 </p>
+</li>
+</ol>
+</details>      <hr />
+<p>IPLM Integrals of the fully normalized associated Legendre functions
+ over blocks for a selected order M. </p>
+<p>HOW: p = iplm(l,m,theRAD)              - assumes dt = theRAD(2)-theRAD(1)
+      p = iplm(l,m,theRAD,dt)</p>
+<p>IN:
+    l ........ degree (vector). Integer, but not necessarily monotonic.
+               For l &lt; m a vector of zeros will be returned.
+    m ........ order (scalar)
+    theRAD ... co-latitude [rad] (vector)
+    dt ....... integration block-size [rad] (scalar). Default: dt = theRAD(2)-theRAD(1)</p>
+<p>OUT: 
+    p ........ Matrix with integrated Legendre functions.
+               Functions are integrated from theRAD(i)-dt/2 till theRAD(i)+dt/2.
+               The matrix has length(TH) rows and length(L) columns, unless L 
+               or TH is scalar. Then the output vector follows the shape of 
+               respectively L or TH. </p>
+<p>USES:
+    plm</p>
+<p>REMARKS:
+    The blocks at the pole might become too large under circumstances.
+    This is not treated separately, i.e. unwanted output may appear.
+    In case TH is scalar, dt will be 1 (arbitrarily).</p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.GRACEpy"></a>
+  <div class="doc doc-contents first">
+  
+      <p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6</p>
+</li>
+</ol>
+</details>
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="pyshbundle.GRACEpy.lovenr" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">lovenr</span><span class="p">(</span><span class="n">lmax</span><span class="p">)</span></code>
+
+<a href="#pyshbundle.GRACEpy.lovenr" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Created on Mon May 11 11:09:28 2022</p>
+<p>@author: Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+
+      <details class="quote">
+        <summary>Source code in <code>pyshbundle/GRACEpy.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">lovenr</span><span class="p">(</span><span class="n">lmax</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Created on Mon May 11 11:09:28 2022</span>
+
+<span class="sd">    @author: Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">l</span>  <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>    <span class="mi">2</span><span class="p">,</span>    <span class="mi">3</span><span class="p">,</span>    <span class="mi">4</span><span class="p">,</span>    <span class="mi">5</span><span class="p">,</span>   <span class="mi">6</span><span class="p">,</span>   <span class="mi">7</span><span class="p">,</span>   <span class="mi">8</span><span class="p">,</span>   <span class="mi">9</span><span class="p">,</span>  <span class="mi">10</span><span class="p">,</span>  <span class="mi">12</span><span class="p">,</span>  <span class="mi">15</span><span class="p">,</span>  <span class="mi">20</span><span class="p">,</span>  <span class="mi">30</span><span class="p">,</span>  <span class="mi">40</span><span class="p">,</span>  <span class="mi">50</span><span class="p">,</span>  <span class="mi">70</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">200</span><span class="p">]</span>
+    <span class="n">kl</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">divide</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">270</span><span class="p">,</span><span class="o">-</span><span class="mi">3030</span><span class="p">,</span><span class="o">-</span><span class="mi">1940</span><span class="p">,</span><span class="o">-</span><span class="mi">1320</span><span class="p">,</span><span class="o">-</span><span class="mi">1040</span><span class="p">,</span><span class="o">-</span><span class="mi">890</span><span class="p">,</span><span class="o">-</span><span class="mi">810</span><span class="p">,</span><span class="o">-</span><span class="mi">760</span><span class="p">,</span><span class="o">-</span><span class="mi">720</span><span class="p">,</span><span class="o">-</span><span class="mi">690</span><span class="p">,</span><span class="o">-</span><span class="mi">640</span><span class="p">,</span><span class="o">-</span><span class="mi">580</span><span class="p">,</span><span class="o">-</span><span class="mi">510</span><span class="p">,</span><span class="o">-</span><span class="mi">400</span><span class="p">,</span><span class="o">-</span><span class="mi">330</span><span class="p">,</span><span class="o">-</span><span class="mi">270</span><span class="p">,</span><span class="o">-</span><span class="mi">200</span><span class="p">,</span><span class="o">-</span><span class="mi">140</span><span class="p">,</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="o">-</span><span class="mi">700</span><span class="p">],</span><span class="mf">1e4</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">lmax</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">kn</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">l</span><span class="p">,</span><span class="n">kl</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">kn</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="pyshbundle.GRACEpy.lovenrPREM" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">lovenrPREM</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span></code>
+
+<a href="#pyshbundle.GRACEpy.lovenrPREM" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Created on Mon May 11 11:51:29 2022</p>
+<p>@author:  Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+
+      <details class="quote">
+        <summary>Source code in <code>pyshbundle/GRACEpy.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">lovenrPREM</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">frame</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Created on Mon May 11 11:51:29 2022</span>
+
+<span class="sd">    @author:  Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span> <span class="mi">1</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.28476</span><span class="p">,</span>   <span class="mf">0.00000</span><span class="p">,</span>   <span class="mf">0.10462</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">2</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.99297</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.61274</span><span class="p">,</span>   <span class="mf">0.04661</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">3</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.05142</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.58897</span> <span class="p">,</span>  <span class="mf">0.21048</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">4</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.05378</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.53513</span> <span class="p">,</span>  <span class="mf">0.23564</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">5</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.08658</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.52382</span> <span class="p">,</span>  <span class="mf">0.23186</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">6</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.14404</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.54222</span> <span class="p">,</span>  <span class="mf">0.23263</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">7</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.21254</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.57464</span> <span class="p">,</span>  <span class="mf">0.24058</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">8</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.28403</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.61256</span> <span class="p">,</span>  <span class="mf">0.25308</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">9</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.35479</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.65203</span> <span class="p">,</span>  <span class="mf">0.26799</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">10</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.42330</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.69140</span><span class="p">,</span>   <span class="mf">0.28419</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">11</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.48909</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.72998</span><span class="p">,</span>   <span class="mf">0.30121</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">12</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.55204</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.76749</span><span class="p">,</span>   <span class="mf">0.31880</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">13</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.61221</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.80381</span><span class="p">,</span>   <span class="mf">0.33684</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">14</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.66968</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.83886</span><span class="p">,</span>   <span class="mf">0.35522</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">15</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.72454</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.87260</span><span class="p">,</span>   <span class="mf">0.37382</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">16</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.77684</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.90499</span><span class="p">,</span>   <span class="mf">0.39251</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">17</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.82668</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.93599</span><span class="p">,</span>   <span class="mf">0.41119</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">18</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.87414</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.96560</span><span class="p">,</span>   <span class="mf">0.42973</span><span class="p">]</span> <span class="p">,</span>    
+    <span class="p">[</span><span class="mi">19</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.91928</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.99382</span><span class="p">,</span>   <span class="mf">0.44804</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">20</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.96220</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.02066</span><span class="p">,</span>   <span class="mf">0.46603</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">21</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.00297</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.04614</span><span class="p">,</span>   <span class="mf">0.48363</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">22</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.04169</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.07029</span><span class="p">,</span>   <span class="mf">0.50078</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">23</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.07844</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.09313</span><span class="p">,</span>   <span class="mf">0.51742</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">24</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.11332</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.11472</span><span class="p">,</span>   <span class="mf">0.53355</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">25</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.14642</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.13511</span><span class="p">,</span>   <span class="mf">0.54912</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">30</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.28839</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.22067</span><span class="p">,</span>   <span class="mf">0.61848</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">40</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.48641</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.33024</span><span class="p">,</span>   <span class="mf">0.71925</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">50</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.61710</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.39016</span><span class="p">,</span>   <span class="mf">0.78410</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">60</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.71254</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.42377</span><span class="p">,</span>   <span class="mf">0.82683</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">70</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.78865</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.44313</span><span class="p">,</span>   <span class="mf">0.85550</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">80</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.85368</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.45474</span><span class="p">,</span>   <span class="mf">0.87479</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">90</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.91216</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.46226</span><span class="p">,</span>   <span class="mf">0.88764</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">100</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.96672</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.46787</span><span class="p">,</span>   <span class="mf">0.89598</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">120</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.06983</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.47811</span><span class="p">,</span>   <span class="mf">0.90421</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">140</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.16950</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.49082</span><span class="p">,</span>   <span class="mf">0.90634</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">160</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.26809</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.50771</span><span class="p">,</span>   <span class="mf">0.90603</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">180</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.36633</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.52909</span><span class="p">,</span>   <span class="mf">0.90532</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">200</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.48436</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.55473</span><span class="p">,</span>   <span class="mf">0.90547</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">250</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.70773</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.63448</span><span class="p">,</span>   <span class="mf">0.91388</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">300</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.94607</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.73053</span><span class="p">,</span>   <span class="mf">0.93714</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">350</span><span class="p">,</span>  <span class="o">-</span><span class="mf">4.17591</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.83593</span><span class="p">,</span>   <span class="mf">0.97495</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">400</span><span class="p">,</span>  <span class="o">-</span><span class="mf">4.39433</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.94515</span><span class="p">,</span>   <span class="mf">1.02467</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">500</span><span class="p">,</span>  <span class="o">-</span><span class="mf">4.78872</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.15940</span><span class="p">,</span>   <span class="mf">1.14615</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">600</span><span class="p">,</span>  <span class="o">-</span><span class="mf">5.12008</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.35243</span><span class="p">,</span>   <span class="mf">1.27714</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">800</span><span class="p">,</span>  <span class="o">-</span><span class="mf">5.59959</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.64798</span><span class="p">,</span>   <span class="mf">1.50995</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">1000</span><span class="p">,</span>  <span class="o">-</span><span class="mf">5.88447</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.83157</span><span class="p">,</span>  <span class="mf">1.67325</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">1500</span><span class="p">,</span>  <span class="o">-</span><span class="mf">6.15106</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.00957</span><span class="p">,</span>   <span class="mf">1.84797</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">2000</span><span class="p">,</span>  <span class="o">-</span><span class="mf">6.20058</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.04408</span><span class="p">,</span>   <span class="mf">1.88423</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">3000</span><span class="p">,</span>  <span class="o">-</span><span class="mf">6.21044</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.05176</span><span class="p">,</span>   <span class="mf">1.89114</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">5000</span><span class="p">,</span>  <span class="o">-</span><span class="mf">6.21155</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.05324</span><span class="p">,</span>   <span class="mf">1.89118</span><span class="p">]</span> <span class="p">,</span>
+    <span class="p">[</span><span class="mi">10000</span><span class="p">,</span>  <span class="o">-</span><span class="mf">6.21226</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.05427</span><span class="p">,</span>   <span class="mf">1.89110</span><span class="p">]])</span>
+
+    <span class="n">l</span>  <span class="o">=</span>  <span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">hl</span> <span class="o">=</span>  <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">kl</span> <span class="o">=</span>  <span class="n">numpy</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span><span class="n">l</span><span class="p">)</span>
+    <span class="n">ll</span> <span class="o">=</span>  <span class="n">numpy</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">3</span><span class="p">],</span><span class="n">l</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">frame</span> <span class="o">==</span> <span class="s1">&#39;CM&#39;</span><span class="p">:</span>
+        <span class="n">hl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">hl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">ll</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ll</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">kl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">kl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Love numbers are in center of mass frame&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">frame</span> <span class="o">==</span> <span class="s1">&#39;CF&#39;</span><span class="p">:</span>
+        <span class="n">hlo</span> <span class="o">=</span> <span class="n">hl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">llo</span> <span class="o">=</span> <span class="n">ll</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">hl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">hlo</span> <span class="o">-</span> <span class="n">llo</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="o">/</span><span class="mi">3</span>
+        <span class="n">ll</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">hlo</span> <span class="o">-</span> <span class="n">llo</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">kl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="o">-</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">llo</span><span class="p">)</span> <span class="o">-</span> <span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">hlo</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Love numbers are in center of figure frame&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">frame</span> <span class="o">==</span> <span class="s1">&#39;CE&#39;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Love numbers are in center of solid Earth frame&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lovenrPREM</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">&#39;Please choose a compatible frame of reference: one of CM, CF, or CE&#39;</span><span class="p">)</span>
+
+
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">lmax</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">kn</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">l</span><span class="p">,</span><span class="n">kl</span><span class="p">)</span>
+    <span class="n">hn</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">l</span><span class="p">,</span><span class="n">hl</span><span class="p">)</span>
+    <span class="n">ln</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">l</span><span class="p">,</span><span class="n">ll</span><span class="p">)</span>
+    <span class="n">kn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> 
+    <span class="n">hn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">ln</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">kn</span><span class="p">,</span><span class="n">hn</span><span class="p">,</span><span class="n">ln</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="pyshbundle.GRACEpy.upwcon" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">upwcon</span><span class="p">(</span><span class="n">degree</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span></code>
+
+<a href="#pyshbundle.GRACEpy.upwcon" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Created on Sat May  9 18:49:45 2022
+% UPWCON(degree,height,const) returns the upward continuation (R/r)^l, in which</p>
+<p>% uc = upwcon(degree,height)</p>
+<p>% INPUT
+% degree - Spherical harmonic degree, must be integer [scalar/vector]
+% height - Height above mean Earth radius [m] [scalar/vector]</p>
+<p>load constants in the file GRACEconstants - def: GRS80 constants
+%
+% OUTPUT
+% uc    - Upward continuation terms.
+% ----------------------------------------------------------------------------</p>
+
+      <details class="quote">
+        <summary>Source code in <code>pyshbundle/GRACEpy.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">upwcon</span><span class="p">(</span><span class="n">degree</span><span class="p">,</span><span class="n">height</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Created on Sat May  9 18:49:45 2022</span>
+<span class="sd">    % UPWCON(degree,height,const) returns the upward continuation (R/r)^l, in which</span>
+
+<span class="sd">    % uc = upwcon(degree,height)</span>
+
+<span class="sd">    % INPUT</span>
+<span class="sd">    % degree - Spherical harmonic degree, must be integer [scalar/vector]</span>
+<span class="sd">    % height - Height above mean Earth radius [m] [scalar/vector]</span>
+
+<span class="sd">    load constants in the file GRACEconstants - def: GRS80 constants</span>
+<span class="sd">    %</span>
+<span class="sd">    % OUTPUT</span>
+<span class="sd">    % uc    - Upward continuation terms.</span>
+<span class="sd">    % ----------------------------------------------------------------------------</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">rr</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">GC</span><span class="o">.</span><span class="n">ae</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">GC</span><span class="o">.</span><span class="n">ae</span><span class="p">,</span><span class="n">height</span><span class="p">))</span>
+    <span class="n">uc</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">rr</span><span class="p">,</span> <span class="n">degree</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">uc</span><span class="p">)</span>    
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.Phase_calc"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Thu Jul 14 09:10:27 2022
+Summary of this function goes here
+calculates the phase difference between two time series based on the
+Hilbert transform method explained by Phillip et al.</p>
+<p>Phillips, T., R. S. Nerem, B. Fox-Kemper, J. S. Famiglietti, and B. Rajagopalan (2012),
+The influence of ENSO on global terrestrial water storage using GRACE, Geophysical
+Research Letters, 39 (16), L16,705, doi:10.1029/2012GL052495.</p>
+<hr />
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6 </p>
+</li>
+</ol>
+</details>      <p>@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.eigengrav"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Mon May 11 00:20:49 2020</p>
+<p>@author: Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6</p>
+</li>
+</ol>
+</details>
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.gaussian"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Thu Jun 30 13:47:51 2022
+gaussian(L, cap): The program delivers the spherical harmonic coefficients of a gaussian
+smoothing filter. The coefficients are calculates according to Wahr et.
+al. (1998) equation (34) and Swenson and Wahr equation (34)</p>
+<p>How:      Wl = gaussian(L,cap)</p>
+
+<details class="input">
+  <summary>L    integer    maximum degree</summary>
+  <p>cap  integer    half width of Gaussian smoothing function [km]</p>
+</details>      <p>Output:   Wl   [L+1 x 1]  smoothing coefficients</p>
+<p>@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6</p>
+</li>
+</ol>
+</details>
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.grule"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Fri Jun 17 15:31:15 2022</p>
+<p>This function computes Gauss base points and weight factors
+ using the algorithm given by Davis and Rabinowitz in 'Methods
+ of Numerical Integration', page 365, Academic Press, 1975.</p>
+<p>bp, wf = grule(n)</p>
+<p>IN:
+    n ....... number of base points required. </p>
+<p>OUT:
+    bp ...... cosine of the base points
+    wf ...... weight factors for computing integrals and such </p>
+<p>@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+<hr />
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6</p>
+</li>
+</ol>
+</details>
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.ispec"></a>
+  <div class="doc doc-contents first">
+  
+      <p><em>summary</em></p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="pyshbundle.ispec.ispec" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">ispec</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">9999</span><span class="p">)</span></code>
+
+<a href="#pyshbundle.ispec.ispec" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Returns the function F from the spectra A and B</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>a</code></td>
+          <td>
+                <code>_type_</code>
+          </td>
+          <td><p>cosine coefficients</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>b</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>sine coefficients. Defaults to -9999.</p></td>
+          <td>
+                <code>-9999</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>f</code></td>          <td>
+                <code>_type_</code>
+          </td>
+          <td><p><em>description</em></p></td>
+        </tr>
+    </tbody>
+  </table>
+
+<details class="see-also">
+  <summary>See Also</summary>
+  <p>pyshbundle/spec.py</p>
+</details>
+      <details class="quote">
+        <summary>Source code in <code>pyshbundle/ispec.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">ispec</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="o">-</span><span class="mi">9999</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the function F from the spectra A and B</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (_type_): cosine coefficients</span>
+<span class="sd">        b (int, optional): sine coefficients. Defaults to -9999.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        f (_type_): _description_</span>
+
+<span class="sd">    See Also:</span>
+<span class="sd">        pyshbundle/spec.py</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">n2</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span><span class="o">*</span><span class="mi">2</span>
+
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">n2</span><span class="o">-</span><span class="mi">1</span><span class="p">,:])</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">n2</span> <span class="o">-</span> <span class="mi">2</span>     
+        <span class="n">a</span><span class="p">[</span><span class="n">n2</span><span class="o">-</span><span class="mi">1</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">n2</span><span class="o">-</span><span class="mi">1</span><span class="p">,:]</span> <span class="o">*</span> <span class="mi">2</span>            
+        <span class="n">fs</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">fs</span>  <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">fs</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">fs</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n2</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),:])),</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">))</span><span class="o">*</span><span class="nb">max</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">n2</span> <span class="o">-</span> <span class="mi">1</span>                        
+        <span class="n">fs</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">fs</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">fs</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">fs</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n2</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),:])),</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">))</span><span class="o">*</span><span class="n">n</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.naninterp"></a>
+  <div class="doc doc-contents first">
+  
+      <p>This function uses cubic interpolation to replace NaNs
+@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6</p>
+</li>
+</ol>
+</details>
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.neumann"></a>
+  <div class="doc doc-contents first">
+  
+      <p>Created on Sat Jun 18 14:38:16 2022
+% NEUMANN returns the weights and nodes for Neumann's numerical integration
+%
+% NB1 In 1st N-method, length(x) should not become too high, 
+% since a linear system of this size is solved. Eg: 500.
+% NB2 No use is made of potential symmetries of nodes.
+%
+% HOW:   w     = neumann(x)   -- 1st Neumann method 
+%        [w,x] = neumann(n)   -- 2nd Neumann method (Gauss quadrature)
+%
+% IN:
+%    x ...... base points (nodes) in the interval [-1;1]
+%    n ...... number of weights and number of base points
+%
+% OUT:
+%    w ...... quadrature weights
+%    x ...... base points (nodes) in the interval [-1;1]
+%
+% USES:
+%    plm, uberall/grule
+%
+% REMARKS:
+%    1st N.-method: see Sneeuw (1994) GJI 118, pp 707-716, eq. 19.5
+%    2nd N.-method: see uberall/GRULE</p>
+<hr />
+<p>This file is part of PySHbundle. 
+    PySHbundle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+</code></pre></div></td></tr></table></div>
+<hr />
+
+<details class="acknowledgement-statement">
+  <summary>Acknowledgement Statement</summary>
+  <p>Please note that PySHbundle has adapted the following code packages, 
+both licensed under GNU General Public License
+1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/</p>
+<ol>
+<li>Downscaling GRACE Total Water Storage Change using 
+Partial Least Squares Regression
+https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 </li>
+</ol>
+</details>
+<details class="key-papers-referred">
+  <summary>Key Papers Referred</summary>
+  <ol>
+<li>
+<p>Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., &amp; Sneeuw, N. (2017). 
+A data‐driven approach for repairing the hydrological catchment signal damage 
+due to filtering of GRACE products. Water Resources Research, 
+53(11), 9824-9844. https://doi.org/10.1002/2017WR021150</p>
+</li>
+<li>
+<p>Vishwakarma, B. D., Zhang, J., &amp; Sneeuw, N. (2021). 
+Downscaling GRACE total water storage change using 
+partial least squares regression. Scientific data, 8(1), 95.
+https://doi.org/10.1038/s41597-021-00862-6 </p>
+</li>
+</ol>
+</details>      <p>@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)</p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pyshbundle.normalklm"></a>
+  <div class="doc doc-contents first">
+  
+      <p>This script computes teh normal field for the given ellipsoid upto certain maxium degree.</p>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="pyshbundle.normalklm.normalklm" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">normalklm</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s1">&#39;wgs84&#39;</span><span class="p">)</span></code>
+
+<a href="#pyshbundle.normalklm.normalklm" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>NORMALKLM returns an ellipsoidal normal field
+consisting of normalized -Jn, n=0,2,4,6,8</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>lmax</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>maximum degree</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>typ</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td><p>Ellipsoids can be either 
+        'wgs84' - World Geodetic System 84, 
+        'grs80' - , 
+        'he' - hydrostatic equilibrium ellipsoid</p></td>
+          <td>
+                <code>&#39;wgs84&#39;</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>nklm</code></td>          <td>
+                <code>np.</code>
+          </td>
+          <td><p>normal field in CS-format (sparse)</p></td>
+        </tr>
+    </tbody>
+  </table>
+      <p>TODO: Find type of nklm; I think raising TypeError, VlueError or NameError instad of general Exception</p>
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>Exception</code>
+          </td>
+          <td><p>lmax should be an integer</p></td>
+        </tr>
+        <tr>
+          <td>
+                <code>Exception</code>
+          </td>
+          <td><p>lmax should be positive</p></td>
+        </tr>
+        <tr>
+          <td>
+                <code>Exception</code>
+          </td>
+          <td><p>Unknown type of ellipsoid, supports 'wgs84', <code>GRS80</code> and 'he'</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+<details class="references">
+  <summary>References</summary>
+  <p>.J2,J4 values for hydrostatic equilibrium ellipsoid from Lambeck (1988)
+"Geophysical Geodesy", p.18</p>
+</details>
+      <details class="quote">
+        <summary>Source code in <code>pyshbundle/normalklm.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">normalklm</span><span class="p">(</span><span class="n">lmax</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">typ</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;wgs84&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; NORMALKLM returns an ellipsoidal normal field</span>
+<span class="sd">    consisting of normalized -Jn, n=0,2,4,6,8</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        lmax (int): maximum degree</span>
+<span class="sd">        typ (str): Ellipsoids can be either </span>
+<span class="sd">                    &#39;wgs84&#39; - World Geodetic System 84, </span>
+<span class="sd">                    &#39;grs80&#39; - , </span>
+<span class="sd">                    &#39;he&#39; - hydrostatic equilibrium ellipsoid</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        nklm (np.): normal field in CS-format (sparse)</span>
+
+<span class="sd">    TODO: Find type of nklm; I think raising TypeError, VlueError or NameError instad of general Exception</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        Exception: lmax should be an integer</span>
+<span class="sd">        Exception: lmax should be positive</span>
+<span class="sd">        Exception: Unknown type of ellipsoid, supports &#39;wgs84&#39;, `GRS80` and &#39;he&#39;</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        .J2,J4 values for hydrostatic equilibrium ellipsoid from Lambeck (1988)</span>
+<span class="sd">        &quot;Geophysical Geodesy&quot;, p.18    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">lmax</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;lmax should be integer&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">lmax</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;lmax should be positive&quot;</span><span class="p">)</span>
+
+
+    <span class="n">typ_</span> <span class="o">=</span> <span class="n">typ</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">typ_</span> <span class="o">==</span> <span class="s1">&#39;wgs84&#39;</span><span class="p">):</span>
+        <span class="n">J2</span>     <span class="o">=</span>  <span class="mf">1.08262982131e-3</span>     <span class="c1">#% earth&#39;s dyn. form factor (= -C20 unnormalized)</span>
+        <span class="n">J4</span>     <span class="o">=</span> <span class="o">-</span><span class="mf">2.37091120053e-6</span>    <span class="c1">#% -C40 unnormalized</span>
+        <span class="n">J6</span>     <span class="o">=</span>  <span class="mf">6.08346498882e-9</span>     <span class="c1">#% -C60 unnormalized</span>
+        <span class="n">J8</span>     <span class="o">=</span> <span class="o">-</span><span class="mf">1.42681087920e-11</span>    <span class="c1">#% -C80 unnormalized</span>
+        <span class="n">jcoefs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">J2</span><span class="p">,</span> <span class="o">-</span><span class="n">J4</span><span class="p">,</span> <span class="o">-</span><span class="n">J6</span><span class="p">,</span> <span class="o">-</span><span class="n">J8</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">l</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">min</span><span class="p">(</span><span class="n">lmax</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span><span class="mi">8</span> <span class="o">+</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">l</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="p">(</span><span class="n">typ_</span> <span class="o">==</span> <span class="s1">&#39;grs80&#39;</span><span class="p">):</span>
+        <span class="n">J2</span>     <span class="o">=</span>  <span class="mf">1.08263e-3</span>         <span class="c1"># % earth&#39;s dyn. form factor (= -C20 unnormalized)</span>
+        <span class="n">J4</span>     <span class="o">=</span> <span class="o">-</span><span class="mf">2.37091222e-6</span>     <span class="c1">#% -C40 unnormalized</span>
+        <span class="n">J6</span>     <span class="o">=</span>  <span class="mf">6.08347e-9</span>        <span class="c1">#% -C60 unnormalized</span>
+        <span class="n">J8</span>     <span class="o">=</span> <span class="o">-</span><span class="mf">1.427e-11</span>         <span class="c1">#% -C80 unnormalized</span>
+        <span class="n">jcoefs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">J2</span><span class="p">,</span> <span class="o">-</span><span class="n">J4</span><span class="p">,</span> <span class="o">-</span><span class="n">J6</span><span class="p">,</span> <span class="o">-</span><span class="n">J8</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">l</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">min</span><span class="p">(</span><span class="n">lmax</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span><span class="mi">8</span> <span class="o">+</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">l</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="p">((</span><span class="n">typ_</span> <span class="o">==</span> <span class="s1">&#39;he&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">typ_</span> <span class="o">==</span> <span class="s1">&#39;hydro&#39;</span><span class="p">)):</span>
+        <span class="n">J2</span>     <span class="o">=</span> <span class="mf">1.072618e-3</span>		<span class="c1">#% earth&#39;s dyn. form factor (= -C20 unnormalized)</span>
+        <span class="n">J4</span>     <span class="o">=</span> <span class="mf">0.2992e-5</span>     	<span class="c1">#% -C40 unnormalized</span>
+        <span class="n">jcoefs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">J2</span><span class="p">,</span> <span class="o">-</span><span class="n">J4</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">l</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">min</span><span class="p">(</span><span class="n">lmax</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">l</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown type of ellipsoid:   &quot;</span><span class="p">,</span> <span class="n">typ</span><span class="p">)</span>
+
+    <span class="n">coefs</span> <span class="o">=</span> <span class="n">jcoefs</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)]</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c1">#    coefs.reshape(coefs.shape[0],1)</span>
+
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coefs</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+    <span class="n">col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
+    <span class="n">nklm</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,(</span><span class="n">row</span><span class="p">,</span><span class="n">col</span><span class="p">)),</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">lmax</span><span class="p">))</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">nklm</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../changelog/" class="btn btn-neutral float-left" title="Changelog"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/abhimhamane/pyshbundle" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../changelog/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6" defer></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

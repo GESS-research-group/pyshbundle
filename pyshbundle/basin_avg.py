@@ -75,16 +75,18 @@ def basin_avg(data, path: str, c_rs, m, gs):
     lat_shape, lon_shape = data.tws.shape[1],data.tws.shape[2]
     
     # Calculation of area of each corresponding to  the latitudes and longitudes
-    # not sure if ';' is proper syntax may be the octave residu
+    # not sure if ';' is proper syntax may be the octave residual
 
     deg = gs
     x = np.linspace(0, 359+(1-deg), int(360/deg), dtype='double')
     y = np.linspace(0, 179+(1-deg), int(180/deg), dtype='double')
     x1 = np.linspace(1*deg, 360, int(360/deg), dtype='double')
     y1 = np.linspace(1*deg, 180, int(180/deg), dtype='double')
+
     lambd,theta = np.meshgrid(x,y)  
-    lambd1,theta1 = np.meshgrid(x1,y1)  
-    a = np.sin(np.deg2rad(90-theta))-np.sin(np.deg2rad(90-theta1))
+    lambd1,theta1 = np.meshgrid(x1,y1)
+    
+    a = np.sin(np.deg2rad(90-theta)) - np.sin(np.deg2rad(90-theta1))
     b = (lambd1 - lambd)*np.pi/180
     
     
@@ -93,7 +95,7 @@ def basin_avg(data, path: str, c_rs, m, gs):
     tot_area = np.sum(np.sum(area))
     tws_m = np.zeros([m, lat_shape, lon_shape])
     for i in range(0,m,1):
-        tws_m[i, :, :] = np.multiply(tws_val[i, :, :],area)
+        tws_m[i, :, :] = np.multiply(tws_val[i, :, :], area)
     ds_area_w = xr.Dataset(
     data_vars=dict(
         tws=(["time","lat", "lon"], tws_m)
@@ -105,9 +107,11 @@ def basin_avg(data, path: str, c_rs, m, gs):
     attrs=dict(description="TWS Anomaly corresponding to long term (2004-2010) mean \n lmax=96 and half radius of Gaussian filter = 500Km"),
     )
     
-    ds_area_w_clp= ds_area_w.salem.roi(shape=shdf)
+    ds_area_w_clp = ds_area_w.salem.roi(shape=shdf)
     # Time series for the whole basin(shapefile) in user defined range
     alpha = ds_area_w_clp.tws.sum(dim=('lon','lat'))/shdf_area
+
+    # plotting
     fig,ax = plt.subplots(figsize=(15,5))
     alpha.plot(ax=ax, color='b');
     ax.set_box_aspect(0.33)
@@ -115,4 +119,4 @@ def basin_avg(data, path: str, c_rs, m, gs):
     ax.set_ylabel('TWS anomaly in mm ', size=15)
     plt.tight_layout()
     
-    return alpha
+    return alpha, ds_area_w_clp
