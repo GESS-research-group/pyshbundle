@@ -88,8 +88,9 @@ def clm2sc(data):
             i = 0
             for index1 in range(0,Lmax+1, 1):
                 for index2 in range(0,index1+1, 1):
-                    sc_mat[month, index1, Lmax+index2+1] = clm[year][i + tile*degree_order]
+                    
                     sc_mat[month, index1, Lmax-index2] = slm[year][i + tile*degree_order]
+                    sc_mat[month, index1, Lmax+index2+1] = clm[year][i + tile*degree_order]
                     i = i + 1
             month = month + 1
             

@@ -283,7 +283,7 @@ def reader_replacer_csr(path, path_tn14, path_tn13):
         beta[x] = (len(start_date[x])/degree_order)
         sum = sum + len(start_date[x])/degree_order 
     
-    #''' Finding the dates for time bounds of data '''
+    #''' Finding the dates dates_csrfor time bounds of data '''
     dates_start, dates_end = [],[] 
     for i in range(0,time_axes+1,1):
         j = 0
