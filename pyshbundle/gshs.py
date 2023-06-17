@@ -100,7 +100,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
         jflag (int, optional): _description_. Defaults to 1.
     
     Returns:
-        f (): the global field
+        f (np.ndarray): the global field
         theRAD (): vector of co-latitudes [rad]
         lamRAD (): vector of longitudes [rad]
 
@@ -177,7 +177,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
         field = field - cs2sc.cs2sc(normalklm.normalklm(lmax+1))
         
     l = np.arange(0, lmax+1)
-    transf = np.array([eigengrav.eigengrav(lmax, quant, h)]).T
+    transf = np.array([eigengrav.eigengrav(lmax, quant, h)])[0, :, :].T
     
     field = field * np.matmul(transf, np.ones((1, 2*lmax+1)), dtype='longdouble')
     

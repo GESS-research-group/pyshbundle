@@ -43,6 +43,7 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 import numpy as np
+from tqdm import tqdm
 
 # CLM to /S|C\
 def clm2sc(data):
@@ -72,12 +73,12 @@ def clm2sc(data):
     clm = data[2]
     slm = data[3]
 
-    Lmax=degree[0][-1]
-    degree_order=int((Lmax+1) * (Lmax+2)/2)
+    Lmax = degree[0][-1]
+    degree_order = int((Lmax+1) * (Lmax+2)/2)
     # Count no of months of data 
     month_count = 0
     for i in range(0, len(data[0]), 1):
-        month_count= month_count+round(len(data[0][i])/degree_order)
+        month_count = month_count+round(len(data[0][i])/degree_order)
     
     # clm >>> sc 
     month = 0
@@ -85,8 +86,8 @@ def clm2sc(data):
     for year in range(0, no_of_years, 1):
         for tile in range(0,int(len(degree[year])/degree_order), 1):
             i = 0
-            for index1 in range(0,Lmax+1,1):
-                for index2 in range(0,index1+1,1):
+            for index1 in range(0,Lmax+1, 1):
+                for index2 in range(0,index1+1, 1):
                     sc_mat[month, index1, Lmax+index2+1] = clm[year][i + tile*degree_order]
                     sc_mat[month, index1, Lmax-index2] = slm[year][i + tile*degree_order]
                     i = i + 1
