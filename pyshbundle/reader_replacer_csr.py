@@ -249,10 +249,10 @@ def reader_replacer_csr(path, path_tn14, path_tn13):
     for year in range(0,time_axes+1,1):
         for y in range(0,int(len(clm[year])/degree_order),1):    
             while(index<len(c1m)):
-               curr_date_deg1 = datetime.datetime.strptime(start_date[year][y*degree_order], '%Y-%m-%d')
-               rep_date_cmp_deg1 = datetime.datetime.strptime(rep_start_date_deg1[index], '%Y-%m-%d')
+                curr_date_deg1 = datetime.datetime.strptime(start_date[year][y*degree_order], '%Y-%m-%d')
+                rep_date_cmp_deg1 = datetime.datetime.strptime(rep_start_date_deg1[index], '%Y-%m-%d')
                
-               if  rep_date_cmp_deg1-margin_deg1 <= curr_date_deg1 <= rep_date_cmp_deg1+margin_deg1:
+                if  rep_date_cmp_deg1-margin_deg1 <= curr_date_deg1 <= rep_date_cmp_deg1+margin_deg1:
                     print(curr_date_deg1, rep_date_cmp_deg1, index)
                     # degree[year][y*degree_order+1] = int(1)
                     # degree[year][y*degree_order+1+Lmax] = int(1)
@@ -269,7 +269,7 @@ def reader_replacer_csr(path, path_tn14, path_tn13):
                     
                     index = index +2
                     break
-            else:
+                else:
                     index = index +2
     print('Degree 1 replacement complete!') 
                  
@@ -294,7 +294,7 @@ def reader_replacer_csr(path, path_tn14, path_tn13):
     print("Number of months of data in each year starting", dates_start[0], \
           "& ending", dates_end[-1], beta)   
         
-    import pickle
-    with open("/home/wslvivek/Desktop/level2/pysh_v2/output/saved_as_num","wb") as pk:
-        pickle.dump(saved_as_num, pk)
+    #import pickle
+    #with open("/home/wslvivek/Desktop/level2/pysh_v2/output/saved_as_num","wb") as pk:
+    #    pickle.dump(saved_as_num, pk)
     return saved_as_num, dates_start,dates_end, no_of_files
