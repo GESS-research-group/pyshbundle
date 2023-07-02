@@ -40,7 +40,9 @@
 #       https://doi.org/10.1038/s41597-021-00862-6
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-# @author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+# author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+# document and new feature - Abhishek Mhamane, MS-R Geoinformatics, IIT Kanpur
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 import numpy as np
 
@@ -62,9 +64,11 @@ def klm2sc(data):
     degree = data[0]
     clm = data[2]
     slm = data[3]
+    clm_std_dev = data[4]
+    slm_std_dev = data[5]
     
-    Lmax=degree[0][-1]
-    degree_order=int((Lmax+1)*(Lmax+2)/2)
+    lmax=degree[0][-1]
+    degree_order=int((lmax+1)*(lmax+2)/2)
     
     ''' Count no of months of data '''
     month_count =0
@@ -73,16 +77,27 @@ def klm2sc(data):
         
     ''' klm >>> sc '''
     month = 0
-    sc_mat = np.zeros([month_count,Lmax+1,2*Lmax+2])
+    sc_mat = np.zeros([month_count,lmax+1,2*lmax+2])
+    dev_sc_mat = np.zeros((month_count, lmax+1, 2*lmax + 2))
+
     for year in range(0,no_of_years,1):
         index2 =0
         for tile in range(0,int(len(clm[year])/degree_order),1):  
-            for index1 in range(0,Lmax+1,1):
-                sc_mat[month,index1:,Lmax-index1] = slm[year][(index2):(index2+Lmax-index1+1)]
-                sc_mat[month,index1:,index1+Lmax] = clm[year][(index2):(index2+Lmax-index1+1)]
-                print(month,'\t',index1,'\t',Lmax-index1,'\t',year,'\t',index2,'\t',index2+Lmax-index1+1)
-                index2 = index2+Lmax-index1+1
+            for index1 in range(0,lmax+1,1):
+                sc_mat[month,index1:,lmax-index1] = slm[year][(index2):(index2+lmax-index1+1)]
+                sc_mat[month,index1:,index1+lmax] = clm[year][(index2):(index2+lmax-index1+1)]
+
+                dev_sc_mat[month,index1:,lmax-index1] = slm_std_dev[year][(index2):(index2+lmax-index1+1)]
+                dev_sc_mat[month,index1:,index1+lmax] = clm_std_dev[year][(index2):(index2+lmax-index1+1)]
+
+        
+                
+                #print(month,'\t',index1,'\t',Lmax-index1,'\t',year,'\t',index2,'\t',index2+Lmax-index1+1)
+                index2 = index2+lmax-index1+1
             month=month+1
-    sc_mat=np.delete(sc_mat,193,axis=2)
+    
+    sc_mat=np.delete(sc_mat,lmax,axis=2)
+    dev_sc_mat=np.delete(dev_sc_mat,lmax,axis=2)
+
     print('Conversion into clm format complete')
-    return sc_mat
+    return sc_mat, dev_sc_mat
