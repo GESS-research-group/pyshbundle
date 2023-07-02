@@ -37,7 +37,8 @@
 #       partial least squares regression. Scientific data, 8(1), 95.
 #       https://doi.org/10.1038/s41597-021-00862-6
 
-# @author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+# author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+# Debug and restructure: Abhishek Mhamane, MS-Research Geoinformatics, IIT Kanpur
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 import gzip
@@ -211,7 +212,8 @@ def reader_replacer_csr(path, path_tn14, path_tn13):
                     index = index +1
                     if math.isnan(c30[index]) == False:
                         clm[year][y*degree_order+3] = c30[index]
-                        slm_std[year][y*degree_order+3] = c30_sigma[index]
+                        # NOTE: rectified from slm_dev -> clm_dev
+                        clm_std[year][y*degree_order+3] = c30_sigma[index]
                     break
                 else:   
                     index = index +1                           
