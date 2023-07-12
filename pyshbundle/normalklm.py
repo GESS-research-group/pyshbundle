@@ -85,6 +85,7 @@ def normalklm(lmax: int, typ: str = 'wgs84'):
         J6     =  6.08346498882e-9     #% -C60 unnormalized
         J8     = -1.42681087920e-11    #% -C80 unnormalized
         jcoefs = np.array([1, -J2, -J4, -J6, -J8]).T.reshape(5,1)
+        # as lmax + 2 is requires 
         l      = np.arange(0,min(lmax + 2,8 + 2), 2).T
         l.reshape(l.shape[0],1)
         
@@ -101,6 +102,7 @@ def normalklm(lmax: int, typ: str = 'wgs84'):
         J2     = 1.072618e-3		#% earth's dyn. form factor (= -C20 unnormalized)
         J4     = 0.2992e-5     	#% -C40 unnormalized
         jcoefs = np.array([1, -J2, -J4]).T.reshape(5,1)
+        # adding (2) beacuse of arange function is only uptp last integer and not including last
         l      = np.arange(0,min(lmax + 2,4 + 2), 2).T
         l.reshape(l.shape[0],1)
         
@@ -114,5 +116,6 @@ def normalklm(lmax: int, typ: str = 'wgs84'):
     data = np.array(coefs)[0]
     row = np.array(l)
     col = np.zeros(len(l))
-    nklm = sparse.coo_matrix((data,(row,col)),shape=(lmax,lmax)).toarray()
+    # lmax = 96 then shape=(97, 97) -> consisitent with everything else
+    nklm = sparse.coo_matrix((data,(row,col)),shape=(lmax+1,lmax+1)).toarray()
     return nklm
