@@ -86,6 +86,7 @@ def reader(file_name,line_num,degree,order,clm,slm,clm_std,slm_std,start_date,en
             start_date[time_axes].append(  split[7][0:4]+'-'+split[7][4:6]+'-'+split[7][6:8]  )
             end_date[time_axes].append(  split[8][0:4]+'-'+split[8][4:6]+'-'+split[8][6:8]  )
             line_num = line_num + 1
+
    
 # Function for yearwise            
 def TIME(year_start,file_name,time_axes):
@@ -106,6 +107,7 @@ def TIME(year_start,file_name,time_axes):
         time_axes = time_axes + 1  
         year_start = file_name[-39:-35]
     return year_start, time_axes
+
 
 def last_4chars(x):
         return(x[-39:-32])
