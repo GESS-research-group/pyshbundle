@@ -165,7 +165,9 @@ def reader_replacer_itsg(path, path_tn14, path_tn13):
     
     Lmax=degree[0][-1]
     degree_order=int((Lmax+1)*(Lmax+2)/2)
+
     ''' Replacement '''
+
     print('Starting replacement')
     ''' Replace deg 2,3 '''
     new_file_TN14 = path_tn14
@@ -206,7 +208,7 @@ def reader_replacer_itsg(path, path_tn14, path_tn13):
                 rep_date_cmp = datetime.datetime.strptime(rep_start_date[index], '%Y-%m-%d')
                 
                 if rep_date_cmp-margin <= curr_date <= rep_date_cmp+margin:
-                    print(curr_date, rep_date_cmp, index)
+                    print(f"Data date - {curr_date}, replacemebt date (tn-14) = {rep_date_cmp}")
                     clm[year][y*degree_order+3] = c20[index]
                     clm_std[year][y*degree_order+3] = c20_sigma[index]
                     if math.isnan(c30[index]) == False:
@@ -218,6 +220,8 @@ def reader_replacer_itsg(path, path_tn14, path_tn13):
                     index = index +1
                     
     print('Degree 2,3 replacement complete!')
+
+
     ''' Replace deg 1 '''
     new_file_TN13 = path_tn13
     rep_start_date_deg1, rep_end_date_deg1, c1m, s1m, c1m_sigma, s1m_sigma = [], [], [], [], [], []
@@ -254,7 +258,7 @@ def reader_replacer_itsg(path, path_tn14, path_tn13):
                 rep_date_cmp_deg1 = datetime.datetime.strptime(rep_start_date_deg1[index], '%Y-%m-%d')
                 
                 if rep_date_cmp_deg1-margin <= curr_date <=rep_date_cmp_deg1+margin:
-                    print(curr_date,rep_date_cmp_deg1,index)
+                    print(f"Data date - {curr_date}, replacemebt date (tn-13) = {rep_date_cmp_deg1}")
                     degree[year][y*degree_order+1]=int(0)
                     degree[year][y*degree_order+2]=int(1)
                     order[year][y*degree_order+1]=int(0)
@@ -271,7 +275,7 @@ def reader_replacer_itsg(path, path_tn14, path_tn13):
                     start_date[year][y*degree_order+2]=rep_start_date_deg1[index+1]
                     index = index +2
                     break
-                else:   
+                else:
                     index = index +2
     print('Degree 1 replacement complete!')
     
