@@ -3,7 +3,8 @@
 
 #Created on Fri Dec  9 10:14:32 2022
 
-#@author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+# author: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+# Debug, documentation and new feature: Abhishek Mhamane, MS-Research Geoinformatics, Indian Institute of Technology (IIT) Kanpur
 
 # License:
 #    This file is part of PySHbundle.
@@ -72,6 +73,8 @@ def clm2sc(data):
     degree = data[0]
     clm = data[2]
     slm = data[3]
+    clm_std_dev = data[4]
+    slm_std_dev = data[5]
 
     Lmax = degree[0][-1]
     degree_order = int((Lmax+1) * (Lmax+2)/2)
@@ -83,6 +86,7 @@ def clm2sc(data):
     # clm >>> sc 
     month = 0
     sc_mat = np.zeros([month_count, Lmax+1, 2*Lmax + 2])
+    dev_sc_mat = np.zeros([month_count, Lmax+1, 2*Lmax + 2])
     for year in range(0, no_of_years, 1):
         for tile in range(0,int(len(degree[year])/degree_order), 1):
             i = 0
@@ -91,12 +95,65 @@ def clm2sc(data):
                     
                     sc_mat[month, index1, Lmax-index2] = slm[year][i + tile*degree_order]
                     sc_mat[month, index1, Lmax+index2+1] = clm[year][i + tile*degree_order]
+
+                    dev_sc_mat[month, index1, Lmax-index2] = slm_std_dev[year][i + tile*degree_order]
+                    dev_sc_mat[month, index1, Lmax+index2+1] = clm_std_dev[year][i + tile*degree_order]
+
                     i = i + 1
             month = month + 1
             
     # delete order 0 column
     sc_mat = np.delete(sc_mat, Lmax, 2)
+    dev_sc_mat = np.delete(dev_sc_mat, Lmax, 2)
     print('Conversion into clm format complete')
-    return sc_mat
+    return sc_mat, dev_sc_mat
 
 # mean=np.mean(sc_mat[18:102], axis=0)
+
+
+def clm2sc_new(data_mat: np.ndarray, lmax: int, sigma_flag=False):
+    """Converts the spherical harmonic coefficients from clm format to /S|C\ format
+
+    Args:
+        data_mat (numpy.ndarray): list containing [degree;  order; clm; slm; delta clm; delta slm; start data; end date]
+        lmax (int): Max Degree of the spherical harmonic expansion
+        sigma_flag (boolean): Flag to return the standard deviation data in /S|C\ format or not. Defaults to False
+
+    Returns:
+        numpy.ndarray: Spherical Harmonic Coefficients in /S|C\ format
+    
+    References:
+        Refer to the SHBundle or PySHBundle docs for the different data storage and retrival formats.
+    
+    """
+
+    
+
+    sc_mat = np.zeros((lmax+1, 2*lmax + 2))
+    dev_sc_mat = np.zeros((lmax+1, 2*lmax + 2))
+    
+    # as per the convention
+    clm = data_mat[:, 2]
+    slm = data_mat[:, 3]
+    clm_std_dev = data_mat[:, 4]
+    slm_std_dev = data_mat[:, 5]
+
+    i = 0
+    for index1 in range(0,lmax+1, 1):
+        for index2 in range(0,index1+1, 1):
+            
+            sc_mat[index1, lmax-index2] = slm[i]
+            sc_mat[index1, lmax+index2+1] = clm[i]
+
+            dev_sc_mat[index1, lmax-index2] = slm_std_dev[i]
+            dev_sc_mat[index1, lmax+index2+1] = clm_std_dev[i]
+
+            i = i + 1
+    
+    sc_mat = np.delete(sc_mat, lmax, 1)
+    dev_sc_mat = np.delete(dev_sc_mat, lmax, 1)
+
+    if sigma_flag:
+        return sc_mat, dev_sc_mat
+    else:
+        return sc_mat
