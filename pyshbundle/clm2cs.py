@@ -43,6 +43,7 @@
 
 
 import numpy as np
+from pyshbundle import sc2cs, clm2sc
 
 # CLM to C|S format
 def clm2cs(data):
@@ -89,3 +90,25 @@ def clm2cs(data):
     print('Conversion into clm format complete')        
     #np.save('/path/SH_coeff_cs.npy', cs_mat)
     return cs_mat
+
+def clm2cs_new(data_mat: np.ndarray, lmax: int, sigma_flag=False):
+    """Converts the format from CLM to |C\S|
+    Under the hood uses the `clm2sc` and `sc2cs` function
+
+    Args:
+        data_mat (numpy.ndarray): list containing [degree;  order; clm; slm; delta clm; delta slm; start data; end date]
+        lmax (int): Max Degree of the spherical harmonic expansion
+        sigma_flag (boolean): Flag to return the standard deviation data in |C\S| format or not. Defaults to False
+
+    Returns:
+        numpy.ndarray: Spherical Harmonic Coefficients in |C\S| format
+        
+    """
+    if sigma_flag:
+        sc_mat, dev_sc = clm2sc.clm2sc(data_mat=data_mat, lmax=lmax, sigma_flag=True)
+        return sc2cs.sc2cs(sc_mat), sc2cs.sc2cs(dev_sc)
+    else:
+        sc_mat = clm2sc.clm2sc(data_mat=data_mat, lmax=lmax, sigma_flag=False)
+        return sc2cs.sc2cs(sc_mat)
+
+    
