@@ -1,3 +1,6 @@
+
+
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -101,3 +104,40 @@ def klm2sc(data):
 
     print('Conversion into clm format complete')
     return sc_mat, dev_sc_mat
+
+def klm2sc_new(data_mat, lmax: int, sigma_flag=False):
+    """_summary_
+
+    Args:
+        data_mat (_type_): _description_
+        lmax (int): _description_
+        sigma_flag (bool, optional): _description_. Defaults to False.
+
+    Returns:
+        _type_: _description_
+    """
+    sc_mat = np.zeros((lmax+1, 2*lmax + 2))
+    dev_sc_mat = np.zeros((lmax+1, 2*lmax + 2))
+    clm = data_mat[:, 2]
+    slm = data_mat[:, 3]
+    clm_std_dev = data_mat[:, 4]
+    slm_std_dev = data_mat[:, 5]
+    
+    # first place the slm and then clm
+    index2 =0
+    for index1 in range(0,lmax+1,1):
+        sc_mat[index1:, lmax-index1] = slm[(index2):(index2 + lmax-index1+1)]
+        sc_mat[index1:, index1+lmax] = clm[(index2):(index2 + lmax-index1+1)]
+
+        dev_sc_mat[index1:, lmax-index1] = slm_std_dev[(index2):(index2 + lmax-index1+1)]
+        dev_sc_mat[index1:, index1+lmax] = clm_std_dev[(index2):(index2 + lmax-index1+1)]
+        
+        index2 = index2 + lmax-index1+1
+
+    sc_mat=np.delete(sc_mat,lmax,axis=1)
+    dev_sc_mat=np.delete(dev_sc_mat,lmax,axis=1)
+
+    if sigma_flag:
+        return sc_mat, dev_sc_mat
+    else: 
+        return sc_mat
