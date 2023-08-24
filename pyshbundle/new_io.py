@@ -5,7 +5,7 @@
 from copy import deepcopy
 import julian
 from tqdm import tqdm, trange
-from . import sc2cs
+from . import sc2cs, clm2sc
 from datetime import datetime, timedelta
 
 import gzip
@@ -22,7 +22,7 @@ def clm2cs_new(data):
         data (_type_): _description_
     """
     # read the data from clm to sc format
-    sc_mat, devsc_mat = clm2sc(data)
+    sc_mat, devsc_mat = clm2sc.clm2sc(data)
 
     # number of files stacked
     num_files = np.shape(sc_mat)[0]
@@ -44,6 +44,12 @@ def read_jpl(file_path: str):
 
     Args:
         file_path (str): Absolute path to the file
+    
+    Returns:
+        dict: Header info in a structured dictionary
+        np.ndarray: SH coefficient data in form of a numpy n-dim array. Format is CLM.
+        list: 
+
     """
     # ensure that the file path is valid then proceed
 
@@ -82,32 +88,22 @@ def read_jpl(file_path: str):
     return jpl_header, clm_mat, start_date, end_date
 
 
-def parse_jpl_header(header_info):
-    """Parses the header info for given 
+def parse_jpl_header(header_info: list):
+    """Parses the header info and returns important metadata as a dictionary 
 
     Args:
         header_info (list): list of string representing each of the lines 
+    
+    Returns:
+        dict: Header info in a structured dictionary
     """
 
-    # parse the header info passed by the reader in as list of bytes
+        # parse the header info passed by the reader in as list of bytes
     # create a dictionary with key = important params from header file
 
     header = {}
 
     # important info from header file
-    # Dimension - Degree and Order
-    # normalization info
-    # permanent_tide_flag
-    # earth_gravity_param - G*M_earth with units and value
-    # mean_equator_radius - units and value
-    # processing_level
-    # product_version
-    # conventions
-    # institution
-    # title
-    # time_coverage_start
-    # time_coverage_end
-    # unused_days
 
     normal_keys = ['title', 'institution', 'product_version',
                    'processing_level', 'normalization', 'permanent_tide_flag',
@@ -152,16 +148,23 @@ def parse_jpl_header(header_info):
     return header
 
 
-def parse_jpl_data(jpl_data):
-    """
+def parse_jpl_data(jpl_data: list):
+    """parses the numerical data from the list of strings read from the file
+
+    Args:
+        jpl_data (list): linewise data strings read from the file
+
+    Returns:
+        np.ndarray: A (n x 6) 2-d matrix representing the [degrer_l, order_m, C_lm, S_lm, sig_C_lm, sig_S_lm]
+        _type_: Epoch begin and stop dates stored as float (eg. 20020519.0)
     """
 
-    column_headers = ['record_key', 'order_index', 'degree_index', 'clm', 'slm',
+    column_headers = ['record_key', 'degree_index', 'order_index', 'clm', 'slm',
                       'clm_std_dev', 'slm_std_dev', 'epoch_begin_time',
                       'epoch_stop_time', 'solution_flags', 'solution_comment']
 
-    order_index = []
     degree_index = []
+    order_index = []
     clm = []
     slm = []
     clm_std_dev = []
@@ -175,8 +178,8 @@ def parse_jpl_data(jpl_data):
     for line in (jpl_data):
         parsed_array = parse_lines(line, parse_fmt='\s+')
 
-        order_index.append(int(parsed_array[1]))
-        degree_index.append(int(parsed_array[2]))
+        degree_index.append(int(parsed_array[1]))
+        order_index.append(int(parsed_array[2]))
         clm.append(float(parsed_array[3]))
         slm.append(float(parsed_array[4]))
         clm_std_dev.append(float(parsed_array[5]))
@@ -185,7 +188,7 @@ def parse_jpl_data(jpl_data):
         epoch_begin_time.add(float(parsed_array[7]))
         epoch_stop_time.add(float(parsed_array[8]))
 
-    clm_matrix = np.array([order_index, degree_index, clm, slm,
+    clm_matrix = np.array([degree_index, order_index, clm, slm,
                            clm_std_dev, slm_std_dev])
 
     # output will be a [x, 6] rectangular matrix
@@ -195,6 +198,8 @@ def parse_jpl_data(jpl_data):
 
 
 def parse_lines(line, parse_fmt='\s+'):
+    """Helper Function"""
+
     #  parses the liness and reutrns an array
     # '\s+' returns array with no whitespace
 
@@ -203,15 +208,8 @@ def parse_lines(line, parse_fmt='\s+'):
     return parsed_array
 
 
-def find_word(info_lines, search_key):
-    """ Find the target word in the list of lines read from the text file
-    Args:
-        info_lines (): _description_
-        search_key (str): The keyword whose index needs to be found
-    
-    Returns:
-        int: index of the search keyword in the list
-    """
+def find_word(info_lines: list, search_key: str):
+    """ Helper Function"""
     # finding the target word in the read lines
 
     for i in range(len(info_lines)):
@@ -224,7 +222,15 @@ def find_word(info_lines, search_key):
 
 
 def read_csr(file_path: str):
-    """ Similar to `read_jpl` but with tweaks made for CSR data source
+    """Reads the spherical harmonic data provided by CSR
+
+    Args:
+        file_path (str): Absolute path to the file
+    
+    Returns:
+        dict: Header info in a structured dictionary
+        np.ndarray: SH coefficient data in form of a numpy n-dim array. Format is KLM
+        _type_: _description_
     """
     # ensure that the file path is valid then proceed
 
@@ -260,22 +266,88 @@ def read_csr(file_path: str):
     return csr_header, klm_mat, start_time, stop_time
 
 
-def parse_csr_header():
+def parse_csr_header(header_info):
+    """Parses the CSR header info and returns important metadata as a dictionary 
+
+    Args:
+        header_info (list): list of string representing each of the lines 
+    
+    Returns:
+        dict: Header info in a structured dictionary
+    """
 
     # similar to JPL one
 
-    raise NotImplementedError(
-        "Similar to `parse_jpl_header`... not yet implemented seperately.")
+    # parse the header info passed by the reader in as list of bytes
+    # create a dictionary with key = important params from header file
+
+    header = {}
+
+    # important info from header file
+
+    normal_keys = ['title', 'institution', 'product_version',
+                   'processing_level', 'normalization', 'permanent_tide_flag',
+                   ]
+    
+    dimension_keys = ['degree', 'order']
+    
+    date_time_keys = ['time_coverage_start',
+                      'time_coverage_end', 'unused_days']
+    
+    physical_constant_keys = ['earth_gravity_param', 'mean_equator_radius']
+
+    for key in normal_keys:
+        key_index_in_header = find_word(header_info, key)
+        # print(f"{key} - header line = {key_index_in_header +1} value= {' '.join(parse_lines(header_info[key_index_in_header])[3:])[: -3]}")
+        header[key] = ' '.join(parse_lines(
+            header_info[key_index_in_header])[3:])[: -3]
+
+    for key in dimension_keys:
+        key_index_in_header = find_word(header_info, key)
+        val = int(" ".join(parse_lines(
+            header_info[key_index_in_header], parse_fmt='\s+')[3:])[: -3])
+        # print(f"{key} - {val}")
+        header[key] = val
+
+    for key in date_time_keys:
+        # TODO: Look back and find what you meant....
+        key_index_in_header = find_word(header_info, key)
+        # find a way to make it date time object so it can be used later
+        pass
+
+    for key in physical_constant_keys:
+        key_index_in_header = find_word(header_info, key)
+
+        const_long_name = ' '.join(parse_lines(
+            header_info[key_index_in_header + 1])[3:])[: -3]
+        const_units = ' '.join(parse_lines(
+            header_info[key_index_in_header + 2])[3:])[: -3]
+        const_value = float(' '.join(parse_lines(
+            header_info[key_index_in_header + 3])[3:])[: -3])
+        const_dict = {'units': const_units, 'value': const_value}
+        # returning a dict with value and corresponding units
+        header[key] = const_dict
+
+    return header
 
 
-def parse_csr_data(csr_data):
+def parse_csr_data(csr_data: list):
+    """parses the numerical data from the list of strings read from the file
 
-    column_headers = ['record_key', 'order_index', 'degree_index', 'clm', 'slm',
+    Args:
+        csr_data (list): linewise data strings read from the file
+
+    Returns:
+        np.ndarray: A (n x 6) 2-d matrix representing the [degrer_l, order_m, C_lm, S_lm, sig_C_lm, sig_S_lm]
+        _type_: Epoch begin and stop dates stored as float (eg. 20020519.0)
+    """
+
+    file_column_headers = ['record_key', 'degree_index', 'order_index', 'clm', 'slm',
                       'clm_std_dev', 'slm_std_dev', 'epoch_begin_time',
                       'epoch_stop_time', 'solution_flags', 'solution_comment']
 
-    order_index = []
     degree_index = []
+    order_index = []
     clm = []
     slm = []
     clm_std_dev = []
@@ -286,8 +358,8 @@ def parse_csr_data(csr_data):
     for line in (csr_data):
         parsed_array = parse_lines(line, parse_fmt='\s+')
 
-        order_index.append(int(parsed_array[1]))
-        degree_index.append(int(parsed_array[2]))
+        degree_index.append(int(parsed_array[1]))
+        order_index.append(int(parsed_array[2]))
         clm.append(float(parsed_array[3]))
         slm.append(float(parsed_array[4]))
         clm_std_dev.append(float(parsed_array[5]))
@@ -296,7 +368,7 @@ def parse_csr_data(csr_data):
         epoch_begin_time.add(float(parsed_array[7]))
         epoch_stop_time.add(float(parsed_array[8]))
 
-    klm_matrix = np.array([order_index, degree_index, clm, slm,
+    klm_matrix = np.array([degree_index, order_index, clm, slm,
                            clm_std_dev, slm_std_dev])
 
     # output will be a [..., 6] rectangular matrix
@@ -304,11 +376,21 @@ def parse_csr_data(csr_data):
     return klm_matrix.T, epoch_begin_time, epoch_stop_time
 
 
-def read_itsg(file_path):
+def read_itsg(file_path: str):
+    """Reads the spherical harmonic data provided by ITSG
+
+    Args:
+        file_path (str): Absolute path to the file
+    
+    Returns:
+        dict: Header info in a structured dictionary
+        np.ndarray: SH coefficient data in form of a numpy n-dim array. Format is KLM
+        str: date of the data acquisition
+    """
 
     # ensure that the file path is valid then proceed
 
-    source = 'CSR'
+    source = 'ITSG'
 
     # check if the file is ziped or not
 
@@ -330,6 +412,7 @@ def read_itsg(file_path):
 
         # call the parse header info functon and create a metadata dictionary
         header_dict, date_str = parse_itsg_header(header_info)
+
         # call the parse data function and create a dictionary or matrix
         itsg_clm_mat = parse_itsg_data(itsg_data)
 
@@ -339,11 +422,18 @@ def read_itsg(file_path):
 
 
 def parse_itsg_header(header_info: list):
+    """_summary_
+
+    Args:
+        header_info (list): _description_
+
+    Returns:
+        _type_: _description_
+    """
 
     normal_keys = ['modelname', 'product_type',
                    'norm', 'tide_system', 'errors', 'earth_gravity_constant', 'radius',
-                   'max_degree'
-                   ]
+                   'max_degree']
 
     # physical_constant_keys = ['earth_gravity_constant', 'radius', ]
 
@@ -370,6 +460,14 @@ def parse_itsg_header(header_info: list):
 
 
 def parse_itsg_data(itsg_data: list):
+    """parses the numerical data from the list of strings read from the file
+
+    Args:
+        itsg_data (list): linewise data strings read from the file
+
+    Returns:
+        np.ndarray: A (n x 6) 2-d matrix representing the [degrer_l, order_m, C_lm, S_lm, sig_C_lm, sig_S_lm]
+    """
 
     data_column_headers = ['key', 'L', 'M', 'C', 'S', 'sigma_C', 'sigma_S']
 
@@ -383,14 +481,14 @@ def parse_itsg_data(itsg_data: list):
     for line in (itsg_data):
         parsed_array = parse_lines(line, parse_fmt='\s+')
 
-        order_index.append(int(parsed_array[1]))
-        degree_index.append(int(parsed_array[2]))
+        degree_index.append(int(parsed_array[1]))
+        order_index.append(int(parsed_array[2]))
         clm.append(float(parsed_array[3]))
         slm.append(float(parsed_array[4]))
         clm_std_dev.append(float(parsed_array[5]))
         slm_std_dev.append(float(parsed_array[6]))
 
-    clm_matrix = np.array([order_index, degree_index, clm, slm,
+    clm_matrix = np.array([degree_index, order_index, clm, slm,
                            clm_std_dev, slm_std_dev])
 
     # output will be a [..., 6] rectangular matrix
@@ -399,6 +497,14 @@ def parse_itsg_data(itsg_data: list):
 
 
 def read_tn13(file_path):
+    """_summary_
+
+    Args:
+        file_path (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
 
     # check if file exists at given path
 
@@ -431,6 +537,14 @@ def read_tn13(file_path):
 
 
 def parse_tn13_header(header_info):
+    """_summary_
+
+    Args:
+        header_info (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
 
     # IMP Info
     # - Title
@@ -464,6 +578,14 @@ def parse_tn13_header(header_info):
 
 
 def parse_tn13_data(tn13_data):
+    """_summary_
+
+    Args:
+        tn13_data (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
 
     data_column_headers = ['record_key', 'degree_index', 'order_index', 'clm', 'slm',
                            'clm_std_dev', 'slm_std_dev', 'epoch_begin_time', 'epoch_stop_time',
@@ -482,8 +604,8 @@ def parse_tn13_data(tn13_data):
     for line in (tn13_data):
         parsed_array = parse_lines(line, parse_fmt='\s+')
 
-        order_index.append(int(parsed_array[1]))
-        degree_index.append(int(parsed_array[2]))
+        degree_index.append(int(parsed_array[1]))
+        order_index.append(int(parsed_array[2]))
         clm.append(float(parsed_array[3]))
         slm.append(float(parsed_array[4]))
         clm_std_dev.append(float(parsed_array[5]))
@@ -495,7 +617,7 @@ def parse_tn13_data(tn13_data):
         epoch_begin_time.append(float(parsed_array[7]))
         epoch_stop_time.append(float(parsed_array[8]))
 
-    clm_matrix = np.array([order_index, degree_index, clm, slm,
+    clm_matrix = np.array([degree_index, order_index, clm, slm,
                            clm_std_dev, slm_std_dev, epoch_begin_time, epoch_stop_time])
 
     # output will be a [..., 6] rectangular matrix
@@ -504,6 +626,14 @@ def parse_tn13_data(tn13_data):
 
 
 def read_tn14(file_path):
+    """_summary_
+
+    Args:
+        file_path (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
 
     # check the file extension - '.txt' or some zipped format
 
@@ -542,11 +672,19 @@ def parse_tn14_header():
     # - Mean C30
     # - GM
     # R
-
+    raise NotImplementedError("Yet to be written")
     pass
 
 
 def parse_tn14_data(tn14_data):
+    """_summary_
+
+    Args:
+        tn14_data (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
 
     data_column_headers = ['begin_MJD', 'begin_frac_date', 'C20', 'C20_sub_mean_C20',
                            'sigma_C20', 'C30', 'C30_sub_mean_C30', 'sigma_C30',
@@ -582,6 +720,20 @@ def parse_tn14_data(tn14_data):
 
 
 def find_date_in_replacemnt_file(replacemnt_mat,file_type: str, source: str, epoch_begin):
+    """_summary_
+
+    Args:
+        replacemnt_mat (_type_): _description_
+        file_type (str): _description_
+        source (str): _description_
+        epoch_begin (_type_): _description_
+
+    Raises:
+        ValueError: _description_
+
+    Returns:
+        _type_: _description_
+    """
 
     # epoch_begin and epoch_end -> date from the grace data file
     # begin_date and end_data -> date from the replacement file (tn-13 or tn-14)
@@ -675,6 +827,20 @@ def find_date_in_replacemnt_file(replacemnt_mat,file_type: str, source: str, epo
 
 
 def extract_C10_11_replcmnt_coeff(data_tn13, source, epoch_begin, epoch_end=None):
+    """_summary_
+
+    Args:
+        data_tn13 (_type_): _description_
+        source (_type_): _description_
+        epoch_begin (_type_): _description_
+        epoch_end (_type_, optional): _description_. Defaults to None.
+
+    Raises:
+        ValueError: _description_
+
+    Returns:
+        _type_: _description_
+    """
 
     # match the date
     file_type = 'tn-13'
@@ -728,6 +894,17 @@ def extract_C10_11_replcmnt_coeff(data_tn13, source, epoch_begin, epoch_end=None
 
 
 def extract_C20_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end=None):
+    """_summary_
+
+    Args:
+        data_tn14 (_type_): _description_
+        source (_type_): _description_
+        epoch_begin (_type_): _description_
+        epoch_end (_type_, optional): _description_. Defaults to None.
+
+    Returns:
+        _type_: _description_
+    """
     # For JPL
     # generating a CLM array for C20 and C30
     # NOTE: Zonal coeff. does not have Slm - its taken as 0
@@ -757,6 +934,17 @@ def extract_C20_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end=None):
 
 
 def extract_C30_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end=None):
+    """_summary_
+
+    Args:
+        data_tn14 (_type_): _description_
+        source (_type_): _description_
+        epoch_begin (_type_): _description_
+        epoch_end (_type_, optional): _description_. Defaults to None.
+
+    Returns:
+        _type_: _description_
+    """
     if source == 'jpl':
 
         replcmnt_idxs = find_date_in_replacemnt_file(
@@ -798,6 +986,20 @@ def extract_C30_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end=None):
 
 
 def replace_zonal_coeff(data_mat, source, lmax, data_tn13, data_tn14, epoch_begin: float, epoch_end: float):
+    """_summary_
+
+    Args:
+        data_mat (_type_): _description_
+        source (_type_): _description_
+        lmax (_type_): _description_
+        data_tn13 (_type_): _description_
+        data_tn14 (_type_): _description_
+        epoch_begin (float): _description_
+        epoch_end (float): _description_
+
+    Returns:
+        _type_: _description_
+    """
 
     data_mat_copy = deepcopy(data_mat)
 
