@@ -76,12 +76,6 @@ def gaussian(L: int, cap: int):
     References:
         Wahr et.al. (1998) equation (34) and Swenson and Wahr equation (34)
     
-    Example:
-        >>> W = gaussian(L, cap)
-        Write the output here
-    
-    To DO: 
-        Instea of using if statemetn we can make it more consise by using assert statements
     """
     
     #Check input

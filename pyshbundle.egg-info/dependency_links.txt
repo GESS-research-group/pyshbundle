@@ -1,0 +1,13 @@
+numpy
+pandas
+netCDF4
+scipy
+xarray
+julian
+scipy
+geopandas
+matplotlib
+rasterio
+salem
+shapely
+tqdm
