@@ -1176,3 +1176,7 @@ def cklm2sc_new(clm_mat, lmax: int):
     # with one flag include for
 
     return scmat, dev_scmat
+
+def check_format(scmat):
+    
+    pass
