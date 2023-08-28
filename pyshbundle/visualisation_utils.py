@@ -14,88 +14,127 @@ from pyshbundle import sc2cs, clm2sc
 from pyshbundle import plm
 import pyshbundle
 
-def sctriplot(scmat: np.ndarray | list, lmax: int, units=''):
-    """SCTRIPLOT plots the triangles of SH coefficients stored in SC-format. 
-    If stored in CS format it is converted to SC-format before plotting.
+def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
+    """_summary_
 
     Args:
-        fig (_type_): Matplotlib figure object
-        scmat (np.ndarray | list): _descrMatrix of real SH coefficients in SC, CS or [l m Clm Slm] formats.iption_
-        lmax (int): Maximum degree of spherical harmonic expansion
-    
+        scmat (np.ndarray): _description_
+        lmax (int): _description_
+        title (str): _description_
+        vmin (_type_): _description_
+        vmax (_type_): _description_
+
     Returns:
-        _type_: Generates an image of the SC-formatted SH coefficients
-    
-    To Do:
-        1. pass figure object from user
-        2. or provide no plot changing options
+        _type_: _description_
+    """
+    fig, ax = plt.subplots(1, 1, figsize=(25, 10))
+    im = ax.imshow(np.ma.log10(abs(scmat)), extent=[-lmax, lmax, lmax, 0], cmap='Spectral_r',vmin=vmin, vmax=vmax)
+    ax.grid()
+    # plt.colorbar()
+    x_vec = np.arange(-lmax, lmax+1, 6)
+    y_vec = np.arange(lmax, -2, -6)
+
+    x_st = 0*y_vec
+
+    # vertical line
+    ax.plot(x_st, y_vec, "black") 
+
+    plt.xticks(x_vec,)
+    plt.yticks(y_vec)
+    plt.title(title)
+    fig.colorbar(im,)    
+    return ax
+
+def cs_sqplot(csmat: np.ndarray, lmax: int, title: str, vmin, vmax):
     """
 
-    fmt, l_max = checkformat(scmat)
+    Args:
+        csmat (np.ndarray): _description_
+        lmax (int): _description_
+        title (str): _description_
+        vmin (_type_): _description_
+        vmax (_type_): _description_
 
-    if fmt == 'clm':
-        scmat = clm2sc(scmat)
+    Returns:
+        _type_: _description_
+    """
+    fig, ax = plt.subplots(1, 1, figsize=(10, 10))
+    im = ax.imshow(np.ma.log10(abs(csmat)), extent=[0, lmax, lmax, 0], cmap='Spectral_r',vmin=vmin, vmax=vmax)
+    ax.grid()
+    ax.set_aspect('equal')
+
+    # plt.colorbar()
+    x_vec = np.arange(0, lmax+1, 6)
+    y_vec = np.arange(lmax, -2, -6)
+
+    # diagonal line
+    ax.plot(x_vec, np.flip(y_vec), "black") 
+
+    # formating
+    plt.xticks(x_vec,)
+    plt.yticks(y_vec)
+    plt.title(title)
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("bottom", size="5%", pad=0.45)
     
-    r, c = np.shape(scmat)
-
-    if fmt == 'cs':
-        scmat = sc2cs(scmat)
-    elif (r > c) and (r == (2*lmax) + 1) and (c == lmax+1):
-        scmat = scmat.T
-    elif (min(r,c) != lmax+1) or (max(r,c) != (2*lmax + 1)):
-        raise ValueError('Matrix neither confirms to SC-format, nor CS-format')
+    # Plot horizontal colorbar
+    fig.colorbar(im, orientation="horizontal", cax=cax)
     
-    fig, ax = plt.subplots(figsize=())
+    return ax
 
-    # using masked array to avoid log(0) error
-    im = ax.imshow(np.ma.log10(np.abs(scmat)), cmap='Spectral_r', extent=[-lmax, lmax+1, lmax+1, 0]) 
 
-    ax.set_aspect('auto')
 
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
+def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
+    """_summary_
 
-    plt.xlabel("Order [m]")
-    plt.ylabel("Degre [l]")
+    Args:
+        field (_type_): _description_
+        polar_loc (str): _description_
+        title (_type_): _description_
+        file_name (_type_, optional): _description_. Defaults to None.
+        save_flag (bool, optional): _description_. Defaults to False.
 
-    fig.colorbar(im, ax=ax, label=f"[{units}]", orientation='vertical', pad=0.02)
+    Returns:
+        _type_: _description_
+    """
 
-    return fig, ax
-
-def polar_plot(field, flag: str, dpi=100):
-
-    if flag == 'greenland':
-        extent = [-75, -5, 55, 85]
+    if polar_loc == 'greenland':
+        extent = (-75, -5, 55, 85)
 
         # setting the 
-        fig = plt.figure(1, figsize=(5, 5), dpi=dpi)
+        fig = plt.figure()
         ax = plt.axes(projection=ccrs.LambertConformal(central_latitude=72,central_longitude=-42.0))
 
-        im = ax.imshow(field, origin='upper',  extent=extent, cmap='RdYlBu_r', transform=ccrs.PlateCarree(),)
+        im = ax.imshow(field, origin='upper', cmap='Spectral', transform=ccrs.PlateCarree(), )
 
-        ax.set_extent(extent)
+        ax.set_extent((-75, -5, 55, 85))
         gl = ax.gridlines(crs = ccrs.PlateCarree(), draw_labels=True, x_inline=False, y_inline=False, color='gray', alpha=0.9, linestyle='--')
 
         gl.top_labels = False
-        ax.coastlines(resolution='50m')
-        plt.colorbar(im)
+        ax.coastlines()
+        plt.colorbar(im, orientation='vertical', shrink=1.0, pad=0.1,label=f"[...]")
+
+        plt.title(f"{title}")
+        if save_flag:
+            plt.savefig(f"{file_name}.jpg")
+
     
-    elif flag == 'antarctica':
+    elif polar_loc == 'antarctica':
         extent = [-180, 180, -85, -60]
 
-        fig = plt.figure(1, figsize=(5, 5), dpi=dpi)
+        fig = plt.figure(1, figsize=(7, 7))
         # setting the projection for polar plot
         ax = plt.axes(projection=ccrs.SouthPolarStereo())
 
         # plotting the matrix field
-        im = ax.imshow(field, origin='upper', extent=extent, cmap='RdYlBu_r', transform=ccrs.PlateCarree(),)
+        im = ax.imshow(field, origin='upper', cmap='RdYlBu', transform=ccrs.PlateCarree(),)
 
         # setting the gridlines and continental boundary
         ax.set_extent(extent, ccrs.PlateCarree())
         gl = ax.gridlines(crs = ccrs.PlateCarree(), draw_labels=True, x_inline=False, y_inline=False, color='gray', alpha=0.9, linestyle='--')
         #gl.top_labels = False
         
-        ax.coastlines(resolution='50m')
+        ax.coastlines()
 
         # to plot the circular plot boundary
         theta = np.linspace(0, 2*np.pi, 100)
@@ -104,10 +143,16 @@ def polar_plot(field, flag: str, dpi=100):
         circle = mpath.Path(verts * radius + center)
 
         ax.set_boundary(circle, transform=ax.transAxes)
-    pass
+        plt.colorbar(im, orientation='vertical', shrink=1.0, pad=0.1,label=f"[...]")
+        plt.title(f"{title}")
+
+        if save_flag:
+            plt.savefig(f"{file_name}.jpg")
+    return im
 
 
-def surface_spherical_hormonics(l: int, m: int):
+
+def ylm(l: int, m: int):
     """_summary_
 
     Args:
@@ -142,3 +187,48 @@ def surface_spherical_hormonics(l: int, m: int):
     ylms = p * sinml
 
     return (ylmc, ylms)
+
+
+def ylm_plot(l: int, m: int):
+    """_summary_
+
+    Args:
+        l (int): _description_
+        m (int): _description_
+    """
+    ylmc, ylms = ylm(l, m)
+
+    fig = plt.figure(figsize=(15, 7.5))
+    ax = plt.axes(projection = ccrs.PlateCarree())
+
+    lons = np.linspace(-180, 180, 73)
+    lats = np.linspace(-90, 90, 37)
+
+    x, y = np.meshgrid(lons, lats)
+
+    if m >=0 :
+        img_extent = (-180, 180, -90, 90)
+
+        # plot the data
+        im = ax.imshow(ylmc[:, 0, :], origin='upper', extent=img_extent, transform=ccrs.PlateCarree(), cmap="Spectral")
+    else:
+        #plt.contourf(x, y, ylms_00[:, 0, :], cmap='RdYlBu_r')
+        im = ax.imshow(ylms[:, 0, :], origin='upper', extent=img_extent, transform=ccrs.PlateCarree(), cmap="Spectral")
+
+
+
+    # setting gridlines
+    gl = ax.gridlines(crs = ccrs.PlateCarree(), draw_labels=True, x_inline=False, y_inline=False, color='gray', alpha=0.9, linestyle='--')
+    # remove top x label
+    gl.top_labels = False
+    # change x label styles - font size ad colour
+    gl.xlabel_style = {'size':12,}
+    # left and right labels
+    gl.left_labels = True
+    gl.right_labels = False
+    # coastlines
+    ax.coastlines()
+
+    plt.colorbar(im, orientation='vertical', shrink=0.85, pad=0.02,label=f"[...]")
+
+    plt.title(f"Visualization of Spherical Harmonics - degree: {l} order: {m}")
