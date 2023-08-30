@@ -115,4 +115,4 @@ def basin_avg(data, path: str, c_rs, m, gs):
     ax.set_ylabel('TWS anomaly in mm ', size=15)
     plt.tight_layout()
     
-    return alpha
+    return alpha, ds_area_w

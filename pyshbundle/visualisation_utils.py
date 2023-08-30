@@ -150,7 +150,46 @@ def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
             plt.savefig(f"{file_name}.jpg")
     return im
 
+def mapfield(field, img_extent, title, name=None, colorbar_bounds=None, save_flag=False):
+    # Plotting and Visualization
+    
+    fig = plt.figure(figsize=(16, 7.5))
+    geo_ax = plt.axes(projection = ccrs.Robinson())
 
+    
+
+    # plot the data
+    if colorbar_bounds is not None:
+        vmin = colorbar_bounds[0]
+        vmax = colorbar_bounds[1]
+        im = geo_ax.imshow(field, origin='upper', extent=img_extent, cmap='RdYlBu', transform=ccrs.PlateCarree(), vmin=vmin, vmax=vmax)
+    else:
+        im = geo_ax.imshow(field, origin='upper', extent=img_extent, cmap='RdYlBu', transform=ccrs.PlateCarree(), )
+
+    plt.xlabel("Longitude")
+    plt.ylabel("Latitude")
+    # setting gridlines
+    gl = geo_ax.gridlines(crs = ccrs.PlateCarree(), draw_labels=True, x_inline=False, y_inline=False, color='gray', alpha=0.9, linestyle='--')
+    # remove top x label
+    gl.top_labels = False
+    # change x label styles - font size ad colour
+    gl.xlabel_style = {'size':12,}
+    # left and right labels
+    gl.left_labels = True
+    gl.right_labels = False
+    # coastlines
+    geo_ax.coastlines()
+
+    # Using new axes for colorbar
+    
+
+    plt.colorbar(im, shrink=0.845, orientation='vertical', pad=0.02,label=f"gravity [...]",)
+
+    plt.title(f"{title}")
+    if save_flag:
+        plt.savefig(f"{name}.jpg")
+    
+    return fig, geo_ax
 
 def ylm(l: int, m: int):
     """_summary_
@@ -232,3 +271,4 @@ def ylm_plot(l: int, m: int):
     plt.colorbar(im, orientation='vertical', shrink=0.85, pad=0.02,label=f"[...]")
 
     plt.title(f"Visualization of Spherical Harmonics - degree: {l} order: {m}")
+
