@@ -82,8 +82,8 @@ def basin_avg(data, path: str, c_rs, m, gs):
     y = np.linspace(0, 179+(1-deg), int(180/deg), dtype='double')
     x1 = np.linspace(1*deg, 360, int(360/deg), dtype='double')
     y1 = np.linspace(1*deg, 180, int(180/deg), dtype='double')
-    lambd,theta = np.meshgrid(x,y)  
-    lambd1,theta1 = np.meshgrid(x1,y1)  
+    lambd,theta = np.meshgrid(x,y)
+    lambd1,theta1 = np.meshgrid(x1,y1)
     a = np.sin(np.deg2rad(90-theta))-np.sin(np.deg2rad(90-theta1))
     b = (lambd1 - lambd)*np.pi/180
     
