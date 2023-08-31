@@ -72,9 +72,6 @@ def grule(n: int):
     References:
         1. 'Methods of Numerical Integration' by Davis and Rabinowitz, page 365, Academic Press, 1975.
     
-    Example:
-        >>> bp, wf = grule(n)
-        TO DO: write suitable output
     """
     bp = np.zeros((n,1))
     wf = bp

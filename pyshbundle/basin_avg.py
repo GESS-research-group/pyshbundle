@@ -82,8 +82,8 @@ def basin_avg(data, path: str, c_rs, m, gs):
     y = np.linspace(0, 179+(1-deg), int(180/deg), dtype='double')
     x1 = np.linspace(1*deg, 360, int(360/deg), dtype='double')
     y1 = np.linspace(1*deg, 180, int(180/deg), dtype='double')
-    lambd,theta = np.meshgrid(x,y)  
-    lambd1,theta1 = np.meshgrid(x1,y1)  
+    lambd,theta = np.meshgrid(x,y)
+    lambd1,theta1 = np.meshgrid(x1,y1)
     a = np.sin(np.deg2rad(90-theta))-np.sin(np.deg2rad(90-theta1))
     b = (lambd1 - lambd)*np.pi/180
     
@@ -109,10 +109,10 @@ def basin_avg(data, path: str, c_rs, m, gs):
     # Time series for the whole basin(shapefile) in user defined range
     alpha = ds_area_w_clp.tws.sum(dim=('lon','lat'))/shdf_area
     fig,ax = plt.subplots(figsize=(15,5))
-    alpha.plot(ax=ax, color='b');
+    alpha.plot(ax=ax, color='b')
     ax.set_box_aspect(0.33)
     ax.set_title('Time series for the basin', size=15)
     ax.set_ylabel('TWS anomaly in mm ', size=15)
     plt.tight_layout()
     
-    return alpha
+    return alpha, ds_area_w

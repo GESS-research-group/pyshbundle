@@ -42,7 +42,7 @@ from . import GRACEconstants as GC
 
 
 def upwcon(degree: int, height):
-    """returns the upward continuation $(R/r)^l$
+    """Returns the upward continuation $(R/r)^l$
 
     Args:
         degree (int): Spherical harmonic degree
