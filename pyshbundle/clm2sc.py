@@ -55,13 +55,10 @@ def clm2sc(data):
 
     Returns:
         np.ndarray: Spherical Harmonic Coefficients in /S|C\ format [[files or months]; [2-D matrix of /S|C\ format]]
+        np.ndarray: Standard Deviations of correcponding Spherical Harmonic Coefficients in /S|C\ format [[files or months]; [2-D matrix of /S|C\ format]]
     
     References:
         Refer to the SHBundle or PySHBundle docs for the different data storage and retrival formats.
-    
-    Example:
-        >>> sc_matrix = clm2sc(data)
-        TO DO: write the function output
     """
     # import pickle
     # data=np.load("/path/saved_as-num.npy",allow_pickle=True)

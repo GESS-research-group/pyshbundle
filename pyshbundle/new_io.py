@@ -17,9 +17,13 @@ import re
 def clm2cs_new(data):
     """This is an other implementation of clm2cs which uses the clm2sc and then converts using
     sc2cs functions
-
+    
     Args:
         data (_type_): _description_
+    
+    Returns:
+        numpy.ndarray: Spherical harmonic coefficients in |C\S| format
+        numpy.ndarray: Standard deviations associated with SH data arranged in |C\S| format
     """
     # read the data from clm to sc format
     sc_mat, devsc_mat = clm2sc.clm2sc(data)
@@ -48,7 +52,7 @@ def read_jpl(file_path: str):
     Returns:
         dict: Header info in a structured dictionary
         np.ndarray: SH coefficient data in form of a numpy n-dim array. Format is CLM.
-        list: 
+        set: Epoch start and end times as per the GRACE datafile. (eg. 20020519.0)
 
     """
     # ensure that the file path is valid then proceed
@@ -95,7 +99,7 @@ def parse_jpl_header(header_info: list):
         header_info (list): list of string representing each of the lines 
     
     Returns:
-        dict: Header info in a structured dictionary
+        dict: Important/Relevant header info as a structured dictionary
     """
 
         # parse the header info passed by the reader in as list of bytes
@@ -156,7 +160,7 @@ def parse_jpl_data(jpl_data: list):
 
     Returns:
         np.ndarray: A (n x 6) 2-d matrix representing the [degrer_l, order_m, C_lm, S_lm, sig_C_lm, sig_S_lm]
-        _type_: Epoch begin and stop dates stored as float (eg. 20020519.0)
+        set: Epoch begin and stop dates stored as float (eg. 20020519.0)
     """
 
     column_headers = ['record_key', 'degree_index', 'order_index', 'clm', 'slm',
@@ -198,7 +202,7 @@ def parse_jpl_data(jpl_data: list):
 
 
 def parse_lines(line, parse_fmt='\s+'):
-    """Helper Function"""
+    # HELPER FUNCTIONS
 
     #  parses the liness and reutrns an array
     # '\s+' returns array with no whitespace
@@ -209,7 +213,7 @@ def parse_lines(line, parse_fmt='\s+'):
 
 
 def find_word(info_lines: list, search_key: str):
-    """ Helper Function"""
+    # HELPER FUNCTIONS
     # finding the target word in the read lines
 
     for i in range(len(info_lines)):
@@ -225,12 +229,12 @@ def read_csr(file_path: str):
     """Reads the spherical harmonic data provided by CSR
 
     Args:
-        file_path (str): Absolute path to the file
+        file_path (str): Absolute path to the GRACE data file from CSR
     
     Returns:
         dict: Header info in a structured dictionary
         np.ndarray: SH coefficient data in form of a numpy n-dim array. Format is KLM
-        _type_: _description_
+        set: Epoch begin and stop dates stored as float (eg. 20020519.0)
     """
     # ensure that the file path is valid then proceed
 
@@ -339,7 +343,7 @@ def parse_csr_data(csr_data: list):
 
     Returns:
         np.ndarray: A (n x 6) 2-d matrix representing the [degrer_l, order_m, C_lm, S_lm, sig_C_lm, sig_S_lm]
-        _type_: Epoch begin and stop dates stored as float (eg. 20020519.0)
+        set: Epoch begin and stop dates stored as float (eg. 20020519.0)
     """
 
     file_column_headers = ['record_key', 'degree_index', 'order_index', 'clm', 'slm',
@@ -422,13 +426,14 @@ def read_itsg(file_path: str):
 
 
 def parse_itsg_header(header_info: list):
-    """_summary_
+    """Parses the ITSG header info and returns important metadata as a dictionary
 
     Args:
-        header_info (list): _description_
+        header_info (list): list of string representing each of the lines
 
     Returns:
-        _type_: _description_
+        dict: Important/Relevant header info as a structured dictionary
+        str: date of the ITSG file straight out of the file name
     """
 
     normal_keys = ['modelname', 'product_type',

@@ -1,6 +1,3 @@
-
-
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -50,13 +47,14 @@
 import numpy as np
 
 def klm2sc(data):
-    """_summary_
+    """Converts the spherical harmonic coefficients from klm format to /S|C\ format
 
     Args:
-        data (_type_): _description_
+        data (list): list containing [degree;  order; clm; slm; delta clm; delta slm; start data; end date]
 
     Returns:
-        _type_: _description_
+        np.ndarray: Spherical Harmonic Coefficients in /S|C\ format [[files or months]; [2-D matrix of /S|C\ format]]
+        np.ndarray: Standard Deviations of correcponding Spherical Harmonic Coefficients in /S|C\ format [[files or months]; [2-D matrix of /S|C\ format]]
     """
     # import pickle
     # with open("/path/saved_as_num", "rb") as pk:
@@ -105,16 +103,16 @@ def klm2sc(data):
     print('Conversion into clm format complete')
     return sc_mat, dev_sc_mat
 
-def klm2sc_new(data_mat, lmax: int, sigma_flag=False):
-    """_summary_
+def klm2sc_new(data_mat: np.ndarray, lmax: int, sigma_flag=False):
+    """Converts the spherical harmonic coefficients from klm format to /S|C\ format
 
     Args:
-        data_mat (_type_): _description_
-        lmax (int): _description_
-        sigma_flag (bool, optional): _description_. Defaults to False.
+        data_mat (np.ndarray): A 2-D matrix(numpy ndarray)
+        lmax (int): maximum degree of spherical harmonic expansion
+        sigma_flag (bool, optional): Flag to return the associated standard deviation values. Defaults to False.
 
     Returns:
-        _type_: _description_
+        np.ndarray: Spherical Harmonic Coefficients or/and associated standard deviations in /S|C\ format
     """
     sc_mat = np.zeros((lmax+1, 2*lmax + 2))
     dev_sc_mat = np.zeros((lmax+1, 2*lmax + 2))
