@@ -15,17 +15,17 @@ from pyshbundle import plm
 import pyshbundle
 
 def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
-    """_summary_
+    """Visualize the SH coeff. in /S|C\ triangular matrix format
 
     Args:
-        scmat (np.ndarray): _description_
-        lmax (int): _description_
-        title (str): _description_
-        vmin (_type_): _description_
-        vmax (_type_): _description_
+        scmat (np.ndarray): /S|C\ matrix data (see clm2sc)
+        lmax (int): maximum degree of SH expansion
+        title (str): Title of the figure
+        vmin (flaot | int): minimum value for the colorbar
+        vmax (float | int): maximum value for the colorbar
 
     Returns:
-        _type_: _description_
+        matplotlib.axes._axes.Axes: Plot axes
     """
     fig, ax = plt.subplots(1, 1, figsize=(25, 10))
     im = ax.imshow(np.ma.log10(abs(scmat)), extent=[-lmax, lmax, lmax, 0], cmap='Spectral_r',vmin=vmin, vmax=vmax)
@@ -46,17 +46,17 @@ def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
     return ax
 
 def cs_sqplot(csmat: np.ndarray, lmax: int, title: str, vmin, vmax):
-    """
+    """ Visualize the SH coeff. in |C\S| square matrix format
 
     Args:
-        csmat (np.ndarray): _description_
-        lmax (int): _description_
-        title (str): _description_
-        vmin (_type_): _description_
-        vmax (_type_): _description_
+        csmat (np.ndarray): |C\S| matrix data (see clm2cs or sc2cs)
+        lmax (int): maximum degree of SH expansion
+        title (str): Title of the figure
+        vmin (float): miniumum value for the colorbar
+        vmax (flaot): maximum value for the colorbar
 
     Returns:
-        _type_: _description_
+        matplotlib.axes._axes.Axes: Plot axes
     """
     fig, ax = plt.subplots(1, 1, figsize=(10, 10))
     im = ax.imshow(np.ma.log10(abs(csmat)), extent=[0, lmax, lmax, 0], cmap='Spectral_r',vmin=vmin, vmax=vmax)
@@ -85,14 +85,14 @@ def cs_sqplot(csmat: np.ndarray, lmax: int, title: str, vmin, vmax):
 
 
 def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
-    """_summary_
+    """Visualize the polar regions of Greenland and Antarctica 
 
     Args:
-        field (_type_): _description_
-        polar_loc (str): _description_
-        title (_type_): _description_
-        file_name (_type_, optional): _description_. Defaults to None.
-        save_flag (bool, optional): _description_. Defaults to False.
+        field (numpy.ndarray): _description_
+        polar_loc (str): State the region 'greenland' or 'antarctica'
+        title (str): Title for the figure
+        file_name (_type_, optional): file name along with absolute path to location to be saved. Defaults to None.
+        save_flag (bool, optional): True if the figure is to be saved. Defaults to False.
 
     Returns:
         _type_: _description_
@@ -151,6 +151,19 @@ def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
     return im
 
 def mapfield(field, img_extent, title, name=None, colorbar_bounds=None, save_flag=False):
+    """_summary_
+
+    Args:
+        field (_type_): _description_
+        img_extent (_type_): _description_
+        title (_type_): _description_
+        name (_type_, optional): _description_. Defaults to None.
+        colorbar_bounds (_type_, optional): _description_. Defaults to None.
+        save_flag (bool, optional): _description_. Defaults to False.
+
+    Returns:
+        _type_: _description_
+    """
     # Plotting and Visualization
     
     fig = plt.figure(figsize=(16, 7.5))
