@@ -17,7 +17,6 @@ authors:
     affiliation: 2
   - name: Abhishek Mhamane
     orcid: 0000-0001-9788-0371
-    equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
     affiliation: 3
   - name: Tsungrojungla Walling
     affiliation: 4
