@@ -17,6 +17,7 @@ authors:
     affiliation: 2
   - name: Abhishek Mhamane
     orcid: 0000-0001-9788-0371
+    equal-contrib: true
     affiliation: 3
   - name: Tsungrojungla Walling
     affiliation: 4
