@@ -11,3 +11,6 @@ rasterio
 salem
 shapely
 tqdm
+cartopy
+ipykernel
+jupyterlab
