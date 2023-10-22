@@ -450,18 +450,25 @@ def parse_itsg_header(header_info: list):
     model_name_idx = find_word(header_info, 'modelname')
     date_str = parse_lines(header_info[model_name_idx])[1][-7:]
 
-    header_dict = {}
-    '''
-    for key in physical_constant_keys:
-        key_index_in_header = find_word(header_info, key)
-        
-        const_long_name = parse_lines(header_info[key_index_in_header])[0]
-        const_value = float(parse_lines(header_info[key_index_in_header])[1])
-        const_dict = {'long_name': const_long_name, 'value': const_value}
-        print(const_dict)
+    title = header_info[0].split('\n')[0]
+    cite_info = ''
+    for line in header_info[3:7]:
+        cite_info += (line.split('\n')[0] + ' ')
+    
+    model_name = " ".join(str(header_info[10]).split()).split(" ")[-1]
+    product_type = " ".join(str(header_info[11]).split()).split(" ")[-1]
+    earth_gravity_constant = " ".join(str(header_info[12]).split()).split(" ")[-1]
+    radius = " ".join(str(header_info[13]).split()).split(" ")[-1]
+    max_degree = " ".join(str(header_info[14]).split()).split(" ")[-1]
+    norm = " ".join(str(header_info[15]).split()).split(" ")[-1]
+    tide_system = " ".join(str(header_info[16]).split()).split(" ")[-1]
+    errors = " ".join(str(header_info[17]).split()).split(" ")[-1]
+    itsg_header_dict = {'modelname': model_name, 'product': product_type,
+                    'EarthGravityConst': earth_gravity_constant, 'radius': radius,
+                    'MaxDegree': max_degree, 'norm': norm, 'tide_system': tide_system, 'error': errors, 'units': "SI",
+                      'citeInfo': cite_info}
 
-    '''
-    return header_dict, date_str
+    return itsg_header_dict, date_str
 
 
 def parse_itsg_data(itsg_data: list):
@@ -575,11 +582,13 @@ def parse_tn13_header(header_info):
     # TODO: later convert the str object to a date-time object
     last_reported_date = (re.split("\s+", header_info[title_idx+3])[-2])[:-1]
 
-    special_notes = []
+   #special_notes = []
+    simplified_header = {'title': title, "last_updated": last_reported_date}
 
     # add parsing for special notes later
 
-    return title, last_reported_date
+    return simplified_header
+
 
 
 def parse_tn13_data(tn13_data):
@@ -664,21 +673,30 @@ def read_tn14(file_path):
     return tn14_raplacement_mat
 
 
-def parse_tn14_header():
+
+def parse_tn14_header(header_info):
 
     # Key info
     # - Title
+    title = header_info[0].split(':')[1].split('\n')[0]
     # - Version
+    version = header_info[1].split(':')[1].split('\n')[0]
     # - Date Span
+    created_date = header_info[2].split(':')[1].split('\n')[0]
+    date_span = header_info[3].split(':')[1].split('\n')[0]
     # - Notes:
+    description = ''
+    for line in header_info[7:13]:
+        description += line.lstrip().split("\n")[0] + ' '
 
     # Constants
     # - Mean C20
     # - Mean C30
     # - GM
     # R
-    raise NotImplementedError("Yet to be written")
-    pass
+    header_dict = {'title': title, 'version': version, 'created_date': created_date,
+                   'date_span': date_span, 'description': description}
+    return header_dict
 
 
 def parse_tn14_data(tn14_data):
