@@ -10,9 +10,9 @@ import numpy as np
 import cartopy
 import cartopy.crs as ccrs
 
-from pyshbundle import sc2cs, clm2sc
-from pyshbundle import plm
 import pyshbundle
+from pyshbundle import sc2cs, clm2sc
+from pyshbundle import plm, gshs
 
 def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
     """Visualize the SH coeff. in /S|C\ triangular matrix format
@@ -285,3 +285,18 @@ def ylm_plot(l: int, m: int):
 
     plt.title(f"Visualization of Spherical Harmonics - degree: {l} order: {m}")
 
+def gshs_prepare(lmax, gs, quant, grd, h, jflag, sc_coeff):
+    n = int(180/gs)
+    
+    grid_y = int(180/gs)
+    grid_x = int(360/gs)
+
+    ff = gshs.gshs(sc_coeff, quant, grd, n, h, jflag)[0]
+
+    # rearranging
+    field = np.zeros([grid_y,grid_x], dtype ='longdouble')
+
+    field[:,0:int(grid_x/2)] = ff[:,int(grid_x/2):]
+    field[:,int(grid_x/2):] = ff[:,0:int(grid_x/2)]  
+    
+    return field
