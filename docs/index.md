@@ -11,9 +11,6 @@
 -   Documentation: <https://mn5hk.github.io/pyshbundle>
     
 
-## Features
-
--   TODO
 
 ## How to install <br>
 We recommend using Mamba to install required packages <br>
@@ -29,7 +26,6 @@ Convert [SHbundle matlab codes](https://www.gis.uni-stuttgart.de/en/research/dow
 Currently we are upgrading (under process) the package to be implementable on binder. 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mn5hk/pyshbundle/HEAD)
 
-## How to download data
 
 ### Mathematics
 

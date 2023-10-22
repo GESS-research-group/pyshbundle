@@ -5,7 +5,7 @@
 from copy import deepcopy
 import julian
 from tqdm import tqdm, trange
-from . import sc2cs, clm2sc
+from pyshbundle import sc2cs, clm2sc
 from datetime import datetime, timedelta
 
 import gzip
@@ -17,9 +17,13 @@ import re
 def clm2cs_new(data):
     """This is an other implementation of clm2cs which uses the clm2sc and then converts using
     sc2cs functions
-
+    
     Args:
         data (_type_): _description_
+    
+    Returns:
+        numpy.ndarray: Spherical harmonic coefficients in |C\S| format
+        numpy.ndarray: Standard deviations associated with SH data arranged in |C\S| format
     """
     # read the data from clm to sc format
     sc_mat, devsc_mat = clm2sc.clm2sc(data)
@@ -48,7 +52,7 @@ def read_jpl(file_path: str):
     Returns:
         dict: Header info in a structured dictionary
         np.ndarray: SH coefficient data in form of a numpy n-dim array. Format is CLM.
-        list: 
+        set: Epoch start and end times as per the GRACE datafile. (eg. 20020519.0)
 
     """
     # ensure that the file path is valid then proceed
@@ -95,7 +99,7 @@ def parse_jpl_header(header_info: list):
         header_info (list): list of string representing each of the lines 
     
     Returns:
-        dict: Header info in a structured dictionary
+        dict: Important/Relevant header info as a structured dictionary
     """
 
         # parse the header info passed by the reader in as list of bytes
@@ -156,7 +160,7 @@ def parse_jpl_data(jpl_data: list):
 
     Returns:
         np.ndarray: A (n x 6) 2-d matrix representing the [degrer_l, order_m, C_lm, S_lm, sig_C_lm, sig_S_lm]
-        _type_: Epoch begin and stop dates stored as float (eg. 20020519.0)
+        set: Epoch begin and stop dates stored as float (eg. 20020519.0)
     """
 
     column_headers = ['record_key', 'degree_index', 'order_index', 'clm', 'slm',
@@ -198,7 +202,7 @@ def parse_jpl_data(jpl_data: list):
 
 
 def parse_lines(line, parse_fmt='\s+'):
-    """Helper Function"""
+    # HELPER FUNCTIONS
 
     #  parses the liness and reutrns an array
     # '\s+' returns array with no whitespace
@@ -209,7 +213,7 @@ def parse_lines(line, parse_fmt='\s+'):
 
 
 def find_word(info_lines: list, search_key: str):
-    """ Helper Function"""
+    # HELPER FUNCTIONS
     # finding the target word in the read lines
 
     for i in range(len(info_lines)):
@@ -225,12 +229,12 @@ def read_csr(file_path: str):
     """Reads the spherical harmonic data provided by CSR
 
     Args:
-        file_path (str): Absolute path to the file
+        file_path (str): Absolute path to the GRACE data file from CSR
     
     Returns:
         dict: Header info in a structured dictionary
         np.ndarray: SH coefficient data in form of a numpy n-dim array. Format is KLM
-        _type_: _description_
+        set: Epoch begin and stop dates stored as float (eg. 20020519.0)
     """
     # ensure that the file path is valid then proceed
 
@@ -339,7 +343,7 @@ def parse_csr_data(csr_data: list):
 
     Returns:
         np.ndarray: A (n x 6) 2-d matrix representing the [degrer_l, order_m, C_lm, S_lm, sig_C_lm, sig_S_lm]
-        _type_: Epoch begin and stop dates stored as float (eg. 20020519.0)
+        set: Epoch begin and stop dates stored as float (eg. 20020519.0)
     """
 
     file_column_headers = ['record_key', 'degree_index', 'order_index', 'clm', 'slm',
@@ -422,13 +426,14 @@ def read_itsg(file_path: str):
 
 
 def parse_itsg_header(header_info: list):
-    """_summary_
+    """Parses the ITSG header info and returns important metadata as a dictionary
 
     Args:
-        header_info (list): _description_
+        header_info (list): list of string representing each of the lines
 
     Returns:
-        _type_: _description_
+        dict: Important/Relevant header info as a structured dictionary
+        str: date of the ITSG file straight out of the file name
     """
 
     normal_keys = ['modelname', 'product_type',
@@ -445,18 +450,25 @@ def parse_itsg_header(header_info: list):
     model_name_idx = find_word(header_info, 'modelname')
     date_str = parse_lines(header_info[model_name_idx])[1][-7:]
 
-    header_dict = {}
-    '''
-    for key in physical_constant_keys:
-        key_index_in_header = find_word(header_info, key)
-        
-        const_long_name = parse_lines(header_info[key_index_in_header])[0]
-        const_value = float(parse_lines(header_info[key_index_in_header])[1])
-        const_dict = {'long_name': const_long_name, 'value': const_value}
-        print(const_dict)
+    title = header_info[0].split('\n')[0]
+    cite_info = ''
+    for line in header_info[3:7]:
+        cite_info += (line.split('\n')[0] + ' ')
+    
+    model_name = " ".join(str(header_info[10]).split()).split(" ")[-1]
+    product_type = " ".join(str(header_info[11]).split()).split(" ")[-1]
+    earth_gravity_constant = " ".join(str(header_info[12]).split()).split(" ")[-1]
+    radius = " ".join(str(header_info[13]).split()).split(" ")[-1]
+    max_degree = " ".join(str(header_info[14]).split()).split(" ")[-1]
+    norm = " ".join(str(header_info[15]).split()).split(" ")[-1]
+    tide_system = " ".join(str(header_info[16]).split()).split(" ")[-1]
+    errors = " ".join(str(header_info[17]).split()).split(" ")[-1]
+    itsg_header_dict = {'modelname': model_name, 'product': product_type,
+                    'EarthGravityConst': earth_gravity_constant, 'radius': radius,
+                    'MaxDegree': max_degree, 'norm': norm, 'tide_system': tide_system, 'error': errors, 'units': "SI",
+                      'citeInfo': cite_info}
 
-    '''
-    return header_dict, date_str
+    return itsg_header_dict, date_str
 
 
 def parse_itsg_data(itsg_data: list):
@@ -570,11 +582,13 @@ def parse_tn13_header(header_info):
     # TODO: later convert the str object to a date-time object
     last_reported_date = (re.split("\s+", header_info[title_idx+3])[-2])[:-1]
 
-    special_notes = []
+   #special_notes = []
+    simplified_header = {'title': title, "last_updated": last_reported_date}
 
     # add parsing for special notes later
 
-    return title, last_reported_date
+    return simplified_header
+
 
 
 def parse_tn13_data(tn13_data):
@@ -659,21 +673,30 @@ def read_tn14(file_path):
     return tn14_raplacement_mat
 
 
-def parse_tn14_header():
+
+def parse_tn14_header(header_info):
 
     # Key info
     # - Title
+    title = header_info[0].split(':')[1].split('\n')[0]
     # - Version
+    version = header_info[1].split(':')[1].split('\n')[0]
     # - Date Span
+    created_date = header_info[2].split(':')[1].split('\n')[0]
+    date_span = header_info[3].split(':')[1].split('\n')[0]
     # - Notes:
+    description = ''
+    for line in header_info[7:13]:
+        description += line.lstrip().split("\n")[0] + ' '
 
     # Constants
     # - Mean C20
     # - Mean C30
     # - GM
     # R
-    raise NotImplementedError("Yet to be written")
-    pass
+    header_dict = {'title': title, 'version': version, 'created_date': created_date,
+                   'date_span': date_span, 'description': description}
+    return header_dict
 
 
 def parse_tn14_data(tn14_data):

@@ -69,8 +69,8 @@
 # @author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
 import numpy as np
-from . import grule
-from . import plm
+from pyshbundle import grule
+from pyshbundle import plm
 
 def neumann(inn):
     """Returns the weights and nodes for Neumann's numerical integration

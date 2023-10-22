@@ -56,9 +56,10 @@ def basin_avg(data, path: str, c_rs, m, gs):
         path (str): valid path to the basin shape file with extension (.shp)
         c_rs (crs): the crs into which the dataframe must be transformed (related to salem module)
         m (int): number of files read
-        gs (_type_): grid size [units to do]
+        gs (float): grid size 
 
     Returns:
+        xarray.Dataset: basin averaged values of TWS
         _type_: _description_
     """
     shdf = salem.read_shapefile(path)

@@ -82,11 +82,11 @@
 import numpy as np
 from os import chdir, getcwd
 
-from . import cs2sc
-from . import normalklm
-from . import plm
-from . import eigengrav
-from . import ispec
+from pyshbundle import cs2sc
+from pyshbundle import normalklm
+from pyshbundle import plm
+from pyshbundle import eigengrav
+from pyshbundle import ispec
 
 def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     """GSHS - Global Spherical Harmonic Synthesis

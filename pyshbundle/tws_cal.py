@@ -43,8 +43,8 @@
 
 import os
 #os.chdir(path_functions)
-from . import gaussian
-from . import gshs
+from pyshbundle import gaussian
+from pyshbundle import gshs
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
@@ -86,3 +86,14 @@ def tws_cal(data, lmax: int, gs: float, r, m):
     
     plt.imshow(tws_f[0,:,:])
     return(tws_f)
+
+def apply_gaussian(sc_coeff, gaussian_coeff, lmax):
+    
+    # filtered SH Coeff
+    shfil = np.zeros([lmax+1, 2 * lmax+1])
+
+    # applying filter on substracted coeff
+    for j in range(0, 2*lmax+1, 1):
+        shfil[:,j] = gaussian_coeff[:,0] * sc_coeff[:,j]
+    
+    return shfil
