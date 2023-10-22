@@ -71,7 +71,7 @@
 
 import numpy as np
 import sys
-from . import plm
+from pyshbundle import plm
 
 def iplm(l, m:int, theRAD, dt=-9999):
     """IPLM Integrals of the fully normalized associated Legendre functions

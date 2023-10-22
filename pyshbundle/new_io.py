@@ -5,7 +5,7 @@
 from copy import deepcopy
 import julian
 from tqdm import tqdm, trange
-from . import sc2cs, clm2sc
+from pyshbundle import sc2cs, clm2sc
 from datetime import datetime, timedelta
 
 import gzip

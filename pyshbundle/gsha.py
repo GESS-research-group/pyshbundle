@@ -76,12 +76,12 @@
 # @author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
 import numpy as np
-from . import neumann
-from . import plm
+from pyshbundle import neumann
+from pyshbundle import plm
 from scipy import sparse
 from scipy import linalg
-from . import iplm
-from . import sc2cs
+from pyshbundle import iplm
+from pyshbundle import sc2cs
 
 def gsha(f, method: str, grid: str = None, lmax: int = -9999):
     """ GSHA - Global Spherical Harmonic Analysis
