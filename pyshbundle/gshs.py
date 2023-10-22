@@ -82,11 +82,11 @@
 import numpy as np
 from os import chdir, getcwd
 
-from . import cs2sc
-from . import normalklm
-from . import plm
-from . import eigengrav
-from . import ispec
+from cs2sc import cs2sc
+from normalklm import normalklm
+from plm import plm
+from eigengrav import eigengrav
+from ispec import ispec
 
 def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     """GSHS - Global Spherical Harmonic Synthesis
@@ -177,7 +177,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
         field = field - cs2sc.cs2sc(normalklm.normalklm(lmax+1))
         
     l = np.arange(0, lmax+1)
-    transf = np.array([eigengrav.eigengrav(lmax, quant, h)])[0, :, :].T
+    transf = np.array([eigengrav(lmax, quant, h)])[0, :, :].T
     
     field = field * np.matmul(transf, np.ones((1, 2*lmax+1)), dtype='longdouble')
     
@@ -202,7 +202,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     m = 0
     c = field[m:lmax+1, lmax+m] 
     l = np.array([np.arange(m,lmax+1)])
-    p = plm.plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
+    p = plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
     a[:, m] = np.dot(p,c) 
     b[:, m] = np.zeros(nlat) 
     
@@ -213,7 +213,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
         s = field[m:lmax+1,lmax-m]
         
         l = np.array([np.arange(m,lmax+1)])
-        p = plm.plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
+        p = plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
         a[:, m] = np.dot(p,c)
         b[:, m] = np.dot(p,s)
         
@@ -244,7 +244,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     
     #Code for ispec
     
-    f = ispec.ispec(a.T, b.T).T
+    f = ispec(a.T, b.T).T
     if dlam > 1: 
         f = f[:,np.arange(1,dlam*nlon+1,dlam)]
 

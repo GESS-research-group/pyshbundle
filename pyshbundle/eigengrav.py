@@ -41,8 +41,8 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 import numpy
-from . import GRACEpy as GB
-from . import GRACEconstants as GC
+import GRACEpy as GB
+import GRACEconstants as GC
 
 
 def eigengrav(lmax: int, fstr: str, h: float):

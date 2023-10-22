@@ -43,8 +43,8 @@
 
 import os
 #os.chdir(path_functions)
-from . import gaussian
-from . import gshs
+from gaussian import gaussian
+from gshs import gshs
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
@@ -61,7 +61,7 @@ def tws_cal(data, lmax: int, gs: float, r, m):
     """
     SC = data
     
-    gfilter = gaussian.gaussian(lmax,r)
+    gfilter = gaussian(lmax,r)
     grid_y = int(180/gs)
     grid_x = int(360/gs)
     tws_f = np.zeros([m,grid_y,grid_x], dtype ='longdouble')
@@ -78,7 +78,7 @@ def tws_cal(data, lmax: int, gs: float, r, m):
         h = 0 
         jflag = 0
         
-        ff = gshs.gshs(shfil, quant, grd, n, h, jflag)[0]
+        ff = gshs(shfil, quant, grd, n, h, jflag)[0]
         
         ff = ff*1000
         tws_f[i,:,0:int(grid_x/2)] = ff[:,int(grid_x/2):]
