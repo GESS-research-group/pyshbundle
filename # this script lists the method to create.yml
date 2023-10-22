@@ -1,0 +1,21 @@
+# this script lists the method to create a new python env with all the dependencies for pyshbundle
+# start by creating a separate python env
+conda create -n pysh
+#  install mamba for faster dependency resolution
+conda install -n base --override-channels -c conda-forge mamba 'python_abi=*=*cp*'
+# now use the mamba package manager to install all the dependencies
+conda install -c conda-forge bump2version wheel watchdog flake8 tox coverage \
+Sphinx twine grip numpy pandas netCDF4 scipy xarray julian geopandas matplotlib shapely tqdm
+
+#rasterio 
+
+#Run powershell  as admin and execute the folowing
+#et-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
+#When conda is not found in path add the following path to your env variables:
+System properties> Advance system properties > environment variabels
+In user variables
+C:\Users\arind\miniconda3\Scripts
+C:\Users\arind\miniconda3\Library\bin
+C:\Users\arind\miniconda3\Library\usr\bin
+C:\Users\arind\miniconda3\Library\mingw-w64\bin
+C:\Users\arind\miniconda3
