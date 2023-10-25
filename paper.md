@@ -228,7 +228,3 @@ The results of the PySHbundle TWS computation has been validated with respect to
 - Wahr, J., Molenaar, M., & Bryan, F. (1998). Time variability of the Earth's gravity field: Hydrological and oceanic effects and their possible detection using GRACE. Journal of Geophysical Research: Solid Earth, 103(B12), 30205-30229. https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/98jb02844 
 - Wieczorek, M. A., & Meschede, M. (2018). SHTools: Tools for working with spherical harmonics. Geochemistry, Geophysics, Geosystems, 19(8), 2574-2592. https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018GC007529 
 </p>
-
-
-
-
