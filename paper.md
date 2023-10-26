@@ -57,8 +57,9 @@ bibliography: paper.bib
 GRACE stands for the Gravity Recovery and Climate Experiment, a joint satellite mission by NASA, the National Aeronautics and Space Administration and DLR, the German Aerospace Centre. Some details of the GRACE mission is provided in Table 1.
 
 <i>Table 1: Summary of GRACE satellite mission</i>
-| Parameter        |    Details      | 
-| -------------    |:--------------:| 
+
+| Parameter        |    Details     | 
+| --------------   |:--------------:| 
 | Start of Mission | 17 March 2002  | 
 | End of Mission   | 27 October 2017| 
 | Inclination      | 89.0°          | 
@@ -170,8 +171,10 @@ In this contribution, tools to implement the spherical harmonic analysis and fil
 # Implementation
 A schematic diagram of the code workflow is presented in the Fig 01. 
 <br>
+
 ![Schematic diagram of code workflow. \label{fig:code_workflow}](./pic/01_flowchart_without_background.png)<br>
 <i>Fig 01: Schematic Diagram of the Code Workflow</i>
+
 <br>
 
 The module codes can be categorized into four categories: load data, convert data formats, core functionality and auxillary codes. The <i>load data</i> codes can read data from either of the `JPL`, `ITSG` or `CSR` GRACE data centers. The codes further performs the necessary preprocessing, including the conversion of data formats, replacement of some Legendre coefficients as well as removing the longterm mean. The <i>convert data format</i> codes can convert `L2` GRACE Spherical Harmonics data from one format to another. These codes are invoked by the  <i>load data</i> codes for data format conversion. Further, these codes can be independently invoked as well by the user for their needs.
