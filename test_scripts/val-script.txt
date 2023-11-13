@@ -1,3 +1,0 @@
-
-load('\\wsl.localhost\Ubuntu\home\wslvivek\Desktop\Downscaling_mini\twss.mat');
-

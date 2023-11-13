@@ -1,3 +1,13 @@
+pip
+bump2version
+wheel
+watchdog
+flake8
+tox
+coverage
+Sphinx
+twine
+grip
 numpy
 pandas
 netCDF4
@@ -8,9 +18,10 @@ scipy
 geopandas
 matplotlib
 rasterio
-salem
 shapely
 tqdm
 cartopy
 ipykernel
 jupyterlab
+rioxarray
+#conda install -c conda-forge --file requirements_dev.txt -y
