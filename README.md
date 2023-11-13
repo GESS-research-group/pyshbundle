@@ -34,8 +34,7 @@ Currently the package is not yet finalized hence the version on PyPI is outdated
     ```shell
     $ conda create -n pyshbundle-env
     $ conda activate pyshbundle-env
-    $ conda install pip
-    $ pip install -r requirements.txt
+    $ conda install -c conda-forge --file requirements_dev.txt -y
     ```
 4. Note that the base path to the entire repo is important while importing (this is tempoary only, after PyPi module gets updated this approach will not be required) 
    ```
