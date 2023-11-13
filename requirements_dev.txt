@@ -18,9 +18,10 @@ scipy
 geopandas
 matplotlib
 rasterio
-salem
 shapely
 tqdm
 cartopy
 ipykernel
 jupyterlab
+rioxarray
+#conda install -c conda-forge --file requirements_dev.txt -y
