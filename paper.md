@@ -20,13 +20,21 @@ authors:
     equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
     affiliation: 3
   - name: Tsungrojungla Walling
+    orcid: 0009-0006-9323-1191
     affiliation: 4
   - name: Maya Suryawanshi
     affiliation: 2
+  - name: Shard Chander
+    affiliation: 5
+  - name: Bhaskar Ramchandra Nigam
+    affiliation: 6
+  - name: Nagesh Kumar Dasika
+    orcid: 0009-0006-9323-1191
+    affiliation: 7
   - name: Bramha Dutt Vishwakarma
     orcid: 0000-0003-4787-8470
     corresponding: true # (This is how to denote the corresponding author)
-    affiliation: "2,5" # (Multiple affiliations must be quoted)
+    affiliation: "2,8" # (Multiple affiliations must be quoted)
 affiliations:
  - name: Faculty of Geo-Information Science and Earth Observation, University of Twente, the Netherlands
    index: 1
@@ -36,9 +44,16 @@ affiliations:
    index: 3
  - name: Undergraduate Programme, Indian Institute of Science, India
    index: 4
- - name: Centre of Earth Science, Indian Institute of Science, India
+ - name: Land Hydrology Division, Space Applications Centre, Indian Space Research Organisation, India 
    index: 5
-date: 23 September 2023
+ - name: Indian Institute of Remote Sensing, Indian Space Research Organisation, India
+   index: 6
+ - name: Department of Civil Engineering, Indian Institute of Science, India
+   index: 7
+ - name: Centre of Earth Science, Indian Institute of Science, India
+   index: 8
+
+date: 15 November 2023
 bibliography: paper.bib
 
 # Optional fields if submitting to a AAS journal too, see this blog post:
@@ -50,7 +65,7 @@ bibliography: paper.bib
 
 # Summary
 
-`GRACE` or the Gravity Recovery and Climate Experiment<sup>1</sup>, is a gravimetric satellite mission that can detect the mass changes near the surface of the Earth. Since mass redistribution at shorter temporal scales is dominated by hydrology, GRACE satellite mission has been instrumental in mapping the terrestrial water storage anomalies (TWSA). The data from the satellite system has been used for various hydrological studies related to groundwater depletion, floods, droughts, etc. GRACE satellite products are typically released at various levels of complexity, often referred to as processing levels. In this contribution, we have translated the exisitng matlab codes SHbundle into the python programming language. SHbundle is a Matlab code that converts GRACE level 2 (`L2`) Spherical Harmonics data products into Level 3 (`L3`) `TWSA` products. In addition, a GRACE data driven correction algorithm, firstly coded in Matlab, has also been translated into Python. With this contribution, we hope to enable further work on GRACE data analytics using the Python programming language. Further, we hope to develop synergies within the geodesy community using different programming languages to better collaborate with one-another through this common framework of SHbundle and PySHbundle packages in Matlab and Python programming languages respectively.
+`GRACE` or the Gravity Recovery and Climate Experiment<sup>1</sup>, is a gravimetric satellite mission that can detect the mass changes near the surface of the Earth. Since mass redistribution at shorter temporal scales is dominated by hydrology, GRACE satellite mission has been instrumental in mapping the terrestrial water storage anomalies (`TWSA`). The data from the satellite system has been used for various hydrological studies related to groundwater depletion, floods, droughts, etc. GRACE satellite products are typically released at various levels of complexity, often referred to as processing levels. Level 2 is the spherical harmonic coefficients that are processed to obtain gridded mass change estimates. Processing choices have an impact on the final gridded output. Therefore, an open source GRACE level 2 processing toolbox is of high value to the user community as it will provide them more control over processing choices. In this contribution, we provide a python module, called PySHbundle, that converts GRACE level 2 (`L2`) Spherical Harmonics data products into Level 3 (`L3`) `TWSA` products. In addition, a GRACE data driven correction algorithm, firstly coded in Matlab, has also been translated into Python. With this contribution, we hope to enable further work on GRACE data analytics using the Python programming language.
 
 # Introduction
 
@@ -65,11 +80,9 @@ GRACE stands for the Gravity Recovery and Climate Experiment, a joint satellite 
 | Inclination      | 89.0°          | 
 | Period           | 94.5 minutes   |  
 
-GRACE consists of two identical satellites orbiting around the Earth on the same orbital path. The monitoring of the intersatellite distance between the two satellites is measured using microwave ranging system that gives an accuracy in the range of micrometers `(Wahr & Molenaar, 1998)`. When the satellite system comes across a mass anomaly, each satellite accelerates or decelerates with a phase lag and the intersatellite distance changes. This change in intersatellite distance is processed to obtain the magnitude of the mass anamoly. When it comes to the continental land surface, the hydrological processes are the major driver of the at monthly to decadal scales. However various other signals such as oceanic and atmospheric variations, systemic correlated errors, etc. are also part of the obtained GRACE signals. These unwanted signals are modelled and removed at level 1 processing, while the noise is still present at level 2 and it requires filtering. The choice of post-processing steps also introduce some errors as well as deteriorate the qualtiy of the hydrological products `(Humphrey et al., 2023)`. The hydrological signal estimated is referred to as the  `total water storage anomaly` (`TWSA`). `TWSA` is the sum of the total water components over a vertical extention of the grid area through the earth. Conventionally, it is represented in terms of the `equivalent water height` (`m`). GRACE has a successor, GRACE-FO, which was successfully launched on 22 May 2018.<br>
+GRACE consists of two identical satellites orbiting around the Earth on the same orbital path. The monitoring of the intersatellite distance between the two satellites is measured using microwave ranging system that gives an accuracy in the range of micrometers `(Wahr & Molenaar, 1998)`. When the satellite system comes across a mass anomaly, each satellite accelerates or decelerates with a phase lag and the intersatellite distance changes. This change in intersatellite distance is processed to obtain the magnitude of the mass anamoly. When it comes to the continental land surface, the hydrological processes are the major driver of the at monthly to decadal scales. However various other signals such as oceanic and atmospheric variations, systemic correlated errors, etc. are also part of the obtained GRACE signals. These unwanted signals are modelled and removed at level 1 processing. Noise is still present at level 2 and it requires filtering `(Wahr & Molenaar, 1998; Vishwakarma et. al., 2016)`. The choice of post-processing steps also introduce some errors as well as deteriorate the qualtiy of the hydrological products `(Humphrey et al., 2023; Vishwakarma (2020))`. The hydrological signal estimated is referred to as the  `total water storage anomaly` (`TWSA`). `TWSA` is the sum of the total water components over a vertical extention of the grid area through the earth. Conventionally, it is represented in terms of the `equivalent water height` (`m`). GRACE has a successor, GRACE-FO, which was successfully launched on 22 May 2018.<br>
 
-Various different research centres provide GRACE data. The University of Texas Center for Space Research (`CSR`), Jet Propulsion Laboratory (`JPL`), and the German Research Center for Geosciences (`GFZ`) are some of the centres whose data is widely used. `Level 2` data product are the spherical harmonic coefficients for the geospatial potential estimates. These may be accessed through the JPL's Physical Oceanography Distributed Active Archive Center (`PO.DAAC`)<sup>2</sup> or through the Information System and Data Center (`ISDC`)<sup>3</sup>. `Level 3` consists of mass anomalies or other standardized products, such as the Monthly Ocean/Land Water Equivalent Thickness Surface-Mass Anomaly. Similarly, mass concentration blocks or `mascons` are also availble. These directly provide the `TWSA` over gridded regions, and are available through the three GRACE data centers. More details on the mascon approaches for studying gravity fields and the approaches used by the different data centers for generating mascon products may be referred to in `Antoni (2022)`. Mascon products from various centres differ due to the difference in the post-processing strategy used by these centres. While the mascon results make application of GRACE data easier to a wider audience, use of `Level 2` data gives the user the freedom and the flexibility to choose their own post-processing algorithms. The choice of application of mascon data product or Level 2 data product may depend upon the purpose of the exercise and the expertise level of the user on the GRACE data post-processing. <br>
-
-`Level 2` GRACE data products may be stored in various data formats. These include `|C\S|`, `/S|C\`, `clm`, `klm`, vector, and `Colombo` format (`Sneew et al., 2021`). In `|C\S|` format, the `Clm` and `Slm` coefficient are stored as lower triangle and upper triangle, respectively, in a matrix of dimention <i>(l + 1) x (l + 1)</i>. In `/S|C\` format, the coefficients are stored in amatrix of dimension <i>(l + 1) x (2 l + 1)</i> with horizontally flipped triangular matrix of `Slm` coefficients on the left half, triangular matrix of `Clm` on the right half, and zeros on the rest of the matrix elements. The conversion between the three data formats is made possible with the modules `cs2sc`, `sc2cs`, `clm2sc`, `clm2cs`, and `klm2sc`.<br>
+Various different research centres provide GRACE data. The University of Texas Center for Space Research (`CSR`), Jet Propulsion Laboratory (`JPL`), and the German Research Center for Geosciences (`GFZ`) are some of the centres whose data is widely used. `Level 2` data product are the spherical harmonic coefficients for the geospatial potential estimates. `Level 3` consists of mass anomalies or other standardized products, such as the Monthly Ocean/Land Water Equivalent Thickness Surface-Mass Anomaly. Similarly, mass concentration blocks or `mascons` are also availble. These directly provide the `TWSA` over gridded regions, and are available through the three GRACE data centers. More details on the mascon approaches for studying gravity fields and the approaches used by the different data centers for generating mascon products may be referred to in `Antoni (2022)`. Mascon products from various centres differ due to the difference in the post-processing strategy used by these centres. While the mascon results make application of GRACE data easier to a wider audience, use of `Level 2` data gives the user the freedom and the flexibility to choose their own post-processing algorithms. The choice of application of mascon data product or Level 2 data product may depend upon the purpose of the exercise and the expertise level of the user on the GRACE data post-processing. <br>
 
 `Level 3` products are estimates of global `TWSA`. These are obtained through spherical harmonic analysis. `Level 3` products may further be processed to obtain catchment average timeseries data, labelled as `Level 4` products. Various tools exist in the literature to process GRACE data and to analyze it. Some of these developed in the `Matlab` programming language are: `SHbundle` (`Sneew et al., 2021`), GRACE Data Driven Correction (`GDDC`) (`Vishwakarma et al., 2017`), `GRAMAT` (`Feng, 2019`), `SHADE` (`Piretzidis, D., & Sideris, M. G., 2018`), `GRACETOOLS` (`Darbeheshti et al., 2018`), etc. Similarly, some GRACE data processing tools are also available based on the python programming language. These include `gravity-toolkit` `(Sutterley, 2023)`, `ggtools` `(Li, 2020)` and `GRACE-filter` `(Rietbroek, n.a.)`. General tools for spheric harmonic analysis are also available, such as SHTools (`Wieczorek, M. A., & Meschede, M., 2018`). `SHBundle` provides MATLAB-tools for `spheric harmonic synthesis` and `spheric harmonic analysis`. The earliest version of the code were developed in 1994 while the latest version with upgrades can be found dated 2018. `GRAMAT` provides a similar MATLAB-based tools for processing GRACE spherical harmonics data to obtain spatiotemporal global mass variations. The GRAMAT toolbox includes Gaussian smoothening filter to remove North-South stripes, spherical harmonic analysis and synthesis routines, leakage effect reduction routines, harmonic analysis of times series over regions, and uncertainty analysis of GRACE estimates (`Feng, 2019`). `SHADE` provides a matlab-based toolbox for the empirical de-correlation of GRACE monthly spherical harmonics (`Piretzidis, D., & Sideris, M. G., 2018`). `Gravity-toolkit` is a python-based package meant to handle GRACE L2 data products. Its functionalities include visualization of GRACE and GRACE-FO L2 data products, and the estimation of GRACE and GRACE-FO L2 data product errors. `Gg-tools` too contain similar tools for signal correction and for conversion of GRACE L2 products to L3. `GRACE-filter` provides tool for filtering of GRACE L2 product using DDK filter based on `Kusche et al. (2009)`.
  
@@ -123,7 +136,11 @@ Here, <i>$\Delta \sigma (\theta, \lambda)$</i> represents the change in surface 
 \end{equation}
 
 
-Thus, we can obtain the hydrological parameter <i>EWH</i> from GRACE Level 2 data using <i>equation 3</i>. The accuracy and precision of the <i>EWH</i> computed depends upon the accuracy and precision of the <i>$\Delta C_{l,m}$</i> and <i>$\Delta P_{l,m}$</i>, obtained from GRACE. However, these GRACE products are both noisy and coarse in resolution `(Wahr et. al., 1998)`. A tradeoff exists between the noise and resolution of the spherical harmonic products. To capture the spherical harmonic products at a higher spatial resolution, their values at higher degree and order needs to be used. However, noise increases with the increase in degree and order, making the computed <i>EWH</i> also noisy. Similarly, if the spherical harmonics are truncated at a lower degree and order, the noise in the computed <i>EWH</i> decreases, however, the spatial resolution of the obtained <i>EWH</i> also reduces.
+Thus, we can obtain the hydrological parameter <i>EWH</i> from GRACE Level 2 data using <i>equation 3</i>. 
+
+`Level 2` GRACE data products may be stored in various data formats. These include `|C\S|`, `/S|C\`, `clm`, `klm`, vector, and `Colombo` format (`Sneew et al., 2021`). In `|C\S|` format, the `Clm` and `Slm` coefficient are stored as lower triangle and upper triangle, respectively, in a matrix of dimention <i>(l + 1) x (l + 1)</i>. In `/S|C\` format, the coefficients are stored in a matrix of dimension <i>(l + 1) x (2 l + 1)</i> with horizontally flipped triangular matrix of `Slm` coefficients on the left half, triangular matrix of `Clm` on the right half, and zeros on the rest of the matrix elements. The conversion between the three data formats is made possible with the modules `cs2sc`, `sc2cs`, `clm2sc`, `clm2cs`, and `klm2sc`.<br>
+
+The accuracy and precision of the <i>EWH</i> computed depends upon the accuracy and precision of the <i>$\Delta C_{l,m}$</i> and <i>$\Delta P_{l,m}$</i>, obtained from GRACE. However, these GRACE products are both noisy and coarse in resolution `(Wahr et. al., 1998)`. A tradeoff exists between the noise and resolution of the spherical harmonic products `Devaraju and Sneew, 2016; Vishwakarma et. al., 2018`. To capture the spherical harmonic products at a higher spatial resolution, their values at higher degree and order needs to be used. However, noise increases with the increase in degree and order, making the computed <i>EWH</i> also noisy. Similarly, if the spherical harmonics are truncated at a lower degree and order, the noise in the computed <i>EWH</i> decreases, however, the spatial resolution of the obtained <i>EWH</i> also reduces.
 
 To improve the signal-to-noise ratio of the obtained <i>EWH</i>, various filtering techniques have been used. An ideal filter retains all of the signal while filtering out all of the noise. A popular filter used for GRACE applications is the Gaussian filter. The weights, <i>w</i>, for the Gaussian spatial averaging is given by:
 
@@ -190,9 +207,22 @@ The `Global Spherical Harmonic Analysis` code depends upon `neumann` along with 
 <br>
 
 # Validation
-The results of the PySHbundle TWS computation has been validated with respect to TWS computation using SHbundle and presented in Fig 02. The NRMSE values are in the order of e<sup>-8</sup>. Timeseries plots for the Amazon and the Ganges basins have been plotted in Fig 03 and Fig 04, respectively. In both the cases, the order of magnitude of the signal is e<sup>2</sup>, while the error is in the order of e<sup>-6</sup>. Additionally, water budget closure timeseries for the world is provided in Fig 05. The magnitude of difference between the errors and the signal is of the order e<sup>-4</sup>. As such, the errors are likely computational artifacts; and of very small order that can be neglected. Thus, the python package PySHbundle is deemed to give the desired performance in the processing of GRACE L2 Spherical Harmonics to obtain L3 TWS anomalies over land grids.
+The results of the PySHbundle TWS computation has been validated with respect to TWS computation using SHbundle and presented in Fig 02. We have chosen the Normalized Root Mean Square Error (`NRMSE`) metric for the validation.
+
+\begin{equation}
+NRMSE = 
+\frac{\sqrt{\frac{\sum_{i=1}^{n}(TWS_pySH - TWS_SH)^2}{n}}}
+{\frac{\sum_{i=1}^{n} TWS_SH}{n}}
+\end{equation}
+
+where:
+- \(n\) is the total number of timesteps
+- \(TWS_pySH) is the TWS for each timestep generated by pySHbundle
+- \(TWS_SH) os the TWS for each timestep generated by SHbundle
+
+The `NRMSE` values are in the order of e<sup>-8</sup>. Timeseries plots for the Amazon and the Ganges basins have been plotted in Fig 03 and Fig 04, respectively. In both the cases, the order of magnitude of the signal is e<sup>2</sup>, while the error is in the order of e<sup>-6</sup>. Additionally, water budget closure timeseries for the world is provided in Fig 05. The magnitude of difference between the errors and the signal is of the order e<sup>-4</sup>. As such, the errors are likely computational artifacts; and of very small order that can be neglected. Thus, the python package PySHbundle is deemed to give the desired performance in the processing of GRACE L2 Spherical Harmonics to obtain L3 TWS anomalies over land grids.
 ![Fig 02: NRMSE of TWS computation for PySHbundle with respect to SHbundle results.  \label{fig:error_validation}](./pic/02_error_nrmse.png)<br>
-<i>Fig 02: RMSE and NRMSE of TWS computation for PySHbundle with respect to SHbundle results.</i><br>
+<i>Fig 02: NRMSE of TWS computation for PySHbundle with respect to SHbundle results.</i><br>
 
 ![Fig 03: Timeseries plot of TWS signal from pyshbundle, shbundle and error signal for the Amazon basin](./pic/03_basin_avg_tws_Amazon.png)<br>
 <i>Fig 03: Timeseries plot of TWS signal from pyshbundle, shbundle and error signal for the Amazon basin</i><br>
@@ -203,16 +233,9 @@ The results of the PySHbundle TWS computation has been validated with respect to
 ![Fig 05: Water budget closure timeseries plot of TWS signal from pyshbundle, shbundle and error signal](./pic/04_water_budget_closure.png)<br>
 <i>Fig 05: Water budget closure timeseries plot of TWS signal from pyshbundle, shbundle and error signal</i><br>
 
-
-# Acknowledgements
-
 # References
 
 1. https://www.nasa.gov/mission_pages/Grace/ <br>
-2. https://podaac.jpl.nasa.gov/ <br>
-3. http://isdc.gfz-potsdam.de/grace-isdc <br>
-4. https://ccar.colorado.edu/grace<br>
-2. https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/ <br>
 
 # Citations
 
@@ -220,6 +243,7 @@ The results of the PySHbundle TWS computation has been validated with respect to
 - Chao, B. F., & Gross, R. S. (1987). Changes in the Earth's rotation and low-degree gravitational field induced by earthquakes. Geophysical Journal International, 91(3), 569-596. DOI 10.1111/j.1365-246X.197.tb01659.x 
 - Darbeheshti, N., Wöske, F., Weigelt, M., Mccullough, C., & Wu, H. (2018). GRACETOOLS—GRACE Gravity Field Recovery Tools. Geosciences, 8(9), 350. https://www.mdpi.com/2076-3263/8/9/350 
 - Devaraju B (2015) Understanding filtering on the sphere – Experiences from filtering GRACE data. PhD thesis, Universität Stuttgart, https://elib.uni-stuttgart.de/bitstream/11682/4002/1/BDevarajuPhDThesis.pdf 
+- Devaraju, B., & Sneeuw, N. (2016). On the spatial resolution of homogeneous isotropic filters on the sphere. In VIII Hotine-Marussi Symposium on Mathematical Geodesy: Proceedings of the Symposium in Rome, 17-21 June, 2013 (pp. 67-73). Springer International Publishing. https://link.springer.com/chapter/10.1007/1345_2015_5
 - Feng, W. GRAMAT: a comprehensive Matlab toolbox for estimating global mass variations from GRACE satellite data. Earth Sci Inform 12, 389–404 (2019). https://doi.org/10.1007/s12145-018-0368-0
 - Humphrey, V., Rodell, M., & Eicker, A. (2023). Using Satellite-Based Terrestrial Water Storage Data: A Review. Surveys in Geophysics, 1-29. https://link.springer.com/article/10.1007/s10712-022-09754-9 
 - Kaula, W. M. (1966). Theory of satellite geodesy, Blaisdell Publ. Co., Waltham, Mass, 345.
@@ -230,8 +254,11 @@ The results of the PySHbundle TWS computation has been validated with respect to
 - Piretzidis, D., & Sideris, M. G. (2018). SHADE: A MATLAB toolbox and graphical user interface for the empirical de-correlation of GRACE monthly solutions. Computers & Geosciences, 119, 137-150. https://www.sciencedirect.com/science/article/pii/S0098300418302760 
 - Rietbroek. GRACE filter. https://github.com/strawpants/GRACE-filter.
 - Sutterley (2023). Gravity-toolkit. https://github.com/tsutterley/gravity-toolkit. 
+- Vishwakarma, B. D., Devaraju, B., & Sneeuw, N. (2016). Minimizing the effects of filtering on catchment scale GRACE solutions. Water Resources Research, 52(8), 5868-5890.
 - Vishwakarma, B. D. (2017). Understanding and repairing the signal damage due to filtering of mass change estimates from the GRACE satellite mission. https://elib.uni-stuttgart.de/handle/11682/9210 
 - Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). A data‐driven approach for repairing the hydrological catchment signal damage due to filtering of GRACE products. Water Resources Research, 53(11), 9824-9844. https://agupubs.onlinelibrary.wiley.com/doi/full/10.1002/2017WR021150 
+- Vishwakarma, B. D., Devaraju, B., & Sneeuw, N. (2018). What is the spatial resolution of GRACE satellite products for hydrology?. Remote Sensing, 10(6), 852. https://www.mdpi.com/2072-4292/10/6/852
+- Vishwakarma, B. D. (2020). Monitoring droughts from GRACE. Frontiers in Environmental Science, 8, 584690. https://www.frontiersin.org/articles/10.3389/fenvs.2020.584690/
 - Wahr, J., Molenaar, M., & Bryan, F. (1998). Time variability of the Earth's gravity field: Hydrological and oceanic effects and their possible detection using GRACE. Journal of Geophysical Research: Solid Earth, 103(B12), 30205-30229. https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/98jb02844 
 - Wieczorek, M. A., & Meschede, M. (2018). SHTools: Tools for working with spherical harmonics. Geochemistry, Geophysics, Geosystems, 19(8), 2574-2592. https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018GC007529 
 </p>
