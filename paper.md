@@ -25,9 +25,9 @@ authors:
   - name: Maya Suryawanshi
     orcid: 0009-0008-5701-7504
     affiliation: 2
-  - name: Shard Chander
+  - name: Sharad Chander
     affiliation: 5
-  - name: Bhaskar Ramchandra Nigam
+  - name: Bhaskar R. Nigam
     affiliation: 6
   - name: Nagesh Kumar Dasika
     orcid: 0009-0006-9323-1191
