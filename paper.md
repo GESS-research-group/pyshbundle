@@ -27,7 +27,7 @@ authors:
     affiliation: 2
   - name: Sharad Chander
     affiliation: 5
-  - name: Bhaskar R. Nigam
+  - name: Bhaskar R. Nikam
     affiliation: 6
   - name: Nagesh Kumar Dasika
     orcid: 0009-0006-9323-1191
