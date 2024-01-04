@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: pyshbundle
-Version: 0.1.0
+Version: 0.1.1
 Summary: PySHbundle: A Python implementation of MATLAB codes SHbundle
 Home-page: https://github.com/mn5hk/pyshbundle
 Author: Amin Shakya

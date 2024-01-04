@@ -24,3 +24,4 @@ cartopy
 ipykernel
 jupyterlab
 rioxarray
+cartopy
