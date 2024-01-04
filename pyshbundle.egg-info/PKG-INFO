@@ -7,7 +7,6 @@ Author: Amin Shakya
 Author-email: aminshk50@gmail.com
 License: GNU General Public License v3
 Keywords: pyshbundle
-Platform: UNKNOWN
 Classifier: Development Status :: 2 - Pre-Alpha
 Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
@@ -23,6 +22,9 @@ License-File: LICENSE
 
 # PySHbundle: A Python implementation of MATLAB codes SHbundle <br>
 
+![](https://visitor-badge.glitch.me/badge?page_id=mn5hk.mat2py) <br>
+
+
 PySHBundle is the python implementation of the popular SHBundle toolbox originally written using MATLAB. 
 
 TODO: Badges and and banner for the project
@@ -31,65 +33,114 @@ TODO: Badges and and banner for the project
 ## Usage
 
 1. Read and Load level-2 spherical harmonic data
-2. create basin time series for TWS
-3. perform grace data driven correction
+2. Create basin time series for TWS
+3. Perform grace data driven correction
+4. Plot spherical harmonic related plots
 
 ## 1. How to install <br>
 ### 1.1 For Users
-Currently the package is not yet finalized hence the version on PyPI is outdated and should not be used. Please follow the steps mentioned for contributors in order to use the latest features. <br>
+Currently the package is not yet finalized hence the version on PyPI is outdated and should not be used (as of now). Please follow the steps mentioned in the following section till things are finalized. <br>
 
-### 1.2 For Contributors
-1. Fork the repository and clone it onto your system
-2. In order to use the codebase understand the repository structure
-   
+### 1.2 Till things get finalized
+
+1.  Fork the pyshbundle repo on GitHub.
+
+2.  Clone your fork locally:
+
+    ```shell
+    $ git clone git@github.com:your_name_here/pyshbundle.git
+    ```
+
+3.  Create a new virtual environment or conda environment to install all the necessary dependencies. using `conda` is recommended along with `jupyter lab`. Use of python 3.x is recommended
+
+    ```shell
+    $ conda create -n pyshbundle-env
+    $ conda activate pyshbundle-env
+    $ conda install -c conda-forge --file requirements_dev.txt -y
+    ```
+4. Note that the base path to the entire repo is important while importing (this is tempoary only, after PyPi module gets updated this approach will not be required) 
    ```
-   Example base repo path -> ../open-source/pyshbundle
+   Example base repo path -> ../open_source/pyshbundle
 
-   pyshbundle (base repo)
-    | - pyshbundle (actual module)
+   pyshbundle (base container repo)
+    | - pyshbundle (codes and functions reside here)
         | - all the codes
     | - notebooks
     | - docs
-    | - and rest other folders
+    | - and rest of the other folders
    ```
-3. in order to use any of the functions change the current directory to teh pyshbundle (base repo) then use import
-   ```{python}
-   import os
 
-   os.chdir(../open-source/pyshbundle)
+5. In order to use any of the functions change the current directory to the pyshbundle (base repo) then use import as usual
+   ```python
+   import os
+   os.chdir(../open_source/pyshbundle)
 
    import pyshbundle
+   # or import individual functions
+   from pyshbundle import read_jpl
    ```
+   after importing the fucntions this way you are all good to go.
 
 
 ## Read the Docs
 
-Please find the docs here - [link goes here]
+Please find the docs here - [PySHBundle](https://abhimhamane.github.io/pyshbundle/)
 
 
-## Contribution Guidelines
-1. Found a bug?
- - Please check the know issues section before reporting
- - If the bug not mentioned in known issue section, report the bug in the given format
-   
-2. Want a new feature to be added?
- - Try creating a feature request in the GitHub issues section
+## Contributing
 
-3. Want to start the open source journey?
- - Try helping out in improving the documentation for the project
- - Try the module and come up with innovative tutorial ideas and implement them
+Contributions are welcome, and they are greatly appreciated! Every
+little bit helps, and credit will always be given.
+
+You can contribute in many ways:
+
+## Types of Contributions
+
+### Report Bugs
+
+Report bugs at [GitHub Issues](https://github.com/mn5hk/pyshbundle/issues)
 
 
-### Reporting bugs/issues
-> Expected format
-[Update]
+If you are reporting a bug, please include:
+
+-   Your operating system name and version.
+-   Any details about your local setup that might be helpful in troubleshooting.
+-   Detailed steps to reproduce the bug.
+
+### Fix Bugs
+
+Look through the GitHub issues for bugs. Anything tagged with `bug` and
+`help wanted` is open to whoever wants to implement it.
+
+### Implement Features
+
+Look through the GitHub issues for features. Anything tagged with
+`enhancement` and `help wanted` is open to whoever wants to implement it.
+
+### Write Documentation
+
+pyshbundle could always use more documentation,
+whether as part of the official pyshbundle docs,
+in docstrings, or even on the web in blog posts, articles, and such.
+
+### Submit Feedback
+
+The best way to send feedback is to file an issue at
+[GitHub Issues](https://github.com/mn5hk/pyshbundle/issues)
+
+If you are proposing a feature:
+
+-   Explain in detail how it would work.
+-   Keep the scope as narrow as possible, to make it easier to implement.
+-   Remember that this is a volunteer-driven project, and that contributions are welcome :)
 
 ## Known Issues
 
-[To Be Updated...]
+1. New implementation of reading data has some bug. It works for CSR but not properly properly for JPL and ITSG sources. For more information check the current issues.
+2. There is some inconsistency related to importing functions it is recommended to always use `import pyshbundle` along with any of the targeted imports you want.
 
 
-# License Statement
+## License Statement
 
 This file is part of PySHbundle. <br>
     PySHbundle is free software: you can redistribute it and/or modify<br>
@@ -107,11 +158,10 @@ This file is part of PySHbundle. <br>
     
 
 ## Acknowledgement:
-    Please note that PySHbundle has adapted the following code packages, 
-    both licensed under GNU General Public License
+Please note that PySHbundle has adapted the following code packages,both licensed under GNU General Public License
+
   1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/ 
-  2. Downscaling GRACE Total Water Storage Change using Partial Least Squares Regression
-    https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
+  2. Downscaling GRACE Total Water Storage Change using Partial Least Squares Regression: https://springernature.figshare.com/collections/downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
 
 
 ## Key Papers Referred:
@@ -131,7 +181,10 @@ TODO: Add citing info
 
 
 
-![](https://visitor-badge.glitch.me/badge?page_id=mn5hk.mat2py) <br>
-[Geodesy for Earth system science (GESS) research Group at ICWaR, IISc](https://ultra-pluto-7f6d1.netlify.app/)
 
 
+
+
+## Follow the Research Group
+
+<a href="https://ultra-pluto-7f6d1.netlify.app" rel="Geodesy for Earth system science (GESS) research Group at ICWaR, IISc">![Geodesy for Earth system science (GESS) research Group at ICWaR, IISc](../notebooks/imgs/logoGESS.jpg)</a>

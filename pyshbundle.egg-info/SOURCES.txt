@@ -35,6 +35,7 @@ pyshbundle/reader_replacer_itsg.py
 pyshbundle/reader_replacer_jpl.py
 pyshbundle/sc2cs.py
 pyshbundle/tws_cal.py
+pyshbundle/visualisation_utils.py
 pyshbundle.egg-info/PKG-INFO
 pyshbundle.egg-info/SOURCES.txt
 pyshbundle.egg-info/dependency_links.txt

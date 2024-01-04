@@ -39,4 +39,71 @@ Key Papers Referred:
 
 __author__ = """Amin Shakya"""
 __email__ = 'aminshk50@gmail.com'
-__version__ = '0.0.1'
+__version__ = '0.1.0'
+
+# __init__.py with initialization code
+print("Initializing PySHbundle v0.0.1")
+
+# __init__.py with __all__
+__all__ = ['basin_avg', 
+           'clm2cs',
+           'clm2sc',
+           'eigengrav',
+           'gaussian',
+           'GRACE_Data_Driven_Correction_Vishwakarma',
+           'GRACEpy',
+           'grule',
+           'gsha',
+           'gshs',
+           'iplm',
+           'ispec',
+           'klm2sc',
+           'load_longterm_mean',
+           'naninterp',
+           'neumann',
+           'new_io',
+           'normalklm',
+           'Phase_calc',
+           'plm',
+           'read_GRACE_SH_paths',
+           'reader_replacer',
+           'reader_replacer_csr',
+           'reader_replacer_itsg',
+           'reader_replacer_jpl',
+           'sc2cs',
+           'tws_cal',
+           'visualisation_utils']
+
+#Import individual modules
+from .basin_avg import basin_avg
+from .clm2cs import clm2cs, clm2cs_new
+from .clm2sc import clm2sc, clm2sc_new
+# from .delta_sc import eigengrav
+from .eigengrav import eigengrav
+from .gaussian import gaussian
+from .GRACE_Data_Driven_Correction_Vishwakarma import deg_to_rad, GRACE_Data_Driven_Correction_Vishwakarma
+# from .GRACEconstants import 
+from .GRACEpy import upwcon, lovenr, lovenrPREM
+from .grule import grule
+from .gsha import gsha
+from .gshs import gshs
+from .iplm import iplm
+from .ispec import ispec
+from .klm2sc import klm2sc #, klm2sc_new
+from .load_longterm_mean import load_longterm_mean
+from .naninterp import naninterp
+from .neumann import neumann
+from .new_io import clm2cs_new, read_jpl, parse_jpl_header, parse_jpl_data, parse_lines, read_csr, find_word, parse_csr_header, parse_csr_data, read_itsg, parse_itsg_header, parse_itsg_data, read_tn13, parse_tn13_header, parse_tn13_data, read_tn14, parse_tn14_header, parse_tn14_data, find_date_in_replacemnt_file, extract_C10_11_replcmnt_coeff, extract_C20_replcmnt_coeff, extract_C30_replcmnt_coeff, replace_zonal_coeff, klm2sc_new, sub2ind, cklm2sc_new, check_format
+from .normalklm import normalklm
+from .Phase_calc import Phase_calc
+from .plm import plm, secrecur, lrecur, derivALF
+# from .pyshbundle import 
+from .read_GRACE_SH_paths import read_GRACE_SH_paths
+from .reader_replacer import reader, TIME, last_4chars, reader_replacer
+from .reader_replacer_csr import reader_replacer_csr 
+from .reader_replacer_itsg import reader_replacer_itsg 
+from .reader_replacer_jpl import reader_replacer_jpl
+from .sc2cs import sc2cs
+from .tws_cal import tws_cal
+# from .tws_py import 
+from .visualisation_utils import sc_triplot, cs_sqplot, polar_plot, mapfield, ylm, ylm_plot, gshs_prepare
