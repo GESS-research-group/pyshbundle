@@ -42,7 +42,6 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 import os
-#os.chdir(path_functions)
 from pyshbundle import gaussian
 from pyshbundle import gshs
 import numpy as np
