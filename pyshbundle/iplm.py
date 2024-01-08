@@ -146,8 +146,8 @@ def iplm(l, m:int, theRAD, dt=-9999):
     ctmin   = np.cos(theRAD-dt/2)
     plmplus = np.ones([n,lmax+1])
     plmmin = np.ones([n,lmax + 1])
-    plmplus[:,l] = plm.plm(np.array([l]),mfix,(theRAD + dt/2),3,1)[:,:,0]                  # Tesserals
-    plmmin[:,l] = plm.plm(np.array([l]),mfix,(theRAD - dt/2),3,1)[:,:,0] 
+    plmplus[:,l] = plm(np.array([l]),mfix,(theRAD + dt/2),3,1)[:,:,0]                  # Tesserals
+    plmmin[:,l] = plm(np.array([l]),mfix,(theRAD - dt/2),3,1)[:,:,0] 
     if mfix > 0:
         m = np.arange(1,mfix + 1,1)
         mm = 2*m
