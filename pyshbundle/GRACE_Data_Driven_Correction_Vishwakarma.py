@@ -147,7 +147,7 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
     else:
         flag_cs = 1
 
-    Weights = gaussian.gaussian(l-1, GaussianR) 
+    Weights = gaussian(l-1, GaussianR) 
     #gaussian returns weights as a list #gaussian is np.array()
     
     try: #Broadcase Weights into dimensions
@@ -162,13 +162,13 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
     if l == cfield:
         for m in range(r):
             if flag_cs == 0:
-                Ft = cs2sc.cs2sc(f[m][0]).astype('longdouble') 
+                Ft = cs2sc(f[m][0]).astype('longdouble') 
             else:
                 Ft = f[m][0].astype('longdouble') 
                 
            
-            fFld__, _, _ = gshs.gshs(Ft * filter_, qty, 'cell', int(180/deg), 0, 0) 
-            ffFld__, _, _ = gshs.gshs((Ft * filter_ * filter_), qty, 'cell', int(180/deg), 0, 0)
+            fFld__, _, _ = gshs(Ft * filter_, qty, 'cell', int(180/deg), 0, 0) 
+            ffFld__, _, _ = gshs((Ft * filter_ * filter_), qty, 'cell', int(180/deg), 0, 0)
             
             if m == 0:
                 fFld = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble') 
@@ -210,8 +210,8 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
        
         #Basin functions, filtered basin function and transfer function Kappa
         Rb = basins[rbasin][0] 
-        csRb = gsha.gsha(Rb, 'mean', 'block', long/2) 
-        csF = cs2sc.cs2sc(csRb[0:l, 0:l]) 
+        csRb = gsha(Rb, 'mean', 'block', long/2) 
+        csF = cs2sc(csRb[0:l, 0:l]) 
         filRb_ = gshs(csF * filter_, 'none', 'cell', int(long/2), 0, 0) 
         filRb = filRb_[0]
         kappa = (1-Rb) * filRb
@@ -268,8 +268,8 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
         
         
         A = np.ones([60,2])
-        A[:,1] = naninterp.naninterp(tsleaktotalff[:, i])
-        lssol_ = sc.linalg.lstsq(A, naninterp.naninterp(tsleaktotalf[:, i])) #returns a tuple of solution "x", residue and rank of matrix A; for A x = B
+        A[:,1] = naninterp(tsleaktotalff[:, i])
+        lssol_ = sc.linalg.lstsq(A, naninterp(tsleaktotalf[:, i])) #returns a tuple of solution "x", residue and rank of matrix A; for A x = B
         lssol = lssol_[0]
         bl.append(lssol[2-1])
         #Working till here 2022-10-21 1530pm
@@ -280,15 +280,15 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
     leakLS = tsleaktotalf * multp
     
     
-    ps = Phase_calc.Phase_calc(tsleaktotalf,tsleaktotalff)
+    ps = Phase_calc(tsleaktotalf,tsleaktotalff)
     
     
     
     #Compute the near true leakage
     
     for i in range(0, cid):   
-        ftsleaktotal[:,i] = naninterp.naninterp(tsleaktotalf[:,i]) #Replaces gaps (NaN values) with an itnerpolated value in the leakage time series from once filtered fields
-        fftsleaktotal[:,i] = naninterp.naninterp(tsleaktotalff[:,i]) #replace the gaps (NaN values) with an interpolated value in leakage time series from twice filtered fields
+        ftsleaktotal[:,i] = naninterp(tsleaktotalf[:,i]) #Replaces gaps (NaN values) with an itnerpolated value in the leakage time series from once filtered fields
+        fftsleaktotal[:,i] = naninterp(tsleaktotalff[:,i]) #replace the gaps (NaN values) with an interpolated value in leakage time series from twice filtered fields
         
         X = sc.fft.fft(ftsleaktotal[:,i]) #take fast Fourier transform #check shape of X 2022-10-21
         p = -ps[0,i] / r #compute the fraction of the time period by which the time series is to be shiftes

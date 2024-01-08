@@ -138,7 +138,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
             lam = np.arange(0, 360+(dt/4) - dt, dt)
         elif (grid == 'neumann') or (grid == 'gauss'): 
         # gw, gx = neumann(n+1) #For some reason, grule does not work for even values
-            gw, gx = neumann.neumann(n)
+            gw, gx = neumann(n)
             theta = np.arccos(np.flipud(gx)) * 180 / np.pi
             lam = np.arange(0, 360+(dt/4)-dt, dt)
             
@@ -253,7 +253,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
             slm[m:L+1, m] = (1 + (m == 0))/ 4 * p.T @ (si * bi)
     
     elif method == 'fnm': #1st Neumann method (exact upto L/2)
-        w = neumann.neumann(np.cos(theRAD))
+        w = neumann(np.cos(theRAD))
         
         for m in range(L+1):
             l = np.arange(m, L+1).reshape(L+1-m, 1)

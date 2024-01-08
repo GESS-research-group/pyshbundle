@@ -26,7 +26,7 @@ def clm2cs_new(data):
         numpy.ndarray: Standard deviations associated with SH data arranged in |C\S| format
     """
     # read the data from clm to sc format
-    sc_mat, devsc_mat = clm2sc.clm2sc(data)
+    sc_mat, devsc_mat = clm2sc(data)
 
     # number of files stacked
     num_files = np.shape(sc_mat)[0]
@@ -37,8 +37,8 @@ def clm2cs_new(data):
     devcs_mat = np.zeros((num_files, r, r))
 
     for ith_file in range(num_files):
-        cs_mat[ith_file, :, :] = sc2cs.sc2cs(sc_mat[ith_file, :, :])
-        devcs_mat[ith_file, :, :] = sc2cs.sc2cs(devsc_mat[ith_file, :, :])
+        cs_mat[ith_file, :, :] = sc2cs(sc_mat[ith_file, :, :])
+        devcs_mat[ith_file, :, :] = sc2cs(devsc_mat[ith_file, :, :])
 
     return cs_mat, devcs_mat
 

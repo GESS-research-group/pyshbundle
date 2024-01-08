@@ -105,10 +105,10 @@ def clm2cs_new(data_mat: np.ndarray, lmax: int, sigma_flag=False):
         
     """
     if sigma_flag:
-        sc_mat, dev_sc = clm2sc.clm2sc(data_mat=data_mat, lmax=lmax, sigma_flag=True)
-        return sc2cs.sc2cs(sc_mat), sc2cs.sc2cs(dev_sc)
+        sc_mat, dev_sc = clm2sc(data_mat=data_mat, lmax=lmax, sigma_flag=True)
+        return sc2cs(sc_mat), sc2cs.sc2cs(dev_sc)
     else:
-        sc_mat = clm2sc.clm2sc(data_mat=data_mat, lmax=lmax, sigma_flag=False)
-        return sc2cs.sc2cs(sc_mat)
+        sc_mat = clm2sc(data_mat=data_mat, lmax=lmax, sigma_flag=False)
+        return sc2cs(sc_mat)
 
     
