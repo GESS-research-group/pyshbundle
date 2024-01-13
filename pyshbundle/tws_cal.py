@@ -42,8 +42,8 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 import os
-from pyshbundle import gaussian
-from pyshbundle import gshs
+from .gaussian import gaussian
+from .gshs import gshs
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm

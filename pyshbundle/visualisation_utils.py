@@ -11,8 +11,10 @@ import cartopy
 import cartopy.crs as ccrs
 
 import pyshbundle
-from pyshbundle import sc2cs, clm2sc
-from pyshbundle import plm, gshs
+from pyshbundle.clm2cs import clm2cs, clm2cs_new
+from pyshbundle.sc2cs import sc2cs
+from pyshbundle.plm import plm
+from pyshbundle.gshs import gshs
 
 def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
     """Visualize the SH coeff. in /S|C\ triangular matrix format
