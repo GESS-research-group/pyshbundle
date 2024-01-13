@@ -11,8 +11,10 @@ import cartopy
 import cartopy.crs as ccrs
 
 import pyshbundle
-from pyshbundle import sc2cs, clm2sc
-from pyshbundle import plm, gshs
+from pyshbundle.clm2cs import clm2cs, clm2cs_new
+from pyshbundle.sc2cs import sc2cs
+from pyshbundle.plm import PLM
+from pyshbundle.gshs import GSHS
 
 def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
     """Visualize the SH coeff. in /S|C\ triangular matrix format
@@ -233,7 +235,7 @@ def ylm(l: int, m: int):
     arr[0] = l
     
     
-    p = plm(arr, m, thetaRAD, nargin=1, nargout=1)
+    p = PLM(arr, m, thetaRAD, nargin=1, nargout=1)
 
     ylmc = p * cosml
     ylms = p * sinml
@@ -291,7 +293,7 @@ def gshs_prepare(lmax, gs, quant, grd, h, jflag, sc_coeff):
     grid_y = int(180/gs)
     grid_x = int(360/gs)
 
-    ff = gshs(sc_coeff, quant, grd, n, h, jflag)[0]
+    ff = GSHS(sc_coeff, quant, grd, n, h, jflag)[0]
 
     # rearranging
     field = np.zeros([grid_y,grid_x], dtype ='longdouble')

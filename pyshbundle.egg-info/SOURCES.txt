@@ -42,3 +42,4 @@ pyshbundle.egg-info/dependency_links.txt
 pyshbundle.egg-info/not-zip-safe
 pyshbundle.egg-info/requires.txt
 pyshbundle.egg-info/top_level.txt
+tests/test_pyshbundle.py

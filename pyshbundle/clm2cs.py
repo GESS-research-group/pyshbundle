@@ -43,7 +43,8 @@
 
 
 import numpy as np
-from pyshbundle import sc2cs, clm2sc
+from pyshbundle.sc2cs import sc2cs
+from pyshbundle.clm2sc import clm2sc
 
 # CLM to C|S format
 def clm2cs(data):

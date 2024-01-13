@@ -82,13 +82,13 @@
 import numpy as np
 from os import chdir, getcwd
 
-from pyshbundle import cs2sc
-from pyshbundle import normalklm
-from pyshbundle import plm
-from pyshbundle import eigengrav
-from pyshbundle import ispec
+from pyshbundle.cs2sc import cs2sc
+from pyshbundle.normalklm import normalklm
+from pyshbundle.plm import PLM
+from pyshbundle.eigengrav import eigengrav
+from pyshbundle.ispec import ispec
 
-def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
+def GSHS(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     """GSHS - Global Spherical Harmonic Synthesis
 
     Args:
@@ -202,7 +202,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     m = 0
     c = field[m:lmax+1, lmax+m] 
     l = np.array([np.arange(m,lmax+1)])
-    p = plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
+    p = PLM(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
     a[:, m] = np.dot(p,c) 
     b[:, m] = np.zeros(nlat) 
     
@@ -213,7 +213,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
         s = field[m:lmax+1,lmax-m]
         
         l = np.array([np.arange(m,lmax+1)])
-        p = plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
+        p = PLM(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
         a[:, m] = np.dot(p,c)
         b[:, m] = np.dot(p,s)
         

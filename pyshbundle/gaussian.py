@@ -55,7 +55,7 @@
 
 import numpy as np
 
-def gaussian(L: int, cap: int):
+def Gaussian(L: int, cap: int):
     """The program delivers the spherical harmonic coefficients of a gaussian
     smoothing filter. The coefficients are calculated according to Wahr et. al.(1998)
     equation (34) and Swenson and Wahr equation (34)
