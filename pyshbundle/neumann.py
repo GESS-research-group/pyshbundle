@@ -69,8 +69,8 @@
 # @author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
 import numpy as np
-from pyshbundle import grule
-from pyshbundle import plm
+from pyshbundle.grule import grule
+from pyshbundle.plm import PLM
 
 def neumann(inn):
     """Returns the weights and nodes for Neumann's numerical integration
@@ -114,7 +114,7 @@ def neumann(inn):
             x = inn
             theRAD = np.arccos(x) #x in radian
             l = np.array(list(range(len(x))))
-            pp = plm(l, theRAD)
+            pp = PLM(l, theRAD)
             
             rr = list([2])
             for i in len(x-1):
