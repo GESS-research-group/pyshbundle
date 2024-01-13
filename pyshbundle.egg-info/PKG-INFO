@@ -7,7 +7,6 @@ Author: Amin Shakya
 Author-email: aminshk50@gmail.com
 License: GNU General Public License v3
 Keywords: pyshbundle
-Platform: UNKNOWN
 Classifier: Development Status :: 2 - Pre-Alpha
 Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
@@ -189,5 +188,3 @@ TODO: Add citing info
 ## Follow the Research Group
 
 <a href="https://ultra-pluto-7f6d1.netlify.app" rel="Geodesy for Earth system science (GESS) research Group at ICWaR, IISc">![Geodesy for Earth system science (GESS) research Group at ICWaR, IISc](../notebooks/imgs/logoGESS.jpg)</a>
-
-
