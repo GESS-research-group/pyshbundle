@@ -42,7 +42,7 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 import os
-from pyshbundle.gaussian import Gaussian
+from pyshbundle.gaussian import gaussian
 from pyshbundle.gshs import gshs as GSHS
 import numpy as np
 import matplotlib.pyplot as plt
@@ -60,7 +60,7 @@ def tws_cal(data, lmax: int, gs: float, r, m):
     """
     SC = data
     
-    gfilter = Gaussian(lmax,r)
+    gfilter = gaussian(lmax,r)
     grid_y = int(180/gs)
     grid_x = int(360/gs)
     tws_f = np.zeros([m,grid_y,grid_x], dtype ='longdouble')
