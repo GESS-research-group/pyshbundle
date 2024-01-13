@@ -42,13 +42,13 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 import os
-from pyshbundle.gaussian import gaussian
-from pyshbundle.gshs import gshs as GSHS
+from pyshbundle.gaussian import Gaussian
+from pyshbundle.gshs import GSHS
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-def tws_cal(data, lmax: int, gs: float, r, m):
+def TWSCalc(data, lmax: int, gs: float, r, m):
     """_summary_
 
     Args:
@@ -60,7 +60,7 @@ def tws_cal(data, lmax: int, gs: float, r, m):
     """
     SC = data
     
-    gfilter = gaussian(lmax,r)
+    gfilter = Gaussian(lmax,r)
     grid_y = int(180/gs)
     grid_x = int(360/gs)
     tws_f = np.zeros([m,grid_y,grid_x], dtype ='longdouble')

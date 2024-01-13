@@ -55,7 +55,7 @@ import scipy as sc
 from scipy import signal as signal
 import numpy as np
 
-def Phase_calc(fts, ffts):
+def PhaseCalc(fts, ffts):
     """calculates the phase difference between two time series based on the
     Hilbert transform method explained by Phillip et al.
 

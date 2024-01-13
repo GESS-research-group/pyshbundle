@@ -87,7 +87,7 @@
 import sys
 import numpy as np
 
-def plm(l: np.array, m:int, thetaRAD, nargin, nargout): 
+def PLM(l: np.array, m:int, thetaRAD, nargin, nargout): 
     """PLM Fully normalized associated Legendre functions for a selected order M
 
     Args:
