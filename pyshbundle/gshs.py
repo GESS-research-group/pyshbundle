@@ -88,7 +88,7 @@ from pyshbundle.plm import PLM
 from pyshbundle.eigengrav import eigengrav
 from pyshbundle.ispec import ispec
 
-def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
+def GSHS(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     """GSHS - Global Spherical Harmonic Synthesis
 
     Args:

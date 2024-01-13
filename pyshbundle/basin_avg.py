@@ -48,7 +48,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 import salem
 
-def basin_avg(data, path: str, c_rs, m, gs):
+def BasinAvg(data, path: str, c_rs, m, gs):
     """Computes the TWSA time-series for a given basin shape file, using the SH data.
 
     Args:
