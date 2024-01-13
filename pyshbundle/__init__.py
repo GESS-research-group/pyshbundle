@@ -95,7 +95,7 @@ from .naninterp import naninterp
 from .neumann import neumann
 from .new_io import clm2cs_new, read_jpl, parse_jpl_header, parse_jpl_data, parse_lines, read_csr, find_word, parse_csr_header, parse_csr_data, read_itsg, parse_itsg_header, parse_itsg_data, read_tn13, parse_tn13_header, parse_tn13_data, read_tn14, parse_tn14_header, parse_tn14_data, find_date_in_replacemnt_file, extract_C10_11_replcmnt_coeff, extract_C20_replcmnt_coeff, extract_C30_replcmnt_coeff, replace_zonal_coeff, klm2sc_new, sub2ind, cklm2sc_new, check_format
 from .normalklm import normalklm
-from .phase_calc import PhaseCalc
+from .Phase_calc import PhaseCalc
 from .plm import PLM, secrecur, lrecur, derivALF
 # from .pyshbundle import 
 from .read_GRACE_SH_paths import read_GRACE_SH_paths

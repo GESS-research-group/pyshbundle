@@ -13,8 +13,8 @@ import cartopy.crs as ccrs
 import pyshbundle
 from pyshbundle.clm2cs import clm2cs, clm2cs_new
 from pyshbundle.sc2cs import sc2cs
-from pyshbundle.plm import plm as PLM
-from pyshbundle.gshs import gshs as GSHS
+from pyshbundle.plm import PLM
+from pyshbundle.gshs import GSHS
 
 def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
     """Visualize the SH coeff. in /S|C\ triangular matrix format
