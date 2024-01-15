@@ -10,6 +10,7 @@ authors:
   - name: Amin Shakya
     orcid: 0000-0002-4706-826X
     equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
+    corresponding: true # (This is how to denote the corresponding author)
     affiliation: 1
   - name: Vivek Kumar Yadav
     orcid: 0009-0000-7156-4450
@@ -34,7 +35,6 @@ authors:
     affiliation: 7
   - name: Bramha Dutt Vishwakarma
     orcid: 0000-0003-4787-8470
-    corresponding: true # (This is how to denote the corresponding author)
     affiliation: "2,8" # (Multiple affiliations must be quoted)
 affiliations:
  - name: Faculty of Geo-Information Science and Earth Observation, University of Twente, the Netherlands
@@ -235,8 +235,7 @@ The `NRMSE` values are in the order of $e^{-8}$. Time-series plots for the Amazo
 <i>Fig 05: Water budget closure timeseries plot of TWS signal from pyshbundle, shbundle and error signal</i><br>
 
 # Concluding Remarks
-In this paper, we have introduced a new python software package, named `PySHbundle`. `GRACE` data has been used for numerous studies globally in hydrology, geodesy, sea level rise, glacier mass balance, climate change etc., and has provided novel insights into the changing climate in our planet. With this open source software and associated tutorials, it is hoped that the reach of the satellite data application can be further enlarged. Further, with open science, we strongly encourage our audience to further build upon the modules presented in this version of the software and to further its application. Lastly, we acknowledge building upon existing Matlab codes such as [`SHbundle`](https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle) and [`DataDrivenCorrection Bundle`](https://www.gis.uni-stuttgart.de/en/research/downloads/datadrivencorrectionbundle) to build this software.
-
+In this paper, we have introduced a new Python software package named `PySHbundle`. The software can process Stokes coefficients for Earth's gravity field to provide gridded products representing changes in mass, geoid height anomalies, equivalent water height anomalies, etc. This package has been specially developed to process the level 2  spherical harmonic data from the GRACE satellite mission, which finds application in numerous disciplines of Earth system science. Many of the existing software packages for processing GHRACE data, such as the [`SHbundle`](https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle), [`LUH-GRACE`](https://www.ife.uni-hannover.de/en/services/luh-grace), and [`DataDrivenCorrection Bundle`](https://www.gis.uni-stuttgart.de/en/research/downloads/datadrivencorrectionbundle), are written in Matlab, a propriety software. With this open-source software and associated tutorials available, we hope that more researchers can process GRACE data and use it for their research. This work will also aid students and online short schools, such as the GRACE Hackweek organized by IIT Kanpur, India, where many young researchers from low-income countries participate. The software has potential to increase GRACE level-2 data processing accessibility to early-career researchers and researchers from low-income regions, adhering to the principles of open science.
 
 # Citations
 
