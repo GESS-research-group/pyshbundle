@@ -67,7 +67,7 @@ def reader(file_name: str,line_num, degree: int, order: int, clm,slm,delta_clm,d
         year_start (_type_): _description_
         time_axes (_type_): _description_
     """
-    with gzip.open(file_name,"r") as file:
+    with gzip.open(file_name,"r", encoding='utf8') as file:
         stuff = file.readlines()
         stuff
         for i in range (0,len(stuff),1):
@@ -168,7 +168,7 @@ def reader_replacer(path, path_tn14, path_tn13):
     
     
     rep_start_date, rep_end_date, c20, c30 = [], [], [], []
-    with open(new_file_TN14,"r") as file:
+    with open(new_file_TN14,"r", encoding='utf8') as file:
         stuff = file.readlines()
         for i in range(0,len(stuff),1):
             if  stuff[i] == str('Product:\n'):
@@ -209,7 +209,7 @@ def reader_replacer(path, path_tn14, path_tn13):
     new_file_TN13 = path_tn13
     
     rep_start_date_deg1, rep_end_date_deg1, c1m, s1m = [], [], [], []
-    with open(new_file_TN13,"r") as file:
+    with open(new_file_TN13,"r", encoding='utf8') as file:
         stuff = file.readlines()
         for i in range(0,len(stuff),1):
             if  stuff[i] == str('end of header ===============================================================================\n'):
