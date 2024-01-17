@@ -402,7 +402,7 @@ def read_itsg(file_path: str):
 
     # open the file and read the lines
     if file_path[-4:] == '.gfc':
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r', encoding='utf8') as file:
 
             # read the file line wise -> obtain a list of bytes
             info_lines = file.readlines()
@@ -525,7 +525,7 @@ def read_tn13(file_path):
     # check the file format - txt of zipped
 
     if file_path[-4:] == '.txt':
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r', encoding='utf8') as file:
 
             # read the file line wise -> obtain a list of bytes
             info_lines = file.readlines()
@@ -655,7 +655,7 @@ def read_tn14(file_path):
 
     # read the data into a list
     if file_path[-4:] == '.txt':
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r', encoding='utf8') as file:
 
             # read the file line wise -> obtain a list of bytes
             info_lines = file.readlines()
