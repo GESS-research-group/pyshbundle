@@ -24,5 +24,4 @@ cartopy
 ipykernel
 jupyterlab
 rioxarray
-cartopy
 salem

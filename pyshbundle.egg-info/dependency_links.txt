@@ -24,7 +24,6 @@ cartopy
 ipykernel
 jupyterlab
 rioxarray
-cartopy
 salem
 #conda install -c conda-forge --file requirements_dev.txt -y
 
