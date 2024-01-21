@@ -17,48 +17,41 @@ TODO: Badges and and banner for the project
 
 ## 1. How to install <br>
 ### 1.1 For Users
-Currently the package is not yet finalized hence the version on PyPI is outdated and should not be used (as of now). Please follow the steps mentioned in the following section till things are finalized. <br>
+The module can be installed via pip python package manager. Follow the follwing steps to setup a virtual environment and start exploring the GRACE Gravity Field data.
 
-### 1.2 Till things get finalized
+```shell
+# creating a new virtual environment
+$ python3 -m venv <name-env>
+# activate the virtual environment environment
+$ source </location-of-virt-env/name-env/bin/activate>
+# install package into virtual environment
+$ pip install pyshbundle
 
-1.  Fork the pyshbundle repo on GitHub.
+# clone the repository in order to access the notebooks and data
+$ git clone https://github.com/mn5hk/pyshbundle.git
+```
 
-2.  Clone your fork locally:
+### 1.2 For Devs/Contributors
+Developers can access the latest development branch and 
+```shell
+# clone the repo and fetch the dev branch
+$ git clone https://github.com/mn5hk/pyshbundle.git
 
-    ```shell
-    $ git clone git@github.com:your_name_here/pyshbundle.git
-    ```
+# creating a new virtual environment
+$ python3 -m venv <name-env>
 
-3.  Create a new virtual environment or conda environment to install all the necessary dependencies. using `conda` is recommended along with `jupyter lab`. Use of python 3.x is recommended
+# install the dependencies from the requirements-dev file
+$ pip install -r ../pyshbundle/requirements-dev.txt
 
-    ```shell
-    $ conda create -n pyshbundle-env
-    $ conda activate pyshbundle-env
-    $ conda install -c conda-forge --file requirements_dev.txt -y
-    ```
-4. Note that the base path to the entire repo is important while importing (this is tempoary only, after PyPi module gets updated this approach will not be required) 
-   ```
-   Example base repo path -> ../open_source/pyshbundle
+# activate the virtual environment environment
+$ source </location-of-virt-env/name-env/bin/activate>
 
-   pyshbundle (base container repo)
-    | - pyshbundle (codes and functions reside here)
-        | - all the codes
-    | - notebooks
-    | - docs
-    | - and rest of the other folders
-   ```
+# install package into virtual environment
+$ pip install ../pyshbundle/dist/<required-version>.tzr.gz
 
-5. In order to use any of the functions change the current directory to the pyshbundle (base repo) then use import as usual
-   ```python
-   import os
-   os.chdir(../open_source/pyshbundle)
-
-   import pyshbundle
-   # or import individual functions
-   from pyshbundle import read_jpl
-   ```
-   after importing the fucntions this way you are all good to go.
-
+# you also have the option to build the module using, be careful of 
+$ python setup.py sdist
+```
 
 ## Read the Docs
 
@@ -114,9 +107,7 @@ If you are proposing a feature:
 
 ## Known Issues
 
-1. New implementation of reading data has some bug. It works for CSR but not properly properly for JPL and ITSG sources. For more information check the current issues.
-2. There is some inconsistency related to importing functions it is recommended to always use `import pyshbundle` along with any of the targeted imports you want.
-
+**To be updated soon.**
 
 ## License Statement
 
