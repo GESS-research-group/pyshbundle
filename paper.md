@@ -190,7 +190,7 @@ In this contribution, tools to implement the spherical harmonic analysis and fil
 A schematic diagram of the code workflow is presented in Fig 01. 
 <br>
 
-![Schematic diagram of code workflow. \label{fig:code_workflow}](./pic/01_flowchart_20240122.png)<br>
+![Schematic diagram of code workflow. \label{fig:code_workflow}](./pic/01_flowchart_20240122.jpg)<br>
 <i>Fig 01: Schematic Diagram of the Code Workflow</i>
 
 <br>
