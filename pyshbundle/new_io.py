@@ -12,8 +12,8 @@ from copy import deepcopy
 from tqdm import tqdm, trange
 from datetime import datetime, timedelta
 
-from pyshbundle.sc2cs import sc2cs
-from pyshbundle.clm2sc import clm2sc
+from pyshbundle.convert_sh_fmt import sc2cs
+from pyshbundle.convert_sh_fmt import clm2sc
 
 
 def clm2cs_new(data):

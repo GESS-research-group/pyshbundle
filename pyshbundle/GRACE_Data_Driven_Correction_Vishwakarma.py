@@ -67,7 +67,7 @@ import scipy.io
 #CS2SC, gsha, gshs, gaussian
 
 from pyshbundle.gaussian import Gaussian
-from pyshbundle.cs2sc import cs2sc
+from pyshbundle.convert_sh_fmt import cs2sc
 from pyshbundle.gshs import GSHS
 from pyshbundle.gsha import gsha
 from pyshbundle.naninterp import naninterp

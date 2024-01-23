@@ -3,16 +3,11 @@
 # 
 
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-import matplotlib as mpl
 import matplotlib.path as mpath
 import matplotlib.pyplot as plt
 import numpy as np
-import cartopy
 import cartopy.crs as ccrs
 
-import pyshbundle
-from pyshbundle.clm2cs import clm2cs, clm2cs_new
-from pyshbundle.sc2cs import sc2cs
 from pyshbundle.plm import PLM
 from pyshbundle.gshs import GSHS
 

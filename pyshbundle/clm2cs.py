@@ -49,7 +49,7 @@ from pyshbundle.clm2sc import clm2sc
 # CLM to C|S format
 '''
 def clm2cs(data):
-    """_summary_
+    """[Depricated]
 
     Args:
         data (_type_): _description_

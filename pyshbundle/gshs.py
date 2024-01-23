@@ -82,7 +82,7 @@
 import numpy as np
 from os import chdir, getcwd
 
-from pyshbundle.cs2sc import cs2sc
+from pyshbundle.convert_sh_fmt import cs2sc
 from pyshbundle.normalklm import normalklm
 from pyshbundle.plm import PLM
 from pyshbundle.eigengrav import eigengrav
