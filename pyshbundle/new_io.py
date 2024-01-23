@@ -1204,4 +1204,4 @@ def cklm2sc_new(clm_mat, lmax: int):
 
 def check_format(scmat):
     
-    pass
+    raise NotImplementedError()
