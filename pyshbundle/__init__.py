@@ -39,10 +39,10 @@ Key Papers Referred:
 
 __author__ = """Amin Shakya"""
 __email__ = 'aminshk50@gmail.com'
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 # __init__.py with initialization code
-print("Initializing PySHbundle v0.0.1")
+print("Initializing PySHbundle v0.2")
 
 # __init__.py with __all__
 __all__ = ['basin_avg', 
@@ -77,8 +77,8 @@ __all__ = ['basin_avg',
 
 #Import individual modules
 from .basin_avg import BasinAvg
-from .clm2cs import clm2cs, clm2cs_new
-from .clm2sc import clm2sc, clm2sc_new
+#from .clm2cs import clm2cs
+#from .clm2sc import clm2sc
 # from .delta_sc import eigengrav
 from .eigengrav import eigengrav
 from .gaussian import Gaussian
@@ -90,7 +90,7 @@ from .gsha import gsha
 from .gshs import GSHS
 from .iplm import iplm
 from .ispec import ispec
-from .klm2sc import klm2sc #, klm2sc_new
+#from .klm2sc import klm2sc #, klm2sc_new
 from .load_longterm_mean import load_longterm_mean
 from .naninterp import naninterp
 from .neumann import neumann
@@ -104,7 +104,7 @@ from .reader_replacer import reader, TIME, last_4chars, reader_replacer
 from .reader_replacer_csr import reader_replacer_csr 
 from .reader_replacer_itsg import reader_replacer_itsg 
 from .reader_replacer_jpl import reader_replacer_jpl
-from .sc2cs import sc2cs
+#from .sc2cs import sc2cs
 from .conv_data_fmt import sc2cs, clm2cs, clm2sc, cs2sc, klm2sc
 from .tws_cal import TWSCalc
 # from .tws_py import 
