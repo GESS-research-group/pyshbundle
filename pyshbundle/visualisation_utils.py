@@ -283,6 +283,20 @@ def ylm_plot(l: int, m: int):
     plt.title(f"Visualization of Spherical Harmonics - degree: {l} order: {m}")
 
 def gshs_prepare(lmax, gs, quant, grd, h, jflag, sc_coeff):
+    """_summary_
+
+    Args:
+        lmax (_type_): _description_
+        gs (_type_): _description_
+        quant (_type_): _description_
+        grd (_type_): _description_
+        h (_type_): _description_
+        jflag (_type_): _description_
+        sc_coeff (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     n = int(180/gs)
     
     grid_y = int(180/gs)
