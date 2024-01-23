@@ -147,7 +147,7 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
     else:
         flag_cs = 1
 
-    Weights = gaussian(l-1, GaussianR) 
+    Weights = Gaussian(l-1, GaussianR) 
     #gaussian returns weights as a list #gaussian is np.array()
     
     try: #Broadcase Weights into dimensions
@@ -167,8 +167,8 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
                 Ft = f[m][0].astype('longdouble') 
                 
            
-            fFld__, _, _ = gshs(Ft * filter_, qty, 'cell', int(180/deg), 0, 0) 
-            ffFld__, _, _ = gshs((Ft * filter_ * filter_), qty, 'cell', int(180/deg), 0, 0)
+            fFld__, _, _ = GSHS(Ft * filter_, qty, 'cell', int(180/deg), 0, 0) 
+            ffFld__, _, _ = GSHS((Ft * filter_ * filter_), qty, 'cell', int(180/deg), 0, 0)
             
             if m == 0:
                 fFld = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble') 
@@ -212,7 +212,7 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
         Rb = basins[rbasin][0] 
         csRb = gsha(Rb, 'mean', 'block', long/2) 
         csF = cs2sc(csRb[0:l, 0:l]) 
-        filRb_ = gshs(csF * filter_, 'none', 'cell', int(long/2), 0, 0) 
+        filRb_ = GSHS(csF * filter_, 'none', 'cell', int(long/2), 0, 0) 
         filRb = filRb_[0]
         kappa = (1-Rb) * filRb
          
@@ -280,7 +280,7 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
     leakLS = tsleaktotalf * multp
     
     
-    ps = Phase_calc(tsleaktotalf,tsleaktotalff)
+    ps = PhaseCalc(tsleaktotalf,tsleaktotalff)
     
     
     
