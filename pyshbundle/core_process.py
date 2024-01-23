@@ -11,8 +11,6 @@ from os import chdir, getcwd
 
 from pyshbundle.convert_sh_fmt import cs2sc, sc2cs
 from pyshbundle.shutils import normalklm, PLM, iplm, eigengrav, ispec, Gaussian, naninterp, neumann
-from pyshbundle.core_process import GSHS, gsha
-
 from pyshbundle.grace_hydro import PhaseCalc
 
 
