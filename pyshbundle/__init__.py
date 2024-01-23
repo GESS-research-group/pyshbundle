@@ -72,7 +72,8 @@ __all__ = ['basin_avg',
            'reader_replacer_jpl',
            'sc2cs',
            'tws_cal',
-           'visualisation_utils']
+           'visualisation_utils',
+           'conv_data_fmt']
 
 #Import individual modules
 from .basin_avg import BasinAvg
