@@ -104,6 +104,7 @@ from .reader_replacer_csr import reader_replacer_csr
 from .reader_replacer_itsg import reader_replacer_itsg 
 from .reader_replacer_jpl import reader_replacer_jpl
 from .sc2cs import sc2cs
+from .conv_data_fmt import sc2cs, clm2cs, clm2sc, cs2sc, klm2sc
 from .tws_cal import TWSCalc
 # from .tws_py import 
 from .visualisation_utils import sc_triplot, cs_sqplot, polar_plot, mapfield, ylm, ylm_plot, gshs_prepare
