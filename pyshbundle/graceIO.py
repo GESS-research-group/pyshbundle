@@ -4,16 +4,11 @@
 
 import julian
 import gzip
-import os
 import re
 
 import numpy as np
 from copy import deepcopy
-from tqdm import tqdm, trange
 from datetime import datetime, timedelta
-
-from pyshbundle.convert_sh_fmt import sc2cs
-from pyshbundle.convert_sh_fmt import clm2sc
 
 '''
 def clm2cs_new(data):

@@ -39,65 +39,51 @@ Key Papers Referred:
 
 __author__ = """Amin Shakya"""
 __email__ = 'aminshk50@gmail.com'
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 # __init__.py with initialization code
-print("Initializing PySHbundle v0.2")
+print("Initializing PySHbundle v0.2.1")
 
 # __init__.py with __all__
-__all__ = ['basin_avg', 
-           'clm2cs',
-           'clm2sc',
-           'eigengrav',
-           'gaussian',
-           'GRACE_Data_Driven_Correction_Vishwakarma',
-           'GRACEpy',
-           'grule',
-           'gsha',
-           'gshs',
-           'iplm',
-           'ispec',
-           'klm2sc',
+__all__ = ['GRACEpy',
            'load_longterm_mean',
-           'naninterp',
-           'neumann',
            'graceIO',
-           'normalklm',
-           'Phase_calc',
-           'plm',
            'read_GRACE_SH_paths',
            'reader_replacer',
            'reader_replacer_csr',
            'reader_replacer_itsg',
            'reader_replacer_jpl',
-           'sc2cs',
-           'tws_cal',
            'visualisation_utils',
-           'convert_sh_fmt']
+           'convert_sh_fmt',
+           'graceIO',
+           'shutils',
+           'grace_hydro',
+           'core_process'
+           ]
 
 #Import individual modules
 from .basin_avg import BasinAvg
 #from .clm2cs import clm2cs
 #from .clm2sc import clm2sc
 # from .delta_sc import eigengrav
-from .eigengrav import eigengrav
-from .gaussian import Gaussian
-from .GRACE_Data_Driven_Correction_Vishwakarma import deg_to_rad, GRACE_Data_Driven_Correction_Vishwakarma
+#rom .eigengrav import eigengrav
+#from .gaussian import Gaussian
+#from .GRACE_Data_Driven_Correction_Vishwakarma import deg_to_rad, GRACE_Data_Driven_Correction_Vishwakarma
 # from .GRACEconstants import 
 from .GRACEpy import upwcon, lovenr, lovenrPREM
-from .grule import grule
-from .gsha import gsha
-from .gshs import GSHS
-from .iplm import iplm
-from .ispec import ispec
+#from .grule import grule
+#from .gsha import gsha
+#from .gshs import GSHS
+#from .iplm import iplm
+#from .ispec import ispec
 #from .klm2sc import klm2sc #, klm2sc_new
 from .load_longterm_mean import load_longterm_mean
-from .naninterp import naninterp
-from .neumann import neumann
+#from .naninterp import naninterp
+#from .neumann import neumann
 from .graceIO import read_jpl, parse_jpl_header, parse_jpl_data, parse_lines, read_csr, parse_csr_header, parse_csr_data, read_itsg, parse_itsg_header, parse_itsg_data, read_tn13, parse_tn13_header, parse_tn13_data, read_tn14, parse_tn14_header, parse_tn14_data, find_date_in_replacemnt_file, extract_C10_11_replcmnt_coeff, extract_C20_replcmnt_coeff, extract_C30_replcmnt_coeff, replace_zonal_coeff, cklm2sc_new, check_format
-from .normalklm import normalklm
-from .Phase_calc import PhaseCalc
-from .plm import PLM, secrecur, lrecur, derivALF
+#from .normalklm import normalklm
+#from .Phase_calc import PhaseCalc
+#from .plm import PLM, secrecur, lrecur, derivALF
 # from .pyshbundle import 
 from .read_GRACE_SH_paths import read_GRACE_SH_paths
 from .reader_replacer import reader, TIME, last_4chars, reader_replacer
@@ -106,6 +92,9 @@ from .reader_replacer_itsg import reader_replacer_itsg
 from .reader_replacer_jpl import reader_replacer_jpl
 #from .sc2cs import sc2cs
 from .convert_sh_fmt import sc2cs, clm2cs, clm2sc, cs2sc, klm2sc
-from .tws_cal import TWSCalc
+#from .tws_cal import TWSCalc
 # from .tws_py import 
+from .grace_hydro import TWSCalc, BasinAvg, PhaseCalc
+from .shutils import PLM, iplm, ispec, eigengrav, grule, Gaussian, neumann, naninterp, normalklm
+from .core_process import GSHS, gsha, GRACE_Data_Driven_Correction_Vishwakarma 
 from .visualisation_utils import sc_triplot, cs_sqplot, polar_plot, mapfield, ylm, ylm_plot, gshs_prepare
