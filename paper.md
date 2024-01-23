@@ -23,7 +23,7 @@ authors:
   - name: Tsungrojungla Walling
     orcid: 0009-0006-9323-1191
     affiliation: 4
-  - name: Maya Suryawanshi
+  - name: Maya Raghunath Suryawanshi
     orcid: 0009-0008-5701-7504
     affiliation: 2
   - name: Shard Chander
@@ -66,13 +66,13 @@ bibliography: paper.bib
 
 # Summary
 
-`GRACE` or the Gravity Recovery and Climate Experiment, is a gravimetric satellite mission that can detect the mass changes near the surface of the Earth. Since mass redistribution at shorter temporal scales is dominated by hydrology, GRACE satellite mission has been instrumental in mapping the terrestrial water storage anomalies (`TWSA`). The data from the satellite system has been used for various hydrological studies related to groundwater depletion, floods, droughts, etc. GRACE satellite products are typically released at various levels of complexity, often referred to as processing levels. Level 2 is the spherical harmonic coefficients that are processed to obtain gridded mass change estimates. Processing choices have an impact on the final gridded output. Therefore, an open-source GRACE level 2 processing toolbox is of high value to the user community as it will provide them more control over processing choices. In this contribution, we provide a python module, called PySHbundle, that converts GRACE level 2 (`L2`) Spherical Harmonics data products into Level 3 (`L3`) `TWSA` products. In addition, a GRACE data-driven correction algorithm, firstly coded in Matlab, has also been translated into Python. With this contribution, we hope to enable further work on GRACE data analytics using the Python programming language.
+`GRACE` (Gravity Recovery and Climate Experiment), is a gravimetric satellite mission that can detect the mass changes near the surface of the Earth. Since mass redistribution at shorter temporal scales is dominated by hydrology, GRACE satellite mission has been instrumental in mapping the terrestrial water storage anomalies (`TWSA`). The data from the satellite system has been used for various hydrological studies related to groundwater depletion, floods, droughts, etc. GRACE satellite products are typically released at various levels of complexity, often referred to as processing levels. Level 2 is the spherical harmonic coefficients that are processed to obtain gridded mass change estimates. Processing choices have an impact on the final gridded output. Therefore, an open-source GRACE level 2 processing toolbox is of high value to the user community as it will provide them more control over processing choices. In this contribution, we provide a python module, called PySHbundle, that converts GRACE level 2 (`L2`) Spherical Harmonics data products into Level 3 (`L3`) `TWSA` products. In addition, a GRACE data-driven correction algorithm, firstly coded in Matlab, has also been translated into Python. With this contribution, we hope to enable further work on GRACE data analytics using the Python programming language.
 
 # Introduction
 
 GRACE stands for the Gravity Recovery and Climate Experiment, a joint satellite mission by NASA, the National Aeronautics and Space Administration and DLR, the German Aerospace Centre. Some details of the GRACE mission is provided in Table 1. GRACE has a successor, GRACE-FO, which was successfully launched on 22 May 2018.
 
-GRACE consists of two identical satellites orbiting around the Earth on the same orbital path. The monitoring of the intersatellite distance between the two satellites is measured using microwave ranging system that gives an accuracy in the range of micrometers `(Wahr & Molenaar, 1998)`. When the satellite system comes across a mass anomaly, each satellite accelerates or decelerates with a phase lag and the intersatellite distance changes. This change in intersatellite distance is processed to obtain the magnitude of the mass anamoly. When it comes to the continental land surface, the hydrological processes are the major driver of the at monthly to decadal scales. However various other signals such as oceanic and atmospheric variations, systemic correlated errors, etc. are also part of the obtained GRACE signals. These unwanted signals are modelled and removed at level 1 processing. Noise is still present at level 2 and it requires filtering `(Wahr & Molenaar, 1998; Vishwakarma et. al., 2016)`. The choice of post-processing steps also introduce some errors as well as deteriorate the qualtiy of the hydrological products `(Humphrey et al., 2023; Vishwakarma (2020))`. The estimated hydrological signal is called the  `total water storage anomaly` (`TWSA`). `TWSA` is the change in the sum of water components over a vertical extension of the grid area through the earth. Conventionally, it is represented in terms of the `equivalent water height` (`m`). <br>
+GRACE consists of two identical satellites orbiting around the Earth on the same orbital path. The monitoring of the intersatellite distance between the two satellites is measured using microwave ranging system that gives an accuracy in the range of micrometers `(Wahr & Molenaar, 1998)`. When the satellite system comes across a mass anomaly, each satellite accelerates or decelerates with a phase lag and the intersatellite distance changes. This change in intersatellite distance is processed to obtain the magnitude of the mass anamoly. When it comes to the continental land surface, the hydrological processes are the major driver of the variation in mass anomaly at monthly to decadal scales. However various other signals such as oceanic and atmospheric variations, systemic correlated errors, etc. are also part of the obtained GRACE signals. These unwanted signals are modelled and removed at level 1 processing. Noise is still present at level 2 and it requires filtering `(Wahr & Molenaar, 1998; Vishwakarma et. al., 2016)`. The choice of post-processing steps also introduce some errors as well as deteriorate the qualtiy of the hydrological products `(Humphrey et al., 2023; Vishwakarma (2020))`. The estimated hydrological signal is called the  `total water storage anomaly` (`TWSA`). `TWSA` is the change in the sum of water components over a vertical extension of the grid area through the earth. Conventionally, it is represented in terms of the `equivalent water height` (`m`). <br>
 
 <i>Table 1: Summary of GRACE satellite mission</i>
 
@@ -206,29 +206,29 @@ The `Global Spherical Harmonic Analysis` code depends upon `neumann` along with 
 <br>
 
 # Validation
-The results of the PySHbundle TWS computation have been validated with respect to TWS computation using SHbundle and presented in Fig 02. We have chosen the Normalized Root Mean Square Error (`NRMSE`) metric for the validation.
+The results of the PySHbundle TWS computation have been validated with respect to TWSA computation using SHbundle and presented in Fig 02. We have chosen the Normalized Root Mean Square Error (`NRMSE`) metric for the validation.
 
 \begin{equation}
 NRMSE = 
-\frac{\sqrt{\frac{\sum_{i=1}^{n}(TWS_{pySH} - TWS_{SH})^2}{n}}}
-{\frac{\sum_{i=1}^{n} TWS_{SH}}{n}}
+\frac{\sqrt{\frac{\sum_{i=1}^{n}(TWSA_{pySH} - TWSA_{SH})^2}{n}}}
+{\frac{\sum_{i=1}^{n} TWSA_{SH}}{n}}
 \end{equation}
 
 where:
 - \(n\) is the total number of timesteps
-- \(TWS_{pySH}) is the TWS for each timestep generated by pySHbundle
-- \(TWS_{SH}) os the TWS for each timestep generated by SHbundle
+- \(TWSA_{pySH}\) is the TWS for each timestep generated by pySHbundle
+- \(TWSA_{SH}\) os the TWS for each timestep generated by SHbundle
 
-![Fig 02: NRMSE of TWS computation for PySHbundle with respect to SHbundle results.  \label{fig:error_validation}](./pic/02_error_nrmse.png)<br>
+![Fig 02: NRMSE of TWSA computation for PySHbundle with respect to SHbundle results.  \label{fig:error_validation}](./pic/02_error_nrmse.png)<br>
 <i>Fig 02: NRMSE of TWS computation for PySHbundle with respect to SHbundle results.</i><br>
 
-![Fig 03: Timeseries plot of TWS signal from pyshbundle, shbundle and error signal for the Amazon basin](./pic/03_basin_avg_tws_Amazon.png)<br>
-<i>Fig 03: Timeseries plot of TWS signal from pyshbundle, shbundle and error signal for the Amazon basin</i><br>
+![Fig 03: Timeseries plot of TWSA signal from pyshbundle, shbundle and error signal for the Amazon basin](./pic/03_basin_avg_tws_Amazon.png)<br>
+<i>Fig 03: Timeseries plot of TWSA signal from pyshbundle, shbundle and error signal for the Amazon basin</i><br>
 
 The `NRMSE` values are in the order of $e^{-8}$. Time-series plots for the Amazon and the Ganges basins have been plotted in Fig 03 and Fig 04, respectively. In both cases, the order of magnitude of the signal is $e^2$, while the error is in the order of $e^{-6}$. Thus, the Python package PySHbundle is deemed to give the desired performance in the processing of GRACE L2 Spherical Harmonics to obtain L3 TWS anomalies over land grids.
 
-![Fig 04: Timeseries plot of TWS signal from pyshbundle, shbundle and error signal for the Ganges basin](./pic/03_basin_avg_tws_Ganges.png)<br>
-<i>Fig 04: Timeseries plot of TWS signal from pyshbundle, shbundle and error signal for the Ganges basin</i><br>
+![Fig 04: Timeseries plot of TWSA signal from pyshbundle, shbundle and error signal for the Ganges basin](./pic/03_basin_avg_tws_Ganges.png)<br>
+<i>Fig 04: Timeseries plot of TWSA signal from pyshbundle, shbundle and error signal for the Ganges basin</i><br>
 
 # Concluding Remarks
 
