@@ -4,60 +4,11 @@
 import salem
 import numpy as np
 import xarray as xr
-from scipy import signal
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 from pyshbundle.shutils import Gaussian
 from pyshbundle.core_process import GSHS
-
-def PhaseCalc(fts, ffts):
-    """calculates the phase difference between two time series based on the
-    Hilbert transform method explained by Phillip et al.
-
-    Args:
-        fts (np.ndarray): _description_
-        ffts (np.ndarray): _description_
-
-    Returns:
-        _type_: _description_
-    
-    References:
-        1. Phillips, T., R. S. Nerem, B. Fox-Kemper, J. S. Famiglietti, and B. Rajagopalan (2012),
-        The influence of ENSO on global terrestrial water storage using GRACE, Geophysical
-        Research Letters, 39 (16), L16,705, doi:10.1029/2012GL052495.
-    
-    Author:
-        Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
-    """
-    c = fts.shape[1]
-    
-    ps = np.zeros((1, c))
-    
-    filter_ = ~np.isnan(fts)
-    filter__ = ~np.isnan(ffts)
-    
-    fts_ = fts[filter_] #Extract values and leave Nan
-    ffts_ = ffts[filter__] #Extract values and leave Nan
-    
-    fts = fts_.reshape(int(fts_.shape[0]/c),c)
-    ffts = ffts_.reshape(int(ffts_.shape[0]/c),c)
-    
-    rn = fts.shape[0]
-    
-    for i in range(c):
-        # A = np.concatenate(np.ones((rn,1)), np.real(signal.hilbert(ffts[:, i])), np.imag(signal.hilbert(ffts[:, i]))) #design matrix
-        
-        A = np.array((np.ones((rn)), np.real(signal.hilbert(ffts[:, i])), np.imag(signal.hilbert(ffts[:, i])))).T
-        
-        A = A.astype('double')
-        B = fts[:,i]
-        B = B.astype('double')
-        abc = np.linalg.lstsq(A.T @ A, A.T @ B)[0]
-        
-        ps[0,i] = np.arctan2(abc[3-1],abc[2-1])*(180/np.pi) #check indices and degree/radian
-    return ps
-
 
 
 def TWSCalc(data, lmax: int, gs: float, r, m):
