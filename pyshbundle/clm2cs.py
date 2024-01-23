@@ -47,6 +47,7 @@ from pyshbundle.sc2cs import sc2cs
 from pyshbundle.clm2sc import clm2sc
 
 # CLM to C|S format
+'''
 def clm2cs(data):
     """_summary_
 
@@ -91,8 +92,9 @@ def clm2cs(data):
     print('Conversion into clm format complete')        
     #np.save('/path/SH_coeff_cs.npy', cs_mat)
     return cs_mat
+'''
 
-def clm2cs_new(data_mat: np.ndarray, lmax: int, sigma_flag=False):
+def clm2cs(data_mat: np.ndarray, lmax: int, sigma_flag=False):
     """Converts the format from CLM to |C\S|
     Under the hood uses the `clm2sc` and `sc2cs` function
 
