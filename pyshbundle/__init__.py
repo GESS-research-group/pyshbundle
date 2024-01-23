@@ -55,14 +55,13 @@ __all__ = ['GRACEpy',
            'reader_replacer_jpl',
            'visualisation_utils',
            'convert_sh_fmt',
-           'graceIO',
            'shutils',
            'grace_hydro',
            'core_process'
            ]
 
 #Import individual modules
-from .basin_avg import BasinAvg
+#from .basin_avg import BasinAvg
 #from .clm2cs import clm2cs
 #from .clm2sc import clm2sc
 # from .delta_sc import eigengrav
@@ -94,7 +93,7 @@ from .reader_replacer_jpl import reader_replacer_jpl
 from .convert_sh_fmt import sc2cs, clm2cs, clm2sc, cs2sc, klm2sc
 #from .tws_cal import TWSCalc
 # from .tws_py import 
-from .grace_hydro import TWSCalc, BasinAvg, PhaseCalc
+from .grace_hydro import TWSCalc, BasinAvg
 from .shutils import PLM, iplm, ispec, eigengrav, grule, Gaussian, neumann, naninterp, normalklm
-from .core_process import GSHS, gsha, GRACE_Data_Driven_Correction_Vishwakarma 
+from .core_process import GSHS, gsha, GRACE_Data_Driven_Correction_Vishwakarma, PhaseCalc
 from .visualisation_utils import sc_triplot, cs_sqplot, polar_plot, mapfield, ylm, ylm_plot, gshs_prepare
