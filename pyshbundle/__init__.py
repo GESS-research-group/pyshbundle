@@ -47,17 +47,17 @@ print("Initializing PySHbundle v0.2.1")
 # __init__.py with __all__
 __all__ = ['GRACEpy',
            'load_longterm_mean',
-           'graceIO',
+           'io',
            'read_GRACE_SH_paths',
            'reader_replacer',
            'reader_replacer_csr',
            'reader_replacer_itsg',
            'reader_replacer_jpl',
-           'visualisation_utils',
-           'convert_sh_fmt',
+           'viz_utils',
+           'conv_sh',
            'shutils',
-           'grace_hydro',
-           'core_process'
+           'hydro',
+           'pysh_core'
            ]
 
 #Import individual modules
@@ -79,7 +79,7 @@ from .GRACEpy import upwcon, lovenr, lovenrPREM
 from .load_longterm_mean import load_longterm_mean
 #from .naninterp import naninterp
 #from .neumann import neumann
-from .graceIO import read_jpl, parse_jpl_header, parse_jpl_data, parse_lines, read_csr, parse_csr_header, parse_csr_data, read_itsg, parse_itsg_header, parse_itsg_data, read_tn13, parse_tn13_header, parse_tn13_data, read_tn14, parse_tn14_header, parse_tn14_data, find_date_in_replacemnt_file, extract_C10_11_replcmnt_coeff, extract_C20_replcmnt_coeff, extract_C30_replcmnt_coeff, replace_zonal_coeff, cklm2sc_new, check_format
+from .io import read_jpl, parse_jpl_header, parse_jpl_data, parse_lines, read_csr, parse_csr_header, parse_csr_data, read_itsg, parse_itsg_header, parse_itsg_data, read_tn13, parse_tn13_header, parse_tn13_data, read_tn14, parse_tn14_header, parse_tn14_data, find_date_in_replacemnt_file, extract_C10_11_replcmnt_coeff, extract_C20_replcmnt_coeff, extract_C30_replcmnt_coeff, replace_zonal_coeff, cklm2sc_new, check_format
 #from .normalklm import normalklm
 #from .Phase_calc import PhaseCalc
 #from .plm import PLM, secrecur, lrecur, derivALF
@@ -90,10 +90,10 @@ from .reader_replacer_csr import reader_replacer_csr
 from .reader_replacer_itsg import reader_replacer_itsg 
 from .reader_replacer_jpl import reader_replacer_jpl
 #from .sc2cs import sc2cs
-from .convert_sh_fmt import sc2cs, clm2cs, clm2sc, cs2sc, klm2sc
+from .conv_sh import sc2cs, clm2cs, clm2sc, cs2sc, klm2sc
 #from .tws_cal import TWSCalc
 # from .tws_py import 
-from .grace_hydro import TWSCalc, BasinAvg
+from .hydro import TWSCalc, BasinAvg
 from .shutils import PLM, iplm, ispec, eigengrav, grule, Gaussian, neumann, naninterp, normalklm
-from .core_process import GSHS, gsha, GRACE_Data_Driven_Correction_Vishwakarma, PhaseCalc
-from .visualisation_utils import sc_triplot, cs_sqplot, polar_plot, mapfield, ylm, ylm_plot, gshs_prepare
+from .pysh_core import GSHS, gsha, GRACE_Data_Driven_Correction_Vishwakarma, PhaseCalc
+from .viz_utils import sc_triplot, cs_sqplot, polar_plot, mapfield, ylm, ylm_plot, gshs_prepare

@@ -66,12 +66,9 @@ import scipy as sc
 import scipy.io
 #CS2SC, gsha, gshs, gaussian
 
-from pyshbundle.gaussian import Gaussian
-from pyshbundle.convert_sh_fmt import cs2sc
-from pyshbundle.gshs import GSHS
-from pyshbundle.gsha import gsha
-from pyshbundle.naninterp import naninterp
-from pyshbundle.Phase_calc import PhaseCalc
+from pyshbundle.conv_sh import cs2sc
+from pyshbundle.pysh_core import GSHS, gsha, PhaseCalc
+from pyshbundle.shutils import naninterp, Gaussian
 
 def deg_to_rad(deg: float):
     """Converts angle from degree to radian

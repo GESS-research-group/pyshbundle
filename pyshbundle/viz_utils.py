@@ -9,7 +9,7 @@ import numpy as np
 import cartopy.crs as ccrs
 
 from pyshbundle.shutils import PLM
-from pyshbundle.core_process import GSHS
+from pyshbundle.pysh_core import GSHS
 
 def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
     """Visualize the SH coeff. in /S|C\ triangular matrix format

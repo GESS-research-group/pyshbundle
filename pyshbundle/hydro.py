@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 from pyshbundle.shutils import Gaussian
-from pyshbundle.core_process import GSHS
+from pyshbundle.pysh_core import GSHS
 
 
 def TWSCalc(data, lmax: int, gs: float, r, m):
