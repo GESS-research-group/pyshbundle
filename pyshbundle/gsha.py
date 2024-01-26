@@ -81,7 +81,7 @@ from pyshbundle.plm import PLM
 from scipy import sparse
 from scipy import linalg
 from pyshbundle.iplm import iplm
-from pyshbundle.sc2cs import sc2cs
+from pyshbundle.convert_sh_fmt import sc2cs
 
 def gsha(f, method: str, grid: str = None, lmax: int = -9999):
     """ GSHA - Global Spherical Harmonic Analysis

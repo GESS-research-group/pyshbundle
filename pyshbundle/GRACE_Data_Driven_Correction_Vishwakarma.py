@@ -66,12 +66,9 @@ import scipy as sc
 import scipy.io
 #CS2SC, gsha, gshs, gaussian
 
-from pyshbundle.gaussian import Gaussian
-from pyshbundle.cs2sc import cs2sc
-from pyshbundle.gshs import GSHS
-from pyshbundle.gsha import gsha
-from pyshbundle.naninterp import naninterp
-from pyshbundle.Phase_calc import PhaseCalc
+from pyshbundle.conv_sh import cs2sc
+from pyshbundle.pysh_core import GSHS, gsha, PhaseCalc
+from pyshbundle.shutils import naninterp, Gaussian
 
 def deg_to_rad(deg: float):
     """Converts angle from degree to radian
@@ -147,7 +144,7 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
     else:
         flag_cs = 1
 
-    Weights = gaussian(l-1, GaussianR) 
+    Weights = Gaussian(l-1, GaussianR) 
     #gaussian returns weights as a list #gaussian is np.array()
     
     try: #Broadcase Weights into dimensions
@@ -167,8 +164,8 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
                 Ft = f[m][0].astype('longdouble') 
                 
            
-            fFld__, _, _ = gshs(Ft * filter_, qty, 'cell', int(180/deg), 0, 0) 
-            ffFld__, _, _ = gshs((Ft * filter_ * filter_), qty, 'cell', int(180/deg), 0, 0)
+            fFld__, _, _ = GSHS(Ft * filter_, qty, 'cell', int(180/deg), 0, 0) 
+            ffFld__, _, _ = GSHS((Ft * filter_ * filter_), qty, 'cell', int(180/deg), 0, 0)
             
             if m == 0:
                 fFld = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble') 
@@ -212,7 +209,7 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
         Rb = basins[rbasin][0] 
         csRb = gsha(Rb, 'mean', 'block', long/2) 
         csF = cs2sc(csRb[0:l, 0:l]) 
-        filRb_ = gshs(csF * filter_, 'none', 'cell', int(long/2), 0, 0) 
+        filRb_ = GSHS(csF * filter_, 'none', 'cell', int(long/2), 0, 0) 
         filRb = filRb_[0]
         kappa = (1-Rb) * filRb
          
@@ -280,7 +277,7 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
     leakLS = tsleaktotalf * multp
     
     
-    ps = Phase_calc(tsleaktotalf,tsleaktotalff)
+    ps = PhaseCalc(tsleaktotalf,tsleaktotalff)
     
     
     

@@ -69,7 +69,7 @@
 
 import numpy as np
 import scipy
-import scipy.fft
+from scipy.fft import ifft
 
 def ispec(a,b = -9999):
     """Returns the function F from the spectra A and B
@@ -100,7 +100,7 @@ def ispec(a,b = -9999):
         fs = (a - 1j * b)/2
         fs = (np.concatenate((fs,np.conj(fs[np.arange(n2-1,0,-1),:])), axis = 0))*n
 
-    f = np.real(scipy.fft.ifft(fs.T).T)
+    f = np.real(ifft(fs.T).T)
     return f
 
 
