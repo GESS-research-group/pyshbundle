@@ -72,12 +72,14 @@ bibliography: paper.bib
 
 GRACE stands for the Gravity Recovery and Climate Experiment, a joint satellite mission by NASA, the National Aeronautics and Space Administration in the USA, and GFZ, the Geoforschung Zentrum in Germany. Some details of the GRACE mission is provided in Table 1. GRACE has a successor, GRACE-FO, which was successfully launched on 22 May 2018. GRACE consists of two identical satellites in the same orbit separated by approx. 220 km. The mission measures changes in the intersatellite distance with a microwave ranging system that gives an accuracy in the range of micrometers `(Wahr & Molenaar, 1998)`. When the satellite system comes in the vicinity of a temporal mass anomaly, the relative intersatellite distance changes and it can be inverted to estimate the mass change near the surface of the Earth. Over the continental land surface, the hydrological processes are the major driver of the variation in mass anomaly at monthly to decadal scales. However various other signals such as oceanic and atmospheric variations, systemic correlated errors, etc. are also part of the obtained GRACE signals. Some of the unwanted signals are modelled and removed at level 1 processing, while noise is still present at level 2 and it requires filtering `(Wahr & Molenaar, 1998; Vishwakarma et. al., 2016)`. The choice of post-processing steps also introduce some errors as well as deteriorates the qualtiy of the hydrological products `(Humphrey et al., 2023; Vishwakarma (2020))`. The estimated hydrological signal is represented in terms of  `total water storage anomaly` (`TWSA`), which is the change in the water mass over a vertical column. Conventionally, it is represented in terms of the `equivalent water height` (`m`). <br>
 
-<i>Table 1: Summary of GRACE satellite mission</i>
+<i>Table 1: Summary of GRACE satellite mission [[source]](https://www2.csr.utexas.edu/grace/mission/mdetail.html)</i>
 
 | Parameter        |    Details     | 
 | --------------   |:--------------:| 
 | Start of Mission | 17 March 2002  | 
 | End of Mission   | 27 October 2017| 
+| Altitude         | 485 km         |
+| Intersatellite distance | ~ 220 km 
 | Inclination      | 89.0°          | 
 | Period           | 94.5 minutes   |  
 
