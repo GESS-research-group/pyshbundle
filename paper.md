@@ -1,5 +1,5 @@
 ---
-title: 'PySHbundle: A Python implementation of GRACE Spherical Harmonics Analysis MATLAB codes SHbundle'
+title: 'PySHbundle: A Python implementation of GRACE Spherical Harmonics Synthesis MATLAB codes SHbundle'
 tags:
   - Python
   - GRACE
