@@ -111,7 +111,7 @@ where <i>G</i> is the Gravitational constant, <i>M</i> represents the total Eart
 
 It should be noted that <i>equation 1</i> does not deal with the variability of gravimetric potential function over time. However, a major application of the GRACE satellite system is to retrieve the time-variable gravity information. To obtain time variability, a long-term mean of the spherical harmonic coefficients is removed from the monthly spherical harmonic fields and denoted by <i>$\Delta C_{l,m}$</i> and <i>$\Delta P_{l,m}$</i>. Thus, <i>equation 1</i> can be modified to obtain the change in gravimetric potential function over time.
 
-Since we are interested in the water mass change, we need to obtain the change in density from the change in gravity potential function. It is further assumed that the redistribution of the mass of the Earth takes place within a thin layer close to the surface of the Earth. Furthermore, this mass redistribution results in solid Earth deformation that is accounted for by the load Love numbers <i>k<sub>l</sub></i> `(Wahr et al., 1998)`. After accounting for all these assumptions, approximations, and effects, <i>equation 1</i> further resolves to:
+Since we are interested in the water mass change, we need to obtain the change in density from the change in gravity potential function. It is further assumed that the redistribution of the mass of the Earth takes place within a thin layer close to the surface of the Earth. Furthermore, this mass redistribution results in solid Earth deformation that is accounted for by the load Love numbers <i>$k_l$</i> `(Wahr et al., 1998)`. After accounting for all these assumptions, approximations, and effects, <i>equation 1</i> further resolves to:
 
 
 \begin{equation}
