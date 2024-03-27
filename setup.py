@@ -6,7 +6,7 @@ import io
 from os import path as op
 from setuptools import setup, find_packages
 
-with open('README.md') as readme_file:
+with open('README.md', encoding='utf8') as readme_file:
     readme = readme_file.read()
 
 here = op.abspath(op.dirname(__file__))
@@ -54,6 +54,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/mn5hk/pyshbundle',
-    version='0.0.3.2',
+    version='0.2.1',
     zip_safe=False,
 )

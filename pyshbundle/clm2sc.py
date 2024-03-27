@@ -47,8 +47,9 @@ import numpy as np
 from tqdm import tqdm
 
 # CLM to /S|C\
+'''
 def clm2sc(data):
-    """Converts the spherical harmonic coefficients from clm format to /S|C\ format
+    """[Deprecated/Not required]Converts the spherical harmonic coefficients from clm format to /S|C\ format
 
     Args:
         data (list): list containing [degree;  order; clm; slm; delta clm; delta slm; start data; end date]
@@ -106,9 +107,9 @@ def clm2sc(data):
     return sc_mat, dev_sc_mat
 
 # mean=np.mean(sc_mat[18:102], axis=0)
+'''
 
-
-def clm2sc_new(data_mat: np.ndarray, lmax: int, sigma_flag=False):
+def clm2sc(data_mat: np.ndarray, lmax: int, sigma_flag=False):
     """Converts the spherical harmonic coefficients from clm format to /S|C\ format
 
     Args:
@@ -122,9 +123,7 @@ def clm2sc_new(data_mat: np.ndarray, lmax: int, sigma_flag=False):
     References:
         Refer to the SHBundle or PySHBundle docs for the different data storage and retrival formats.
     
-    """
-
-    
+    """    
 
     sc_mat = np.zeros((lmax+1, 2*lmax + 2))
     dev_sc_mat = np.zeros((lmax+1, 2*lmax + 2))

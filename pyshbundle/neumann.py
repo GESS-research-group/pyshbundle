@@ -69,8 +69,8 @@
 # @author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
 import numpy as np
-from pyshbundle import grule
-from pyshbundle import plm
+from pyshbundle.grule import grule
+from pyshbundle.plm import PLM
 
 def neumann(inn):
     """Returns the weights and nodes for Neumann's numerical integration
@@ -101,10 +101,10 @@ def neumann(inn):
     """
 
     try: #if input is an integer
-        x, w = grule.grule(inn)
+        x, w = grule(inn)
     except: #if input is an array
         if(len(inn)==1): #2nd Neumann method
-            x, w = grule.grule(inn)
+            x, w = grule(inn)
             if(np.not_equal(np.mod(x, 1), 0)): #Not integer
                 raise TypeError("Integer input argument required")
             
@@ -114,7 +114,7 @@ def neumann(inn):
             x = inn
             theRAD = np.arccos(x) #x in radian
             l = np.array(list(range(len(x))))
-            pp = plm.plm(l, theRAD)
+            pp = PLM(l, theRAD)
             
             rr = list([2])
             for i in len(x-1):

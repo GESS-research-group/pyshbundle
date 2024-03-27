@@ -1,3 +1,5 @@
+pip
+grip
 numpy
 pandas
 netCDF4
@@ -8,6 +10,12 @@ scipy
 geopandas
 matplotlib
 rasterio
-salem
 shapely
 tqdm
+cartopy
+ipykernel
+jupyterlab
+rioxarray
+salem
+#conda install -c conda-forge --file requirements_dev.txt -y
+
