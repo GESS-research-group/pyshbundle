@@ -41,7 +41,7 @@ affiliations:
    index: 1
  - name: Interdisciplinary Centre for Water Research, Indian Institute of Science, India
    index: 2
- - name: Geoinformatics Laboratory, Indian Institute of Technology Kanpur, India
+ - name: National Centre for Geodesy, Indian Institute of Technology Kanpur, India
    index: 3
  - name: Undergraduate Programme, Indian Institute of Science, India
    index: 4
