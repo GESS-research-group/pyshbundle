@@ -1,11 +1,9 @@
-# PySHbundle: A Python implementation of MATLAB codes SHbundle <br>
+# PySHbundle: A Python implementation of GRACE Spherical Harmonics Synthesis MATLAB codes SHbundle <br>
 
 ![](https://visitor-badge.glitch.me/badge?page_id=mn5hk.mat2py) <br>
 
 
-PySHBundle is the python implementation of the popular SHBundle toolbox originally written using MATLAB. 
-
-TODO: Badges and and banner for the project
+PySHBundle is a tool to process GRACE L2 data. It includes python re-implementation of the popular [SHBundle](https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/) and [DataDrivenCorrection Bundle](https://www.gis.uni-stuttgart.de/en/research/downloads/datadrivencorrectionbundle/) tools originally written using MATLAB. 
 
 
 ## Usage
@@ -55,7 +53,7 @@ $ python setup.py sdist
 
 ## Read the Docs
 
-Please find the docs here - [PySHBundle](https://abhimhamane.github.io/pyshbundle/)
+Please find the docs here - [PySHBundle](https://mn5hk.github.io/pyshbundle/)
 
 
 ## Contributing
@@ -104,10 +102,6 @@ If you are proposing a feature:
 -   Explain in detail how it would work.
 -   Keep the scope as narrow as possible, to make it easier to implement.
 -   Remember that this is a volunteer-driven project, and that contributions are welcome :)
-
-## Known Issues
-
-**To be updated soon.**
 
 ## License Statement
 
