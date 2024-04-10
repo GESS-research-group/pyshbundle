@@ -23,9 +23,6 @@ authors:
   - name: Tsungrojungla Walling
     orcid: 0009-0006-9323-1191
     affiliation: 4
-  - name: Maya Raghunath Suryawanshi
-    orcid: 0009-0008-5701-7504
-    affiliation: 2
   - name: Shard Chander
     affiliation: 5
   - name: Bhaskar R. Nikam
