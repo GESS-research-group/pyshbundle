@@ -39,7 +39,7 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
     ],
-    description="PySHbundle: A Python implementation of MATLAB codes SHbundle",
+    description="PySHbundle: A Python implementation of GRACE Spherical Harmonics Synthesis MATLAB codes SHbundle",
     package_data={"my_package": ["data/*"]},
     install_requires=install_requires,
     dependency_links=dependency_links,
@@ -54,6 +54,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/mn5hk/pyshbundle',
-    version='0.2.1',
+    version='1.0.0',
     zip_safe=False,
 )
