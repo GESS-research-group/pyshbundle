@@ -26,14 +26,14 @@ $ source </location-of-virt-env/name-env/bin/activate>
 $ pip install pyshbundle
 
 # clone the repository in order to access the notebooks and data
-$ git clone https://github.com/mn5hk/pyshbundle.git
+$ git clone git@github.com:mn5hk/pyshbundle.git
 ```
 
 ### 1.2 For Devs/Contributors
 Developers can access the latest development branch and 
 ```shell
 # clone the repo and fetch the dev branch
-$ git clone https://github.com/mn5hk/pyshbundle.git
+$ git clone git@github.com:mn5hk/pyshbundle.git
 
 # creating a new virtual environment
 $ python3 -m venv <name-env>
