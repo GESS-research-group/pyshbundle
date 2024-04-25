@@ -45,11 +45,22 @@ $ pip install -r ../pyshbundle/requirements-dev.txt
 $ source </location-of-virt-env/name-env/bin/activate>
 
 # install package into virtual environment
-$ pip install ../pyshbundle/dist/<required-version>.tzr.gz
+$ pip install ../pyshbundle/dist/<required-version>.tar.gz
 
 # you also have the option to build the module using, be careful of 
 $ python setup.py sdist
 ```
+
+## Trying it out
+
+Data for trying out this new tool is included in the repo. After installing and cloning the repo, go to the notebooks directory in order to find explainatory ipython jupyter notebooks. Simply activate the virtual environment and fire up these jupyter notebooks. Available notebooks:
+
+1. Introduction to Spherical Harmonics
+2. Loading the data
+3. Visualizations
+4. Terrestrial Water Storage (TWS) Time Series
+5. Tests and Validation notebook
+
 
 ## Read the Docs
 
