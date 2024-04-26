@@ -39,6 +39,7 @@ extra_javascript:
 
 nav:
     - Home: index.md
+    - Theoretical Background: theory.md
     - Installation: installation.md
     - Usage: usage.md
     - Contributing: contributing.md
