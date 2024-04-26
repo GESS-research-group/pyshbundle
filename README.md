@@ -2,12 +2,12 @@
 
 ![](https://visitor-badge.glitch.me/badge?page_id=mn5hk.mat2py) <br>
 
+This package, `PySHbundle` provides tools to process GRACE data, such as, the computation of anomalies, substitution of poor quality low degree coefficients, reducing noise in GRACE data using filtering approaches, signal leakage correction using `GDDC`, etc. In addition, the package provides a flexibility for future development and addition of further processing choices for handling GRACE data for hydrological application.
 
-PySHBundle is a tool to process GRACE L2 data. It includes python re-implementation of the popular [SHBundle](https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/) and [DataDrivenCorrection Bundle](https://www.gis.uni-stuttgart.de/en/research/downloads/datadrivencorrectionbundle/) tools originally written using MATLAB. 
+PySHBundle is a tool to process GRACE L2 data and re-implements the popular [SHBundle](https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/) and [DataDrivenCorrection Bundle](https://www.gis.uni-stuttgart.de/en/research/downloads/datadrivencorrectionbundle/) tools originally written using MATLAB. 
 
 
 ## Usage
-
 1. Read and Load level-2 spherical harmonic data
 2. Create basin time series for TWS
 3. Perform grace data driven correction
@@ -62,7 +62,7 @@ Data for trying out this new tool is included in the repo. After installing and 
 5. Tests and Validation notebook
 
 
-## Read the Docs
+## Docs
 
 Please find the docs here - [PySHBundle](https://mn5hk.github.io/pyshbundle/)
 
@@ -112,7 +112,7 @@ If you are proposing a feature:
 
 -   Explain in detail how it would work.
 -   Keep the scope as narrow as possible, to make it easier to implement.
--   Remember that this is a volunteer-driven project, and that contributions are welcome :)
+-   Remember that this is a volunteer-driven project, and that contributions are welcome :).
 
 ## License Statement
 
@@ -152,10 +152,6 @@ Please note that PySHbundle has adapted the following code packages,both license
 
 ## How to Cite?
 TODO: Add citing info
-
-
-
-
 
 
 
