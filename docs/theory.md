@@ -195,7 +195,7 @@ This is a variation of the clm-format for compact notation with just 3 or 4 colu
 
 '''math
     \begin{bmatrix}0 & 0 & $\overline{C}_{0, 0}$ & $\sigma_{\overline{C}_{0, 0}}$ \\0 & 0 & $\overline{C}_{0, 0}$ & $\sigma_{\overline{C}_{0, 0}}$ \\0 & 0 & $\overline{C}_{0, 0}$ & $\sigma_{\overline{C}_{0, 0}}$ \\ 0 & 0 & $\overline{C}_{0, 0}$ & $\sigma_{\overline{C}_{0, 0}}$ \\ 0 & 0 & $\overline{C}_{0, 0}$ & $\sigma_{\overline{C}_{0, 0}}$ \\ 0 & 0 & $\overline{C}_{0, 0}$ & $\sigma_{\overline{C}_{0, 0}}$ \\ 0 & 0 & \overline{C}_{0, 0} & $\sigma_{\overline{C}_{0, 0}}$ \\ 0 & 0 & $\overline{C}_{0, 0}$ & $\sigma_{\overline{C}_{0, 0}}$ \\
-    0 & 0 & $\overline{C}_{0, 0}$ & $\sigma_{\overline{C}_{0, 0}}$ \\ \vdots & & & \vdots \\ $N_{max}$ & $N_{max}$ & $\overline{C}_{N_{max}, N_{max}}$ & $\sigma_{\overline{C}_{N_max}, N_{max}}$ \\ \begin{bmatrix}
+    0 & 0 & $\overline{C}_{0, 0}$ & $\sigma_{\overline{C}_{0, 0}}$ \\ \vdots & & & \vdots \\ $N_{max}$ & $N_{max}$ & $\overline{C}_{N_{max}, N_{max}}$ & $\sigma_{\overline{C}_{N_max}, N_{max}}$ \\ \end{bmatrix}
 '''
 
 
