@@ -193,30 +193,20 @@ The first column represents the degree $n$, the second column represents the ord
 
 This is a variation of the clm-format for compact notation with just 3 or 4 columns. The coefficients are sorted first w.r.t. degree and then the order, particularly the sine-coefficients are arranged starting first with negative orders. The following matrix represents the klm-format:
 
-
-\begin{bmatrix}
-  0 & 0 & \overline{C}_{0, 0} & \sigma_{\overline{C}_{0, 0}} \\
-  0 & 0 & \overline{C}_{0, 0} & \sigma_{\overline{C}_{0, 0}} \\
-  0 & 0 & \overline{C}_{0, 0} & \sigma_{\overline{C}_{0, 0}} \\
-  0 & 0 & \overline{C}_{0, 0} & \sigma_{\overline{C}_{0, 0}} \\
-  0 & 0 & \overline{C}_{0, 0} & \sigma_{\overline{C}_{0, 0}} \\
-  0 & 0 & \overline{C}_{0, 0} & \sigma_{\overline{C}_{0, 0}} \\
-  0 & 0 & \overline{C}_{0, 0} & \sigma_{\overline{C}_{0, 0}} \\
-  0 & 0 & \overline{C}_{0, 0} & \sigma_{\overline{C}_{0, 0}} \\
-  0 & 0 & \overline{C}_{0, 0} & \sigma_{\overline{C}_{0, 0}} \\
-  \vdots & & & \vdots \\
-  N_{max} & N_{max} & \overline{C}_{N_{max}, N_{max}} & \sigma_{\overline{C}_{N_{max}, N_{max}}} \\
-\begin{bmatrix}
+'''math
+    \begin{bmatrix}0 & 0 & $\overline{C}_{0, 0}$ & $\sigma_{\overline{C}_{0, 0}}$ \\0 & 0 & $\overline{C}_{0, 0}$ & $\sigma_{\overline{C}_{0, 0}}$ \\0 & 0 & $\overline{C}_{0, 0}$ & $\sigma_{\overline{C}_{0, 0}}$ \\ 0 & 0 & $\overline{C}_{0, 0}$ & $\sigma_{\overline{C}_{0, 0}}$ \\ 0 & 0 & $\overline{C}_{0, 0}$ & $\sigma_{\overline{C}_{0, 0}}$ \\ 0 & 0 & $\overline{C}_{0, 0}$ & $\sigma_{\overline{C}_{0, 0}}$ \\ 0 & 0 & \overline{C}_{0, 0} & $\sigma_{\overline{C}_{0, 0}}$ \\ 0 & 0 & $\overline{C}_{0, 0}$ & $\sigma_{\overline{C}_{0, 0}}$ \\
+    0 & 0 & $\overline{C}_{0, 0}$ & $\sigma_{\overline{C}_{0, 0}}$ \\ \vdots & & & \vdots \\ $N_{max}$ & $N_{max}$ & $\overline{C}_{N_{max}, N_{max}}$ & $\sigma_{\overline{C}_{N_max}, N_{max}}$ \\ \begin{bmatrix}
+'''
 
 
-### $\left | C \backslash S \right |$-format
+### $\left | C \backslash S \right |$ format
 
 This is another well known arrangement of Spherical Harmonic coefficients. This is a square matrix of size $n_{max}, n_{max}$.
 
 The lower traingular terms are made of the cosine terms
 
 
-### $\left / S | C \right \backslash$-format
+### $\left / S | C \right \backslash$ format
 
 This is yet another popular format where the sine-coefficients are flipped from left to right, to obtain a triangular arrangement which is completed by zeros.
 
