@@ -117,7 +117,7 @@ Since we are interested in the water mass change, we need to obtain the change i
 \begin{equation}
     \Delta \sigma (\theta, \lambda) = 
     \frac{a \rho_{avg}}{3} \sum_{l=0} ^ {\infty} 
-    \sum_{m=0} ^ {l} 
+    \sum_{m=0} ^ {l} Untitled
     \bar{P}_{l,m}(\cos \theta)
     \frac{2 l + 1}{1 + k_{l}}
     [\Delta C_{l,m}\cos m\lambda+ \Delta S_{l,m}\sin m\lambda].
