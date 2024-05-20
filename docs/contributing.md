@@ -3,7 +3,7 @@
 Contributions are welcome, and they are greatly appreciated! Every
 little bit helps, and credit will always be given.
 
-You can contribute in many ways:
+You can contribute in many ways.
 
 ## Types of Contributions
 
@@ -17,23 +17,25 @@ If you are reporting a bug, please include:
 -   Any details about your local setup that might be helpful in troubleshooting.
 -   Detailed steps to reproduce the bug.
 
-### Fix Bugs
+### Found Bugs!!!
 
 Look through the GitHub issues for bugs. Anything tagged with `bug` and
 `help wanted` is open to whoever wants to implement it.
 
-### Implement Features
+### Want New Functionality?
 
 Look through the GitHub issues for features. Anything tagged with
 `enhancement` and `help wanted` is open to whoever wants to implement it.
 
-### Write Documentation
+### Let's Improve Documentation
 
 pyshbundle could always use more documentation,
 whether as part of the official pyshbundle docs,
-in docstrings, or even on the web in blog posts, articles, and such.
+in docstrings, or even on the web in blog posts, articles, and such.<br>
 
-### Submit Feedback
+Another prefered way is to create explainatory tutorials. Using the `PySHBundle` functions to explain the `Spherical Harmonics` and `GRACE Data Processing`.
+
+### Feedback
 
 The best way to send feedback is to file an issue at
 <https://github.com/mn5hk/pyshbundle/issues>.
@@ -50,21 +52,30 @@ Ready to contribute? Here's how to set up pyshbundle for local development.
 
 1.  Fork the pyshbundle repo on GitHub.
 
-2.  Clone your fork locally:
-
+2.  Setup a seperate development environment.
     ```shell
-    $ git clone git@github.com:your_name_here/pyshbundle.git
+    # clone the repo and fetch the dev branch
+    $ git clone git@github.com:mn5hk/pyshbundle.git
+
+    # creating a new virtual environment
+    $ python3 -m venv <name-env>
+
+    # install the dependencies from the requirements-dev file
+    $ pip install -r ../pyshbundle/requirements-dev.txt
+
+    # activate the virtual environment environment
+    $ source </location-of-virt-env/name-env/bin/activate>
     ```
 
-3.  Install your local copy into a virtualenv. Assuming you have
-    virtualenvwrapper installed, this is how you set up your fork for
-    local development:
-
+3. Build the latest repo in the development virtual environment.
     ```shell
-    $ mkvirtualenv pyshbundle
-    $ cd pyshbundle/
-    $ python setup.py develop
+    # install package into virtual environment
+    $ pip install ../pyshbundle/dist/<required-version>.tar.gz
+
+    # you also have the option to build the module using, be careful of 
+    $ python setup.py sdist
     ```
+
 
 4.  Create a branch for local development:
 
@@ -72,20 +83,9 @@ Ready to contribute? Here's how to set up pyshbundle for local development.
     $ git checkout -b name-of-your-bugfix-or-feature
     ```
 
-    Now you can make your changes locally.
+    Now you can make your changes lo    cally.
 
-5.  When you're done making changes, check that your changes pass flake8
-    and the tests, including testing other Python versions with tox:
-
-    ```shell
-    $ flake8 pyshbundle tests
-    $ python setup.py test or pytest
-    $ tox
-    ```
-
-    To get flake8 and tox, just pip install them into your virtualenv.
-
-6.  Commit your changes and push your branch to GitHub:
+5.  Commit your changes and push your branch to GitHub:
 
     ```shell
     $ git add .
@@ -93,16 +93,10 @@ Ready to contribute? Here's how to set up pyshbundle for local development.
     $ git push origin name-of-your-bugfix-or-feature
     ```
 
-7.  Submit a pull request through the GitHub website.
+6.  Submit a pull request through the GitHub website.
 
 ## Pull Request Guidelines
 
 Before you submit a pull request, check that it meets these guidelines:
 
-1.  The pull request should include tests.
-2.  If the pull request adds functionality, the docs should be updated.
-    Put your new functionality into a function with a docstring, and add
-    the feature to the list in README.rst.
-3.  The pull request should work for Python 3.5, 3.6, 3.7 and 3.8, and
-    for PyPy. Check <https://github.com/mn5hk/pyshbundle/pull_requests> and make sure that the tests pass for all
-    supported Python versions.
+TBD...
