@@ -1,0 +1,7 @@
+ notebooks/.ipynb_checkpoints
+ notebooks/.ipynb_checkpoints/*
+pyshbundle.egg-info/PKG-INFO
+pyshbundle/.ipynb_checkoutpoints/
+pyshbundle/.ipynb_checkpoints/*
+pyshbundle/__pycache__/
+pyshbundle/__pycache__/*
