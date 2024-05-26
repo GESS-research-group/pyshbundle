@@ -235,9 +235,9 @@ In this paper, we have introduced a new Python software package named `PySHbundl
 
 The authors would like to thank Dr.-Ing. Markus Antoni and Clara Buetzler, Institute of Geodesy, University of Stuttgart, Germany, for early feedback to the `PySHbundle` software during its development phase. We are extremely grateful to the financial support from IISc-ISRO Space Technology Cell for funding the project titled "Improving the spatial resolution of GRACE TWS for India using remote sensing datasets and modeling approach" under grant number STC0437.
 
-# Citations
+# References
 
-[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
+<!-- [rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html) -->
 
 - Antoni, M. (2022). A review of different mascon approaches for regional gravity field modelling since 1968. History of Geo-and Space Sciences, 13(2), 205-217. https://hgss.copernicus.org/articles/13/205/2022/ 
 - Chao, B. F., & Gross, R. S. (1987). Changes in the Earth's rotation and low-degree gravitational field induced by earthquakes. Geophysical Journal International, 91(3), 569-596. DOI 10.1111/j.1365-246X.197.tb01659.x 
