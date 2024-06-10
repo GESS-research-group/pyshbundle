@@ -36,7 +36,39 @@ Key Papers Referred:
     partial least squares regression. Scientific data, 8(1), 95.
     https://doi.org/10.1038/s41597-021-00862-6 
     """
+# 2024-06-10, updated: Vivek Kumar Yadav, IISc Bengaluru
 
 __author__ = """Amin Shakya"""
 __email__ = 'aminshk50@gmail.com'
-__version__ = '0.0.1'
+__version__ = '0.2.1'
+
+# __init__.py with initialization code
+print("Initializing PySHbundle v0.2.1")
+
+# __init__.py with __all__
+__all__ = ['GRACEpy',
+           'io',
+           'read_GRACE_SH_paths',
+           'reader_replacer',
+           'viz_utils',
+           'reshape_SH_coefficients',
+           'shutils',
+           'hydro',
+           'pysh_core'
+           ]
+
+
+from .GRACEpy import upwcon, lovenr, lovenrPREM
+from .io import extract_SH_data, extract_deg1_coeff_tn13, extract_deg2_3_coeff_tn14, \
+    parse_lines, \
+    parse_jpl_file, parse_csr_file, parse_itsg_file, parse_jpl_header, parse_csr_header, parse_itsg_header, \
+    parse_tn13_header, parse_tn14_header, \
+    find_date_in_replacemnt_file, extract_C10_11_replcmnt_coeff, extract_C20_replcmnt_coeff, \
+    extract_C30_replcmnt_coeff, cklm2sc_new
+from .read_GRACE_SH_paths import read_GRACE_SH_paths
+from .sc2cs import sc2cs
+from .reshape_SH_coefficients import sc2cs, clm2cs, clm2sc, cs2sc, klm2sc
+from .hydro import TWSCalc, area_weighting, Basinaverage
+from .shutils import PLM, iplm, ispec, eigengrav, grule, Gaussian, neumann, naninterp, normalklm
+from .pysh_core import GSHS, gsha, GRACE_Data_Driven_Correction_Vishwakarma, PhaseCalc
+from .viz_utils import sc_triplot, cs_sqplot, polar_plot, mapfield, ylm, ylm_plot, gshs_prepare

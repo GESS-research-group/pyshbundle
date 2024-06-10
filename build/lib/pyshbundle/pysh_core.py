@@ -4,13 +4,13 @@
 import numpy as np
 import numpy.matlib as npm
 import scipy as sc
-from scipy import sparse
+# from scipy import sparse
 from scipy import signal
 from scipy import linalg
 
 from os import chdir, getcwd
 
-from pyshbundle.conv_sh import cs2sc, sc2cs
+from pyshbundle.reshape_SH_coefficients import cs2sc, sc2cs
 from pyshbundle.shutils import normalklm, PLM, iplm, eigengrav, ispec, Gaussian, naninterp, neumann
 
 

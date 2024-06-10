@@ -1,0 +1,17 @@
+pip
+numpy
+pandas
+netCDF4
+scipy
+xarray
+julian
+scipy
+geopandas
+matplotlib
+rasterio
+shapely
+tqdm
+cartopy
+ipykernel
+jupyterlab
+rioxarray

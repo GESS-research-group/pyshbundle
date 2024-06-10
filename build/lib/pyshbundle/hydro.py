@@ -1,12 +1,12 @@
 # Applications of GRACE data to Hydrology
 # Curator: Abhishek Mhamane
 
-import salem
 import numpy as np
-import xarray as xr
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-
+import geopandas as gpd
+import rioxarray
+from shapely.geometry import mapping
 from pyshbundle.shutils import Gaussian
 from pyshbundle.pysh_core import GSHS
 
@@ -45,7 +45,7 @@ def TWSCalc(data, lmax: int, gs: float, r, m):
         
         ff = GSHS(shfil, quant, grd, n, h, jflag)[0]
         
-        ff = ff*1000
+        ff = ff*1000    # convert values from m to mm
         tws_f[i,:,0:int(grid_x/2)] = ff[:,int(grid_x/2):]
         tws_f[i,:,int(grid_x/2):] = ff[:,0:int(grid_x/2)]   
     
@@ -63,77 +63,47 @@ def apply_gaussian(sc_coeff, gaussian_coeff, lmax):
     
     return shfil
 
-
-
-def BasinAvg(data, path: str, c_rs, m, gs):
-    """Computes the TWSA time-series for a given basin shape file, using the SH data.
-
-    Args:
-        data (xarray.Dataset): xarray dataset with format - {coordinates: [time, lat, lon], Data variables: [tws]}
-        path (str): valid path to the basin shape file with extension (.shp)
-        c_rs (crs): the crs into which the dataframe must be transformed (related to salem module)
-        m (int): number of files read
-        gs (float): grid size 
-
-    Returns:
-        xarray.Dataset: basin averaged values of TWS
-        _type_: _description_
-    
-    Author: 
-        Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+def area_weighting(grid_resolution):
     """
-    shdf = salem.read_shapefile(path)
-    shdf.crs
-    shdf.plot()
-    shdf_area = sum(shdf.to_crs(c_rs).area)
-    print('Area of basin in km2:',shdf_area/1e6)
-    if shdf_area < 63*1e9:
-        print('Warning basin too small for GRACE data application')
+     Calculate the area of each grid corresponding to the latitudes and longitudes.
+ 
+     Parameters:
+         grid_resolution (float): The resolution of the grid in grid_resolutionrees.
+ 
+     Returns:
+         numpy.ndarray: The area of each grid in square meters.
+     """
+    longitude_grid = np.linspace(0, 359+(1-grid_resolution), int(360/grid_resolution), dtype='double');
+    latitude_grid = np.linspace(0, 179+(1-grid_resolution), int(180/grid_resolution), dtype='double');
+    longitude_grid1 = np.linspace(1*grid_resolution, 360, int(360/grid_resolution), dtype='double');
+    latitude_grid1 = np.linspace(1*grid_resolution, 180, int(180/grid_resolution), dtype='double');
     
-    tws_val = data.tws.values
-    dates = data.time
-    lat,lon = data.lat, data.lon
-    lat_shape, lon_shape = data.tws.shape[1],data.tws.shape[2]
+    lambd,theta = np.meshgrid(longitude_grid,latitude_grid)  
+    lambd1,theta1 = np.meshgrid(longitude_grid1,latitude_grid1)
     
-    # Calculation of area of each corresponding to  the latitudes and longitudes
-    # not sure if ';' is proper syntax may be the octave residu
+    delta_latitude = np.sin(np.deg2rad(90-theta))-np.sin(np.deg2rad(90-theta1))
+    delta_longitude = (lambd1 - lambd)*np.pi/180
 
-    deg = gs
-    x = np.linspace(0, 359+(1-deg), int(360/deg), dtype='double')
-    y = np.linspace(0, 179+(1-deg), int(180/deg), dtype='double')
-    x1 = np.linspace(1*deg, 360, int(360/deg), dtype='double')
-    y1 = np.linspace(1*deg, 180, int(180/deg), dtype='double')
-    lambd,theta = np.meshgrid(x,y)
-    lambd1,theta1 = np.meshgrid(x1,y1)
-    a = np.sin(np.deg2rad(90-theta))-np.sin(np.deg2rad(90-theta1))
-    b = (lambd1 - lambd)*np.pi/180
-    
-    
-    # Area of each grid (360*720)
-    area = (6378.137**2)*pow(10, 6)*(np.multiply(a, b))        # units m^2
-    tot_area = np.sum(np.sum(area))
-    tws_m = np.zeros([m, lat_shape, lon_shape])
-    for i in range(0,m,1):
-        tws_m[i, :, :] = np.multiply(tws_val[i, :, :],area)
-    ds_area_w = xr.Dataset(
-    data_vars=dict(
-        tws=(["time","lat", "lon"], tws_m)
-    ),
-    coords = {
-        "time":dates,
-        "lat":lat,
-        "lon":lon },
-    attrs=dict(description="TWS Anomaly corresponding to long term (2004-2010) mean \n lmax=96 and half radius of Gaussian filter = 500Km"),
-    )
-    
-    ds_area_w_clp= ds_area_w.salem.roi(shape=shdf)
-    # Time series for the whole basin(shapefile) in user defined range
-    alpha = ds_area_w_clp.tws.sum(dim=('lon','lat'))/shdf_area
-    fig,ax = plt.subplots(figsize=(15,5))
-    alpha.plot(ax=ax, color='b')
-    ax.set_box_aspect(0.33)
-    ax.set_title('Time series for the basin', size=15)
-    ax.set_ylabel('TWS anomaly in mm ', size=15)
-    plt.tight_layout()
-    
-    return alpha, ds_area_w
+    # Area of each grid
+    area = (6378.137**2)*pow(10,6)*(np.multiply(delta_latitude,delta_longitude)) # units m^2
+    return area
+
+def Basinaverage(temp, gs, shp_basin, basin_area):
+
+    from pyshbundle.hydro import area_weighting
+    # area_weighting returns the area of each grid in m^2 for the grid resolution specified
+    temp_weighted=temp.copy()
+    temp_weighted['tws']=temp['tws']*area_weighting(gs)
+
+    ''' add projection system to nc '''
+    basin_tws = temp_weighted.rio.write_crs("EPSG:4326", inplace=True)
+    basin_tws = basin_tws.rio.set_spatial_dims(x_dim="lon", y_dim="lat", inplace=True)
+            
+    # mask data with shapefile
+    basin_tws = basin_tws.rio.clip(shp_basin.geometry.apply(mapping), shp_basin.crs,drop=True)
+    basin_avg_tws=basin_tws.sum(dim=('lon','lat'), skipna=True)/basin_area  #basin average tws
+
+    basin_tws=basin_tws.drop_vars('spatial_ref')
+    basin_avg_tws=basin_avg_tws.drop_vars('spatial_ref')
+
+    return basin_tws, basin_avg_tws

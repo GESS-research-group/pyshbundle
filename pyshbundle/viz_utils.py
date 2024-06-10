@@ -1,7 +1,9 @@
 # Visualisation Utilities for PySHBundle
 # Author: Abhishek Mhamane, MS-Research Geoinformatics, IIT Kanpur (India)
-# 
+# 2024-06-10, updated: Vivek Kumar Yadav, IISc Bengaluru
 
+import calendar
+from datetime import datetime
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.path as mpath
 import matplotlib.pyplot as plt
@@ -172,9 +174,9 @@ def mapfield(field, img_extent, title, name=None, colorbar_bounds=None, save_fla
     if colorbar_bounds is not None:
         vmin = colorbar_bounds[0]
         vmax = colorbar_bounds[1]
-        im = geo_ax.imshow(field, origin='upper', extent=img_extent, cmap='RdYlBu', transform=ccrs.PlateCarree(), vmin=vmin, vmax=vmax)
+        im = geo_ax.imshow(field, origin='upper', extent=img_extent, cmap='Greens', transform=ccrs.PlateCarree(), vmin=vmin, vmax=vmax)
     else:
-        im = geo_ax.imshow(field, origin='upper', extent=img_extent, cmap='RdYlBu', transform=ccrs.PlateCarree(), )
+        im = geo_ax.imshow(field, origin='upper', extent=img_extent, cmap='Greens', transform=ccrs.PlateCarree(), )
 
     plt.xlabel("Longitude")
     plt.ylabel("Latitude")
@@ -311,3 +313,61 @@ def gshs_prepare(lmax, gs, quant, grd, h, jflag, sc_coeff):
     field[:,int(grid_x/2):] = ff[:,0:int(grid_x/2)]  
     
     return field
+
+# Function to plot the calendar
+import matplotlib.patches as mpatches
+def plot_calendar_months(datetime_object):
+    """
+    Plot a calendar for each year in the given list of datetime objects.
+
+    Args:
+        datetime_object (list): A list of datetime objects in the format '%Y-%m'.
+
+    Returns:
+        None
+
+    This function takes a list of datetime objects and plots a calendar for each year in the list.
+    The calendars are displayed in separate subplots, with each subplot representing a year.
+    The function extracts the months and years from the datetime objects and determines the range of years to plot.
+    For each year, the function creates a subplot and sets the title to the year.
+    The function then highlights the months with replacement data by coloring the month names in the calendar.
+    The color of the month names is 'lightblue' if the month is present in the given datetime objects, otherwise it is 'white'.
+    """
+
+    # Extract months and years from dictionary keys
+    dates = [datetime.strptime(date, '%Y-%m').date() for date in datetime_object]
+    months_years = {(date.year, date.month) for date in dates}
+    
+    # Determine the range of years to plot
+    years = sorted({year for year, month in months_years})
+    
+    fig, axes = plt.subplots(nrows=len(years), ncols=1, figsize=(7, 1 * len(years)))
+
+    if len(years) == 1:
+        axes = [axes]
+    
+    for i, year in enumerate(years):
+        ax = axes[i]
+        ax.set_title(f'{year}')
+        ax.set_xticks([])  # Hide y-axis
+        ax.set_yticks([])  # Hide x-axis
+
+        # Highlight months with replacement data
+        for month in range(1, 13):
+            if (year, month) in months_years:
+                color = 'lightblue'
+            else:
+                color = 'white'
+            ax.text(month - 1, 0, calendar.month_abbr[month], ha='center', va='center', 
+                    bbox=dict(facecolor=color, edgecolor='black'))
+
+        ax.set_xlim(-0.5, 11.5)
+        ax.set_ylim(-0.5, 0.5)
+        ax.grid(False)
+        
+    # # Add a legend
+    white_patch = mpatches.Patch(color='white', label='Data unavailable')
+    lightblue_patch = mpatches.Patch(color='lightblue', label='Data available')
+    axes[0].legend(handles=[white_patch, lightblue_patch], loc='lower center', bbox_to_anchor=(0.85, 1.1), fontsize='9')
+    plt.tight_layout()
+    plt.show()

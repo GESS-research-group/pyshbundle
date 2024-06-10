@@ -38,11 +38,11 @@
 #       https://doi.org/10.1038/s41597-021-00862-6
 
 import numpy
-from . import GRACEconstants as GC
+from pyshbundle import GRACEconstants as GC
 
 
 def upwcon(degree: int, height):
-    """returns the upward continuation $(R/r)^l$
+    """Returns the upward continuation $(R/r)^l$
 
     Args:
         degree (int): Spherical harmonic degree
