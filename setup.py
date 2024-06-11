@@ -2,27 +2,18 @@
 
 """The setup script."""
 
-import io
-from os import path as op
+import os
 from setuptools import setup, find_packages
 
 with open('README.md', encoding='utf8') as readme_file:
     readme = readme_file.read()
 
-here = op.abspath(op.dirname(__file__))
+here = os.path.abspath(os.path.dirname(__file__))
 
-# get the dependencies and installs
-with io.open(op.join(here, "requirements.txt"), encoding="utf-8") as f:
-    all_reqs = f.read().split("\n")
-
-install_requires = [x.strip() for x in all_reqs if "git+" not in x]
-dependency_links = [x.strip().replace("git+", "") for x in all_reqs if "git+" not in x]
-
-requirements = [ ]
-
-setup_requirements = [ ]
-
-test_requirements = [ ]
+install_requires = ['pip', 'numpy', 'pandas','netCDF4', 'scipy',
+                    'xarray', 'julian', 'scipy', 'geopandas',
+                    'matplotlib', 'rasterio', 'shapely', 'tqdm','cartopy', 
+                    'ipykernel', 'jupyterlab', 'rioxarray',],
 
 setup(
     author="Amin Shakya",
@@ -42,7 +33,6 @@ setup(
     description="PySHbundle: A Python implementation of GRACE Spherical Harmonics Synthesis MATLAB codes SHbundle",
     package_data={"my_package": ["data/*"]},
     install_requires=install_requires,
-    dependency_links=dependency_links,
     license="GNU General Public License v3",
     long_description=readme,
     long_description_content_type='text/markdown',
@@ -50,10 +40,10 @@ setup(
     keywords='pyshbundle',
     name='pyshbundle',
     packages=find_packages(include=['pyshbundle', 'pyshbundle.*']),
-    setup_requires=setup_requirements,
+    setup_requires=[],
     test_suite='tests',
-    tests_require=test_requirements,
+    tests_require=[],
     url='https://github.com/mn5hk/pyshbundle',
-    version='1.0.0',
+    version='1.1.0',
     zip_safe=False,
 )
