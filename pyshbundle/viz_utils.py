@@ -14,10 +14,10 @@ from pyshbundle.shutils import PLM
 from pyshbundle.pysh_core import GSHS
 
 def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
-    """Visualize the SH coeff. in /S|C\ triangular matrix format
+    """Visualize the SH coeff. in SC triangular matrix format
 
     Args:
-        scmat (np.ndarray): /S|C\ matrix data (see clm2sc)
+        scmat (np.ndarray): SC matrix data (see clm2sc)
         lmax (int): maximum degree of SH expansion
         title (str): Title of the figure
         vmin (flaot | int): minimum value for the colorbar
