@@ -10,7 +10,7 @@ The
 #::: pyshbundle.shutils.iplm
 
 ## GRACE Data Pre-Processing
-#::: pyshbundle.shutils.GRACEpy
+#::: pyshbundle.GRACEpy
 
 ## Filtering the GRACE Data
 #::: pyshbundle.shutils.gaussian
