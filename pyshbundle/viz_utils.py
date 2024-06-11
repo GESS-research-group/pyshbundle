@@ -11,7 +11,7 @@ import numpy as np
 import cartopy.crs as ccrs
 import matplotlib.patches as mpatches
 
-from pyshbundle.shutils import PLM
+from pyshbundle.shutils import plm
 from pyshbundle.pysh_core import GSHS
 
 def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
@@ -233,7 +233,7 @@ def ylm(l: int, m: int):
     arr[0] = l
     
     
-    p = PLM(arr, m, thetaRAD, nargin=1, nargout=1)
+    p = plm(arr, m, thetaRAD, nargin=1, nargout=1)
 
     ylmc = p * cosml
     ylms = p * sinml

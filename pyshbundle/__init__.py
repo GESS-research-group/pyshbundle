@@ -70,6 +70,6 @@ from .reader_replacer import reader, TIME, last_4chars
 from .sc2cs import sc2cs
 from .reshape_SH_coefficients import sc2cs, clm2cs, clm2sc, cs2sc, klm2sc
 from .hydro import TWSCalc, area_weighting, Basinaverage
-from .shutils import PLM, iplm, ispec, eigengrav, grule, Gaussian, neumann, naninterp, normalklm
+from .shutils import plm, iplm, ispec, eigengrav, grule, Gaussian, neumann, naninterp, normalklm
 from .pysh_core import GSHS, gsha, GRACE_Data_Driven_Correction_Vishwakarma, PhaseCalc
 from .viz_utils import sc_triplot, cs_sqplot, polar_plot, mapfield, ylm, ylm_plot, gshs_prepare
