@@ -9,6 +9,7 @@ import matplotlib.path as mpath
 import matplotlib.pyplot as plt
 import numpy as np
 import cartopy.crs as ccrs
+import matplotlib.patches as mpatches
 
 from pyshbundle.shutils import PLM
 from pyshbundle.pysh_core import GSHS
@@ -45,10 +46,10 @@ def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
     return ax
 
 def cs_sqplot(csmat: np.ndarray, lmax: int, title: str, vmin, vmax):
-    """ Visualize the SH coeff. in |C\S| square matrix format
+    """ Visualize the SH coeff. in CS square matrix format
 
     Args:
-        csmat (np.ndarray): |C\S| matrix data (see clm2cs or sc2cs)
+        csmat (np.ndarray): CS matrix data (see clm2cs or sc2cs)
         lmax (int): maximum degree of SH expansion
         title (str): Title of the figure
         vmin (float): miniumum value for the colorbar
@@ -315,7 +316,6 @@ def gshs_prepare(lmax, gs, quant, grd, h, jflag, sc_coeff):
     return field
 
 # Function to plot the calendar
-import matplotlib.patches as mpatches
 def plot_calendar_months(datetime_object):
     """
     Plot a calendar for each year in the given list of datetime objects.
