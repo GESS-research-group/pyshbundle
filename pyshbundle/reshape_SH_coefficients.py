@@ -5,6 +5,7 @@
 
 #@author1: Abhishek Mhamane, MS-R Geoinformatics, IIT Kanpur, India
 #@author2: Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+# updated, 2024-06-11, Vivek
 
 # License:
 #    This file is part of PySHbundle.
@@ -44,18 +45,57 @@
 import numpy as np
 from tqdm import tqdm
 
+def sc2cs(field):
+    """converts the rectangular $(L+1) * (2L+1)$ matrix FIELD, containing
+    spherical harmonics coefficients in SC storage format into a 
+    square (L+1)x(L+1) matrix in CS format.
+
+    Parameters:
+        field (np.ndarray()):
+            the rectangular (L+1)x(2L+1) matrix FIELD, containing
+            spherical harmonics coefficients in SC storage format
+        
+    Returns: 
+        cs (np.ndarray): 
+            square (L+1)x(L+1) matrix in CS format
+    
+    References:
+        See the SHBundle docs or PySHBundle docs for more info about SH coeff. storage and retrival formats being implementd.
+
+    Examples:
+        >>> cs_fmt = sc2cs(field)
+        TO DO: show suitable output
+    """
+
+    rows = len(field)
+    cols = len(field[0])
+
+    if (rows!=cols) and (cols!=2*rows - 1):
+        sc2cs.exit("Input neither in cs nor in sc format")
+    elif cols == rows:
+        cs = field
+    else:
+        c    = field[:, rows-1:cols]
+        st   = np.transpose(np.fliplr(field[:, 0:rows-1]))
+        z    = np.zeros([1,rows])
+        s    = np.concatenate((st, z), axis=0)
+        cs   = np.add(c, s)
+        
+    return(cs)
+
+
 
 def clm2cs(data_mat: np.ndarray, lmax: int, sigma_flag=False):
-    """Converts the format from CLM to |C\S|
+    """Converts the format from CLM to CS
     Under the hood uses the `clm2sc` and `sc2cs` function
 
     Args:
         data_mat (numpy.ndarray): list containing [degree;  order; clm; slm; delta clm; delta slm; start data; end date]
         lmax (int): Max Degree of the spherical harmonic expansion
-        sigma_flag (boolean): Flag to return the standard deviation data in |C\S| format or not. Defaults to False
+        sigma_flag (boolean): Flag to return the standard deviation data in CS format or not. Defaults to False
 
     Returns:
-        numpy.ndarray: Spherical Harmonic Coefficients in |C\S| format
+        numpy.ndarray: Spherical Harmonic Coefficients in CS format
         
     """
     if sigma_flag:
@@ -115,12 +155,12 @@ def clm2sc(data_mat: np.ndarray, lmax: int, sigma_flag=False):
 
 def cs2sc(field):
     """converts the square (L+1)x(L+1) matrix 'field', containing
-    spherical harmonics coefficients in |C\S| storage format into a 
+    spherical harmonics coefficients in CS storage format into a 
     rectangular (L+1)x(2L+1) matrix in  SC format.
 
     Args:
         field (np.ndarray): the square (L+1)x(L+1) np matrix field , containing
-                   spherical harmonics coefficients in |C\S| storage format
+                   spherical harmonics coefficients in CS storage format
     
     Returns:
         np.ndarray: Rectangular (L+1)x(2L+1) np matrix in  SC format
@@ -156,7 +196,7 @@ def cs2sc(field):
 def sc2cs(field):
     """converts the rectangular $(L+1) \times (2L+1)$ matrix FIELD, containing
     spherical harmonics coefficients in SC storage format into a 
-    square (L+1)x(L+1) matrix in |C\S| format.
+    square (L+1)x(L+1) matrix in CS format.
 
     Parameters:
         field (np.ndarray()):
@@ -165,7 +205,7 @@ def sc2cs(field):
         
     Returns: 
         cs (np.ndarray): 
-            square (L+1)x(L+1) matrix in |C\S| format
+            square (L+1)x(L+1) matrix in CS format
     
     References:
         See the SHBundle docs or PySHBundle docs for more info about SH coeff. storage and retrival formats being implementd.

@@ -4,38 +4,38 @@
 
 
 from tqdm import tqdm, trange
-from . import sc2cs
 from datetime import datetime, timedelta
+# from pyshbundle.reshape_SH_coefficients import sc2cs
 import julian
 import gzip
-import os
 import numpy as np
 import re
 
-def clm2cs_new(data):
-    """This is an other implementation of clm2cs which uses the clm2sc and then converts using
-    sc2cs functions
 
-    Args:
-        data (_type_): _description_
-    """
-    # read the data from clm to sc format
-    sc_mat, devsc_mat = clm2sc(data)
+# def clm2cs_new(data):
+#     """This is an other implementation of clm2cs which uses the clm2sc and then converts using
+#     sc2cs functions
 
-    # number of files stacked
-    num_files = np.shape(sc_mat)[0]
-    r, c = np.shape(sc_mat)[1:]
+#     Args:
+#         data (_type_): _description_
+#     """
+#     # read the data from clm to sc format
+#     sc_mat, devsc_mat = clm2sc(data)
 
-    # cs will be a square matrix
-    cs_mat = np.zeros((num_files, r, r))
-    devcs_mat = np.zeros((num_files, r, r))
+#     # number of files stacked
+#     num_files = np.shape(sc_mat)[0]
+#     r, c = np.shape(sc_mat)[1:]
 
-    for ith_file in range(num_files):
-        cs_mat[ith_file, :, :] = sc2cs.sc2cs(sc_mat[ith_file, :, :])
-        devcs_mat[ith_file, :, :] = sc2cs.sc2cs(devsc_mat[ith_file, :, :])
+#     # cs will be a square matrix
+#     cs_mat = np.zeros((num_files, r, r))
+#     devcs_mat = np.zeros((num_files, r, r))
+
+#     for ith_file in range(num_files):
+#         cs_mat[ith_file, :, :] = sc2cs.sc2cs(sc_mat[ith_file, :, :])
+#         devcs_mat[ith_file, :, :] = sc2cs.sc2cs(devsc_mat[ith_file, :, :])
     
     
-    return cs_mat, devcs_mat
+#     return cs_mat, devcs_mat
 
 
 
@@ -458,7 +458,7 @@ def sub2ind(array_shape, rows, cols):
 
 
 def cklm2sc_new(clm_mat, lmax: int):
-    """Transforms the spherical harmonics coefficients data in clm or klm format into a /S|C\ matrix
+    """Transforms the spherical harmonics coefficients data in clm or klm format into a SC matrix
 
         clm data - [l, m, c_lm, s_lm]
 
