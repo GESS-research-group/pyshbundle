@@ -13,7 +13,7 @@ The
 #::: pyshbundle.GRACEpy
 
 ## Filtering the GRACE Data
-#::: pyshbundle.shutils.gaussian
+#::: pyshbundle.shutils.Gaussian
  
 ## Numerical Integration
 #::: pyshbundle.shutils.grule
