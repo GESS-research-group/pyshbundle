@@ -48,8 +48,6 @@ print("Initializing PySHbundle v0.2.1")
 # __init__.py with __all__
 __all__ = ['GRACEpy',
            'io',
-           'read_GRACE_SH_paths',
-           'reader_replacer',
            'viz_utils',
            'reshape_SH_coefficients',
            'shutils',
@@ -64,9 +62,8 @@ from .io import extract_SH_data, extract_deg1_coeff_tn13, extract_deg2_3_coeff_t
     parse_jpl_file, parse_csr_file, parse_itsg_file, parse_jpl_header, parse_csr_header, parse_itsg_header, \
     parse_tn13_header, parse_tn14_header, \
     find_date_in_replacemnt_file, extract_C10_11_replcmnt_coeff, extract_C20_replcmnt_coeff, \
-    extract_C30_replcmnt_coeff, cklm2sc_new
-from .read_GRACE_SH_paths import read_GRACE_SH_paths
-from .reader_replacer import reader, TIME, last_4chars
+    extract_C30_replcmnt_coeff, cklm2sc_new, \
+    read_GRACE_SH_paths, load_longterm_mean
 from .sc2cs import sc2cs
 from .reshape_SH_coefficients import sc2cs, clm2cs, clm2sc, cs2sc, klm2sc
 from .hydro import TWSCalc, area_weighting, Basinaverage

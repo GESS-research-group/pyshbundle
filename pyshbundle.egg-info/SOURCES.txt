@@ -6,15 +6,11 @@ setup.cfg
 setup.py
 pyshbundle/GRACEconstants.py
 pyshbundle/GRACEpy.py
-pyshbundle/Phase_calc.py
 pyshbundle/__init__.py
-pyshbundle/area_weighting.py
-pyshbundle/extract_SH_data.py
 pyshbundle/hydro.py
 pyshbundle/io.py
 pyshbundle/pysh_core.py
 pyshbundle/pyshbundle.py
-pyshbundle/read_GRACE_SH_paths.py
 pyshbundle/reshape_SH_coefficients.py
 pyshbundle/sc2cs.py
 pyshbundle/shutils.py
