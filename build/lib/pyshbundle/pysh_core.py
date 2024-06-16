@@ -11,7 +11,7 @@ from scipy import linalg
 from os import chdir, getcwd
 
 from pyshbundle.reshape_SH_coefficients import cs2sc, sc2cs
-from pyshbundle.shutils import normalklm, PLM, iplm, eigengrav, ispec, Gaussian, naninterp, neumann
+from pyshbundle.shutils import normalklm, plm, iplm, eigengrav, ispec, Gaussian, naninterp, neumann
 
 
 def GSHS(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
@@ -131,7 +131,7 @@ def GSHS(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     m = 0
     c = field[m:lmax+1, lmax+m] 
     l = np.array([np.arange(m,lmax+1)])
-    p = PLM(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
+    p = plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
     a[:, m] = np.dot(p,c) 
     b[:, m] = np.zeros(nlat) 
     
@@ -142,7 +142,7 @@ def GSHS(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
         s = field[m:lmax+1,lmax-m]
         
         l = np.array([np.arange(m,lmax+1)])
-        p = PLM(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
+        p = plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
         a[:, m] = np.dot(p,c)
         b[:, m] = np.dot(p,s)
         
@@ -328,7 +328,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
             l = np.arange(m,L+1).reshape(L+1-m, 1)
             l = l.T
             
-            p = PLM(l,m,theRAD, 3, 1)
+            p = plm(l,m,theRAD, 3, 1)
             p = p[:,:,0]
             ai = a[:, m]
             bi = b[:, m]
@@ -345,7 +345,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
             l = np.arange(m, L+1).reshape(L+1-m, 1)
             l = l.T
             
-            p = PLM(l,m,theRAD, 3, 1)
+            p = plm(l,m,theRAD, 3, 1)
             
             ai = a[:, m]
             bi = b[:, m]
@@ -360,7 +360,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
             l = np.arange(m, L+1).reshape(L+1-m, 1)
             l = l.T
             
-            p = PLM(l,m,theRAD, 3, 1)
+            p = plm(l,m,theRAD, 3, 1)
             
             ai = a[:, m]
             bi = b[:, m]
@@ -373,7 +373,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
             l = np.arange(m, L+1).reshape(L+1-m, 1)
             l = l.T
             
-            p = PLM(l,m,theRAD, 3, 1)
+            p = plm(l,m,theRAD, 3, 1)
             
             ai = a[:, m]
             bi = b[:, m]

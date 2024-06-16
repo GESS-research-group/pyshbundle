@@ -49,8 +49,8 @@ from scipy.interpolate import PchipInterpolator
 from pyshbundle import GRACEpy as GB
 from pyshbundle import GRACEconstants as GC
 
-def PLM(l: np.array, m:int, thetaRAD, nargin, nargout): 
-    """PLM Fully normalized associated Legendre functions for a selected order M
+def plm(l: np.array, m:int, thetaRAD, nargin, nargout): 
+    """plm Fully normalized associated Legendre functions for a selected order M
 
     Args:
         l (np.array): Degree, but not necessarily monotonic.
@@ -60,7 +60,7 @@ def PLM(l: np.array, m:int, thetaRAD, nargin, nargout):
         nargin (int): number of input argument
         nargout (int): number of output argument
     Returns:
-        (np.array): PLM fully normalized
+        (np.array): plm fully normalized
     
     Author:
         Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
@@ -269,7 +269,7 @@ def derivALF(inn, miin, plin, m, lmax):
 
 
 def iplm(l, m:int, theRAD, dt=-9999):
-    """IPLM Integrals of the fully normalized associated Legendre functions
+    """iplm Integrals of the fully normalized associated Legendre functions
         over blocks for a selected order M. 
 
     Args:
@@ -344,8 +344,8 @@ def iplm(l, m:int, theRAD, dt=-9999):
     ctmin   = np.cos(theRAD-dt/2)
     plmplus = np.ones([n,lmax+1])
     plmmin = np.ones([n,lmax + 1])
-    plmplus[:,l] = PLM(np.array([l]),mfix,(theRAD + dt/2),3,1)[:,:,0]                  # Tesserals
-    plmmin[:,l] = PLM(np.array([l]),mfix,(theRAD - dt/2),3,1)[:,:,0] 
+    plmplus[:,l] = plm(np.array([l]),mfix,(theRAD + dt/2),3,1)[:,:,0]                  # Tesserals
+    plmmin[:,l] = plm(np.array([l]),mfix,(theRAD - dt/2),3,1)[:,:,0] 
     if mfix > 0:
         m = np.arange(1,mfix + 1,1)
         mm = 2*m
@@ -650,7 +650,7 @@ def neumann(inn):
             x = inn
             theRAD = np.arccos(x) #x in radian
             l = np.array(list(range(len(x))))
-            pp = PLM(l, theRAD)
+            pp = plm(l, theRAD)
             
             rr = list([2])
             for i in len(x-1):
