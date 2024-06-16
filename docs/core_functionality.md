@@ -12,4 +12,4 @@ This module has both Spherical Harmonics Analysis and Spherical Harmonics Synthe
 ## Hydrological Applications with GRACE
 ::: pyshbundle.hydro.Basinaverage
 ::: pyshbundle.hydro.TWSCalc
-::: pyshbundle.PhaseCalc
+::: pyshbundle.io.PhaseCalc
