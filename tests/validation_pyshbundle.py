@@ -10,31 +10,123 @@ import xarray as xr
 import matplotlib.pyplot as plt
 import os
 import scipy.io
+import os
+import sys
+from datetime import datetime
+from collections import OrderedDict
+from pyshbundle.hydro import TWSCalc
+from pyshbundle.io import extract_SH_data, extract_deg1_coeff_tn13, extract_deg2_3_coeff_tn14
+from pyshbundle.viz_utils import plot_calendar_months
+
+
+# Add the folder path to the Python path
+folder_path = '../pyshbundle/'
+sys.path.append(folder_path)
 
 def validation_pyshbundle():
+    source='jpl'
+    path_sh = "../sample_input_data/JPL_input/"
+
+    path_tn14 = "../pyshbundle/data/JPL_TN_files/TN-14_C30_C20_GSFC_SLR.txt"    # Path to TN14
+    path_tn13 = "../pyshbundle/data/JPL_TN_files/TN-13_GEOC_JPL_RL06.txt"       # Path to TN13
+    files = os.listdir(path_sh)
+    file_paths = [path_sh + file for file in files if os.path.splitext(file)[1] == '.gz'];
+    extracted_data={} 
+    for file_path in file_paths:
+        # file_data = read_sh(file_path, source=source)
+        file_data = extract_SH_data(file_path, source=source)
+        if file_data['time_coverage_start']:
+            # Convert time_coverage_start to a datetime object and then format it as yyyy-mm
+            if source == 'itsg':
+                start_date = datetime.strptime(file_data['time_coverage_start'][-7:], '%Y-%m').strftime('%Y-%m')
+            else:
+                start_date = datetime.strptime(file_data['time_coverage_start'], '%Y-%m-%dT%H:%M:%S.%f').strftime('%Y-%m')
+            # Use the formatted date as the key
+            extracted_data[start_date] = file_data['coefficients']
+
+
+    # Time Sort the dictionary by keys (dates)
+    sorted_data = OrderedDict(sorted(extracted_data.items()));
+    temp_tn14 = extract_deg2_3_coeff_tn14(path_tn14)
+    for date_key in temp_tn14.keys():
+        if date_key in sorted_data.keys():
+            sorted_data[date_key][(2,0)]['Clm'] = temp_tn14[date_key]['c20']
+            if temp_tn14[date_key]['c30'] is not None:
+                sorted_data[date_key][(3,0)]['Clm'] = temp_tn14[date_key]['c30'];
+    temp_tn13=extract_deg1_coeff_tn13(path_tn13)
+    if str.upper(source)=='JPL':
+        for key in sorted_data:
+            sorted_data[key][(0, 0)] = {'Clm': 0.0, 'Slm': 0.0, 'Clm_sdev': 0.0, 'Slm_sdev': 0.0}
+            sorted_data[key][(1, 0)] = {'Clm': 0.0, 'Slm': 0.0, 'Clm_sdev': 0.0, 'Slm_sdev': 0.0}
+            sorted_data[key][(1, 1)] = {'Clm': 0.0, 'Slm': 0.0, 'Clm_sdev': 0.0, 'Slm_sdev': 0.0};
+    else: pass
+    for date_key in temp_tn13.keys():
+        if date_key[0] in sorted_data.keys():
+            sorted_data[date_key[0]][(date_key[1], date_key[2])]['Clm'] = temp_tn13[date_key]['Clm']
+            sorted_data[date_key[0]][(date_key[1], date_key[2])]['Slm'] = temp_tn13[date_key]['Slm']
+            sorted_data[date_key[0]][(date_key[1], date_key[2])]['Clm_sdev'] = temp_tn13[date_key]['Clm_sdev']
+            sorted_data[date_key[0]][(date_key[1], date_key[2])]['Slm_sdev'] = temp_tn13[date_key]['Slm_sdev'];
+    max_degree=np.max([degree for date in sorted_data.keys() for degree, order in sorted_data[date].keys()])
+    max_order=np.max([order for date in sorted_data.keys() for degree, order in sorted_data[date].keys()])
+    number_of_months=len(sorted_data.keys())
+    print('The maximum degree & order in data is:' , max_degree, '&', max_order)
+    print('Number of months for which data is available:', number_of_months)
+    sc_mat=np.zeros([number_of_months, max_degree+1, 2*(max_degree+1)], dtype=np.longdouble)
+
+    for index, key in enumerate(sorted_data.keys()):
+        temp=sorted_data[key]
+        for l in range(0,max_degree+1):
+            for m in range(0,l+1):
+                '''uncomment these two lines to see how the elements are being accessed from the dictionary'''
+                # print(l,m)
+                # print(temp[(l,m)]['Clm'])
+                sc_mat[index, l, max_degree+m+1]=temp[(l,m)]['Clm']
+                sc_mat[index, l, max_degree-m]=temp[(l,m)]['Slm']
+        del temp
+    sc_mat=np.delete(sc_mat, max_degree, axis=2);
+    SH_long_mean_jpl = np.load('../pyshbundle/data/long_mean/SH_long_mean_jpl.npy')    # load the long term mean SH coeffs---> JPL 
+    delta_sc=np.ones_like(sc_mat)*np.nan
+    delta_sc = sc_mat -   SH_long_mean_jpl
+    lmax,gs,half_rad_gf=96, 1, 300
+    tws_fields = TWSCalc(delta_sc,lmax, gs,half_rad_gf, number_of_months)
+    tws_fields = np.float32(tws_fields)
+    lon = np.arange(-180,180,gs)
+    lat = np.arange(89,-91,-gs)
+    dates = pd.to_datetime(list(sorted_data.keys()), format='%Y-%m',) \
+                + pd.offsets.MonthEnd(0)  #.dt.strftime('%d-%m-%Y')
+
+    ds = xr.Dataset(
+        data_vars=dict(
+            tws=(["time","lat", "lon"], tws_fields)
+        ),
+        coords = {
+            # "time":(('time'),dates),
+            "time":dates,
+            "lat":lat,
+            "lon":lon },);
+
+
+
+
+
+
+
+
+
+
+
     # Load the .mat file
     data = scipy.io.loadmat('../pyshbundle/validation_data/tws_m.mat')
     # Access the variables in the .mat file
     var1 = data['tws_m']
+    ds_pysh = ds.copy()
 
-    temp=xr.open_dataset('../pyshbundle/validation_data/tws_py.nc', engine="netcdf4")
-    var2=temp.tws.values
+    # #### Lets convert the shbundle datasets to a netcdf format for easier calculations.
 
-
-    # #### Lets convert both datasets to a netcdf format for easier calculations.
-
-    # * Converting `pyshbundle` processed data into netcdf format using xarray, to `ds_pysh`
+    # * Converting `shbundle` processed data into netcdf format using xarray, to `ds_pysh`
     gs=1;
     lon = np.arange(-180,180,gs)
     lat = np.arange(89,-91,-gs)
-    ds_pysh = xr.Dataset(
-        data_vars=dict(
-            tws=(["time","lat", "lon"], var2)
-        ),
-        coords = {
-            "time":(('time'),temp.time.data),
-            "lat":lat,
-            "lon":lon },);
     ds_msh = xr.Dataset(
         data_vars=dict(
             tws=(["time","lat", "lon"], var1)
@@ -126,3 +218,4 @@ def validation_pyshbundle():
         basin_avg_tws_pysh['time'].isin(basin_avg_tws_gapped_pysh['time']),)
 
     diff_global_basin = basin_avg_tws_gapped_msh['tws'] - basin_avg_tws_gapped_pysh['tws']
+    print('Successfully validated the pyshbundle package')
