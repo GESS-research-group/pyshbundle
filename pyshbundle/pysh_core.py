@@ -14,8 +14,8 @@ from pyshbundle.reshape_SH_coefficients import cs2sc, sc2cs
 from pyshbundle.shutils import normalklm, plm, iplm, eigengrav, ispec, Gaussian, naninterp, neumann
 
 
-def GSHS(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
-    """GSHS - Global Spherical Harmonic Synthesis
+def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
+    """gshs - Global Spherical Harmonic Synthesis
 
     Args:
         field (_type_): set of SH coefficients, either in SC-triangle or CS-square format
@@ -558,8 +558,8 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
                 Ft = f[m][0].astype('longdouble') 
                 
            
-            fFld__, _, _ = GSHS(Ft * filter_, qty, 'cell', int(180/deg), 0, 0) 
-            ffFld__, _, _ = GSHS((Ft * filter_ * filter_), qty, 'cell', int(180/deg), 0, 0)
+            fFld__, _, _ = gshs(Ft * filter_, qty, 'cell', int(180/deg), 0, 0) 
+            ffFld__, _, _ = gshs((Ft * filter_ * filter_), qty, 'cell', int(180/deg), 0, 0)
             
             if m == 0:
                 fFld = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble') 
@@ -603,7 +603,7 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
         Rb = basins[rbasin][0] 
         csRb = gsha(Rb, 'mean', 'block', long/2) 
         csF = cs2sc(csRb[0:l, 0:l]) 
-        filRb_ = GSHS(csF * filter_, 'none', 'cell', int(long/2), 0, 0) 
+        filRb_ = gshs(csF * filter_, 'none', 'cell', int(long/2), 0, 0) 
         filRb = filRb_[0]
         kappa = (1-Rb) * filRb
          

@@ -12,7 +12,7 @@ import cartopy.crs as ccrs
 import matplotlib.patches as mpatches
 
 from pyshbundle.shutils import plm
-from pyshbundle.pysh_core import GSHS
+from pyshbundle.pysh_core import gshs
 
 def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
     """Visualize the SH coeff. in SC triangular matrix format
@@ -305,7 +305,7 @@ def gshs_prepare(lmax, gs, quant, grd, h, jflag, sc_coeff):
     grid_y = int(180/gs)
     grid_x = int(360/gs)
 
-    ff = GSHS(sc_coeff, quant, grd, n, h, jflag)[0]
+    ff = gshs(sc_coeff, quant, grd, n, h, jflag)[0]
 
     # rearranging
     field = np.zeros([grid_y,grid_x], dtype ='longdouble')
