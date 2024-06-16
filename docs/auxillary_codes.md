@@ -23,4 +23,4 @@ The rest of the important functions have been bundled under the `auxillary codes
 ::: pyshbundle.shutils.eigengrav
 
 ## Time Series
-::: pyshbundle.shutils.Phase_calc
+::: pyshbundle.Phase_calc

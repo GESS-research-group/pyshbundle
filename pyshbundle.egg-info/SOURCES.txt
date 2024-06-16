@@ -6,6 +6,7 @@ setup.cfg
 setup.py
 pyshbundle/GRACEconstants.py
 pyshbundle/GRACEpy.py
+pyshbundle/Phase_calc.py
 pyshbundle/__init__.py
 pyshbundle/area_weighting.py
 pyshbundle/extract_SH_data.py
