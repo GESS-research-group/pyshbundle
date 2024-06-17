@@ -16,8 +16,7 @@ from datetime import datetime
 from collections import OrderedDict
 from pyshbundle.hydro import TWSCalc
 from pyshbundle.io import extract_SH_data, extract_deg1_coeff_tn13, extract_deg2_3_coeff_tn14
-from pyshbundle.viz_utils import plot_calendar_months
-
+ignore_warnings = True
 
 # Add the folder path to the Python path
 folder_path = '../pyshbundle/'
@@ -69,8 +68,6 @@ def validation_pyshbundle():
     max_degree=np.max([degree for date in sorted_data.keys() for degree, order in sorted_data[date].keys()])
     max_order=np.max([order for date in sorted_data.keys() for degree, order in sorted_data[date].keys()])
     number_of_months=len(sorted_data.keys())
-    print('The maximum degree & order in data is:' , max_degree, '&', max_order)
-    print('Number of months for which data is available:', number_of_months)
     sc_mat=np.zeros([number_of_months, max_degree+1, 2*(max_degree+1)], dtype=np.longdouble)
 
     for index, key in enumerate(sorted_data.keys()):
@@ -87,13 +84,13 @@ def validation_pyshbundle():
     SH_long_mean_jpl = np.load('../pyshbundle/data/long_mean/SH_long_mean_jpl.npy')    # load the long term mean SH coeffs---> JPL 
     delta_sc=np.ones_like(sc_mat)*np.nan
     delta_sc = sc_mat -   SH_long_mean_jpl
-    lmax,gs,half_rad_gf=96, 1, 300
+    lmax,gs,half_rad_gf=96, 1, 500
     tws_fields = TWSCalc(delta_sc,lmax, gs,half_rad_gf, number_of_months)
     tws_fields = np.float32(tws_fields)
     lon = np.arange(-180,180,gs)
     lat = np.arange(89,-91,-gs)
     dates = pd.to_datetime(list(sorted_data.keys()), format='%Y-%m',) \
-                + pd.offsets.MonthEnd(0)  #.dt.strftime('%d-%m-%Y')
+                + pd.offsets.MonthEnd(0)
 
     ds = xr.Dataset(
         data_vars=dict(
@@ -132,7 +129,7 @@ def validation_pyshbundle():
             tws=(["time","lat", "lon"], var1)
         ),
         coords = {
-            "time":(('time'),temp.time.data),
+            "time":(('time'),dates),
             "lat":lat,
             "lon":lon },);
 
@@ -151,17 +148,27 @@ def validation_pyshbundle():
     # Calculate the root mean squared error (RMSE)
     gridwise_rmse = np.sqrt(mean_squared_diff)
 
+    # Test whether gridwise RMSE is less than 1e-3
+    if np.all(gridwise_rmse < 1e-3):
+        pass
+    else:
+        raise ValueError('Gridwise RMSE is greater than 1e-3')
+
     # ## 2. Gridwise NRMSE
     # Calculate the normalized root mean squared error (NRMSE)
     gridwise_nrmse = gridwise_rmse/np.std(ds_msh['tws'].dropna(dim='time').values, axis=0)
+    
+    # Test whether gridwise NRMSE is less than 1e-5
+    if np.all(gridwise_nrmse < 1e-5):
+        pass
+    else:
+        raise ValueError('Gridwise NRMSE is greater than 1e-4')
 
     # ## 3. Global area weighted water budget closure
     # Area of grids
     from pyshbundle.hydro import area_weighting
     global_grid_area=area_weighting(1)
     global_grid_area_sum = np.sum(global_grid_area)
-    print('global surface area in m\u00b2:', global_grid_area_sum)
-
 
     # * Calculate the global area weighted water budget closure error
     # # Create a copy of the datasets
@@ -182,17 +189,21 @@ def validation_pyshbundle():
     ds_pysh_area_weighted=ds_pysh_area_weighted.where(~np.isnan(ds_pysh['tws'][:,0,0]), np.nan)
     diff_global=diff_global.where(~np.isnan(ds_pysh['tws'][:,0,0]), np.nan)
 
+    # Test whether the global area weighted water budget closure error is less than 1e-5
+    if np.all(np.abs(diff_global) < 1e-5):
+        pass
+    else:
+        raise ValueError('Global area weighted water budget closure error is greater than 1e-5')
+    
+
     # ## 4. Difference in basin-average Time Series
     import geopandas as gpd
     path_shapefile = '/Users/vivek/Desktop/vivek_desktop/mrb_shp_zip/mrb_basins.shp'
     shp = gpd.read_file(path_shapefile)
     shp.plot(figsize=(8, 4))  
     basin_name='KRISHNA'
-    shp_basin=shp[shp['RIVER_BASI']==basin_name]
-    print(shp_basin.head(), '\n')
-    shp_basin.plot()
-    basin_area=np.float64(shp_basin['Shape_Area'].values)*1e12          # basin area already in m^2
-    print('Basin area is :', basin_area, 'm\u00b2');
+    shp_basin=shp[shp['RIVER_BASI']==basin_name];
+    basin_area=np.float64(shp_basin['Shape_Area'].values[0])*1e12
 
     from pyshbundle.hydro import Basinaverage
     _, basin_avg_tws_msh = Basinaverage(ds_msh, gs, shp_basin, basin_area)
@@ -218,4 +229,11 @@ def validation_pyshbundle():
         basin_avg_tws_pysh['time'].isin(basin_avg_tws_gapped_pysh['time']),)
 
     diff_global_basin = basin_avg_tws_gapped_msh['tws'] - basin_avg_tws_gapped_pysh['tws']
-    print('Successfully validated the pyshbundle package')
+
+    # Test whether the difference in basin-average time series is less than 1e-5
+    if np.all(np.abs(diff_global_basin[np.atleast_1d(~np.isnan(diff_global_basin[0])).nonzero()].values) < 1e-5):
+        pass
+    else:
+        raise ValueError('Difference in basin-average time series is greater than 1e-5')
+    # print('Successfully validated the pyshbundle package')
+    return "expected_result"
