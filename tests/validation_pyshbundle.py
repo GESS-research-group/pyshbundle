@@ -203,7 +203,7 @@ def validation_pyshbundle():
     shp.plot(figsize=(8, 4))  
     basin_name='KRISHNA'
     shp_basin=shp[shp['RIVER_BASI']==basin_name];
-    basin_area=np.float64(shp_basin['Shape_Area'].values[0])*1e12
+    basin_area=np.float64(shp_basin['SUM_SUB_AR'].values[0])*1e6
 
     from pyshbundle.hydro import Basinaverage
     _, basin_avg_tws_msh = Basinaverage(ds_msh, gs, shp_basin, basin_area)
