@@ -19,8 +19,8 @@ from pyshbundle.io import extract_SH_data, extract_deg1_coeff_tn13, extract_deg2
 ignore_warnings = True
 
 # Add the folder path to the Python path
-folder_path = '../pyshbundle/'
-sys.path.append(folder_path)
+sys.path.append('../pyshbundle/')
+sys.path.append('../sample_input_data/')
 
 def validation_pyshbundle():
     source='jpl'
