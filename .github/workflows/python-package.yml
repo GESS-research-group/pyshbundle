@@ -1,4 +1,5 @@
 name: Python package
+uses: actions/checkout@v2
 
 on: [push, pull_request]
 

@@ -19,17 +19,24 @@ from pyshbundle.io import extract_SH_data, extract_deg1_coeff_tn13, extract_deg2
 ignore_warnings = True
 
 # Add the folder path to the Python path
-current_dir = os.path.dirname(os.path.abspath('validation_pyshbundle.py'))
-os.chdir(current_dir)
-sys.path.append('../pyshbundle/')
-sys.path.append('../sample_input_data/')
+# Get the current directory
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
+# Add the parent directory to the Python path
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
+# Add the necessary paths
+sys.path.append(os.path.join(parent_dir, 'pyshbundle'))
+sys.path.append(os.path.join(parent_dir, 'sample_input_data'))
+
+# Rest of the code...
 def validation_pyshbundle():
     source='jpl'
-    path_sh = "../sample_input_data/JPL_input/"
+    path_sh = os.path.join(parent_dir, 'sample_input_data', 'JPL_input')
 
-    path_tn14 = "../pyshbundle/data/JPL_TN_files/TN-14_C30_C20_GSFC_SLR.txt"    # Path to TN14
-    path_tn13 = "../pyshbundle/data/JPL_TN_files/TN-13_GEOC_JPL_RL06.txt"       # Path to TN13
+    path_tn14 = os.path.join(parent_dir, 'pyshbundle', 'data', 'JPL_TN_files', 'TN-14_C30_C20_GSFC_SLR.txt')
+    path_tn13 = os.path.join(parent_dir, 'pyshbundle', 'data', 'JPL_TN_files', 'TN-13_GEOC_JPL_RL06.txt')
     files = os.listdir(path_sh)
     file_paths = [path_sh + file for file in files if os.path.splitext(file)[1] == '.gz'];
     extracted_data={} 
