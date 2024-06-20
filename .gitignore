@@ -6,6 +6,6 @@ pyshbundle/.ipynb_checkpoints/*
 pyshbundle/__pycache__/
 pyshbundle/__pycache__/*
 pyshbundle/.ipynb_checkpoints
-tests/__pycache__/
+tests/__pycache__
 .DS_Store
 build
