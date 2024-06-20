@@ -29,16 +29,12 @@ setup(
         'Programming Language :: Python :: 3.10',
     ],
     description="PySHbundle: A Python implementation of GRACE Spherical Harmonics Synthesis MATLAB codes SHbundle",
-    package_data={"my_package": ["data/*"]},
+    package_data={"pyshbundle": ["pyshbundle/data/*"]},
     install_requires=install_requires,
     license="GNU General Public License v3",
     long_description=readme,
     long_description_content_type='text/markdown',
     include_package_data=True,
-    package_data={
-        'pyshbundle': ['data/long_mean/SH_long_mean_jpl.npy']     
-                  },
-
     keywords='pyshbundle',
     name='pyshbundle',
     packages=find_packages(include=['pyshbundle', 'pyshbundle.*']),

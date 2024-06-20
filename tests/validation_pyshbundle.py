@@ -10,12 +10,15 @@ import xarray as xr
 import matplotlib.pyplot as plt
 import os
 import scipy.io
-import os
 import sys
 from datetime import datetime
 from collections import OrderedDict
 from pyshbundle.hydro import TWSCalc
 from pyshbundle.io import extract_SH_data, extract_deg1_coeff_tn13, extract_deg2_3_coeff_tn14
+import pkg_resources
+long_mean_file_path = pkg_resources.resource_filename('pyshbundle', 'data/long_mean/SH_long_mean_jpl.npy')
+matlab_file_path = pkg_resources.resource_filename('pyshbundle', 'validation_data/tws_m.mat')
+shapefile_path = pkg_resources.resource_filename('pyshbundle', 'data/mrb_shapefiles/mrb_basins.shp')
 ignore_warnings = True
 
 # Add the folder path to the Python path
@@ -91,9 +94,7 @@ def validation_pyshbundle():
                 sc_mat[index, l, max_degree-m]=temp[(l,m)]['Slm']
         del temp
     sc_mat=np.delete(sc_mat, max_degree, axis=2);
-    import pkg_resources
-    file_path = pkg_resources.resource_filename('pyshbundle', 'data/long_mean/SH_long_mean_jpl.npy')
-    SH_long_mean_jpl = np.load(file_path)    
+    SH_long_mean_jpl = np.load(long_mean_file_path)    
     delta_sc=np.ones_like(sc_mat)*np.nan
     delta_sc = sc_mat -   SH_long_mean_jpl
     lmax,gs,half_rad_gf=96, 1, 500
@@ -125,7 +126,7 @@ def validation_pyshbundle():
 
 
     # Load the .mat file
-    data = scipy.io.loadmat('../pyshbundle/validation_data/tws_m.mat')
+    data = scipy.io.loadmat(matlab_file_path)
     # Access the variables in the .mat file
     var1 = data['tws_m']
     ds_pysh = ds.copy()
@@ -210,8 +211,7 @@ def validation_pyshbundle():
 
     # ## 4. Difference in basin-average Time Series
     import geopandas as gpd
-    path_shapefile = '../pyshbundle/data/mrb_shapefiles/mrb_basins.shp'
-    shp = gpd.read_file(path_shapefile)
+    shp = gpd.read_file(shapefile_path)
     shp.plot(figsize=(8, 4))  
     basin_name='KRISHNA'
     shp_basin=shp[shp['RIVER_BASI']==basin_name];
