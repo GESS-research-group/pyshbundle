@@ -1,6 +1,9 @@
 include LICENSE
 include README.md
 include requirements.txt
+include pyshbundle/sample_input_data/*.gz
+include pyshbundle/data/JPL_TN_files/*.txt
+
 
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
