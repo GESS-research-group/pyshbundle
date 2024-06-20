@@ -4,8 +4,8 @@ from validation_pyshbundle import validation_pyshbundle  # replace with actual i
 class TestSomeFunctionality(unittest.TestCase):
     
     def test_pyshbundle(self):
-        result = validation_pyshbundle()  # replace with actual function
-        expected = "expected_result"  # replace with the expected result
+        result = validation_pyshbundle() 
+        expected = "expected_result"
         self.assertEqual(result, expected)
 
 if __name__ == '__main__':

@@ -19,6 +19,8 @@ from pyshbundle.io import extract_SH_data, extract_deg1_coeff_tn13, extract_deg2
 ignore_warnings = True
 
 # Add the folder path to the Python path
+current_dir = os.path.dirname(os.path.abspath('validation_pyshbundle.py'))
+os.chdir(current_dir)
 sys.path.append('../pyshbundle/')
 sys.path.append('../sample_input_data/')
 
