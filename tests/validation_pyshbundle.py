@@ -39,7 +39,7 @@ def validation_pyshbundle():
     path_tn13 = os.path.join(parent_dir, 'pyshbundle', 'data', 'JPL_TN_files', 'TN-13_GEOC_JPL_RL06.txt')
     files = os.listdir(path_sh)
     file_paths = [os.path.join(path_sh, file) for file in files if os.path.splitext(file)[1] == '.gz'];
-    print(file_paths)
+    # print(file_paths)
     extracted_data={} 
     for file_path in file_paths:
         # file_data = read_sh(file_path, source=source)
@@ -208,7 +208,7 @@ def validation_pyshbundle():
 
     # ## 4. Difference in basin-average Time Series
     import geopandas as gpd
-    path_shapefile = '/Users/vivek/Desktop/vivek_desktop/mrb_shp_zip/mrb_basins.shp'
+    path_shapefile = '../pyshbundle/data/mrb_shapefiles/mrb_basins.shp'
     shp = gpd.read_file(path_shapefile)
     shp.plot(figsize=(8, 4))  
     basin_name='KRISHNA'

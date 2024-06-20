@@ -1,6 +1,6 @@
 # Load Data
 
-### Newer Approach
+### 
 ::: pyshbundle.io.parse_jpl_file
 ::: pyshbundle.io.parse_jpl_header
 ::: pyshbundle.io.parse_lines
