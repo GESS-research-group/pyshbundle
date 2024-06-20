@@ -1,7 +1,7 @@
 import unittest
-from validation_pyshbundle import validation_pyshbundle  # replace with actual import
+from validation_pyshbundle import validation_pyshbundle
 
-class TestSomeFunctionality(unittest.TestCase):
+class TestpyshbundleAccuracy(unittest.TestCase):
     
     def test_pyshbundle(self):
         result = validation_pyshbundle() 
