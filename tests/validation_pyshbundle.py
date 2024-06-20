@@ -38,7 +38,8 @@ def validation_pyshbundle():
     path_tn14 = os.path.join(parent_dir, 'pyshbundle', 'data', 'JPL_TN_files', 'TN-14_C30_C20_GSFC_SLR.txt')
     path_tn13 = os.path.join(parent_dir, 'pyshbundle', 'data', 'JPL_TN_files', 'TN-13_GEOC_JPL_RL06.txt')
     files = os.listdir(path_sh)
-    file_paths = [path_sh + file for file in files if os.path.splitext(file)[1] == '.gz'];
+    file_paths = [os.path.join(path_sh, file) for file in files if os.path.splitext(file)[1] == '.gz'];
+    print(file_paths)
     extracted_data={} 
     for file_path in file_paths:
         # file_data = read_sh(file_path, source=source)
