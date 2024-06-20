@@ -7,5 +7,7 @@ pyshbundle/__pycache__/
 pyshbundle/__pycache__/*
 pyshbundle/.ipynb_checkpoints
 tests/__pycache__
+sample_input_data/.DS_Store
 .DS_Store
-build
+dist/*
+dist
