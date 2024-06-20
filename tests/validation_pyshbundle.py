@@ -91,7 +91,9 @@ def validation_pyshbundle():
                 sc_mat[index, l, max_degree-m]=temp[(l,m)]['Slm']
         del temp
     sc_mat=np.delete(sc_mat, max_degree, axis=2);
-    SH_long_mean_jpl = np.load('../pyshbundle/data/long_mean/SH_long_mean_jpl.npy')    # load the long term mean SH coeffs---> JPL 
+    import pkg_resources
+    file_path = pkg_resources.resource_filename('pyshbundle', 'data/long_mean/SH_long_mean_jpl.npy')
+    SH_long_mean_jpl = np.load(file_path)    
     delta_sc=np.ones_like(sc_mat)*np.nan
     delta_sc = sc_mat -   SH_long_mean_jpl
     lmax,gs,half_rad_gf=96, 1, 500

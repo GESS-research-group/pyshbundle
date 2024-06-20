@@ -8,8 +8,6 @@ from setuptools import setup, find_packages
 with open('README.md', encoding='utf8') as readme_file:
     readme = readme_file.read()
 
-here = os.path.abspath(os.path.dirname(__file__))
-
 install_requires = ['pip', 'numpy', 'pandas','netCDF4', 'scipy',
                     'xarray', 'julian', 'scipy', 'geopandas',
                     'matplotlib', 'rasterio', 'shapely', 'tqdm','cartopy', 
@@ -37,6 +35,10 @@ setup(
     long_description=readme,
     long_description_content_type='text/markdown',
     include_package_data=True,
+    package_data={
+        'pyshbundle': ['data/long_mean/SH_long_mean_jpl.npy']     
+                  },
+
     keywords='pyshbundle',
     name='pyshbundle',
     packages=find_packages(include=['pyshbundle', 'pyshbundle.*']),
