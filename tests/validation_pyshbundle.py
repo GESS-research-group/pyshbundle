@@ -42,7 +42,6 @@ def validation_pyshbundle():
     path_tn13 = os.path.join(parent_dir, 'pyshbundle', 'data', 'JPL_TN_files', 'TN-13_GEOC_JPL_RL06.txt')
     files = os.listdir(path_sh)
     file_paths = [os.path.join(path_sh, file) for file in files if os.path.splitext(file)[1] == '.gz'];
-    # print(file_paths)
     extracted_data={} 
     for file_path in file_paths:
         # file_data = read_sh(file_path, source=source)
@@ -87,9 +86,6 @@ def validation_pyshbundle():
         temp=sorted_data[key]
         for l in range(0,max_degree+1):
             for m in range(0,l+1):
-                '''uncomment these two lines to see how the elements are being accessed from the dictionary'''
-                # print(l,m)
-                # print(temp[(l,m)]['Clm'])
                 sc_mat[index, l, max_degree+m+1]=temp[(l,m)]['Clm']
                 sc_mat[index, l, max_degree-m]=temp[(l,m)]['Slm']
         del temp
@@ -212,7 +208,6 @@ def validation_pyshbundle():
     # ## 4. Difference in basin-average Time Series
     import geopandas as gpd
     shp = gpd.read_file(shapefile_path)
-    shp.plot(figsize=(8, 4))  
     basin_name='KRISHNA'
     shp_basin=shp[shp['RIVER_BASI']==basin_name];
     basin_area=np.float64(shp_basin['SUM_SUB_AR'].values[0])*1e6

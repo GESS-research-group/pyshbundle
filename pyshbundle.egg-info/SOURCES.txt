@@ -24,6 +24,13 @@ pyshbundle.egg-info/top_level.txt
 pyshbundle/data/JPL_TN_files/TN-13_GEOC_JPL_RL06.txt
 pyshbundle/data/JPL_TN_files/TN-14_C30_C20_GSFC_SLR.txt
 pyshbundle/data/long_mean/SH_long_mean_jpl.npy
+pyshbundle/data/mrb_shapefiles/mrb_basins.cpg
+pyshbundle/data/mrb_shapefiles/mrb_basins.dbf
+pyshbundle/data/mrb_shapefiles/mrb_basins.prj
+pyshbundle/data/mrb_shapefiles/mrb_basins.sbn
+pyshbundle/data/mrb_shapefiles/mrb_basins.sbx
 pyshbundle/data/mrb_shapefiles/mrb_basins.shp
+pyshbundle/data/mrb_shapefiles/mrb_basins.shp.xml
+pyshbundle/data/mrb_shapefiles/mrb_basins.shx
 pyshbundle/validation_data/tws_m.mat
 tests/test_pyshbundle.py
