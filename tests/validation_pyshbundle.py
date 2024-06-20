@@ -7,7 +7,6 @@
 import numpy as np
 import pandas as pd
 import xarray as xr
-import matplotlib.pyplot as plt
 import os
 import scipy.io
 import sys
@@ -38,8 +37,8 @@ def validation_pyshbundle():
     source='jpl'
     path_sh = os.path.join(parent_dir, 'sample_input_data', 'JPL_input')
 
-    path_tn14 = os.path.join(parent_dir, 'pyshbundle', 'data', 'JPL_TN_files', 'TN-14_C30_C20_GSFC_SLR.txt')
-    path_tn13 = os.path.join(parent_dir, 'pyshbundle', 'data', 'JPL_TN_files', 'TN-13_GEOC_JPL_RL06.txt')
+    path_tn14 = os.path.join(parent_dir, 'pyshbundle','data', 'JPL_TN_files', 'TN-14_C30_C20_GSFC_SLR.txt')
+    path_tn13 = os.path.join(parent_dir, 'pyshbundle','data', 'JPL_TN_files', 'TN-13_GEOC_JPL_RL06.txt')
     files = os.listdir(path_sh)
     file_paths = [os.path.join(path_sh, file) for file in files if os.path.splitext(file)[1] == '.gz'];
     extracted_data={} 
