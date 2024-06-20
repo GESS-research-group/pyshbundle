@@ -3,6 +3,7 @@ include README.md
 include requirements.txt
 include pyshbundle/sample_input_data/*.gz
 include pyshbundle/data/JPL_TN_files/*.txt
+include pyshbundle/data/long_mean/*.npy
 
 
 recursive-exclude * __pycache__
