@@ -1,21 +1,12 @@
-#!/usr/bin/env python
-
-"""Tests for `pyshbundle` package."""
-
-
 import unittest
+from validation_pyshbundle import validation_pyshbundle
 
-from pyshbundle import pyshbundle
+class TestpyshbundleAccuracy(unittest.TestCase):
+    
+    def test_pyshbundle(self):
+        result = validation_pyshbundle() 
+        expected = "expected_result"
+        self.assertEqual(result, expected)
 
-
-class TestPyshbundle(unittest.TestCase):
-    """Tests for `pyshbundle` package."""
-
-    def setUp(self):
-        """Set up test fixtures, if any."""
-
-    def tearDown(self):
-        """Tear down test fixtures, if any."""
-
-    def test_000_something(self):
-        """Test something."""
+if __name__ == '__main__':
+    unittest.main()

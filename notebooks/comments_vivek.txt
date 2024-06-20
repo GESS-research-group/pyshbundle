@@ -1,3 +1,0 @@
-I appreciate the work and approach for the 3 notebooks, 01 to 03. Excellent work.
-However, 04 is very poorly written, and most importantly it skips over the data processing choices
-and gshs() very quickly. I recommend removing it and replacing it with 04_01

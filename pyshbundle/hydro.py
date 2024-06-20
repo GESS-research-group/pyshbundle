@@ -8,7 +8,7 @@ import geopandas as gpd
 import rioxarray
 from shapely.geometry import mapping
 from pyshbundle.shutils import Gaussian
-from pyshbundle.pysh_core import GSHS
+from pyshbundle.pysh_core import gshs
 
 
 def TWSCalc(data, lmax: int, gs: float, r, m):
@@ -43,9 +43,9 @@ def TWSCalc(data, lmax: int, gs: float, r, m):
         h = 0 
         jflag = 0
         
-        ff = GSHS(shfil, quant, grd, n, h, jflag)[0]
+        ff = gshs(shfil, quant, grd, n, h, jflag)[0]
         
-        ff = ff*1000    # convert values from m to mm
+        ff = ff*1000    # convert units from m to mm
         tws_f[i,:,0:int(grid_x/2)] = ff[:,int(grid_x/2):]
         tws_f[i,:,int(grid_x/2):] = ff[:,0:int(grid_x/2)]   
     

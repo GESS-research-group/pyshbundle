@@ -8,8 +8,6 @@ from setuptools import setup, find_packages
 with open('README.md', encoding='utf8') as readme_file:
     readme = readme_file.read()
 
-here = os.path.abspath(os.path.dirname(__file__))
-
 install_requires = ['pip', 'numpy', 'pandas','netCDF4', 'scipy',
                     'xarray', 'julian', 'scipy', 'geopandas',
                     'matplotlib', 'rasterio', 'shapely', 'tqdm','cartopy', 
@@ -31,7 +29,7 @@ setup(
         'Programming Language :: Python :: 3.10',
     ],
     description="PySHbundle: A Python implementation of GRACE Spherical Harmonics Synthesis MATLAB codes SHbundle",
-    package_data={"my_package": ["data/*"]},
+    package_data={"pyshbundle": ["data/*"]},
     install_requires=install_requires,
     license="GNU General Public License v3",
     long_description=readme,
