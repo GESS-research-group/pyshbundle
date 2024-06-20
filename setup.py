@@ -29,7 +29,7 @@ setup(
         'Programming Language :: Python :: 3.10',
     ],
     description="PySHbundle: A Python implementation of GRACE Spherical Harmonics Synthesis MATLAB codes SHbundle",
-    package_data={"pyshbundle": ["pyshbundle/data/*"]},
+    package_data={"pyshbundle": ["data/*"]},
     install_requires=install_requires,
     license="GNU General Public License v3",
     long_description=readme,
