@@ -51,20 +51,17 @@ def sc2cs(field):
     square (L+1)x(L+1) matrix in CS format.
 
     Parameters:
-        field (np.ndarray()):
-            the rectangular (L+1)x(2L+1) matrix FIELD, containing
-            spherical harmonics coefficients in SC storage format
+        field (numpy.ndarray()): the rectangular (L+1)x(2L+1) matrix FIELD,
+                                containingspherical harmonics coefficients in SC storage format
         
     Returns: 
-        cs (np.ndarray): 
-            square (L+1)x(L+1) matrix in CS format
+        cs (numpy.ndarray): square (L+1)x(L+1) matrix in CS format
     
     References:
         See the SHBundle docs or PySHBundle docs for more info about SH coeff. storage and retrival formats being implementd.
 
     Examples:
-        >>> cs_fmt = sc2cs(field)
-        TO DO: show suitable output
+        sc2cs(field)
     """
 
     rows = len(field)
@@ -212,7 +209,6 @@ def sc2cs(field):
 
     Examples:
         >>> cs_fmt = sc2cs(field)
-        TO DO: show suitable output
     """
 
     rows = len(field)
@@ -241,7 +237,7 @@ def klm2sc(data_mat: np.ndarray, lmax: int, sigma_flag=False):
         sigma_flag (bool, optional): Flag to return the associated standard deviation values. Defaults to False.
 
     Returns:
-        np.ndarray: Spherical Harmonic Coefficients or/and associated standard deviations in SC format
+        numpy.ndarray: Spherical Harmonic Coefficients or/and associated standard deviations in SC format
     """
     sc_mat = np.zeros((lmax+1, 2*lmax + 2))
     dev_sc_mat = np.zeros((lmax+1, 2*lmax + 2))

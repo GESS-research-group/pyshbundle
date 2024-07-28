@@ -95,7 +95,7 @@ def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
         save_flag (bool, optional): True if the figure is to be saved. Defaults to False.
 
     Returns:
-        _type_: _description_
+        matplotlib.axes._axes.Axes: Plot axes
     """
 
     if polar_loc == 'greenland':
@@ -162,7 +162,8 @@ def mapfield(field, img_extent, title, name=None, colorbar_bounds=None, save_fla
         save_flag (bool, optional): _description_. Defaults to False.
 
     Returns:
-        _type_: _description_
+       fig (matplotlib.figure.Figure): Figure object
+        geo_ax (matplotlib.axes._axes.Axes): Plot axes
     """
     # Plotting and Visualization
     

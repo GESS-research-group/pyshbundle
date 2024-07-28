@@ -12,6 +12,237 @@ import numpy as np
 import re
 import pkg_resources
 
+def extract_SH_data(file_path, source):
+    """
+    Extracts the spherical harmonic coefficients from the given file
+    
+    Parameters:
+        file_path (str): Absolute path to the file
+        source (str): Source of the data (JPL, CSR, or ITSG)
+
+    Returns:
+        dict: Dictionary containing the coefficients and time coverage start and end dates
+    """
+    # Initialize an empty dictionary to store the coefficients and dates
+    data = {
+        'coefficients': {},
+        'time_coverage_start': None,
+        'time_coverage_end': None
+    }
+
+
+    # Regular expression pattern to match the lines with coefficients
+    coeff_pattern_csr = re.compile(r'^GRCOF2\s+(\d+)\s+(\d+)\s+([-+]?\d*\.\d+E[-+]?\d+)\s+([-+]?\d*\.\d+E[-+]?\d+)\s+([-+]?\d*\.\d+E[-+]?\d+)\s+([-+]?\d*\.\d+E[-+]?\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)\s+')
+    coeff_pattern_jpl = re.compile(r'^GRCOF2\s+(\d+)\s+(\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)')
+    coeff_pattern_itsg = re.compile(r'^gfc\s+(\d+)\s+(\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)$')
+
+
+    if source=='jpl': coeff_pattern=coeff_pattern_jpl
+    elif source=='csr': coeff_pattern=coeff_pattern_csr
+    elif source=='itsg': coeff_pattern=coeff_pattern_itsg
+    else: raise ValueError("Invalid source, pyshbundle only supports JPL, CSR, and ITSG")
+
+
+    # Regular expression patterns to match the time coverage start and end lines
+    start_pattern = re.compile(r'time_coverage_start\s*:\s*([\d\-T:.]+)')
+    end_pattern = re.compile(r'time_coverage_end\s*:\s*([\d\-T:.]+)')
+    timeindex_itsg = re.compile(r'^modelname\s+(.+)$')
+
+
+    # Open and read the gzipped file to extract the time coverage start and end dates
+    if source=='itsg':
+        with open(file_path, 'rt') as file:
+            for line in file:
+                # Strip any leading/trailing whitespace characters
+                line = line.strip()
+
+                # Search for time coverage start
+                start_match = timeindex_itsg.search(line)
+                if start_match:
+                    data['time_coverage_start'] = start_match.group(1)
+                
+                # Break the loop if both dates are found
+                if data['time_coverage_start']:
+                    break
+            # File is automatically closed here due to the 'with' statement
+        with open(file_path, 'rt') as file:
+            for line in file:
+                # Strip any leading/trailing whitespace characters
+                line = line.strip()
+                # print(line)
+
+                # Search for the coefficient pattern in the line
+                coeff_match = coeff_pattern.search(line)
+                if coeff_match:
+                    # Extract degree, order, Clm, and Slm
+                    degree = int(coeff_match.group(1))
+                    order = int(coeff_match.group(2))
+                    clm = np.longdouble(coeff_match.group(3))
+                    slm = np.longdouble(coeff_match.group(4))
+                    clm_sdev = np.longdouble(coeff_match.group(5))
+                    slm_sdev = np.longdouble(coeff_match.group(6))
+                    
+                    # Store the coefficients in the dictionary
+                    data['coefficients'][(degree, order)] = {'Clm': clm, 'Slm': slm,
+                                                            'Clm_sdev': clm_sdev, 'Slm_sdev': slm_sdev}
+
+
+
+    elif source=='csr' or source=='jpl':
+        with gzip.open(file_path, 'rt') as file:   # gzip.open
+            for line in file:
+                # Strip any leading/trailing whitespace characters
+                line = line.strip()
+
+                # Search for time coverage start
+                start_match = start_pattern.search(line)
+                if start_match:
+                    data['time_coverage_start'] = start_match.group(1)
+                
+                # Search for time coverage end
+                end_match = end_pattern.search(line)
+                if end_match:
+                    data['time_coverage_end'] = end_match.group(1)
+                
+                # Break the loop if both dates are found
+                if data['time_coverage_start'] and data['time_coverage_end']:
+                    break
+            # File is automatically closed here due to the 'with' statement
+
+
+        # Open and read the gzipped file again to extract the coefficients
+        with gzip.open(file_path, 'rt') as file:
+            for line in file:
+                # Strip any leading/trailing whitespace characters
+                line = line.strip()
+                # print(line)
+
+                # Search for the coefficient pattern in the line
+                coeff_match = coeff_pattern.search(line)
+                if coeff_match:
+                    # Extract degree, order, Clm, and Slm
+                    degree = int(coeff_match.group(1))
+                    order = int(coeff_match.group(2))
+                    clm = np.longdouble(coeff_match.group(3))
+                    slm = np.longdouble(coeff_match.group(4))
+                    clm_sdev = np.longdouble(coeff_match.group(5))
+                    slm_sdev = np.longdouble(coeff_match.group(6))
+                    
+                    # Store the coefficients in the dictionary
+                    data['coefficients'][(degree, order)] = {'Clm': clm, 'Slm': slm,
+                                                            'Clm_sdev': clm_sdev, 'Slm_sdev': slm_sdev}
+    return data
+
+
+def extract_deg1_coeff_tn13(file_path):
+    """
+    Extracts the degree 1 coefficients from the given file
+    
+    Parameters:
+        file_path (str): Absolute path to the file
+    
+    Returns:
+        dict: Dictionary containing the degree 1 (order 1) coefficients and time coverage start and end dates
+    """
+
+    data_dict = {}
+    
+    with open(file_path, 'rt') as file:
+        lines = file.readlines()
+        for line in lines:
+
+            # Extract data using regex
+            pattern = re.compile(r'^GRCOF2\s+(\d+)\s+(\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)')
+            match = pattern.match(line)
+            
+            if match:
+                degree = int(match.group(1))
+                order = int(match.group(2))
+                Clm = float(match.group(3))
+                Slm = float(match.group(4))
+                Clm_sdev = np.longdouble(match.group(5))
+                Slm_sdev = np.longdouble(match.group(6))
+                epoch_begin = match.group(7)
+                epoch_end = match.group(8)
+
+                # Use epoch start as key but in yyyy-mm-dd format
+                epoch_key=datetime.strptime(epoch_begin, '%Y%m%d.%H%M%S').strftime('%Y-%m')
+                data_dict[epoch_key, degree, order] = {
+                    'degree': degree,
+                    'order': order,
+                    'Clm': Clm,
+                    'Slm': Slm,
+                    'Clm_sdev': Clm_sdev,
+                    'Slm_sdev': Slm_sdev,
+                    'epoch_begin': epoch_begin,
+                    'epoch_end': epoch_end,
+                }
+    # Print a sample of the data to check if it's parsed correctly
+    # for key in sorted(data_dict.keys())[:5]:  # print first 5 entries
+    #     print(f"{key}: {data_dict[key]}")
+    return data_dict
+
+def extract_deg2_3_coeff_tn14(file_path):
+    """
+    Extracts the degree 2 and 3 coefficients from the given file
+    
+    Parameters:
+        file_path (str): Absolute path to the file
+    
+    Returns:
+        dict: Dictionary containing the degree 2,3 (order 0) coefficients and time coverage start and end dates
+    """
+    data_dict = {}
+    
+    with open(file_path, 'rt') as file:
+        lines = file.readlines()
+        for line in lines:
+
+            # Extract data using regex
+            pattern = re.compile(
+                r'(\d+\.\d+)\s+(\d+\.\d+)\s+([-\d.eE+]+)\s+([-\d.eE+]+)\s+([-\d.eE+]+)\s+([-\d.eE+]+|NaN)?\s+([-\d.eE+]+|NaN)?\s+([-\d.eE+]+|NaN)?\s+(\d+\.\d+)\s+(\d+\.\d+)')
+            match = pattern.match(line)
+            
+            if match:
+                mjd_start = float(match.group(1))
+                year_frac_start = float(match.group(2))
+                c20 = np.longdouble(match.group(3))
+                c20_mean_diff = np.longdouble(match.group(4))
+                c20_sigma = np.longdouble(match.group(5))
+                c30 = match.group(6)
+                c30_mean_diff = match.group(7)
+                c30_sigma = match.group(8)
+                mjd_end = float(match.group(9))
+                year_frac_end = float(match.group(10))
+
+                # Only add C30 if it exists (not)
+                if c30.lower() != 'nan':
+                    c30 = np.longdouble(c30)
+                    c30_mean_diff = np.longdouble(c30_mean_diff)
+                    c30_sigma = np.longdouble(c30_sigma)
+                else:
+                    c30 = None
+                    c30_mean_diff = None
+                    c30_sigma = None
+
+                # Use mjd as key but in yyyy-mm-dd format
+                mjd_key = julian.from_jd(mjd_start, fmt='mjd').date().strftime('%Y-%m')
+                data_dict[mjd_key] = {
+                    'year_frac_start': year_frac_start,
+                    'mjd_start': mjd_start,
+                    'c20': c20,
+                    'c20_mean_diff': c20_mean_diff,
+                    'c20_sigma': c20_sigma,
+                    'c30': c30,
+                    'c30_mean_diff': c30_mean_diff,
+                    'c30_sigma': c30_sigma,
+                    'mjd_end': mjd_end,
+                    'year_frac_end': year_frac_end
+                }
+    # Print a sample of the data to check if it's parsed correctly
+    # for key in sorted(data_dict.keys())[:5]:  # print first 5 entries
+    #     print(f"{key}: {data_dict[key]}")
+    return data_dict
 
 
 # def clm2cs_new(data):
@@ -642,205 +873,3 @@ def cklm2sc_new(clm_mat, lmax: int):
     # with one flag include for 
 
     return scmat, dev_scmat
-
-def extract_SH_data(file_path, source):
-    # Initialize an empty dictionary to store the coefficients and dates
-    data = {
-        'coefficients': {},
-        'time_coverage_start': None,
-        'time_coverage_end': None
-    }
-
-
-    # Regular expression pattern to match the lines with coefficients
-    coeff_pattern_csr = re.compile(r'^GRCOF2\s+(\d+)\s+(\d+)\s+([-+]?\d*\.\d+E[-+]?\d+)\s+([-+]?\d*\.\d+E[-+]?\d+)\s+([-+]?\d*\.\d+E[-+]?\d+)\s+([-+]?\d*\.\d+E[-+]?\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)\s+')
-    coeff_pattern_jpl = re.compile(r'^GRCOF2\s+(\d+)\s+(\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)')
-    coeff_pattern_itsg = re.compile(r'^gfc\s+(\d+)\s+(\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)$')
-
-
-    if source=='jpl': coeff_pattern=coeff_pattern_jpl
-    elif source=='csr': coeff_pattern=coeff_pattern_csr
-    elif source=='itsg': coeff_pattern=coeff_pattern_itsg
-
-
-    # Regular expression patterns to match the time coverage start and end lines
-    start_pattern = re.compile(r'time_coverage_start\s*:\s*([\d\-T:.]+)')
-    end_pattern = re.compile(r'time_coverage_end\s*:\s*([\d\-T:.]+)')
-    timeindex_itsg = re.compile(r'^modelname\s+(.+)$')
-
-
-    # Open and read the gzipped file to extract the time coverage start and end dates
-    if source=='itsg':
-        with open(file_path, 'rt') as file:
-            for line in file:
-                # Strip any leading/trailing whitespace characters
-                line = line.strip()
-
-                # Search for time coverage start
-                start_match = timeindex_itsg.search(line)
-                if start_match:
-                    data['time_coverage_start'] = start_match.group(1)
-                
-                # Break the loop if both dates are found
-                if data['time_coverage_start']:
-                    break
-            # File is automatically closed here due to the 'with' statement
-        with open(file_path, 'rt') as file:
-            for line in file:
-                # Strip any leading/trailing whitespace characters
-                line = line.strip()
-                # print(line)
-
-                # Search for the coefficient pattern in the line
-                coeff_match = coeff_pattern.search(line)
-                if coeff_match:
-                    # Extract degree, order, Clm, and Slm
-                    degree = int(coeff_match.group(1))
-                    order = int(coeff_match.group(2))
-                    clm = np.longdouble(coeff_match.group(3))
-                    slm = np.longdouble(coeff_match.group(4))
-                    clm_sdev = np.longdouble(coeff_match.group(5))
-                    slm_sdev = np.longdouble(coeff_match.group(6))
-                    
-                    # Store the coefficients in the dictionary
-                    data['coefficients'][(degree, order)] = {'Clm': clm, 'Slm': slm,
-                                                            'Clm_sdev': clm_sdev, 'Slm_sdev': slm_sdev}
-
-
-
-    elif source=='csr' or source=='jpl':
-        with gzip.open(file_path, 'rt') as file:   # gzip.open
-            for line in file:
-                # Strip any leading/trailing whitespace characters
-                line = line.strip()
-
-                # Search for time coverage start
-                start_match = start_pattern.search(line)
-                if start_match:
-                    data['time_coverage_start'] = start_match.group(1)
-                
-                # Search for time coverage end
-                end_match = end_pattern.search(line)
-                if end_match:
-                    data['time_coverage_end'] = end_match.group(1)
-                
-                # Break the loop if both dates are found
-                if data['time_coverage_start'] and data['time_coverage_end']:
-                    break
-            # File is automatically closed here due to the 'with' statement
-
-
-        # Open and read the gzipped file again to extract the coefficients
-        with gzip.open(file_path, 'rt') as file:
-            for line in file:
-                # Strip any leading/trailing whitespace characters
-                line = line.strip()
-                # print(line)
-
-                # Search for the coefficient pattern in the line
-                coeff_match = coeff_pattern.search(line)
-                if coeff_match:
-                    # Extract degree, order, Clm, and Slm
-                    degree = int(coeff_match.group(1))
-                    order = int(coeff_match.group(2))
-                    clm = np.longdouble(coeff_match.group(3))
-                    slm = np.longdouble(coeff_match.group(4))
-                    clm_sdev = np.longdouble(coeff_match.group(5))
-                    slm_sdev = np.longdouble(coeff_match.group(6))
-                    
-                    # Store the coefficients in the dictionary
-                    data['coefficients'][(degree, order)] = {'Clm': clm, 'Slm': slm,
-                                                            'Clm_sdev': clm_sdev, 'Slm_sdev': slm_sdev}
-    return data
-
-
-def extract_deg1_coeff_tn13(file_path):
-    data_dict = {}
-    
-    with open(file_path, 'rt') as file:
-        lines = file.readlines()
-        for line in lines:
-
-            # Extract data using regex
-            pattern = re.compile(r'^GRCOF2\s+(\d+)\s+(\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)')
-            match = pattern.match(line)
-            
-            if match:
-                degree = int(match.group(1))
-                order = int(match.group(2))
-                Clm = float(match.group(3))
-                Slm = float(match.group(4))
-                Clm_sdev = np.longdouble(match.group(5))
-                Slm_sdev = np.longdouble(match.group(6))
-                epoch_begin = match.group(7)
-                epoch_end = match.group(8)
-
-                # Use epoch start as key but in yyyy-mm-dd format
-                epoch_key=datetime.strptime(epoch_begin, '%Y%m%d.%H%M%S').strftime('%Y-%m')
-                data_dict[epoch_key, degree, order] = {
-                    'degree': degree,
-                    'order': order,
-                    'Clm': Clm,
-                    'Slm': Slm,
-                    'Clm_sdev': Clm_sdev,
-                    'Slm_sdev': Slm_sdev,
-                    'epoch_begin': epoch_begin,
-                    'epoch_end': epoch_end,
-                }
-    # Print a sample of the data to check if it's parsed correctly
-    # for key in sorted(data_dict.keys())[:5]:  # print first 5 entries
-    #     print(f"{key}: {data_dict[key]}")
-    return data_dict
-
-def extract_deg2_3_coeff_tn14(file_path):
-    data_dict = {}
-    
-    with open(file_path, 'rt') as file:
-        lines = file.readlines()
-        for line in lines:
-
-            # Extract data using regex
-            pattern = re.compile(
-                r'(\d+\.\d+)\s+(\d+\.\d+)\s+([-\d.eE+]+)\s+([-\d.eE+]+)\s+([-\d.eE+]+)\s+([-\d.eE+]+|NaN)?\s+([-\d.eE+]+|NaN)?\s+([-\d.eE+]+|NaN)?\s+(\d+\.\d+)\s+(\d+\.\d+)')
-            match = pattern.match(line)
-            
-            if match:
-                mjd_start = float(match.group(1))
-                year_frac_start = float(match.group(2))
-                c20 = np.longdouble(match.group(3))
-                c20_mean_diff = np.longdouble(match.group(4))
-                c20_sigma = np.longdouble(match.group(5))
-                c30 = match.group(6)
-                c30_mean_diff = match.group(7)
-                c30_sigma = match.group(8)
-                mjd_end = float(match.group(9))
-                year_frac_end = float(match.group(10))
-
-                # Only add C30 if it exists (not)
-                if c30.lower() != 'nan':
-                    c30 = np.longdouble(c30)
-                    c30_mean_diff = np.longdouble(c30_mean_diff)
-                    c30_sigma = np.longdouble(c30_sigma)
-                else:
-                    c30 = None
-                    c30_mean_diff = None
-                    c30_sigma = None
-
-                # Use mjd as key but in yyyy-mm-dd format
-                mjd_key = julian.from_jd(mjd_start, fmt='mjd').date().strftime('%Y-%m')
-                data_dict[mjd_key] = {
-                    'year_frac_start': year_frac_start,
-                    'mjd_start': mjd_start,
-                    'c20': c20,
-                    'c20_mean_diff': c20_mean_diff,
-                    'c20_sigma': c20_sigma,
-                    'c30': c30,
-                    'c30_mean_diff': c30_mean_diff,
-                    'c30_sigma': c30_sigma,
-                    'mjd_end': mjd_end,
-                    'year_frac_end': year_frac_end
-                }
-    # Print a sample of the data to check if it's parsed correctly
-    # for key in sorted(data_dict.keys())[:5]:  # print first 5 entries
-    #     print(f"{key}: {data_dict[key]}")
-    return data_dict

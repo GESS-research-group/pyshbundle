@@ -42,6 +42,6 @@ setup(
     test_suite='tests',
     tests_require=[],
     url='https://github.com/mn5hk/pyshbundle',
-    version='1.1.0',
+    version='0.3.0',
     zip_safe=False,
 )
