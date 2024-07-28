@@ -26,9 +26,9 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
         jflag (int, optional): _description_. Defaults to 1.
     
     Returns:
-        f (np.ndarray): the global field
-        theRAD (): vector of co-latitudes [rad]
-        lamRAD (): vector of longitudes [rad]
+        f (numpy.ndarray): the global field
+        theRAD (numpy.array): vector of co-latitudes [rad]
+        lamRAD (numpy.array): vector of longitudes [rad]
 
     Raises:
         Exception: Check format of the field
@@ -182,7 +182,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
 
 
 def gsha(f, method: str, grid: str = None, lmax: int = -9999):
-    """ GSHA - Global Spherical Harmonic Analysis
+    """ GSHA - Global Spherical Harmonic Analysis, inverse of GSHS.
 
     Args:
         f (np.ndarray): global field of size $(l_{max} + 1) * 2 * l_{max}$ or $l_{max} * 2 * l_{max}$
@@ -191,7 +191,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
         lmax (int, optional): maximum degree of development. Defaults to -9999.
 
     Returns:
-        np.ndarray: Clm, Slm in |C\S| format
+        np.ndarray: Spherical harmonics coefficients Clm, Slm in |C\S| format
 
     Raises:
         ValueError: grid argument can only be 'block' or 'cell'
@@ -249,7 +249,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
             if len(gx.shape) == 1:
                 gx = gx.reshape(gx.shape[0],1)
         else:
-            raise ValueError("Grid type entered is not right")
+            raise ValueError("Grid type entered is incorrect")
     else:
         raise TypeError("Invalid size of matrix F")
     
@@ -406,8 +406,6 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
     cs = cs[:int(lmax+1), :int(lmax+1)]
     
     
-    # np.save('/path/csRb.npy',cs)
-    
     return cs
 
 
@@ -416,11 +414,11 @@ def PhaseCalc(fts, ffts):
     Hilbert transform method explained by Phillip et al.
 
     Args:
-        fts (np.ndarray): _description_
-        ffts (np.ndarray): _description_
+        fts (numpy.array): time-series 1
+        ffts (numpy.narray): time-series 2
 
     Returns:
-        _type_: _description_
+        numpy.ndarray: Phase difference between the two time series
     
     References:
         1. Phillips, T., R. S. Nerem, B. Fox-Kemper, J. S. Famiglietti, and B. Rajagopalan (2012),
@@ -492,17 +490,15 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
         Exception: gaussian filtered GRACE TWS time-series for all the basins.
 
     Returns:
-        _type_: _description_
-    
-    Todo:
-        + TypeError
+        every output has a size (number of months x basins)
+        RecoveredTWS (numpy.ndarray): Corrected data-driven time-series (Least Squares fit method)
+        RecoveredTWS2 (numpy.ndarray): Corrected data-driven time-series (shift and amplify method)
+        FilteredTS (numpy.ndarray): Gaussian filtered GRACE TWS time-series for all the basins. 
     
     Author:
         Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
     deg = 0.5
-    deg_rad = deg_to_rad(deg)
-    
     x = np.linspace(0, 360-deg, int(360/deg))
     y = np.linspace(0, 180-deg, int(180/deg))
     x1 = np.linspace(deg, 360, int(360/deg))

@@ -49,35 +49,30 @@ from scipy.interpolate import PchipInterpolator
 from pyshbundle import GRACEpy as GB
 from pyshbundle import GRACEconstants as GC
 
+
 def plm(l: np.array, m:int, thetaRAD, nargin, nargout): 
     """plm Fully normalized associated Legendre functions for a selected order M
 
     Args:
-        l (np.array): Degree, but not necessarily monotonic.
+        l (numpy.array): Degree, but not necessarily monotonic.
                For l < m a vector of zeros will be returned.
-        m (int): order (scalar). If absent, m = 0 is assumed.
-        thetaRAD (np.array): co-latitude [rad] (vector)
+        m (int): order. If absent, m = 0 is assumed.
+        thetaRAD (numpy.array): co-latitude [rad] (vector)
         nargin (int): number of input argument
         nargout (int): number of output argument
     Returns:
         (np.array): plm fully normalized
     
     Author:
-        Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+        Vivek Kumar Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
-    
+
     if  min(l.shape) != 1:
-        print('Degree l must be a vector (or scalar)') 
-        sys.exit([])
+        raise ValueError('Degree l must be a vector (or scalar)') 
     if  np.remainder(l,1).all() != 0:
-        print('Vector l contains non-integers !!') 
-        sys.exit([])
-    # if 
-    #     print('Order m must be a scalar') 
-    #     sys.exit([])
+        raise ValueError('Vector l contains non-integers !!') 
     if  np.remainder(m,1) != 0:
-        print('Order must be integer')
-        sys.exit([])
+        raise ValueError('Order must be integer')
 
 # PRELIMINARIES
     lcol = len(l)
@@ -187,17 +182,19 @@ def plm(l: np.array, m:int, thetaRAD, nargin, nargout):
     if nargout == 3: 
         return p, dp, ddp
     
- # INLINE FUNCTIONS
- # function for the sectorial recursion, non-recursive though
+
+  
 def secrecur(m, y):
-    """Helper Function: 
+    """Helper Function for sectorial recursion.
+
+    This function computes the sectorial recursion for given parameters.
 
     Args:
-        m (_type_): _description_
-        y (_type_): _description_
+        m (int): The order of the recursion.
+        y (numpy.ndarray): The input array for which the recursion is computed.
 
     Returns:
-        _type_: _description_
+        numpy.ndarray: The result of the sectorial recursion.
     """
     if m == 0:
        fac = 1
@@ -209,14 +206,15 @@ def secrecur(m, y):
 
 
 # % function for the l-recursion
+
 def lrecur(inn, x, m, lmax):
     """[Helper Function]  
 
     Args:
-        inn (_type_): _description_
-        x (_type_): _description_
-        m (_type_): _description_
-        lmax (_type_): _description_
+        inn (int): _description_
+        x (int): _description_
+        m (int): _description_
+        lmax (int): _description_
 
     Returns:
         _type_: _description_
@@ -236,21 +234,22 @@ def lrecur(inn, x, m, lmax):
 
 
 # function to calculate the derivate
+
 def derivALF(inn, miin, plin, m, lmax):
-    """HelpeFunction
+    """
+    Function to calculate the derivate of the associated Legendre functions
 
     Args:
-        inn (_type_): _description_
-        miin (_type_): _description_
-        plin (_type_): _description_
-        m (_type_): _description_
-        lmax (_type_): _description_
+        inn (numpy.ndarray): _description_
+        miin (numpy.ndarray): _description_
+        plin (numpy.ndarray): _description_
+        m (int): order of associated legendre functions
+        lmax (int): maximum degree
 
     Returns:
-        _type_: _description_
+        numpy.ndarray: derivatives of the associated Legendre functions
     """
     l = np.arange(m,lmax+2,1)
-    #l=l.reshape(l.shape[0],1)
     if m == 0:
         inn[:,0] = 0
         if lmax > m:             
@@ -273,14 +272,14 @@ def iplm(l, m:int, theRAD, dt=-9999):
         over blocks for a selected order M. 
 
     Args:
-        l (_type_): degree (vector). Integer, but not necessarily monotonic.
+        l (numpy.array): degree (vector). Integer, but not necessarily monotonic.
                 For l < m a vector of zeros will be returned.
         m (int): order (scalar)
-        theRAD (np.array): co-latitude [rad] (vector)
+        theRAD (numpy.array): co-latitude [rad] (vector)
         dt (int, optional): integration block-size [rad] (scalar). Defaults to -9999.
     
     Returns:
-        np.ndarray: Matrix with integrated Legendre functions.
+        numpy.ndarray: Matrix with integrated Legendre functions.
                 Functions are integrated from theRAD(i)-dt/2 till theRAD(i)+dt/2.
                 The matrix has length(TH) rows and length(L) columns, unless L 
                 or TH is scalar. Then the output vector follows the shape of 
@@ -290,48 +289,37 @@ def iplm(l, m:int, theRAD, dt=-9999):
         The blocks at the pole might become too large under circumstances.
         This is not treated separately, i.e. unwanted output may appear.
         In case TH is scalar, dt will be 1 (arbitrarily).
-    
-    TO DO:
-        Instead of using sys.exit() we could raise exceptions - that would be a better way of error handling
-    
+        
     Uses:
         `plm`
     
     Author:
-        Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+        Vivek Kumar Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
+
     if dt == -9999:
-        if len(theRAD) == 1:
-            dt = np.pi/180
-        else:
-            dt = theRAD[1] - theRAD[0]
-    if  min(l.shape) != 1:
-        print('Degree l must be a vector (or scalar)') 
-        sys.exit([])
-    if  np.remainder(l,1).all() != 0:
-        print('Vector l contains non-integers !!') 
-        sys.exit([])
-    # if 
-    #     print('Order m must be a scalar') 
-    #     sys.exit([])
-    if  np.remainder(m,1) != 0:
-        print('Order must be integer')
-        sys.exit([])
-    # if min(dt.shape) !=1:
-    #     print('Block size DT must be scalar.') 
-        sys.exit([])
-    if dt == 0: 
-        print('DT cannot be zero') 
-        sys.exit([])
-        
-    # init
+        dt = np.pi / 180 if len(theRAD) == 1 else theRAD[1] - theRAD[0]
+
+    if min(l.shape) != 1:
+        raise ValueError('Degree l must be a vector (or scalar)')
+
+    if not np.all(np.remainder(l, 1) == 0):
+        raise ValueError('Vector l contains non-integers !!')
+
+    if not np.remainder(m, 1) == 0:
+        raise ValueError('Order must be integer')
+
+    if dt == 0:
+        raise ValueError('DT cannot be zero')
+
+
     lcol = len(l)
     trow = len(theRAD)
     n = len(theRAD)
     theRAD.T
     if min(theRAD) < 0 or max(theRAD) > np.pi:
-        print('Is the co-latitude ''theta'' given in radian?')
-        sys.exit([])
+        raise ValueError('Is the co-latitude ''theta'' given in radian?')
+
     lmax = max(l[0])
     mfix = m
     lvec = np.transpose(l) 
@@ -416,11 +404,11 @@ def ispec(a,b = -9999):
     """Returns the function F from the spectra A and B
 
     Args:
-        a (_type_): cosine coefficients
+        a (int): cosine coefficients
         b (int, optional): sine coefficients. Defaults to -9999.
 
     Returns:
-        f (_type_): _description_
+        f (numpy.ndarray: **fill**
 
     See Also:
         `spec`
@@ -447,27 +435,36 @@ def ispec(a,b = -9999):
     f = np.real(ifft(fs.T).T)
     return f
 
-# @author: Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+
 def eigengrav(lmax: int, fstr: str, h: float):
-    """_summary_
+    """
+    Returns the isotropic spectral transfer (or: eigenvalues) of several gravity related quantities. 
+    Upward continuation may be included.
 
     Args:
         lmax (int): Maximum degree of Spherical Coefficients
-        fstr (str): gravity quantity, options: 'None', 'geoid', 'potential', 'gravity', 'tr', 'trr', 'slope'
-                    'water', 'smd', 'height'
-        h (float): _description_
+        fstr(str): denoting the functional under consideration:
+            'none', 
+            'geoid',
+            'dg', 'gravity' ... gravity anomaly,
+            'potential', 
+            'tr' .............. gravity disturbance, 
+            'trr' ............. (d^2/dr^2)
+            'slope' ........... size of surface gradient, 
+            'water' ........... equivalent water thickness, 
+            'smd' ............. surface mass density.
+            'height' .......... vertical displacements
+        h (float): height above Earth mean radius [m].
 
     Returns:
-        _type_: _description_
+        numpy ndarray: transfer. Size and shape equal to lmax. Units are respectively 
+            [none], [m], [mGal], [mGal], [E], [m^2/s^2], [rad], [m], [kg/m^2].
+                                                           [n x 1]
+    Uses:
+        upwcon, lovenr, uberall/constants, uberall/isint
 
     Raises:
         TypeError: Enter a valid lmax value
-
-    Author: Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
-
-    TO DO:
-        Can we think about the raising a ValueError instead of instantly terminating the function
-        Adding comments as variable names are not much descriptive
     
     Author:
         Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
@@ -518,17 +515,17 @@ def eigengrav(lmax: int, fstr: str, h: float):
             5517*r, np.add(range(0, 2*lmax + 1, 2), 1)), np.multiply(3, (1+ln)))
         tf = tf.reshape((1, lmax+1))
     elif fstr == 'height':
-        # not sure aobut heights - kept it unchanged ... abhishek
         kl, hl, ll = GB.lovenrPREM(90, 'CF')
         tf = np.divide(np.multiply(hl, (GC.ae*1000)), np.add(kl, 1))
     else:
-        ValueError('Please choose a valid quantity for fstr')
+        ValueError('Requested functional FSTR not available.')
 
     if h > 0:
         upConTerm = GB.upwcon(lmax, h)
         tf = np.multiply(tf, upConTerm)
 
     return(tf)
+
 
 def grule(n: int):
     """This function computes Gauss base points and weight factors
@@ -628,9 +625,6 @@ def neumann(inn):
     
     Uses:
         `grule`, `plm`
-
-    Examples:
-        >>> TO DO: write example how to use the function
     
     Author:
         Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
@@ -666,6 +660,7 @@ def neumann(inn):
             # TO DO: Write more descriptive exception messages
     
     return w, x
+
 
 
 def normalklm(lmax: int, typ: str = 'wgs84'):
@@ -806,13 +801,11 @@ def naninterp(X):
     """This function uses cubic interpolation to replace NaNs
 
     Args:
-        X (_type_): _description_
+        X (numpy.array): array with NaN values
 
     Returns:
-        _type_: _description_
+        numpy.array: cubic interpolated array
     """
-
-    nan = np.nan
     
     ok = ~np.isnan(X)
     xp = ok.ravel().nonzero()[0] #Indices of xs with values

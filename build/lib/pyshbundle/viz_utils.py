@@ -341,7 +341,7 @@ def plot_calendar_months(datetime_object):
     # Determine the range of years to plot
     years = sorted({year for year, month in months_years})
     
-    fig, axes = plt.subplots(nrows=len(years), ncols=1, figsize=(7, 1 * len(years)))
+    fig, axes = plt.subplots(nrows=len(years), ncols=1, figsize=(7, 1 * len(years)), dpi=300)
 
     if len(years) == 1:
         axes = [axes]

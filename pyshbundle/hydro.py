@@ -1,5 +1,7 @@
 # Applications of GRACE data to Hydrology
 # Curator: Abhishek Mhamane
+# Updated: Vivek, 2024-05-20, added the function Basinaverage, area_weighting.
+# Updated: Vivek, 2024-07-28.
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,16 +13,19 @@ from pyshbundle.shutils import Gaussian
 from pyshbundle.pysh_core import gshs
 
 
-def TWSCalc(data, lmax: int, gs: float, r, m):
-    """_summary_
+def TWSCalc(data, lmax: int, gs: float, r:float, m: int):
+    """
+    Calculate the total water storage (TWS) from spherical harmonics coefficients.
+    Uses spherical harmonics synthesis to go from harmonics to gridded domain.
 
     Args:
-        data (np.ndarray): SC coefficients
+        data (numpy.ndarray): Spherical harmonics coefficients in SC format
         lmax (int): maximum degree
         gs (float): grid size
-        r (_type_): _description_
-        m (_type_): _description_
-    
+        r (float): half-width of the Gaussian filter
+        m (int): numbor of time steps
+    Uses:    
+        'Gaussian', 'gshs',
     Author:
         Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
@@ -53,6 +58,17 @@ def TWSCalc(data, lmax: int, gs: float, r, m):
     return(tws_f)
 
 def apply_gaussian(sc_coeff, gaussian_coeff, lmax):
+    """
+    Apply Gaussian filter on the spherical harmonics coefficients.
+    
+    Parameters:
+        sc_coeff (numpy.ndarray): Spherical harmonics coefficients in SC format
+        gaussian_coeff (numpy.ndarray): Gaussian filter weights
+        lmax (int): maximum degree
+
+    Returns:
+        numpy.ndarray: Filtered spherical harmonics coefficients in SC format
+    """
     
     # filtered SH Coeff
     shfil = np.zeros([lmax+1, 2 * lmax+1])
@@ -89,6 +105,19 @@ def area_weighting(grid_resolution):
     return area
 
 def Basinaverage(temp, gs, shp_basin, basin_area):
+    """
+    Calculate the basin average of the total water storage (TWS) from the gridded TWS data.
+
+    Parameters:
+        temp (xarray.DataArray): Gridded total water storage data
+        gs (float): grid size
+        shp_basin (geopandas.GeoDataFrame): Shapefile of the basin
+        basin_area (float): Area of the basin in square meters
+
+    Returns:
+        xarray.DataArray: Total water storage data clipped to the basin
+        xarray.DataArray: Basin average total water storage
+    """
 
     from pyshbundle.hydro import area_weighting
     # area_weighting returns the area of each grid in m^2 for the grid resolution specified
