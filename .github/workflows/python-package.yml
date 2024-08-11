@@ -21,7 +21,7 @@ jobs:
       run: conda env create -f environment.yml
 
     - name: Activate Conda environment
-      run: conda activate your-environment-name
+      run: conda activate pysh
 
     - name: Install package
       run: pip install .
