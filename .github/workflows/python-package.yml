@@ -1,33 +1,33 @@
-name: Python package
+# name: Python package
 
-on: [push, pull_request]
+# on: [push, pull_request]
 
-jobs:
-  build:
+# jobs:
+#   build:
 
-    runs-on: ubuntu-latest
+#     runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+#     steps:
+#     - name: Checkout repository
+#       uses: actions/checkout@v4
 
-    - name: Set up Conda
-      uses: conda-incubator/setup-miniconda@v2
-      with:
-        auto-activate-base: false
-        python-version: 3.12
+#     - name: Set up Conda
+#       uses: conda-incubator/setup-miniconda@v2
+#       with:
+#         auto-activate-base: false
+#         python-version: 3.12
 
-    - name: Create Conda environment
-      run: conda env create -f environment.yml
+#     - name: Create Conda environment
+#       run: conda env create -f environment.yml
 
-    - name: Activate Conda environment
-      run: conda activate pysh
+#     - name: Activate Conda environment
+#       run: conda activate pysh
 
-    - name: Install package
-      run: pip install .
+#     - name: Install package
+#       run: pip install .
 
-    - name: Run tests
-      run: python -m unittest discover -s tests
+#     - name: Run tests
+#       run: python -m unittest discover -s tests
 
 
 # name: Python package
