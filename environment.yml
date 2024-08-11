@@ -1,5 +1,6 @@
 name: pysh
 channels:
+  - conda-forge
   - defaults
 dependencies:
   - bzip2=1.0.8=h80987f9_6
