@@ -12,7 +12,7 @@ install_requires = ['pip', 'numpy', 'pandas','netCDF4', 'scipy',
                     'xarray', 'julian', 'scipy', 'geopandas',
                     'matplotlib', 'rasterio', 'shapely', 'tqdm','cartopy', 
                     'ipykernel', 'jupyterlab', 'rioxarray',],
-
+tests_reqiures=install_requires
 setup(
     author="Amin Shakya",
     author_email='aminshk50@gmail.com',
@@ -40,7 +40,7 @@ setup(
     packages=find_packages(include=['pyshbundle', 'pyshbundle.*']),
     setup_requires=[],
     test_suite='tests',
-    tests_require=[],
+    tests_require=install_requires,
     url='https://github.com/mn5hk/pyshbundle',
     version='0.3.0',
     zip_safe=False,
