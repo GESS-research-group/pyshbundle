@@ -140,4 +140,3 @@ dependencies:
       - webencodings
       - websocket-client
       - xarray
-prefix: /Users/vivek/miniconda3/envs/pysh
