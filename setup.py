@@ -12,7 +12,6 @@ install_requires = ['pip', 'numpy', 'pandas','netCDF4', 'scipy',
                     'xarray', 'julian', 'scipy', 'geopandas',
                     'matplotlib', 'rasterio', 'shapely', 'tqdm','cartopy', 
                     'ipykernel', 'jupyterlab', 'rioxarray',],
-tests_reqiures=install_requires
 setup(
     author="Amin Shakya",
     author_email='aminshk50@gmail.com',
