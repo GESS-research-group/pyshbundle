@@ -140,8 +140,8 @@ def validation_pyshbundle():
             "time":(('time'),dates),
             "lat":lat,
             "lon":lon },);
-    print(ds_msh)
-    print(ds_pysh)
+    # print(ds_msh)
+    # print(ds_pysh)
     # ## 1. Gridwise RMSE calculation
     # 
     # Before finding the grid-wise RMSE values we need to ignore the data for the missing months.

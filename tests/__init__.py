@@ -1,1 +1,1 @@
-"""Unit test package for pyshbundle."""
+# Unit test package for pyshbundle
