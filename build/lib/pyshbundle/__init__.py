@@ -38,12 +38,12 @@ Key Papers Referred:
     """
 # 2024-06-10, updated: Vivek Kumar Yadav, IISc Bengaluru
 
-__author__ = """Amin Shakya"""
-__email__ = 'aminshk50@gmail.com'
-__version__ = '0.2.1'
+__author__ = """Vivek Kumar Yadav"""
+__email__ = 'viveky@iisc.ac.in'
+__version__ = '0.3.0'
 
 # __init__.py with initialization code
-print("Initializing PySHbundle v0.2.1")
+print("Initializing PySHbundle v0.3.0")
 
 # __init__.py with __all__
 __all__ = ['GRACEpy',
