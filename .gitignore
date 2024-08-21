@@ -14,3 +14,5 @@ sample_input_data/.DS_Store
 dist/*
 dist
 shbundle
+.github/workflows/debug_env_build.yml
+.github/workflows/python-package.yml

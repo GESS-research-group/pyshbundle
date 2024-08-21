@@ -3,35 +3,68 @@ name: Python Package using Conda
 on: [push]
 
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 5
-
+  example-3:
+    name: Ex3 Linux
+    runs-on: "ubuntu-latest"
+    defaults:
+      run:
+        shell: bash -el {0}
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python 3.12
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.12'
-    - name: Add conda to system path
-      run: |
-        # $CONDA is an environment variable pointing to the root of the miniconda directory
-        echo $CONDA/bin >> $GITHUB_PATH
-    - name: Install dependencies
-      run: |
-        conda env create --file environment.yml --name pysh
-        conda init
-    - name: Activate conda environment
-      run: |
-        conda activate pysh
-    - name: Lint with flake8
-      run: |
-        conda install flake8
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with unittest
-      run: |
-        python -m unittest tests/test_pyshbundle.py
+      - uses: actions/checkout@v4
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: pysh
+          environment-file: environment.yml
+          python-version: 3.12
+          auto-activate-base: false
+      - run: |
+          conda info
+          conda list
+      - name: Install package
+        run: pip install .
+      - name: Test with unittest
+        run: |
+          python -m unittest tests/test_pyshbundle.py
+
+
+
+# name: Python Package using Conda
+
+# on: [push]
+
+# jobs:
+#   build-linux:
+#     runs-on: ubuntu-latest
+#     defaults:
+#       run:
+#         shell: bash -l {0}
+#     strategy:
+#       max-parallel: 5
+
+#     steps:
+#     - uses: actions/checkout@v4
+#     - name: Set up Python 3.12
+#       uses: actions/setup-python@v3
+#       with:
+#         python-version: '3.12'
+#     - name: Add conda to system path
+#       run: |
+#         # $CONDA is an environment variable pointing to the root of the miniconda directory
+#         echo $CONDA/bin >> $GITHUB_PATH
+#     - name: Install dependencies
+#       run: |
+#         conda env create --file environment.yml --name pysh
+#         conda init
+#     - name: Activate conda environment
+#       run: |
+#         conda activate pysh
+#     - name: Lint with flake8
+#       run: |
+#         conda install flake8
+#         # stop the build if there are Python syntax errors or undefined names
+#         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+#         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+#         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+#     - name: Test with unittest
+#       run: |
+#         python -m unittest tests/test_pyshbundle.py
