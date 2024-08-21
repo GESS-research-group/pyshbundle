@@ -8,8 +8,8 @@ jobs:
     name: Build wheels on ${{ matrix.os }}
     strategy:
       matrix:
-        # macos-13 is an intel runner, macos-14 is apple silicon
-        os: [windows-latest, ubuntu-latest, macos-13, macos-14]
+        os: ["macos-latest"] #[windows-latest, ubuntu-latest, macos-13, macos-14]
+        python-version: ["3.12"]
     defaults:
       run:
         shell: bash -el {0}
@@ -19,7 +19,7 @@ jobs:
         with:
           activate-environment: pysh
           environment-file: environment.yml
-          python-version: 3.12
+          python-version: ${{ matrix.python-version }}  #3.12
           auto-activate-base: false
       - run: |
           conda info
