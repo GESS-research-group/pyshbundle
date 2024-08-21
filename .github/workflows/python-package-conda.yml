@@ -21,6 +21,7 @@ jobs:
     - name: Install dependencies
       run: |
         conda env create --file environment.yml --name pysh
+        conda init
     - name: Activate conda environment
       run: |
         conda activate pysh
