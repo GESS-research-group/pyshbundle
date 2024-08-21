@@ -43,7 +43,7 @@ __email__ = 'viveky@iisc.ac.in'
 __version__ = '0.3.0'
 
 # __init__.py with initialization code
-print("Initializing PySHbundle v0.2.1")
+print("Initializing PySHbundle v0.3.0")
 
 # __init__.py with __all__
 __all__ = ['GRACEpy',
