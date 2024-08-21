@@ -24,7 +24,7 @@ setup(
     install_requires=install_requires,
     long_description=readme,
     long_description_content_type='text/markdown',
-    package_data={"pyshbundle": ["data/*"]},
+    package_data={"pyshbundle": ["data/*", "validation_data/*"]},
     include_package_data=True,
     keywords=['pyshbundle', 'GRACE', 'Spherical Harmonics', 'Synthesis Harmonics Synthesis', 'Spherical Harmonics Analysis'],
     test_suite='tests',
