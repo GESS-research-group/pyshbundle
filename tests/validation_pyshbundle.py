@@ -16,7 +16,7 @@ from pyshbundle.hydro import TWSCalc
 from pyshbundle.io import extract_SH_data, extract_deg1_coeff_tn13, extract_deg2_3_coeff_tn14
 import pkg_resources
 long_mean_file_path = pkg_resources.resource_filename('pyshbundle', 'data/long_mean/SH_long_mean_jpl.npy')
-matlab_file_path = pkg_resources.resource_filename('pyshbundle', 'validation_data/tws_m.mat')
+matlab_file_path = pkg_resources.resource_filename('pyshbundle', 'data/validation_data/tws_m.mat')
 shapefile_path = pkg_resources.resource_filename('pyshbundle', 'data/mrb_shapefiles/mrb_basins.shp')
 ignore_warnings = True
 

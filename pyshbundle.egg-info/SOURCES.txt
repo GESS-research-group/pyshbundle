@@ -32,5 +32,8 @@ pyshbundle/data/mrb_shapefiles/mrb_basins.sbx
 pyshbundle/data/mrb_shapefiles/mrb_basins.shp
 pyshbundle/data/mrb_shapefiles/mrb_basins.shp.xml
 pyshbundle/data/mrb_shapefiles/mrb_basins.shx
+pyshbundle/data/validation_data/tws_m.mat
+pyshbundle/validation_data/delta_sc.mat
 pyshbundle/validation_data/tws_m.mat
+pyshbundle/validation_data/tws_py.nc
 tests/test_pyshbundle.py

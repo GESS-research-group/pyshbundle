@@ -15,3 +15,7 @@ dist/*
 dist
 shbundle
 .github/workflows/debug_env_build.yml
+build
+build/*
+pyshbundle.egg-info
+pyshbundle.egg-info/*
