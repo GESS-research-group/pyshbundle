@@ -16,7 +16,7 @@ from pyshbundle.hydro import TWSCalc
 from pyshbundle.io import extract_SH_data, extract_deg1_coeff_tn13, extract_deg2_3_coeff_tn14
 import pkg_resources
 long_mean_file_path = pkg_resources.resource_filename('pyshbundle', 'data/long_mean/SH_long_mean_jpl.npy')
-matlab_file_path = pkg_resources.resource_filename('pyshbundle', 'data/validation_data/tws_m.mat')
+matlab_file_path = pkg_resources.resource_filename('pyshbundle', 'examples/validation_data/tws_sh.mat')
 shapefile_path = pkg_resources.resource_filename('pyshbundle', 'data/mrb_shapefiles/mrb_basins.shp')
 ignore_warnings = True
 
@@ -35,7 +35,7 @@ sys.path.append(os.path.join(parent_dir, 'sample_input_data'))
 # Rest of the code...
 def validation_pyshbundle():
     source='jpl'
-    path_sh = os.path.join(parent_dir, 'sample_input_data', 'JPL_input')
+    path_sh = os.path.join(parent_dir, 'data', 'JPL_input')
 
     path_tn14 = os.path.join(parent_dir, 'pyshbundle','data', 'JPL_TN_files', 'TN-14_C30_C20_GSFC_SLR.txt')
     path_tn13 = os.path.join(parent_dir, 'pyshbundle','data', 'JPL_TN_files', 'TN-13_GEOC_JPL_RL06.txt')
@@ -79,7 +79,7 @@ def validation_pyshbundle():
     max_degree=np.max([degree for date in sorted_data.keys() for degree, order in sorted_data[date].keys()])
     max_order=np.max([order for date in sorted_data.keys() for degree, order in sorted_data[date].keys()])
     number_of_months=len(sorted_data.keys())
-    sc_mat=np.zeros([number_of_months, max_degree+1, 2*(max_degree+1)], dtype=np.float)
+    sc_mat=np.zeros([number_of_months, max_degree+1, 2*(max_degree+1)], dtype=np.double)
 
     for index, key in enumerate(sorted_data.keys()):
         temp=sorted_data[key]
