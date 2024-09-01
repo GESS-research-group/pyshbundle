@@ -114,16 +114,6 @@ def validation_pyshbundle():
             "lat":lat,
             "lon":lon },);
 
-
-
-
-
-
-
-
-
-
-
     # Load the .mat file
     data = scipy.io.loadmat(matlab_file_path)
     # Access the variables in the .mat file
@@ -131,11 +121,7 @@ def validation_pyshbundle():
     ds_pysh = ds.copy()
 
     # #### Lets convert the shbundle datasets to a netcdf format for easier calculations.
-
     # * Converting `shbundle` processed data into netcdf format using xarray, to `ds_pysh`
-    gs=1;
-    lon = np.arange(-180,180,gs)
-    lat = np.arange(89,-91,-gs)
     ds_msh = xr.Dataset(
         data_vars=dict(
             tws=(["time","lat", "lon"], var1)
@@ -176,75 +162,4 @@ def validation_pyshbundle():
         pass
     else:
         raise ValueError('Gridwise NRMSE is greater than 1e-4')
-
-    # # ## 3. Global area weighted water budget closure
-    # # Area of grids
-    # from pyshbundle.hydro import area_weighting
-    # global_grid_area=area_weighting(1)
-    # global_grid_area_sum = np.sum(global_grid_area)
-
-    # # * Calculate the global area weighted water budget closure error
-    # # # Create a copy of the datasets
-    # ds_msh_area_weighted, ds_pysh_area_weighted = ds_msh.copy(), ds_pysh.copy()
-
-    # # Area weight with the global grid area and calculate the sum over lat and lon
-    # ds_msh_area_weighted = ds_msh['tws']*global_grid_area / global_grid_area_sum
-    # ds_msh_area_weighted = ds_msh_area_weighted.sum(dim=['lat', 'lon'])
-
-    # # Same for the pyshbundle dataset
-    # ds_pysh_area_weighted = ds_pysh['tws']*global_grid_area / global_grid_area_sum
-    # ds_pysh_area_weighted = ds_pysh_area_weighted.sum(dim=['lat', 'lon'])
-
-    # diff_global = ds_msh_area_weighted - ds_pysh_area_weighted
-
-    # # Reinsert the NaN values where the GRACE data is missing and the time coordinate
-    # ds_msh_area_weighted=ds_msh_area_weighted.where(~np.isnan(ds_pysh['tws'][:,0,0]), np.nan)
-    # ds_pysh_area_weighted=ds_pysh_area_weighted.where(~np.isnan(ds_pysh['tws'][:,0,0]), np.nan)
-    # diff_global=diff_global.where(~np.isnan(ds_pysh['tws'][:,0,0]), np.nan)
-
-    # # Test whether the global area weighted water budget closure error is less than 1e-5
-    # # if np.all(np.abs(diff_global) < 1e-5):
-    # #     pass
-    # # else:
-    # #     raise ValueError('Global area weighted water budget closure error is greater than 1e-5')
-    
-
-    # # ## 4. Difference in basin-average Time Series
-    # import geopandas as gpd
-    # shp = gpd.read_file(shapefile_path)
-    # basin_name='KRISHNA'
-    # shp_basin=shp[shp['RIVER_BASI']==basin_name];
-    # basin_area=np.float64(shp_basin['SUM_SUB_AR'].values[0])*1e6
-
-    # from pyshbundle.hydro import Basinaverage
-    # _, basin_avg_tws_msh = Basinaverage(ds_msh, gs, shp_basin, basin_area)
-    # _, basin_avg_tws_pysh = Basinaverage(ds_pysh, gs, shp_basin, basin_area);
-
-    # new_dates=pd.date_range(start=basin_avg_tws_msh.time[0].values, 
-    #                         end=basin_avg_tws_msh.time[-1].values, freq='ME',);
-
-    # # Empty dataset for the gapped data, msh
-    # basin_avg_tws_gapped_msh = xr.Dataset(
-    #         data_vars = dict(   tws=(["time"], np.nan*np.arange(len(new_dates)))),
-    #         coords=dict(time=new_dates),);
-    # # Empty dataset for the gapped data, pysh
-    # basin_avg_tws_gapped_pysh = xr.Dataset(
-    #         data_vars = dict(   tws=(["time"], np.nan*np.arange(len(new_dates)))),
-    #         coords=dict(time=new_dates),);
-
-    # #
-    # basin_avg_tws_gapped_msh['tws'] = basin_avg_tws_msh['tws'].where(
-    #     basin_avg_tws_msh['time'].isin(basin_avg_tws_gapped_msh['time']),)
-    # #
-    # basin_avg_tws_gapped_pysh['tws'] = basin_avg_tws_pysh['tws'].where(
-    #     basin_avg_tws_pysh['time'].isin(basin_avg_tws_gapped_pysh['time']),)
-
-    # diff_global_basin = basin_avg_tws_gapped_msh['tws'] - basin_avg_tws_gapped_pysh['tws']
-
-    # # Test whether the difference in basin-average time series is less than 1e-5
-    # # if np.all(np.abs(diff_global_basin[np.atleast_1d(~np.isnan(diff_global_basin[0])).nonzero()].values) < 1e-5):
-    # #     pass
-    # # else:
-    # #     raise ValueError('Difference in basin-average time series is greater than 1e-5')
-    # # print('Successfully validated the pyshbundle package')
     return "expected_result"

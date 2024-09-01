@@ -1,5 +1,5 @@
 import unittest
-from .validation_pyshbundle import validation_pyshbundle
+from validation_pyshbundle import validation_pyshbundle
 
 class TestpyshbundleAccuracy(unittest.TestCase):
     
