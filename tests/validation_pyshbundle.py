@@ -79,7 +79,7 @@ def validation_pyshbundle():
     max_degree=np.max([degree for date in sorted_data.keys() for degree, order in sorted_data[date].keys()])
     max_order=np.max([order for date in sorted_data.keys() for degree, order in sorted_data[date].keys()])
     number_of_months=len(sorted_data.keys())
-    sc_mat=np.zeros([number_of_months, max_degree+1, 2*(max_degree+1)], dtype=np.longdouble)
+    sc_mat=np.zeros([number_of_months, max_degree+1, 2*(max_degree+1)], dtype=np.float)
 
     for index, key in enumerate(sorted_data.keys()):
         temp=sorted_data[key]
