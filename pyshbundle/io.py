@@ -113,10 +113,10 @@ def extract_SH_data(file_path, source):
                     # Extract degree, order, Clm, and Slm
                     degree = int(coeff_match.group(1))
                     order = int(coeff_match.group(2))
-                    clm = np.longdouble(coeff_match.group(3))
-                    slm = np.longdouble(coeff_match.group(4))
-                    clm_sdev = np.longdouble(coeff_match.group(5))
-                    slm_sdev = np.longdouble(coeff_match.group(6))
+                    clm = np.double(coeff_match.group(3))
+                    slm = np.double(coeff_match.group(4))
+                    clm_sdev = np.double(coeff_match.group(5))
+                    slm_sdev = np.double(coeff_match.group(6))
                     
                     # Store the coefficients in the dictionary
                     data['coefficients'][(degree, order)] = {'Clm': clm, 'Slm': slm,
@@ -159,10 +159,10 @@ def extract_SH_data(file_path, source):
                     # Extract degree, order, Clm, and Slm
                     degree = int(coeff_match.group(1))
                     order = int(coeff_match.group(2))
-                    clm = np.longdouble(coeff_match.group(3))
-                    slm = np.longdouble(coeff_match.group(4))
-                    clm_sdev = np.longdouble(coeff_match.group(5))
-                    slm_sdev = np.longdouble(coeff_match.group(6))
+                    clm = np.double(coeff_match.group(3))
+                    slm = np.double(coeff_match.group(4))
+                    clm_sdev = np.double(coeff_match.group(5))
+                    slm_sdev = np.double(coeff_match.group(6))
                     
                     # Store the coefficients in the dictionary
                     data['coefficients'][(degree, order)] = {'Clm': clm, 'Slm': slm,
@@ -196,8 +196,8 @@ def extract_deg1_coeff_tn13(file_path):
                 order = int(match.group(2))
                 Clm = float(match.group(3))
                 Slm = float(match.group(4))
-                Clm_sdev = np.longdouble(match.group(5))
-                Slm_sdev = np.longdouble(match.group(6))
+                Clm_sdev = np.double(match.group(5))
+                Slm_sdev = np.double(match.group(6))
                 epoch_begin = match.group(7)
                 epoch_end = match.group(8)
 
@@ -242,9 +242,9 @@ def extract_deg2_3_coeff_tn14(file_path):
             if match:
                 mjd_start = float(match.group(1))
                 year_frac_start = float(match.group(2))
-                c20 = np.longdouble(match.group(3))
-                c20_mean_diff = np.longdouble(match.group(4))
-                c20_sigma = np.longdouble(match.group(5))
+                c20 = np.double(match.group(3))
+                c20_mean_diff = np.double(match.group(4))
+                c20_sigma = np.double(match.group(5))
                 c30 = match.group(6)
                 c30_mean_diff = match.group(7)
                 c30_sigma = match.group(8)
@@ -253,9 +253,9 @@ def extract_deg2_3_coeff_tn14(file_path):
 
                 # Only add C30 if it exists (not)
                 if c30.lower() != 'nan':
-                    c30 = np.longdouble(c30)
-                    c30_mean_diff = np.longdouble(c30_mean_diff)
-                    c30_sigma = np.longdouble(c30_sigma)
+                    c30 = np.double(c30)
+                    c30_mean_diff = np.double(c30_mean_diff)
+                    c30_sigma = np.double(c30_sigma)
                 else:
                     c30 = None
                     c30_mean_diff = None
