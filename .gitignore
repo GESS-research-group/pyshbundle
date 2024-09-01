@@ -1,21 +1,8 @@
-notebooks/wb2.ipynb
-notebooks/wb.ipynb
-notebooks/.ipynb_checkpoints
-notebooks/.ipynb_checkpoints/*
-pyshbundle.egg-info/PKG-INFO
-pyshbundle/.ipynb_checkoutpoints/
-pyshbundle/.ipynb_checkpoints/*
-pyshbundle/__pycache__/
-pyshbundle/__pycache__/*
-pyshbundle/.ipynb_checkpoints
-tests/__pycache__
-sample_input_data/.DS_Store
 .DS_Store
-dist/*
 dist
-shbundle
-.github/workflows/debug_env_build.yml
 build
 build/*
 pyshbundle.egg-info
-pyshbundle.egg-info/*
+develloping_progress.txt
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]

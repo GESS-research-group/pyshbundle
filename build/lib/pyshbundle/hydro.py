@@ -71,7 +71,7 @@ def TWSCalc(data, lmax: int, gs: float, r:float, m: int):
     gfilter = Gaussian(lmax,r)
     grid_y = int(180/gs)
     grid_x = int(360/gs)
-    tws_f = np.zeros([m,grid_y,grid_x], dtype ='longdouble')
+    tws_f = np.zeros([m,grid_y,grid_x], dtype ='float')
     for i in tqdm(range(0,m,1)):
         field = SC[i,0:lmax+1,96-lmax:96+lmax+1]
         shfil = np.zeros([lmax+1,2*lmax+1])
@@ -126,10 +126,10 @@ def area_weighting(grid_resolution):
      Returns:
          numpy.ndarray: The area of each grid in square meters.
      """
-    longitude_grid = np.linspace(0, 359+(1-grid_resolution), int(360/grid_resolution), dtype='double');
-    latitude_grid = np.linspace(0, 179+(1-grid_resolution), int(180/grid_resolution), dtype='double');
-    longitude_grid1 = np.linspace(1*grid_resolution, 360, int(360/grid_resolution), dtype='double');
-    latitude_grid1 = np.linspace(1*grid_resolution, 180, int(180/grid_resolution), dtype='double');
+    longitude_grid = np.linspace(0, 359+(1-grid_resolution), int(360/grid_resolution), dtype='float');
+    latitude_grid = np.linspace(0, 179+(1-grid_resolution), int(180/grid_resolution), dtype='float');
+    longitude_grid1 = np.linspace(1*grid_resolution, 360, int(360/grid_resolution), dtype='float');
+    latitude_grid1 = np.linspace(1*grid_resolution, 180, int(180/grid_resolution), dtype='float');
     
     lambd,theta = np.meshgrid(longitude_grid,latitude_grid)  
     lambd1,theta1 = np.meshgrid(longitude_grid1,latitude_grid1)

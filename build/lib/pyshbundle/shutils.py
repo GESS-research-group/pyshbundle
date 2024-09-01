@@ -80,9 +80,9 @@ def plm(l: np.array, m:int, thetaRAD, nargin, nargout):
     lmax = int(max(l[0,:]))
     
     if lmax < m:
-        p = np.zeros([len(thetaRAD), len(l)], dtype='longdouble')
-        dp = np.zeros([len(thetaRAD), len(l)], dtype='longdouble')
-        ddp = np.zeros([len(thetaRAD), len(l)], dtype='longdouble')
+        p = np.zeros([len(thetaRAD), len(l)], dtype='float')
+        dp = np.zeros([len(thetaRAD), len(l)], dtype='float')
+        ddp = np.zeros([len(thetaRAD), len(l)], dtype='float')
         sys.exit([])
     
     n = thetaRAD.size                                                               # number of latitudes
@@ -100,15 +100,15 @@ def plm(l: np.array, m:int, thetaRAD, nargin, nargout):
     # ptmp will contain zeros, which is useful for assignments when l < m.
     ptmp = np.zeros((n,lmax + 2 - m))
     if nargout >= 2:                                                                #  first derivative needs also P_{n,m+1} and P_{n,m-1}
-        ptmp_m1 = np.zeros((n,lmax + 3 - m), dtype='longdouble')
-        ptmp_p1 = np.zeros((n,lmax + 1 -m), dtype='longdouble')        
-        dptmp = np.zeros((n,lmax + 2 - m), dtype='longdouble') 
+        ptmp_m1 = np.zeros((n,lmax + 3 - m), dtype='float')
+        ptmp_p1 = np.zeros((n,lmax + 1 -m), dtype='float')        
+        dptmp = np.zeros((n,lmax + 2 - m), dtype='float') 
     if nargout == 3:                                                                # second derivative needs also dP_{n,m+1} and dP_{n,m-1}
-        dptmp_m1 = np.zeros((n,lmax + 3 -m), dtype='longdouble')
-        dptmp_p1 = np.zeros((n,lmax + 1 -m), dtype='longdouble')
-        ptmp_m2 = np.zeros((n,lmax + 4 -m), dtype='longdouble')                                         # but these first derivative need dP_{n,m+2} and dP_{n,m-2}
-        ptmp_p2 = np.zeros((n,lmax - m), dtype='longdouble')
-        ddptmp = np.zeros((n,lmax + 2 -m), dtype='longdouble')
+        dptmp_m1 = np.zeros((n,lmax + 3 -m), dtype='float')
+        dptmp_p1 = np.zeros((n,lmax + 1 -m), dtype='float')
+        ptmp_m2 = np.zeros((n,lmax + 4 -m), dtype='float')                                         # but these first derivative need dP_{n,m+2} and dP_{n,m-2}
+        ptmp_p2 = np.zeros((n,lmax - m), dtype='float')
+        ddptmp = np.zeros((n,lmax + 2 -m), dtype='float')
      
     # sectorial recursion: PM (non-recursive, though)
     ptmp[:,0] = secrecur(m,y)

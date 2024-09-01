@@ -119,11 +119,11 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     dt = np.pi/n
     
     if grd == 'pole' or grd == 'mesh':
-        theRAD = np.arange(0, np.pi+dt*0.5, dt, dtype='longdouble')
-        lamRAD = np.arange(0, 2*np.pi, dt, dtype='longdouble')
+        theRAD = np.arange(0, np.pi+dt*0.5, dt, dtype='float')
+        lamRAD = np.arange(0, 2*np.pi, dt, dtype='float')
     elif grd == 'block' or grd == 'cell':
-        theRAD = np.arange(dt/2, np.pi + dt*0.5, dt, dtype='longdouble')
-        lamRAD = np.arange(dt/2, 2*np.pi + dt*0.5, dt, dtype='longdouble')
+        theRAD = np.arange(dt/2, np.pi + dt*0.5, dt, dtype='float')
+        lamRAD = np.arange(dt/2, 2*np.pi + dt*0.5, dt, dtype='float')
     else:
         raise Exception("Incorrect grid type input")
     
@@ -145,7 +145,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     l = np.arange(0, lmax+1)
     transf = np.array([eigengrav(lmax, quant, h)])[0, :, :].T
     
-    field = field * np.matmul(transf, np.ones((1, 2*lmax+1)), dtype='longdouble')
+    field = field * np.matmul(transf, np.ones((1, 2*lmax+1)), dtype='float')
     
     
     '''
@@ -160,8 +160,8 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     
     dlam = int(np.ceil(lmax/n))             #longitude step size
     abcols = dlam*n + 1                     #columns required in A and B
-    a = np.zeros((nlat, int(abcols)), dtype='longdouble')
-    b = np.zeros((nlat, int(abcols)), dtype='longdouble')
+    a = np.zeros((nlat, int(abcols)), dtype='float')
+    b = np.zeros((nlat, int(abcols)), dtype='float')
      
 
 
@@ -197,8 +197,8 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
 
     if grd =='block' or grd == 'cell': 
       m      = np.arange(0,abcols,1)
-      cshift = np.array([np.ones(nlat)], dtype='longdouble').T * np.array([np.cos(m*np.pi/2/n)], dtype='longdouble');	# cshift/sshift describe the 
-      sshift = np.array([np.ones(nlat)], dtype='longdouble').T * np.array([np.sin(m*np.pi/2/n)], dtype='longdouble');	# half-blocksize lambda shift.
+      cshift = np.array([np.ones(nlat)], dtype='float').T * np.array([np.cos(m*np.pi/2/n)], dtype='float');	# cshift/sshift describe the 
+      sshift = np.array([np.ones(nlat)], dtype='float').T * np.array([np.sin(m*np.pi/2/n)], dtype='float');	# half-blocksize lambda shift.
       atemp  =  cshift*a + sshift*b
       b      = -sshift*a + cshift*b
       a      = atemp
@@ -317,8 +317,8 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
     # Init
     
     L = n
-    clm = np.zeros((L+1, L+1), dtype='longdouble')
-    slm = np.zeros((L+1, L+1), dtype='longdouble')
+    clm = np.zeros((L+1, L+1), dtype='float')
+    slm = np.zeros((L+1, L+1), dtype='float')
     
     
     # First step of analysis
@@ -586,17 +586,17 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
     if l == cfield:
         for m in range(r):
             if flag_cs == 0:
-                Ft = cs2sc(f[m][0]).astype('longdouble') 
+                Ft = cs2sc(f[m][0]).astype('double') 
             else:
-                Ft = f[m][0].astype('longdouble') 
+                Ft = f[m][0].astype('double') 
                 
            
             fFld__, _, _ = gshs(Ft * filter_, qty, 'cell', int(180/deg), 0, 0) 
             ffFld__, _, _ = gshs((Ft * filter_ * filter_), qty, 'cell', int(180/deg), 0, 0)
             
             if m == 0:
-                fFld = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble') 
-                ffFld = np.zeros((r, ffFld__.shape[0], ffFld__.shape[1]), dtype = 'longdouble')
+                fFld = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype='double') 
+                ffFld = np.zeros((r, ffFld__.shape[0], ffFld__.shape[1]), dtype='double')
                 
             fFld[m] = fFld__
             ffFld[m] = ffFld__
@@ -610,22 +610,22 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
         
     #Declaration of size of the vectors:
     cid = len(basins) #Here basins is a dictionary with each element storing nd array
-    tsleaktotalf = np.zeros([r, cid], dtype = 'longdouble')
-    tsleaktotalff = np.zeros([r, cid], dtype = 'longdouble')
+    tsleaktotalf = np.zeros([r, cid], dtype='double')
+    tsleaktotalff = np.zeros([r, cid], dtype='double')
     
-    ftsleaktotal = np.zeros([r, cid], dtype = 'longdouble')
-    fftsleaktotal = np.zeros([r, cid], dtype = 'longdouble')
+    ftsleaktotal = np.zeros([r, cid], dtype='double')
+    fftsleaktotal = np.zeros([r, cid], dtype='double')
     
-    lhat = np.zeros([r, cid], dtype = 'longdouble')
+    lhat = np.zeros([r, cid], dtype='double')
     
-    bfDevRegAv = np.zeros([r, cid], dtype = 'longdouble')
-    bbfDevRegAv = np.zeros([r, cid], dtype = 'longdouble')
+    bfDevRegAv = np.zeros([r, cid], dtype='double')
+    bbfDevRegAv = np.zeros([r, cid], dtype='double')
 
-    FilteredTS = np.zeros([r, cid], dtype = 'longdouble')
-    filfilts = np.zeros([r, cid], dtype = 'longdouble')
+    FilteredTS = np.zeros([r, cid], dtype='double')
+    filfilts = np.zeros([r, cid], dtype='double')
 
-    leakage = np.zeros([r, cid], dtype = 'longdouble')
-    leakager = np.zeros([r, cid], dtype = 'longdouble')   
+    leakage = np.zeros([r, cid], dtype='double')
+    leakager = np.zeros([r, cid], dtype='double')   
     
 
     
@@ -642,8 +642,8 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
          
         
     
-        fF = np.zeros((fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble')
-        ffF = np.zeros((fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble')
+        fF = np.zeros((fFld__.shape[0],fFld__.shape[1]), dtype='double')
+        ffF = np.zeros((fFld__.shape[0],fFld__.shape[1]), dtype='double')
         for m in range(0,r):
             
             

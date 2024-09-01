@@ -1,12 +1,9 @@
 include LICENSE
 include README.md
 include requirements.txt
-include pyshbundle/sample_input_data/*.gz
-include pyshbundle/data/JPL_TN_files/*.txt
-include pyshbundle/data/long_mean/SH_long_mean_jpl.npy
-include pyshbundle/data/validation_data/tws_m.mat
-include pyshbundle/data/mrb_shapefiles/*
-
+include examples
+include data
+include pyshbundle/data
 
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]

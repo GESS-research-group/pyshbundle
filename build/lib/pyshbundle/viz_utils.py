@@ -345,7 +345,7 @@ def gshs_prepare(lmax, gs, quant, grd, h, jflag, sc_coeff):
     ff = gshs(sc_coeff, quant, grd, n, h, jflag)[0]
 
     # rearranging
-    field = np.zeros([grid_y,grid_x], dtype ='longdouble')
+    field = np.zeros([grid_y,grid_x], dtype ='float')
 
     field[:,0:int(grid_x/2)] = ff[:,int(grid_x/2):]
     field[:,int(grid_x/2):] = ff[:,0:int(grid_x/2)]  

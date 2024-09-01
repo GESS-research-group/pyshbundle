@@ -1,32 +1,79 @@
-name: pysh
+name: mc
 channels:
   - conda-forge
   - defaults
 dependencies:
+  - appnope
+  - asttokens
   - bzip2
   - ca-certificates
-  - expat
+  - comm
+  - debugpy
+  - decorator
+  - exceptiongroup
+  - executing
+  - importlib-metadata
+  - importlib_metadata
+  - ipython
+  - jedi
+  - jupyter_client
+  - jupyter_core
+  - krb5
+  - libblas
+  - libcblas
   - libcxx
+  - libedit
   - libffi
+  - libgfortran
+  - libgfortran5
+  - liblapack
+  - libopenblas
+  - libsodium
+  - libsqlite
+  - libzlib
+  - llvm-openmp
+  - matplotlib-inline
   - ncurses
+  - nest-asyncio
+  - numpy
   - openssl
+  - packaging
+  - parso
+  - pexpect
+  - pickleshare
   - pip
+  - platformdirs
+  - prompt-toolkit
+  - psutil
+  - ptyprocess
+  - pure_eval
+  - pygments
   - python
+  - python-dateutil
+  - python_abi
+  - pyzmq
   - readline
+  - scipy
   - setuptools
+  - six
   - sqlite
+  - stack_data
   - tk
+  - tornado
+  - traitlets
+  - typing_extensions
+  - wcwidth
   - wheel
   - xz
+  - zeromq
+  - zipp
   - zlib
   - pip:
       - affine
       - anyio
-      - appnope
       - argon2-cffi
       - argon2-cffi-bindings
       - arrow
-      - asttokens
       - async-lru
       - attrs
       - babel
@@ -40,13 +87,9 @@ dependencies:
       - click
       - click-plugins
       - cligj
-      - comm
       - contourpy
       - cycler
-      - debugpy
-      - decorator
       - defusedxml
-      - executing
       - fastjsonschema
       - fonttools
       - fqdn
@@ -55,18 +98,15 @@ dependencies:
       - httpcore
       - httpx
       - idna
+      - importlib-resources
       - ipykernel
-      - ipython
       - isoduration
-      - jedi
       - jinja2
       - json5
       - jsonpointer
       - jsonschema
       - jsonschema-specifications
       - julian
-      - jupyter-client
-      - jupyter-core
       - jupyter-events
       - jupyter-lsp
       - jupyter-server
@@ -77,40 +117,26 @@ dependencies:
       - kiwisolver
       - markupsafe
       - matplotlib
-      - matplotlib-inline
       - mistune
       - nbclient
       - nbconvert
       - nbformat
-      - nest-asyncio
       - netcdf4
       - notebook-shim
-      - numpy
       - overrides
-      - packaging
       - pandas
       - pandocfilters
-      - parso
-      - pexpect
       - pillow
-      - platformdirs
       - prometheus-client
-      - prompt-toolkit
-      - psutil
-      - ptyprocess
-      - pure-eval
       - pycparser
-      - pygments
       - pyogrio
       - pyparsing
       - pyproj
       - pyshbundle
       - pyshp
-      - python-dateutil
       - python-json-logger
       - pytz
       - pyyaml
-      - pyzmq
       - rasterio
       - referencing
       - requests
@@ -118,24 +144,18 @@ dependencies:
       - rfc3986-validator
       - rioxarray
       - rpds-py
-      - scipy
       - send2trash
       - shapely
-      - six
       - sniffio
-      - snuggs
       - soupsieve
-      - stack-data
       - terminado
       - tinycss2
-      - tornado
+      - tomli
       - tqdm
-      - traitlets
       - types-python-dateutil
       - tzdata
       - uri-template
       - urllib3
-      - wcwidth
       - webcolors
       - webencodings
       - websocket-client
