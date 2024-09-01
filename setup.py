@@ -8,7 +8,7 @@ with open('README.md', encoding='utf8') as readme_file:
     readme = readme_file.read()
 
 install_requires = ['pip', 'numpy', 'pandas','netCDF4', 'scipy',
-                    'xarray', 'julian', 'scipy', 'geopandas',
+                    'xarray', 'julian', 'geopandas',
                     'matplotlib', 'rasterio', 'shapely', 'tqdm','cartopy', 
                     'ipykernel', 'jupyterlab', 'rioxarray',],
 setup(
@@ -24,7 +24,7 @@ setup(
     install_requires=install_requires,
     long_description=readme,
     long_description_content_type='text/markdown',
-    package_data={"pyshbundle": ["data/*", "validation_data/*"]},
+    package_data={'': ['data/*', 'examples/validation_data/*'],},
     include_package_data=True,
     keywords=['pyshbundle', 'GRACE', 'Spherical Harmonics', 'Synthesis Harmonics Synthesis', 'Spherical Harmonics Analysis'],
     test_suite='tests',
