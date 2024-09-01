@@ -1,7 +1,6 @@
 .DS_Store
 dist
 build
-build/*
 pyshbundle.egg-info
 develloping_progress.txt
 recursive-exclude * __pycache__
