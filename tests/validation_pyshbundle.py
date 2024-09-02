@@ -4,9 +4,8 @@
 # Unit test script file for pyshbundle package
 # This scripts follows the notebook and `04_TWS_time_series.ipynb` `validation_pyshbundle.ipynb` and is used to validate the 
 # pyshbundle package. Please read them for more details.
+# Author: Vivek Kumar Yadav, IISc Bengaluru, 2024-09-02
 import numpy as np
-import pandas as pd
-import xarray as xr
 import os
 import scipy.io
 import sys
@@ -17,9 +16,6 @@ from pyshbundle.io import extract_SH_data, extract_deg1_coeff_tn13, extract_deg2
 import pkg_resources
 long_mean_file_path = pkg_resources.resource_filename('pyshbundle', 'data/long_mean/SH_long_mean_jpl.npy')
 matlab_file_path = pkg_resources.resource_filename('pyshbundle', 'data/validation_data/tws_sh.mat')
-# long_mean_file_path = '../pyshbundle/data/long_mean/SH_long_mean_jpl.npy'
-# matlab_file_path = '../examples/validation_data/tws_sh.mat'
-
 ignore_warnings = True
 
 # Add the folder path to the Python path
@@ -97,44 +93,18 @@ def validation_pyshbundle():
     lmax,gs,half_rad_gf=96, 1, 500
     tws_fields = TWSCalc(delta_sc,lmax, gs,half_rad_gf, number_of_months)
     tws_fields = np.float32(tws_fields)
-    lon = np.arange(-180,180,gs)
-    lat = np.arange(89,-91,-gs)
-    dates = pd.to_datetime(list(sorted_data.keys()), format='%Y-%m',) \
-                + pd.offsets.MonthEnd(0)
-
-    ds = xr.Dataset(
-        data_vars=dict(
-            tws=(["time","lat", "lon"], tws_fields)
-        ),
-        coords = {
-            # "time":(('time'),dates),
-            "time":dates,
-            "lat":lat,
-            "lon":lon },);
+    data_pysh=tws_fields.copy()
 
     # Load the .mat file
-    data = scipy.io.loadmat(matlab_file_path)
+    data_sh = scipy.io.loadmat(matlab_file_path)
     # Access the variables in the .mat file
-    var1 = data['tws_m']
-    ds_pysh = ds.copy()
+    data_sh = data_sh['tws_m']
 
-    # #### Lets convert the shbundle datasets to a netcdf format for easier calculations.
-    # * Converting `shbundle` processed data into netcdf format using xarray, to `ds_pysh`
-    ds_msh = xr.Dataset(
-        data_vars=dict(
-            tws=(["time","lat", "lon"], var1)
-        ),
-        coords = {
-            "time":(('time'),dates),
-            "lat":lat,
-            "lon":lon },);
-    # print(ds_msh)
-    # print(ds_pysh)
     # ## 1. Gridwise RMSE calculation
     # 
     # Before finding the grid-wise RMSE values we need to ignore the data for the missing months.
     # Calculate the difference between the two datasets
-    diff = ds_msh['tws'].dropna(dim='time').values - ds_pysh['tws'].dropna(dim='time').values    # dropna is used to remove nan values, the dates where the GRACE data is missing
+    diff = data_sh-data_pysh
 
     # Calculate the squared difference
     squared_diff = diff**2
@@ -153,7 +123,7 @@ def validation_pyshbundle():
 
     # ## 2. Gridwise NRMSE
     # Calculate the normalized root mean squared error (NRMSE)
-    gridwise_nrmse = gridwise_rmse/np.std(ds_msh['tws'].dropna(dim='time').values, axis=0)
+    gridwise_nrmse = gridwise_rmse/np.std(data_sh, axis=0)
     
     # Test whether gridwise NRMSE is less than 1e-5
     if np.all(gridwise_nrmse < 1e-5):
