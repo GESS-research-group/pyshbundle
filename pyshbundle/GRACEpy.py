@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 # License:
 #    This file is part of PySHbundle.
 #    PySHbundle is free software: you can redistribute it and/or modify
@@ -39,37 +36,63 @@
 
 import numpy
 from pyshbundle import GRACEconstants as GC
-
+""" 
+    Functions for upward continuation, Love number calculations, and other geophysical computations.
+"""
 
 def upwcon(degree: int, height):
     """Returns the upward continuation $(R/r)^l$
 
-    Args:
-        degree (int): Spherical harmonic degree
-        height (int): Height above mean Earth radius [m] [scalar/vector]
+    Parameters
+    ----------
+    degree :int
+        Spherical harmonic degree
+    height : int
+        Height above mean Earth radius [m] [scalar/vector]
     
-    Returns:
-        uc (_type_): Upward continuation terms
+    Returns
+    -------
+        uc : array
+            Upward continuation terms
     
     Uses:
         `GRACEconstants.GC`
     
+    REMARKS:
+        If both degree and height are vectors, degree will be(come) a row vector
+        and height a column vector.
+        load necessary constants
+        
     Todo:
         + Add input checking functionality and raise exceptions
         + Add reference to formula
-    """
     # Created on Sat May  9 18:49:45 2022
+    """
     rr = numpy.divide(GC.ae, numpy.add(GC.ae,height))
     uc = numpy.power(rr, degree)
 
     return(uc)    
 
 def lovenr(lmax: int):
-    """
-    Created on Mon May 11 11:09:28 2022
+    """LOVENR gives the LOVE number of the elastic earth for a certain degree n
 
-    Todo:
-        + Add type and input checking functionality
+    Parameters
+    ----------
+    lmax : int
+        Spherical harmonic degree (up to 200)
+    
+    Returns:
+    ----------
+    kn : int
+        LOVE number of degree lmax
+
+    REMARKS:
+    The elastic LOVE numbers are taken from the paper by WAHR et al., 
+    "Time variability of the earth's gravity field: hydrological and 
+    oceanic effects and their possible detection using GRACE",  
+    JGR, Vol. 103, No. B12, p 30205-30229, 1998
+
+    Created on Mon May 11 11:09:28 2022
     
     _author_: Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
@@ -80,7 +103,25 @@ def lovenr(lmax: int):
     return(kn)
 
 def lovenrPREM(lmax:int, frame):
-    """
+    """ 
+    
+    lovenrprem calculates the LOVE and Shida number of the elastic earth for a
+    certain degree n in different reference frame
+    values in given degrees for LOVE numbers as provided by Olivier Francis 
+    from the PREM Earth model for selected degrees
+    
+    Parameters
+    ----------
+    lmax : int
+        Spherical harmonic degree (up to 200)
+
+    Returns
+    ----------
+    kn,hn,ln: int
+        load LOVE number of degree n
+
+    REMARKS:
+        see also lovenr
     Created on Mon May 11 11:51:29 2022
     
     @author:  Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
@@ -169,4 +210,3 @@ def lovenrPREM(lmax:int, frame):
     hn[0] = 0
     ln[0] = 0
     return(kn,hn,ln)
-    

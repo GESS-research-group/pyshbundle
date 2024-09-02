@@ -1,5 +1,5 @@
 # Core functionalities of PySHBundle
-# Curator: Abhishek Mhamane
+# Curator: Abhishek Mhamane, Vivek Kumar Yadav
 
 # - - - - - - - - - - - - - - 
 # License:
@@ -54,18 +54,29 @@ from pyshbundle.shutils import normalklm, plm, iplm, eigengrav, ispec, Gaussian,
 def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     """gshs - Global Spherical Harmonic Synthesis
 
-    Args:
-        field (_type_): set of SH coefficients, either in SC-triangle or CS-square format
-        quant (str, optional): defining the field quantity. Defaults to 'none'.
-        grd (str, optional): defining the grid. Defaults to 'mesh'.
-        n (int, optional): _description_. Defaults to -9999.
-        h (int, optional): _description_. Defaults to 0.
-        jflag (int, optional): _description_. Defaults to 1.
+    Parameters
+    ----------
+    field : numpy.ndarray
+        Matrix of SH coefficients, either in SC-triangle or CS-square format
+    quant : (str, optional)
+        defining the field quantity. Defaults to 'none'.
+    grd : (str, optional)
+        defining the grid. Defaults to 'mesh'.
+    n : (int, optional) 
+        Defaults to -9999.
+    h : (int, optional)
+        Defaults to 0.
+    jflag : (int, optional)
+        Defaults to 1.
     
-    Returns:
-        f (numpy.ndarray): the global field
-        theRAD (numpy.array): vector of co-latitudes [rad]
-        lamRAD (numpy.array): vector of longitudes [rad]
+    Returns
+    ----------
+    f : numpy.ndarray)
+        the global Spherical Harmonics feild field
+    theRAD numpy.array
+        vector of co-latitudes in radians
+    lamRAD : numpy.array
+        vector of longitudes in radians
 
     Raises:
         Exception: Check format of the field
@@ -84,6 +95,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     
     Author:
         Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+        Vivek Kumar Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
 
     wd = getcwd()
@@ -132,12 +144,12 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     
     
 
-#    % -------------------------------------------------------------------------
-#% Preprocessing on the coefficients: 
-#%    - subtract reference field (if jflag is set)
-#%    - specific transfer
-#%    - upward continuation
-#% -------------------------------------------------------------------------
+#   -------------------------------------------------------------------------
+#   Preprocessing on the coefficients:
+        # - subtract reference field (if jflag is set)
+        # - specific transfer
+        # - upward continuation
+#   -------------------------------------------------------------------------
     
     if jflag:
         field = field - cs2sc(normalklm(lmax+1))
@@ -148,15 +160,15 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     field = field * np.matmul(transf, np.ones((1, 2*lmax+1)), dtype='float')
     
     
-    '''
-    % -------------------------------------------------------------------------
-% Size declarations and start the waitbar:
-% Note that the definition of dlam causes straight zero-padding in case N > L.
-% When N < L, there will be zero-padding up to the smallest integer multiple
-% of N larger than L. After the Fourier transformation (see below), the
-% proper samples have to be picked out, with stepsize dlam.
-% -------------------------------------------------------------------------
-    '''
+
+# -------------------------------------------------------------------------
+        # Size declarations and start the waitbar:
+        # Note that the definition of dlam causes straight zero-padding in case N > L.
+        # When N < L, there will be zero-padding up to the smallest integer multiple
+        # of N larger than L. After the Fourier transformation (see below), the
+        # proper samples have to be picked out, with stepsize dlam.
+# -------------------------------------------------------------------------
+
     
     dlam = int(np.ceil(lmax/n))             #longitude step size
     abcols = dlam*n + 1                     #columns required in A and B
@@ -184,16 +196,17 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
         b[:, m] = np.dot(p,s)
         
     del field
-    '''
-     -------------------------------------------------------------------------
- The second synthesis step consists of an inverse Fourier transformation
- over the rows of a and b. 
- In case of 'block', the spectrum has to be shifted first.
- When no zero-padding has been applied, the last b-coefficients must be set to
- zero. Otherwise the number of longitude samples will be 2N+1 instead of 2N.
- For N=L this corresponds to setting SLL=0!
- -------------------------------------------------------------------------
-    '''
+
+
+#   -------------------------------------------------------------------------
+        # The second synthesis step consists of an inverse Fourier transformation
+        # over the rows of a and b. 
+        # In case of 'block', the spectrum has to be shifted first.
+        # When no zero-padding has been applied, the last b-coefficients must be set to
+        # zero. Otherwise the number of longitude samples will be 2N+1 instead of 2N.
+        # For N=L this corresponds to setting SLL=0!
+#  -------------------------------------------------------------------------
+
 
     if grd =='block' or grd == 'cell': 
       m      = np.arange(0,abcols,1)
@@ -221,14 +234,21 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
 def gsha(f, method: str, grid: str = None, lmax: int = -9999):
     """ GSHA - Global Spherical Harmonic Analysis, inverse of GSHS.
 
-    Args:
-        f (np.ndarray): global field of size $(l_{max} + 1) * 2 * l_{max}$ or $l_{max} * 2 * l_{max}$
-        method (str): method to be used
-        grid (str, optional): choose between 'block' or 'cell'. Defaults to None.
-        lmax (int, optional): maximum degree of development. Defaults to -9999.
+    Parameters
+    ----------
+    f : numpy.ndarray
+        Global field of size $(l_{max} + 1) * 2 * l_{max}$ or $l_{max} * 2 * l_{max}$
+    method : str
+        Method to be used.
+    grid : (str, optional)
+        choose between 'block' or 'cell'. Defaults to None.
+    lmax : (int, optional)
+        Maximum degree of development. Defaults to -9999.
 
-    Returns:
-        np.ndarray: Spherical harmonics coefficients Clm, Slm in |C\S| format
+    Returns
+    ----------
+    np.ndarray
+        Spherical harmonics coefficients Clm, Slm in |C\S| format
 
     Raises:
         ValueError: grid argument can only be 'block' or 'cell'
@@ -239,6 +259,11 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
         ValueError: Block mean method ONLY on a ''block''/''cell'' GRID
         ValueError: Maximum degree of development is higher than number of rows of input.
     
+    REMARKS:
+    TBD - Zlm-functions option
+        - eigengrav, GRS80
+        - When 'pole' grid, m = 1 yields singular Plm-matrix!
+
     Uses:
         `plm`, `neumann`, `iplm`, `sc2cs`
     
@@ -450,12 +475,17 @@ def PhaseCalc(fts, ffts):
     """calculates the phase difference between two time series based on the
     Hilbert transform method explained by Phillip et al.
 
-    Args:
-        fts (numpy.array): time-series 1
-        ffts (numpy.narray): time-series 2
+    Parameters
+    ----------
+    fts : numpy.array
+        time-series 1
+    ffts : numpy.narray
+        time-series 2
 
-    Returns:
-        numpy.ndarray: Phase difference between the two time series
+    Returns
+    ----------
+    numpy.ndarray
+        Phase difference between the two time series
     
     References:
         1. Phillips, T., R. S. Nerem, B. Fox-Kemper, J. S. Famiglietti, and B. Rajagopalan (2012),
@@ -499,11 +529,14 @@ def PhaseCalc(fts, ffts):
 def deg_to_rad(deg: float):
     """Converts angle from degree to radian
 
-    Args:
-        deg (float): Angle in degree
+    Parameters
+    ----------
+    deg : float
+        Angle in degree
 
-    Returns:
-        float: Angle in Radian
+    Returns
+    ----------
+    float: Angle in Radian
     
     Todo:
         + Inbuilt function available in numpy module
@@ -511,27 +544,42 @@ def deg_to_rad(deg: float):
     return deg * np.pi/180
 
 def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
-    """_summary_
+    """Signal leakage correction using data-driven methods
 
-    Args:
-        F (_type_): a cell matrix with one column containing SH coefficients
-        cf (_type_): the column in F that contains SH coefficients from GRACE
-        GaussianR (_type_): radius of the Gaussian filter (recommened = 400)
-        basins (_type_): mask functions of basin, a cell data format with one
-                        column and each entry is a 360 x 720 matrix with 1 inside the
-                        catchment and 0 outside
+    When GRACE data is applied for hydrological studies, the signal leakage is a common
+    problem. This function uses data-driven methods to correct signal leakage in GRACE data.
+    Please refer to paper (1) above for more details
+
+
+    Parameters
+    ----------
+    F : numpy.ndarray
+        A cell matrix with one column containing SH coefficients
+    cf : int
+        the column in F that contains SH coefficients from GRACE
+    GaussianR : float
+        Radius of the Gaussian filter (recommened = 400)
+    basins : numpy.ndarray
+        mask functions of basin, a cell data format with one
+        column and each entry is a 360 x 720 matrix with 1 inside the
+        catchment and 0 outside
+
+    Returns
+    ----------
+    (every output has a size (number of months x basins))
+    RecoveredTWS : numpy.ndarray
+        Corrected data-driven time-series (Least Squares fit method)
+    RecoveredTWS2 : numpy.ndarray
+        Corrected data-driven time-series (shift and amplify method)
+    FilteredTS : numpy.ndarray
+        Gaussian filtered GRACE TWS time-series for all the basins. 
 
     Raises:
         Exception: corrected data-driven time-series (Least Squares fit method)
         Exception: corrected data-driven time-series (shift and amplify method)
         Exception: gaussian filtered GRACE TWS time-series for all the basins.
 
-    Returns:
-        every output has a size (number of months x basins)
-        RecoveredTWS (numpy.ndarray): Corrected data-driven time-series (Least Squares fit method)
-        RecoveredTWS2 (numpy.ndarray): Corrected data-driven time-series (shift and amplify method)
-        FilteredTS (numpy.ndarray): Gaussian filtered GRACE TWS time-series for all the basins. 
-    
+
     Author:
         Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
@@ -762,5 +810,3 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
     RecoveredTWS2 = FilteredTS - lhat - devint
     
     return RecoveredTWS, RecoveredTWS2, FilteredTS
-        
-          

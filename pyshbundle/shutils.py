@@ -53,15 +53,27 @@ from pyshbundle import GRACEconstants as GC
 def plm(l: np.array, m:int, thetaRAD, nargin, nargout): 
     """plm Fully normalized associated Legendre functions for a selected order M
 
-    Args:
-        l (numpy.array): Degree, but not necessarily monotonic.
-               For l < m a vector of zeros will be returned.
-        m (int): order. If absent, m = 0 is assumed.
-        thetaRAD (numpy.array): co-latitude [rad] (vector)
-        nargin (int): number of input argument
-        nargout (int): number of output argument
-    Returns:
-        (np.array): plm fully normalized
+    Parameters
+    ----------
+    l : numpy.array
+        Degree, but not necessarily monotonic.
+            For l < m a vector of zeros will be returned.
+    m : int
+        order. If absent, m = 0 is assumed.
+    thetaRAD : numpy.array
+        Co-latitude in radians
+    nargin : int
+        number of input argument
+    nargout : int
+        number of output argument
+    Returns
+    ----------
+    p : array
+        plm fully normalized Legendre functions
+    dp : array
+        first derivative of plm
+    ddp : array
+        second derivative of plm
     
     Author:
         Vivek Kumar Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
@@ -148,12 +160,12 @@ def plm(l: np.array, m:int, thetaRAD, nargin, nargout):
         ddptmp = derivALF(ddptmp,dptmp_m1,dptmp_p1,m,lmax)
     
     
-    # %--------------------------------------------------------------------
-    # % The Legendre functions have been computed. What remains to be done, is to
-    # % extract the proper columns from ptmp, corresponding to the vector lvec. 
-    # % If l or thetaRAD is scalar the output matrix p reduces to a vector. It should
-    # % have the shape of respectively thetaRAD or l in that case.
-    # %--------------------------------------------------------------------
+# --------------------------------------------------------------------
+        # The Legendre functions have been computed. What remains to be done, is to
+        # extract the proper columns from ptmp, corresponding to the vector lvec. 
+        # If l or thetaRAD is scalar the output matrix p reduces to a vector. It should
+        # have the shape of respectively thetaRAD or l in that case.
+# --------------------------------------------------------------------
     lind       = (lvec < m)   	 # index into l < m
     pcol       = lvec - m + 0			                                            # index into columns of ptmp
     pcol[lind] = np.ndarray((lmax-m+2-6)*np.ones((sum(sum(lind)),1)))	            # Now l < m points to last col.
@@ -189,11 +201,15 @@ def secrecur(m, y):
 
     This function computes the sectorial recursion for given parameters.
 
-    Args:
-        m (int): The order of the recursion.
-        y (numpy.ndarray): The input array for which the recursion is computed.
+    Parameters
+    ----------
+    m : int
+        The order of the recursion.
+    y : numpy.ndarray
+        The input array for which the recursion is computed.
 
-    Returns:
+    Returns
+    ----------
         numpy.ndarray: The result of the sectorial recursion.
     """
     if m == 0:
@@ -210,13 +226,15 @@ def secrecur(m, y):
 def lrecur(inn, x, m, lmax):
     """[Helper Function]  
 
-    Args:
-        inn (int): _description_
-        x (int): _description_
-        m (int): _description_
-        lmax (int): _description_
+    Parameters
+    ----------
+    inn (int): _description_
+    x (int): _description_
+    m (int): _description_
+    lmax (int): _description_
 
-    Returns:
+    Returns
+    ----------
         _type_: _description_
     """
     for ll in np.arange(int(m)+1,lmax+1,1):
@@ -236,17 +254,18 @@ def lrecur(inn, x, m, lmax):
 # function to calculate the derivate
 
 def derivALF(inn, miin, plin, m, lmax):
-    """
-    Function to calculate the derivate of the associated Legendre functions
+    """Function to calculate the derivate of the associated Legendre functions
 
-    Args:
-        inn (numpy.ndarray): _description_
-        miin (numpy.ndarray): _description_
-        plin (numpy.ndarray): _description_
-        m (int): order of associated legendre functions
-        lmax (int): maximum degree
+    Parameters
+    ----------
+    inn (numpy.ndarray): _description_
+    miin (numpy.ndarray): _description_
+    plin (numpy.ndarray): _description_
+    m (int): order of associated legendre functions
+    lmax (int): maximum degree
 
-    Returns:
+    Returns
+    -------
         numpy.ndarray: derivatives of the associated Legendre functions
     """
     l = np.arange(m,lmax+2,1)
@@ -271,20 +290,27 @@ def iplm(l, m:int, theRAD, dt=-9999):
     """iplm Integrals of the fully normalized associated Legendre functions
         over blocks for a selected order M. 
 
-    Args:
-        l (numpy.array): degree (vector). Integer, but not necessarily monotonic.
-                For l < m a vector of zeros will be returned.
-        m (int): order (scalar)
-        theRAD (numpy.array): co-latitude [rad] (vector)
-        dt (int, optional): integration block-size [rad] (scalar). Defaults to -9999.
+    Parameters
+    ----------
+    l : numpy.array
+        degree (vector). Integer, but not necessarily monotonic.
+        For l < m a vector of zeros will be returned.
+    m : int
+        Order of the Legendre function. If absent, m = 0 is assumed.
+    theRAD : numpy.array 
+        co-latitude in radian
+    dt : (int, optional)
+        integration block-size [rad] (scalar). Defaults to -9999.
     
-    Returns:
-        numpy.ndarray: Matrix with integrated Legendre functions.
-                Functions are integrated from theRAD(i)-dt/2 till theRAD(i)+dt/2.
-                The matrix has length(TH) rows and length(L) columns, unless L 
-                or TH is scalar. Then the output vector follows the shape of 
-                respectively L or TH.
-    
+    Returns
+    ----------
+    numpy.ndarray
+        Matrix with integrated Legendre functions.
+        Functions are integrated from theRAD(i)-dt/2 till theRAD(i)+dt/2.
+        The matrix has length(TH) rows and length(L) columns, unless L 
+        or TH is scalar. Then the output vector follows the shape of 
+        respectively L or TH.
+
     Notes:
         The blocks at the pole might become too large under circumstances.
         This is not treated separately, i.e. unwanted output may appear.
@@ -381,11 +407,12 @@ def iplm(l, m:int, theRAD, dt=-9999):
                 root1nm = np.sqrt( (2*l-1) * (2*l-3) / (l-1+mfix) / (l-1-mfix) )
                 ptmp[:,l] = rootnm/(l+1)*( (l-2)*ptmp[:,l-2].T/root1nm + np.power(stplus,2)*plmplus[:,l-1].T -np.power(stmin,2)*plmmin[:,l-1].T)
 
-
-# The integrated functions have been computed. What remains to be done, is to
-# extract the proper columns from ptmp, corresponding to the vector lvec. 
-# If l or theta is scalar the output matrix p reduces to a vector. It should
-# have the shape of respectively theta or l in that case.
+# --------------------------------------------------------------------
+        # The integrated functions have been computed. What remains to be done, is to
+        # extract the proper columns from ptmp, corresponding to the vector lvec. 
+        # If l or theta is scalar the output matrix p reduces to a vector. It should
+        # have the shape of respectively theta or l in that case.
+# --------------------------------------------------------------------
 
 # p     = zeros(n, length(lvec))
     lind = np.argwhere(lvec<mfix)[:,0]      #index into l < m
@@ -403,11 +430,15 @@ def iplm(l, m:int, theRAD, dt=-9999):
 def ispec(a,b = -9999):
     """Returns the function F from the spectra A and B
 
-    Args:
-        a (int): cosine coefficients
-        b (int, optional): sine coefficients. Defaults to -9999.
+    Parameters
+    ----------
+    a : int 
+        cosine coefficients
+    b : (int, optional)
+        sine coefficients. Defaults to -9999.
 
-    Returns:
+    Returns
+    ----------
         f (numpy.ndarray: **fill**
 
     See Also:
@@ -438,26 +469,32 @@ def ispec(a,b = -9999):
 
 def eigengrav(lmax: int, fstr: str, h: float):
     """
+    
     Returns the isotropic spectral transfer (or: eigenvalues) of several gravity related quantities. 
     Upward continuation may be included.
 
-    Args:
-        lmax (int): Maximum degree of Spherical Coefficients
-        fstr(str): denoting the functional under consideration:
-            'none', 
-            'geoid',
-            'dg', 'gravity' ... gravity anomaly,
-            'potential', 
-            'tr' .............. gravity disturbance, 
-            'trr' ............. (d^2/dr^2)
-            'slope' ........... size of surface gradient, 
-            'water' ........... equivalent water thickness, 
-            'smd' ............. surface mass density.
-            'height' .......... vertical displacements
+    Parameters
+    ----------
+    lmax : int
+        Maximum degree of Spherical Coefficients
+    fstr : str
+        denoting the functional under consideration:
+        'none', 
+        'geoid',
+        'dg', 'gravity' ... gravity anomaly,
+        'potential', 
+        'tr' .............. gravity disturbance, 
+        'trr' ............. (d^2/dr^2)
+        'slope' ........... size of surface gradient, 
+        'water' ........... equivalent water thickness, 
+        'smd' ............. surface mass density.
+        'height' .......... vertical displacements
         h (float): height above Earth mean radius [m].
 
-    Returns:
-        numpy ndarray: transfer. Size and shape equal to lmax. Units are respectively 
+    Returns
+    ----------
+    numpy.ndarray
+        Transfer matrix. Size and shape equal to lmax. Units are respectively 
             [none], [m], [mGal], [mGal], [E], [m^2/s^2], [rad], [m], [kg/m^2].
                                                            [n x 1]
     Uses:
@@ -531,12 +568,17 @@ def grule(n: int):
     """This function computes Gauss base points and weight factors
     using the algorithm-see Reference
 
-    Args:
-        n (int): number of base points required
+    Parameters
+    ----------
+    n : int 
+        number of base points required
 
-    Returns:
-        np.array: cosine of the base points
-        np.array: weight factors for computing integrals and such
+    Returns
+    ----------
+    bp : numpy.array 
+        cosine of the base points
+    wf : numpy.array
+        weight factors for computing integrals and such
     
     References:
         1. 'Methods of Numerical Integration' by Davis and Rabinowitz, page 365, Academic Press, 1975.
@@ -605,17 +647,22 @@ def grule(n: int):
 def neumann(inn):
     """Returns the weights and nodes for Neumann's numerical integration
 
-    Args:
-        inn (int, np.array): base points (nodes) in the interval [-1;1]
+    Parameters
+    ----------
+    inn : int or numpy.array
+        base points (nodes) in the interval [-1;1]
 
+    Returns
+    ----------
+    w : array
+        quadrature weights
+    x : array
+        base points (nodes) in the interval [-1;1]
+    
     Raises:
         TypeError: Integer input argument required
         ValueError: Error in input dimensions
 
-    Returns:
-        _type_: quadrature weights
-        _type_: base points (nodes) in the interval [-1;1]
-    
     Remarks:
         * 1st N.-method: see Sneeuw (1994) GJI 118, pp 707-716, eq. 19.5
         * 2nd N.-method: see uberall/GRULE
@@ -667,15 +714,20 @@ def normalklm(lmax: int, typ: str = 'wgs84'):
     """ NORMALKLM returns an ellipsoidal normal field
     consisting of normalized -Jn, n=0,2,4,6,8
 
-    Args:
-        lmax (int): maximum degree
-        typ (str): Ellipsoids can be either 
-                    'wgs84' - World Geodetic System 84, 
-                    'grs80' - , 
-                    'he' - hydrostatic equilibrium ellipsoid
+    Parameters
+    ----------
+    lmax : int
+        Maximum degree of the spherical harmonics
+    typ : (str, optional) 
+        Ellipsoids can be either 
+            'wgs84' - World Geodetic System 84, 
+            'grs80' - , 
+            'he' - hydrostatic equilibrium ellipsoid
     
-    Returns:
-        nklm (np.array): normal field in CS-format (sparse array - [1, -J2, -J4, -J6, -J8])
+    Returns
+    ----------
+    nklm : numpy.array
+         normal field in CS-format (sparse array - [1, -J2, -J4, -J6, -J8])
     
     TODO: 
         Find type of nklm; I think raising TypeError, VlueError or NameError instad of general Exception
@@ -744,17 +796,24 @@ def normalklm(lmax: int, typ: str = 'wgs84'):
 
 
 def Gaussian(L: int, cap: int):
-    """The program delivers the spherical harmonic coefficients of a gaussian
+    """Generates values for a Gaussian smoothing filter
+    
+    The program delivers the spherical harmonic coefficients of a gaussian
     smoothing filter. The coefficients are calculated according to Wahr et. al.(1998)
     equation (34) and Swenson and Wahr equation (34)
 
 
-    Args:
-        L (int): maximum degree
-        cap (int): half width of Gaussian smoothing function [km]
+    Parameters
+    ----------
+    L : int
+        Maximum degree of the spherical harmonics
+    cap : int
+        half width of Gaussian smoothing function [km]
 
-    Returns:
-        np.ndarray: smoothing coefficients
+    Returns
+    -------
+    W: numpy.ndarray
+        smoothing coefficients
     
     Raises:
         TypeError: Degree must be integer
@@ -800,11 +859,15 @@ def Gaussian(L: int, cap: int):
 def naninterp(X):
     """This function uses cubic interpolation to replace NaNs
 
-    Args:
-        X (numpy.array): array with NaN values
+    Parameters
+    ----------
+    X : (numpy.array)
+        array with NaN values
 
-    Returns:
-        numpy.array: cubic interpolated array
+    Returns
+    ----------
+    numpy.array
+        cubic interpolated array
     """
     
     ok = ~np.isnan(X)

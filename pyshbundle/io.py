@@ -49,15 +49,23 @@ import re
 import pkg_resources
 
 def extract_SH_data(file_path, source):
-    """
-    Extracts the spherical harmonic coefficients from the given file
-    
-    Parameters:
-        file_path (str): Absolute path to the file
-        source (str): Source of the data (JPL, CSR, or ITSG)
+    """Extracts the spherical harmonic coefficients from all the given files
 
-    Returns:
-        dict: Dictionary containing the coefficients and time coverage start and end dates
+    Currently supports JPL, CSR, and ITSG data sources ONLY.
+    Extracts the spherical harmonic coefficients from the given file and returns them in a dictionary.
+    Uses the degree and order of a coefficient as the key and the coefficient values as the value.
+    
+    Parameters
+    ----------
+    file_path : str
+        Absolute path to the file
+    source : str
+        Source of the data (JPL, CSR, or ITSG)
+
+    Returns
+    ----------
+    dict
+        Dictionary containing the coefficients and time coverage start and end dates
     """
     # Initialize an empty dictionary to store the coefficients and dates
     data = {
@@ -171,14 +179,22 @@ def extract_SH_data(file_path, source):
 
 
 def extract_deg1_coeff_tn13(file_path):
-    """
-    Extracts the degree 1 coefficients from the given file
+    """Extracts the degree 1 coefficients from the given TN-13 file
+
+    Ensure the TN-13 file used is the one recommended by respective data centres (JPL, CSR, or ITSG).
+    Similar to extract_SH_data, but specifically for TN-13 files.
+    Returns degree 1 replacement coefficients as a dictionary.
+    Uses the degree and order of a coefficient as the key and the coefficient values as the value.
     
-    Parameters:
-        file_path (str): Absolute path to the file
+    Parameters
+    ----------
+    file_path : str
+        Absolute path to the file
     
-    Returns:
-        dict: Dictionary containing the degree 1 (order 1) coefficients and time coverage start and end dates
+    Returns
+    ----------
+    dict
+        Dictionary containing the degree 1 (order 1) coefficients and time coverage start and end dates
     """
 
     data_dict = {}
@@ -219,14 +235,22 @@ def extract_deg1_coeff_tn13(file_path):
     return data_dict
 
 def extract_deg2_3_coeff_tn14(file_path):
-    """
-    Extracts the degree 2 and 3 coefficients from the given file
+    """Extracts the degree 2 and 3 coefficients from the given file
+
+    Ensure the TN-14 file used is the one recommended by respective data centres (JPL, CSR, or ITSG).
+    Similar to extract_SH_data, but specifically for TN-14 files.
+    Returns degree 2, 3 replacement coefficients as a dictionary.
+    Uses the degree and order of a coefficient as the key and the coefficient values as the value.
     
-    Parameters:
-        file_path (str): Absolute path to the file
+    Parameters
+    ----------
+    file_path : str
+        Absolute path to the file
     
-    Returns:
-        dict: Dictionary containing the degree 2,3 (order 0) coefficients and time coverage start and end dates
+    Returns
+    ----------
+    dict
+        Dictionary containing the degree 2,3 (order 0) coefficients and time coverage start and end dates
     """
     data_dict = {}
     
@@ -312,17 +336,22 @@ def read_GRACE_SH_paths(use_sample_files = 0):
 
     """Returns path of data files, path of tn13 and path of tn14 replacement files
 
-    Args:
-        use_sample_files (int, optional): _description_. Defaults to 0.
+    Parameters
+    ----------
+    use_sample_files : (int, optional)
+        Defaults to 0.
 
     Raises:
         Exception: _description_
 
-    Returns:
-        _type_: _description_
-    """
-
-    """The purpose of this script is to,
+    Returns
+    ----------
+    path_sh, path_tn13, path_tn14, source : str
+        Path of data files, path of tn13 and path of tn14 replacement files, 
+        source of the SH files (JPL, ITSG or CSR)
+    
+    Remarks:
+        The purpose of this script is to,
         firstly read what the data source is (JPL, CSR or ITSG)
         read file path for GRACE L2 spherical harmonics inputs,
         read replacement files for tn13 and tn14
@@ -338,7 +367,7 @@ def read_GRACE_SH_paths(use_sample_files = 0):
     if use_sample_files ==1:
         
         print("You have chosen to use sample replacement files.")
-        print("The replacement files for the TN13 and TN14 parameters have been preloaded into the program")
+        print("The replacement files for the TN13 and TN14 Args have been preloaded into the program")
         print("Due to the size of the GRACE SH files, these have not been preloaded into the program")
         print("You may download the GRACE SH L2 files from the link below. Please ensure to download the files as per your selection of source in the prior step")
         print("Download sample files from: https://github.com/mn5hk/pyshbundle/tree/main/sample_input_data")
@@ -382,17 +411,22 @@ def read_GRACE_SH_paths(use_sample_files = 0):
 
 
 def load_longterm_mean(source = "", use_sample_mean = 0):
-    """_summary_
+    """Loads the long term mean values for the GRACE SH data
 
-    Args:
-        source (str, optional): _description_. Defaults to "".
-        use_sample_mean (int, optional): _description_. Defaults to 0.
+    Parameters
+    ----------
+    source (str, optional): 
+        Source of data. Defaults to "".
+    use_sample_mean (int, optional)
+        Whether to use default long-mean values provided with the data. Defaults to 0.
 
     Raises:
         Exception: _description_
 
-    Returns:
-        _type_: _description_
+    Returns
+    ----------
+    long_mean : str
+        path of the appropriate long term mean file
     
     Todo:
         + Not sure if using "source = ''" is all right
@@ -434,8 +468,10 @@ def load_longterm_mean(source = "", use_sample_mean = 0):
 def parse_jpl_file(file_path: str):
     """Reads the spherical harmonic data provided by JPL
 
-    Args:
-        file_path (str): Absolute path to the file
+    Parameters
+    ----------
+    file_path : str
+        Absolute path to the file
     """
     # ensure that the file path is valid then proceed
     
@@ -842,6 +878,130 @@ def extract_C30_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end=None):
         C30[np.isnan(C30)] = 0
     
     return C30
+
+def replace_zonal_coeff(data_mat, source, lmax, data_tn13, data_tn14, epoch_begin: float, epoch_end: float):
+    """_summary_
+
+    Args:
+        data_mat (_type_): _description_
+        source (_type_): _description_
+        lmax (_type_): _description_
+        data_tn13 (_type_): _description_
+        data_tn14 (_type_): _description_
+        epoch_begin (float): _description_
+        epoch_end (float): _description_
+
+    Returns:
+        _type_: _description_
+    """
+
+    data_mat_copy = deepcopy(data_mat)
+
+    if source == 'jpl':
+        assert epoch_end is not None, "epoch_end argument cannot be None"
+        # convert the float YYYYMMDD into datetime.date object
+        epoch_begin = datetime.strptime(str(int(epoch_begin)), '%Y%m%d').date()
+        epoch_end = datetime.strptime(str(int(epoch_end)), '%Y%m%d').date()
+
+        # Extract the C10, C11, C20 and C30 from TN-13 and TN-14
+        C10, C11 = extract_C10_11_replcmnt_coeff(
+            data_tn13, 'jpl', epoch_begin, epoch_end)
+        C20 = extract_C20_replcmnt_coeff(
+            data_tn14, source, epoch_begin, epoch_end)
+        C30 = extract_C30_replcmnt_coeff(
+            data_tn14, source, epoch_begin, epoch_end)
+
+        # For easy replacement purpose
+        # [l, m, clm, slm, clm_dev, slm_dev]
+        C00 = np.array([0, 0, 0, 0, 0, 0])
+
+        # C30 is  at index - 3 in original matrix
+        if C30 is not None:
+            data_mat_copy[3, :] = C30
+
+        # C20 is at index - 0 in original matrix
+        data_mat_copy[0, :] = C20
+
+        # stack the matrix row-wise
+        data_mat_copy = np.row_stack([C11, data_mat_copy])
+        data_mat_copy = np.row_stack([C10, data_mat_copy])
+        data_mat_copy = np.row_stack([C00, data_mat_copy])
+
+    elif source == 'csr':
+        epoch_begin = datetime.strptime(str(int(epoch_begin)), '%Y%m%d').date()
+        epoch_end = datetime.strptime(str(int(epoch_end)), '%Y%m%d').date()
+
+        C10, C11 = extract_C10_11_replcmnt_coeff(
+            data_tn13, 'csr', epoch_begin, epoch_end)
+
+        C20 = extract_C20_replcmnt_coeff(
+            data_tn14, 'csr', epoch_begin, epoch_end)
+        C30 = extract_C30_replcmnt_coeff(
+            data_tn14, 'csr', epoch_begin, epoch_end)
+
+        # C10 is at index - 1
+        # C20 is at index - 2
+        # C30 is at index - 3
+        # C11 is at index - lmax + 1
+        data_mat_copy[lmax+1, :] = C11
+        if C30 is not None:
+            data_mat_copy[3, :] = C30        
+        data_mat_copy[2, :] = C20
+        data_mat_copy[1, :] = C10
+
+    elif source == 'itsg':
+        # the CSR dates are strings to begin with
+        begin_date = datetime.strptime((epoch_begin), '%Y-%m').date()
+
+        C10, C11 = extract_C10_11_replcmnt_coeff(
+            data_tn13, 'itsg', epoch_begin=begin_date, epoch_end=None)
+        
+        print(C10, C11)
+
+        C20 = extract_C20_replcmnt_coeff(
+            data_tn14, 'itsg', epoch_begin=begin_date, epoch_end=None)
+        C30 = extract_C30_replcmnt_coeff(
+            data_tn14, 'itsg', epoch_begin=begin_date, epoch_end=None)
+
+        # For easy replacement purpose
+        # C10 is at index 1
+        # C11 is at index 2
+        # C20 is at index 3
+        # C30 is at index 6
+        if C30 is not None:
+            data_mat_copy[6, :] = C30
+        data_mat_copy[3, :] = C20
+        data_mat_copy[2, :] = C11
+        data_mat_copy[1, :] = C10
+
+    return data_mat_copy
+
+
+'''
+def klm2sc_new(data_mat, lmax: int):
+    sc_mat = np.zeros((lmax+1, 2*lmax + 2))
+    dev_sc_mat = np.zeros((lmax+1, 2*lmax + 2))
+    clm = data_mat[:, 2]
+    slm = data_mat[:, 3]
+    clm_std_dev = data_mat[:, 4]
+    slm_std_dev = data_mat[:, 5]
+    
+    # first place the slm and then clm
+    index2 =0
+    for index1 in range(0,lmax+1,1):
+        sc_mat[index1:, lmax-index1] = slm[(index2):(index2 + lmax-index1+1)]
+        sc_mat[index1:, index1+lmax] = clm[(index2):(index2 + lmax-index1+1)]
+
+        dev_sc_mat[index1:, lmax-index1] = slm_std_dev[(index2):(index2 + lmax-index1+1)]
+        dev_sc_mat[index1:, index1+lmax] = clm_std_dev[(index2):(index2 + lmax-index1+1)]
+        
+        index2 = index2 + lmax-index1+1
+
+    sc_mat=np.delete(sc_mat,lmax,axis=1)
+    dev_sc_mat=np.delete(dev_sc_mat,lmax,axis=1)
+
+    return sc_mat, dev_sc_mat
+'''
 
 def sub2ind(array_shape, rows, cols):
     # rows, list need to be linear array
