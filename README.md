@@ -1,6 +1,8 @@
 # PySHbundle: A Python implementation of GRACE Spherical Harmonics Synthesis MATLAB codes SHbundle <br>
 
 ![](https://visitor-badge.glitch.me/badge?page_id=mn5hk.mat2py) <br>
+![example workflow] <br>
+(https://github.com/lsmvivek/pyshbundle/actions/workflows/python-package-conda.yml/badge.svg)
 
 This package, `PySHbundle` provides tools to process GRACE data, such as, the computation of anomalies, substitution of poor quality low degree coefficients, reducing noise in GRACE data using filtering approaches, signal leakage correction using `GDDC`, etc. In addition, the package provides a flexibility for future development and addition of further processing choices for handling GRACE data for hydrological application.
 
