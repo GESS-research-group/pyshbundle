@@ -19,7 +19,7 @@ The module can be installed via pip python package manager. Follow the follwing 
 
 ```shell
 # clone the repository in order to access the notebooks and data
-$ git clone git@github.com:mn5hk/pyshbundle.git
+$ git clone https://github.com/lsmvivek/pyshbundle.git
 $ pip install .
 
 
