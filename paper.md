@@ -70,13 +70,16 @@ bibliography: paper.bib
 The mission measures changes in the inter-satellite distance with a microwave ranging system that gives an accuracy in the range of micrometers [@wahr1998time]. When the satellite system comes in the vicinity of a temporal mass anomaly, the relative inter-satellite distance changes and it can be inverted to estimate the mass change near the surface of the Earth. Over the continental land surface, the hydrological processes are the major driver of the variation in mass anomaly at monthly to decadal scales. However various other signals such as oceanic and atmospheric variations, high frequency tidal mass changes, systemic correlated errors, etc. are also part of the obtained GRACE signals [@humphrey2023using]. 
 
 Obtaining `L3` products from `L1` requires 
-	a) removing Oceanic, Atmospheric, Tidal and other signals
-		Isolating the hydrological signal results in host of different atmosphere, ocean and tidal models to be applied.
-	b) filtering to reduce noise
-		Several methods have been proposed for filtering noise in `L2` data, ranging from simple Gaussian averaging to dynamic filters which use hydrological models.
-	c) processing data to global gridded TWSA
+
+a) removing Oceanic, Atmospheric, Tidal and other signals
+Isolating the hydrological signal results in host of different atmosphere, ocean and tidal models to be applied.
+
+b) filtering to reduce noise
+Several methods have been proposed for filtering noise in `L2` data, ranging from simple Gaussian averaging to dynamic filters which use hydrological models.
+
+c) processing data to global gridded TWSA
   
-		Finally, the method applied to convert `L2` data to `L3` `TWSA` data introduces more subtle differences.
+Finally, the method applied to convert `L2` data to `L3` `TWSA` data introduces more subtle differences.
 Various tools exist to process GRACE data and to analyze it. Some of these are developed in the `MATLAB` programming language: [`SHbundle`](https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle) [@SHbundle], [`GRACE Data Driven Correction`](https://www.gis.uni-stuttgart.de/en/research/downloads/datadrivencorrectionbundle) [@vishwakarma2017understanding],  [`LUH-GRACE2018`](https://www.ife.uni-hannover.de/en/services/luh-grace) [@koch2020luh], [`GRAMAT`](https://link.springer.com/article/10.1007/s12145-018-0368-0) [@feng2019gramat], [`SHADE`](https://www.sciencedirect.com/science/article/pii/S0098300418302760) [@piretzidis2018shade], [`GRACETOOLS`](https://www.mdpi.com/2076-3263/8/9/350) [@darbeheshti2018gracetools], [`SSAS GRACE filter`](https://github.com/shuang-yi/SSAS-GRACE-filter)[@yi2022novel], etc. Similarly, some GRACE data processing tools are also available based on the python programming language. These include [`gravity-toolkit`](https://gravity-toolkit.readthedocs.io/en/latest/) [@gravity-toolkit], [`ggtools`](https://pypi.org/project/ggtools/1.1.0/) [@ggtools] and [`GRACE-filter`](https://github.com/strawpants/GRACE-filter) [@GRACEfilter]. General tools for spheric harmonic analysis are also available, such as [`SHTools`](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018GC007529) [@wieczorek2018shtools]. [`SHbundle`](https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle) provide MATLAB scripts for `spheric harmonic synthesis` and `spheric harmonic analysis`. The first version of the code was developed in 1994 while the latest version with upgrades can be found dated 2018.
  
 # Statement of need
@@ -92,10 +95,14 @@ By using Python and the GNU license, the package is accessible globally and alig
 # Implementation
 
 Obtaining gridded fields from GRACE spherical harmonic coefficients consists of several steps, including obtaining the spherical harmonic coefficients from the data providers, replacement of poor coefficients, reducing noise using filtering approaches, etc. Mathematical details of the steps involved can be referred in [@vishwakarma2017understanding].
-Accordingly, the package consists of four main modules, `io`, ``, `` and `shutils`.
+Accordingly, the package consists of four main modules, `io`, `vizutils`, `pysh_core` and `shutils`.
+
 1. `io`: extract the `L2` coefficients from any of `JPl`, `CSR` and `ITGZ` solutions. Followed by replacing the poorly measured degree 1, 2 and 3 spherical harmonics coefficients with data from Satellite Laser Ranging missions. And other pre-processing operations.
+
 2. `vizutils`: plots the `L2` data to visually understand the coefficients, their uncertainties, mathematical functions used for further processing. 
+
 3. `pysh_core`: Scripts for the global spherical harmonics synthesis `gshs` to convert the `L2` data to global gridded `TWSA` data (`L3`). Others, calculating signal leakage (`gddc`) and basin-scale average (`Basinaverage`).
+
 4. `shutils`:  Helper scripts for applying `pysh_core`.
 Based on the main modules, we provide examples as jupyter notebooks for understanding and using spherical harmonics data and the package.
 
