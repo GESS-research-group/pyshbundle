@@ -5,3 +5,4 @@ pyshbundle.egg-info
 develloping_progress.txt
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
+paper_org.md
