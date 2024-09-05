@@ -159,5 +159,6 @@ Coming soon!
 
 
 ## Follow the Research Group
-
-<a href="https://ultra-pluto-7f6d1.netlify.app" rel="Geodesy for Earth system science (GESS) research Group at ICWaR, IISc">![Geodesy for Earth system science (GESS) research Group at ICWaR, IISc](./examples/imgs/logoGESS.jpg)</a>
+<a href="https://ultra-pluto-7f6d1.netlify.app" rel="Geodesy for Earth system science (GESS) research Group at ICWaR, IISc">
+    <img src="./examples/imgs/logoGESS.jpg" alt="Geodesy for Earth system science (GESS) research Group at ICWaR, IISc" width="300" height="300">
+</a>
