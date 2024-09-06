@@ -69,22 +69,13 @@ bibliography: paper.bib
 
 The mission measures changes in the inter-satellite distance with a microwave ranging system that gives an accuracy in the range of micrometers [@wahr1998time]. When the satellite system comes in the vicinity of a temporal mass anomaly, the relative inter-satellite distance changes and it can be inverted to estimate the mass change near the surface of the Earth. Over the continental land surface, the hydrological processes are the major driver of the variation in mass anomaly at monthly to decadal scales. However various other signals such as oceanic and atmospheric variations, high frequency tidal mass changes, systemic correlated errors, etc. are also part of the obtained GRACE signals [@humphrey2023using]. 
 
-Obtaining `L3` products from `L1` requires 
+Obtaining `L3` products from GRACE data requires isolating the hydrological signal from GRACE signal, filtering to reduce noise to obtain `L2` data. Finally, the methods applied to convert the spherical harmonics data to mass changes introduces more subtle differences, potentially affecting the results.
 
-a) removing Oceanic, Atmospheric, Tidal and other signals
-Isolating the hydrological signal results in host of different atmosphere, ocean and tidal models to be applied.
-
-b) filtering to reduce noise
-Several methods have been proposed for filtering noise in `L2` data, ranging from simple Gaussian averaging to dynamic filters which use hydrological models.
-
-c) processing data to global gridded TWSA
-  
-Finally, the method applied to convert `L2` data to `L3` `TWSA` data introduces more subtle differences.
-Various tools exist to process GRACE data and to analyze it. Some of these are developed in the `MATLAB` programming language: [`SHbundle`](https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle) [@SHbundle], [`GRACE Data Driven Correction`](https://www.gis.uni-stuttgart.de/en/research/downloads/datadrivencorrectionbundle) [@vishwakarma2017understanding],  [`LUH-GRACE2018`](https://www.ife.uni-hannover.de/en/services/luh-grace) [@koch2020luh], [`GRAMAT`](https://link.springer.com/article/10.1007/s12145-018-0368-0) [@feng2019gramat], [`SHADE`](https://www.sciencedirect.com/science/article/pii/S0098300418302760) [@piretzidis2018shade], [`GRACETOOLS`](https://www.mdpi.com/2076-3263/8/9/350) [@darbeheshti2018gracetools], [`SSAS GRACE filter`](https://github.com/shuang-yi/SSAS-GRACE-filter)[@yi2022novel], etc. Similarly, some GRACE data processing tools are also available based on the python programming language. These include [`gravity-toolkit`](https://gravity-toolkit.readthedocs.io/en/latest/) [@gravity-toolkit], [`ggtools`](https://pypi.org/project/ggtools/1.1.0/) [@ggtools] and [`GRACE-filter`](https://github.com/strawpants/GRACE-filter) [@GRACEfilter]. General tools for spheric harmonic analysis are also available, such as [`SHTools`](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018GC007529) [@wieczorek2018shtools]. [`SHbundle`](https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle) provide MATLAB scripts for Spheric Harmonic Synthesis and Spheric Harmonic Analysis. The first version of the code was developed in 1994 while the latest version with upgrades can be found dated 2018.
+Some GRACE data processing tools are available based on the python programming language. These include [`gravity-toolkit`](https://gravity-toolkit.readthedocs.io/en/latest/) [@gravity-toolkit], [`ggtools`](https://pypi.org/project/ggtools/1.1.0/) [@ggtools] and [`GRACE-filter`](https://github.com/strawpants/GRACE-filter) [@GRACEfilter]. General tools for spheric harmonic analysis are also available, such as [`SHTools`](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018GC007529) [@wieczorek2018shtools]. [`SHbundle`](https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle) provide MATLAB scripts for Spheric Harmonic Synthesis and Spheric Harmonic Analysis. The first version of the code was developed in 1994 while the latest version with upgrades can be found dated 2018.
  
 # Statement of need
 
-Processing choices (a, b & c) introduce subtle differences in the final `L3` product, potentially affecting results. Processing `L2` data offers flexibility for users to explore GRACE data for specific applications. This software aims to simplify access to `L2` products, allowing users to select different processing options.
+Processing choices introduce subtle differences in the final `L3` product, potentially affecting results. Processing `L2` data offers flexibility for users to explore GRACE data for specific applications. This software aims to simplify access to `L2` products, allowing users to select different processing options.
 
 The software processes widely used `L2` products from CSR, JPL, and GFZ. It closely follows the structure of the Matlab-based [`SHbundle`](https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle) and [`GRACE Data Driven Correction (GDDC)`](https://doi.org/10.1002/2017WR021150)[@vishwakarma2017data] codes, enabling cross-compatibility between Python and Matlab users.
 
@@ -105,10 +96,6 @@ Accordingly, the package consists of four main modules, `io`, `vizutils`, `pysh_
 
 4. `shutils`:  Helper scripts for applying `pysh_core`.
 Based on the main modules, we provide examples as jupyter notebooks for understanding and using spherical harmonics data and the package.
-
-# Concluding Remarks
-
-In this paper, we have introduced a new Python software package named `PySHbundle`. The software can process Stokes coefficients for Earth's gravity field to provide gridded products representing changes in mass, geoid height anomalies, equivalent water height anomalies, etc. This package has been specially developed to process the`L2`  spherical harmonic data from the GRACE satellite mission, which finds application in numerous disciplines of Earth system science. The software has potential to increase GRACE level-2 data processing accessibility to early-career researchers and researchers from low-income regions, adhering to the principles of open science.
 
 # Acknowledgements
 
