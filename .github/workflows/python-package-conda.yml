@@ -1,0 +1,31 @@
+name: Build and test
+
+on: [push]
+
+jobs:
+  build-and-test:
+    name: Ex1 (${{ matrix.python-version }}, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ["macos-latest",] # "macos-latest", "ubuntu-latest"]  "windows-latest", 
+        python-version: ["3.12"]
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: pysh
+          environment-file: environment.yml
+          python-version: ${{ matrix.python-version }}  #3.12
+          auto-activate-base: false
+      - run: |
+          conda info
+          conda list
+      - name: Install package
+        run: pip install .
+      - name: Test with the unittest module
+        run: |
+          python -m unittest tests/test_pyshbundle.py

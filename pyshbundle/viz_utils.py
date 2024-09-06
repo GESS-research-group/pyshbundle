@@ -1,27 +1,73 @@
 # Visualisation Utilities for PySHBundle
 # Author: Abhishek Mhamane, MS-Research Geoinformatics, IIT Kanpur (India)
-# 
+# 2024-06-10, updated: Vivek Kumar Yadav, IISc Bengaluru
+# - - - - - - - - - - - - - - 
+# License:
+#    This file is part of PySHbundle.
+#    PySHbundle is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
 
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# Acknowledgement Statement:
+#    Please note that PySHbundle has adapted the following code packages, 
+#    both licensed under GNU General Public License
+#       1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
+
+#       2. Downscaling GRACE Total Water Storage Change using Partial Least Squares Regression
+#          https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
+    
+# Key Papers Referred:
+#    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
+#       A data‐driven approach for repairing the hydrological catchment signal damage 
+#       due to filtering of GRACE products. Water Resources Research, 
+#       53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
+
+#    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
+#       Downscaling GRACE total water storage change using 
+#       partial least squares regression. Scientific data, 8(1), 95.
+#       https://doi.org/10.1038/s41597-021-00862-6
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+import calendar
+from datetime import datetime
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.path as mpath
 import matplotlib.pyplot as plt
 import numpy as np
 import cartopy.crs as ccrs
+import matplotlib.patches as mpatches
 
-from pyshbundle.shutils import PLM
-from pyshbundle.pysh_core import GSHS
+from pyshbundle.shutils import plm
+from pyshbundle.pysh_core import gshs
 
 def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
-    """Visualize the SH coeff. in /S|C\ triangular matrix format
+    """Visualize the SH coeff. in SC triangular matrix format
 
-    Args:
-        scmat (np.ndarray): /S|C\ matrix data (see clm2sc)
-        lmax (int): maximum degree of SH expansion
-        title (str): Title of the figure
-        vmin (flaot | int): minimum value for the colorbar
-        vmax (float | int): maximum value for the colorbar
+    Parameters
+    ----------
+    scmat : numpy.ndarray 
+        SC matrix data (see clm2sc)
+    lmax : int
+        Maximum degree of SH expansion
+    title : str
+        Title of the figure
+    vmin : (flaot | int)
+        Minimum value for the colorbar
+    vmax : (float | int)
+        Maximum value for the colorbar
 
-    Returns:
+    Returns
+    ----------
         matplotlib.axes._axes.Axes: Plot axes
     """
     fig, ax = plt.subplots(1, 1, figsize=(25, 10))
@@ -43,16 +89,23 @@ def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
     return ax
 
 def cs_sqplot(csmat: np.ndarray, lmax: int, title: str, vmin, vmax):
-    """ Visualize the SH coeff. in |C\S| square matrix format
+    """ Visualize the SH coeff. in CS square matrix format
 
-    Args:
-        csmat (np.ndarray): |C\S| matrix data (see clm2cs or sc2cs)
-        lmax (int): maximum degree of SH expansion
-        title (str): Title of the figure
-        vmin (float): miniumum value for the colorbar
-        vmax (flaot): maximum value for the colorbar
+    Parameters
+    ----------
+    csmat : numpy.ndarray 
+        CS matrix data (see clm2cs or sc2cs)
+    lmax : int
+        maximum degree of SH expansion
+    title : str 
+        Title of the figure
+    vmin : float
+        miniumum value for the colorbar
+    vmax : float
+        maximum value for the colorbar
 
-    Returns:
+    Returns
+    ----------
         matplotlib.axes._axes.Axes: Plot axes
     """
     fig, ax = plt.subplots(1, 1, figsize=(10, 10))
@@ -84,15 +137,22 @@ def cs_sqplot(csmat: np.ndarray, lmax: int, title: str, vmin, vmax):
 def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
     """Visualize the polar regions of Greenland and Antarctica 
 
-    Args:
-        field (numpy.ndarray): _description_
-        polar_loc (str): State the region 'greenland' or 'antarctica'
-        title (str): Title for the figure
-        file_name (_type_, optional): file name along with absolute path to location to be saved. Defaults to None.
-        save_flag (bool, optional): True if the figure is to be saved. Defaults to False.
+    Parameters
+    ----------
+    field : numpy.ndarray
+        __description__
+    polar_loc : str
+        State the region 'greenland' or 'antarctica'
+    title : str
+        Title for the figure
+    file_name : (_type_, optional)
+        file name along with absolute path to location to be saved. Defaults to None.
+    save_flag : (bool, optional)
+        True if the figure is to be saved. Defaults to False.
 
-    Returns:
-        _type_: _description_
+    Returns
+    ----------
+        matplotlib.axes._axes.Axes: Plot axes
     """
 
     if polar_loc == 'greenland':
@@ -150,16 +210,19 @@ def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
 def mapfield(field, img_extent, title, name=None, colorbar_bounds=None, save_flag=False):
     """_summary_
 
-    Args:
-        field (_type_): _description_
-        img_extent (_type_): _description_
-        title (_type_): _description_
-        name (_type_, optional): _description_. Defaults to None.
-        colorbar_bounds (_type_, optional): _description_. Defaults to None.
-        save_flag (bool, optional): _description_. Defaults to False.
+    Parameters
+    ----------
+    field (_type_): _description_
+    img_extent (_type_): _description_
+    title (_type_): _description_
+    name (_type_, optional): _description_. Defaults to None.
+    colorbar_bounds (_type_, optional): _description_. Defaults to None.
+    save_flag (bool, optional): _description_. Defaults to False.
 
-    Returns:
-        _type_: _description_
+    Returns
+    ----------  
+    fig (matplotlib.figure.Figure): Figure object
+    geo_ax (matplotlib.axes._axes.Axes): Plot axes
     """
     # Plotting and Visualization
     
@@ -172,9 +235,9 @@ def mapfield(field, img_extent, title, name=None, colorbar_bounds=None, save_fla
     if colorbar_bounds is not None:
         vmin = colorbar_bounds[0]
         vmax = colorbar_bounds[1]
-        im = geo_ax.imshow(field, origin='upper', extent=img_extent, cmap='RdYlBu', transform=ccrs.PlateCarree(), vmin=vmin, vmax=vmax)
+        im = geo_ax.imshow(field, origin='upper', extent=img_extent, cmap='Greens', transform=ccrs.PlateCarree(), vmin=vmin, vmax=vmax)
     else:
-        im = geo_ax.imshow(field, origin='upper', extent=img_extent, cmap='RdYlBu', transform=ccrs.PlateCarree(), )
+        im = geo_ax.imshow(field, origin='upper', extent=img_extent, cmap='Greens', transform=ccrs.PlateCarree(), )
 
     plt.xlabel("Longitude")
     plt.ylabel("Latitude")
@@ -230,7 +293,7 @@ def ylm(l: int, m: int):
     arr[0] = l
     
     
-    p = PLM(arr, m, thetaRAD, nargin=1, nargout=1)
+    p = plm(arr, m, thetaRAD, nargin=1, nargout=1)
 
     ylmc = p * cosml
     ylms = p * sinml
@@ -302,12 +365,69 @@ def gshs_prepare(lmax, gs, quant, grd, h, jflag, sc_coeff):
     grid_y = int(180/gs)
     grid_x = int(360/gs)
 
-    ff = GSHS(sc_coeff, quant, grd, n, h, jflag)[0]
+    ff = gshs(sc_coeff, quant, grd, n, h, jflag)[0]
 
     # rearranging
-    field = np.zeros([grid_y,grid_x], dtype ='longdouble')
+    field = np.zeros([grid_y,grid_x], dtype ='float')
 
     field[:,0:int(grid_x/2)] = ff[:,int(grid_x/2):]
     field[:,int(grid_x/2):] = ff[:,0:int(grid_x/2)]  
     
     return field
+
+# Function to plot the calendar
+def plot_calendar_months(datetime_object):
+    """
+    Plot a calendar for each year in the given list of datetime objects.
+
+    Args:
+        datetime_object (list): A list of datetime objects in the format '%Y-%m'.
+
+    Returns:
+        None
+
+    This function takes a list of datetime objects and plots a calendar for each year in the list.
+    The calendars are displayed in separate subplots, with each subplot representing a year.
+    The function extracts the months and years from the datetime objects and determines the range of years to plot.
+    For each year, the function creates a subplot and sets the title to the year.
+    The function then highlights the months with replacement data by coloring the month names in the calendar.
+    The color of the month names is 'lightblue' if the month is present in the given datetime objects, otherwise it is 'white'.
+    """
+
+    # Extract months and years from dictionary keys
+    dates = [datetime.strptime(date, '%Y-%m').date() for date in datetime_object]
+    months_years = {(date.year, date.month) for date in dates}
+    
+    # Determine the range of years to plot
+    years = sorted({year for year, month in months_years})
+    
+    fig, axes = plt.subplots(nrows=len(years), ncols=1, figsize=(7, 1 * len(years)), dpi=300)
+
+    if len(years) == 1:
+        axes = [axes]
+    
+    for i, year in enumerate(years):
+        ax = axes[i]
+        ax.set_title(f'{year}')
+        ax.set_xticks([])  # Hide y-axis
+        ax.set_yticks([])  # Hide x-axis
+
+        # Highlight months with replacement data
+        for month in range(1, 13):
+            if (year, month) in months_years:
+                color = 'lightblue'
+            else:
+                color = 'white'
+            ax.text(month - 1, 0, calendar.month_abbr[month], ha='center', va='center', 
+                    bbox=dict(facecolor=color, edgecolor='black'))
+
+        ax.set_xlim(-0.5, 11.5)
+        ax.set_ylim(-0.5, 0.5)
+        ax.grid(False)
+        
+    # # Add a legend
+    white_patch = mpatches.Patch(color='white', label='Data unavailable')
+    lightblue_patch = mpatches.Patch(color='lightblue', label='Data available')
+    axes[0].legend(handles=[white_patch, lightblue_patch], loc='lower center', bbox_to_anchor=(0.85, 1.1), fontsize='9')
+    plt.tight_layout()
+    plt.show()

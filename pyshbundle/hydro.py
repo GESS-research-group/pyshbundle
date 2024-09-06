@@ -1,26 +1,81 @@
 # Applications of GRACE data to Hydrology
 # Curator: Abhishek Mhamane
+# Updated: Vivek, 2024-05-20, added the function Basinaverage, area_weighting.
+# Updated: Vivek, 2024-07-28.
 
-import salem
+# - - - - - - - - - - - - - - 
+# License:
+#    This file is part of PySHbundle.
+#    PySHbundle is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# Acknowledgement Statement:
+#    Please note that PySHbundle has adapted the following code packages, 
+#    both licensed under GNU General Public License
+#       1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
+
+#       2. Downscaling GRACE Total Water Storage Change using Partial Least Squares Regression
+#          https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
+    
+# Key Papers Referred:
+#    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
+#       A data‐driven approach for repairing the hydrological catchment signal damage 
+#       due to filtering of GRACE products. Water Resources Research, 
+#       53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
+
+#    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
+#       Downscaling GRACE total water storage change using 
+#       partial least squares regression. Scientific data, 8(1), 95.
+#       https://doi.org/10.1038/s41597-021-00862-6
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
 import numpy as np
-import xarray as xr
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-
+import geopandas as gpd
+import rioxarray
+from shapely.geometry import mapping
 from pyshbundle.shutils import Gaussian
-from pyshbundle.pysh_core import GSHS
+from pyshbundle.pysh_core import gshs
 
 
-def TWSCalc(data, lmax: int, gs: float, r, m):
-    """_summary_
-
-    Args:
-        data (np.ndarray): SC coefficients
-        lmax (int): maximum degree
-        gs (float): grid size
-        r (_type_): _description_
-        m (_type_): _description_
+def TWSCalc(data, lmax: int, gs: float, r:float, m: int):
+    """Spherical Harmonics Synthesis for Total Water Storage (TWS) calculation.
     
+    Calculate the total water storage (TWS) from spherical harmonics coefficients.
+    Uses spherical harmonics synthesis to go from harmonics to gridded domain.
+
+    Parameters
+    ----------
+    data : numpy.ndarray
+        Spherical harmonics coefficients in SC format
+    lmax : int
+        Maximum degree of the spherical harmonics coefficients
+    gs : float 
+        grid size
+    r : float
+        half-width of the Gaussian filter
+    m : int
+        number of time steps
+
+    Returns
+    ----------
+    numpy.ndarray
+        Gridded TWS data
+
+    Uses:    
+        'Gaussian', 'gshs',
     Author:
         Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
@@ -29,7 +84,7 @@ def TWSCalc(data, lmax: int, gs: float, r, m):
     gfilter = Gaussian(lmax,r)
     grid_y = int(180/gs)
     grid_x = int(360/gs)
-    tws_f = np.zeros([m,grid_y,grid_x], dtype ='longdouble')
+    tws_f = np.zeros([m,grid_y,grid_x], dtype ='float')
     for i in tqdm(range(0,m,1)):
         field = SC[i,0:lmax+1,96-lmax:96+lmax+1]
         shfil = np.zeros([lmax+1,2*lmax+1])
@@ -43,9 +98,9 @@ def TWSCalc(data, lmax: int, gs: float, r, m):
         h = 0 
         jflag = 0
         
-        ff = GSHS(shfil, quant, grd, n, h, jflag)[0]
+        ff = gshs(shfil, quant, grd, n, h, jflag)[0]
         
-        ff = ff*1000
+        ff = ff*1000    # convert units from m to mm
         tws_f[i,:,0:int(grid_x/2)] = ff[:,int(grid_x/2):]
         tws_f[i,:,int(grid_x/2):] = ff[:,0:int(grid_x/2)]   
     
@@ -53,6 +108,22 @@ def TWSCalc(data, lmax: int, gs: float, r, m):
     return(tws_f)
 
 def apply_gaussian(sc_coeff, gaussian_coeff, lmax):
+    """Apply Gaussian filter on the spherical harmonics coefficients.
+    
+    Parameters
+    ----------
+    sc_coeff : numpy.ndarray 
+        Spherical harmonics coefficients in SC format
+    gaussian_coeff : numpy.ndarray 
+        Gaussian filter weights
+    lmax : int 
+        Maximum degree of the spherical harmonics coefficients
+
+    Returns
+    ----------
+    numpy.ndarray
+        Filtered spherical harmonics coefficients in SC format
+    """
     
     # filtered SH Coeff
     shfil = np.zeros([lmax+1, 2 * lmax+1])
@@ -63,77 +134,74 @@ def apply_gaussian(sc_coeff, gaussian_coeff, lmax):
     
     return shfil
 
-
-
-def BasinAvg(data, path: str, c_rs, m, gs):
-    """Computes the TWSA time-series for a given basin shape file, using the SH data.
-
-    Args:
-        data (xarray.Dataset): xarray dataset with format - {coordinates: [time, lat, lon], Data variables: [tws]}
-        path (str): valid path to the basin shape file with extension (.shp)
-        c_rs (crs): the crs into which the dataframe must be transformed (related to salem module)
-        m (int): number of files read
-        gs (float): grid size 
-
-    Returns:
-        xarray.Dataset: basin averaged values of TWS
-        _type_: _description_
+def area_weighting(grid_resolution):
+    """Calculate the area of each grid corresponding to the latitudes and longitudes.
+ 
+    Parameters
+    ----------
+    grid_resolution : float
+        The resolution of the grid in grid_resolutionrees.
+ 
+     Returns
+    ----------
+    numpy.ndarray
+        The area of each grid in square meters.
+     """
+    longitude_grid = np.linspace(0, 359+(1-grid_resolution), int(360/grid_resolution), dtype='float');
+    latitude_grid = np.linspace(0, 179+(1-grid_resolution), int(180/grid_resolution), dtype='float');
+    longitude_grid1 = np.linspace(1*grid_resolution, 360, int(360/grid_resolution), dtype='float');
+    latitude_grid1 = np.linspace(1*grid_resolution, 180, int(180/grid_resolution), dtype='float');
     
-    Author: 
-        Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+    lambd,theta = np.meshgrid(longitude_grid,latitude_grid)  
+    lambd1,theta1 = np.meshgrid(longitude_grid1,latitude_grid1)
+    
+    delta_latitude = np.sin(np.deg2rad(90-theta))-np.sin(np.deg2rad(90-theta1))
+    delta_longitude = (lambd1 - lambd)*np.pi/180
+
+    # Area of each grid
+    area = (6378.137**2)*pow(10,6)*(np.multiply(delta_latitude,delta_longitude)) # units m^2
+    return area
+
+def Basinaverage(temp, gs, shp_basin, basin_area):
+    """Calculate the basin average of the total water storage (TWS) from the gridded TWS data.
+
+    Applies area weighting to the gridded TWS data and then clips the data to the basin shapefile.
+    Followed by summation of data over the latitude and longitude dimensions, divides it by basin-
+    area to get the basin average TWS.
+    
+    Parameters
+    ----------
+    temp : xarray.DataArray 
+        Gridded total water storage data
+    gs : float
+        grid size
+    shp_basin : geopandas.GeoDataFrame
+        Shapefile of the basin
+    basin_area : float
+        Area of the basin in square meters
+
+    Returns
+    ----------
+    xarray.DataArray
+        Total water storage data clipped to the basin
+    xarray.DataArray
+        Basin average total water storage
     """
-    shdf = salem.read_shapefile(path)
-    shdf.crs
-    shdf.plot()
-    shdf_area = sum(shdf.to_crs(c_rs).area)
-    print('Area of basin in km2:',shdf_area/1e6)
-    if shdf_area < 63*1e9:
-        print('Warning basin too small for GRACE data application')
-    
-    tws_val = data.tws.values
-    dates = data.time
-    lat,lon = data.lat, data.lon
-    lat_shape, lon_shape = data.tws.shape[1],data.tws.shape[2]
-    
-    # Calculation of area of each corresponding to  the latitudes and longitudes
-    # not sure if ';' is proper syntax may be the octave residu
 
-    deg = gs
-    x = np.linspace(0, 359+(1-deg), int(360/deg), dtype='double')
-    y = np.linspace(0, 179+(1-deg), int(180/deg), dtype='double')
-    x1 = np.linspace(1*deg, 360, int(360/deg), dtype='double')
-    y1 = np.linspace(1*deg, 180, int(180/deg), dtype='double')
-    lambd,theta = np.meshgrid(x,y)
-    lambd1,theta1 = np.meshgrid(x1,y1)
-    a = np.sin(np.deg2rad(90-theta))-np.sin(np.deg2rad(90-theta1))
-    b = (lambd1 - lambd)*np.pi/180
-    
-    
-    # Area of each grid (360*720)
-    area = (6378.137**2)*pow(10, 6)*(np.multiply(a, b))        # units m^2
-    tot_area = np.sum(np.sum(area))
-    tws_m = np.zeros([m, lat_shape, lon_shape])
-    for i in range(0,m,1):
-        tws_m[i, :, :] = np.multiply(tws_val[i, :, :],area)
-    ds_area_w = xr.Dataset(
-    data_vars=dict(
-        tws=(["time","lat", "lon"], tws_m)
-    ),
-    coords = {
-        "time":dates,
-        "lat":lat,
-        "lon":lon },
-    attrs=dict(description="TWS Anomaly corresponding to long term (2004-2010) mean \n lmax=96 and half radius of Gaussian filter = 500Km"),
-    )
-    
-    ds_area_w_clp= ds_area_w.salem.roi(shape=shdf)
-    # Time series for the whole basin(shapefile) in user defined range
-    alpha = ds_area_w_clp.tws.sum(dim=('lon','lat'))/shdf_area
-    fig,ax = plt.subplots(figsize=(15,5))
-    alpha.plot(ax=ax, color='b')
-    ax.set_box_aspect(0.33)
-    ax.set_title('Time series for the basin', size=15)
-    ax.set_ylabel('TWS anomaly in mm ', size=15)
-    plt.tight_layout()
-    
-    return alpha, ds_area_w
+    from pyshbundle.hydro import area_weighting
+    # area_weighting returns the area of each grid in m^2 for the grid resolution specified
+    temp_weighted=temp.copy()
+    temp_weighted['tws']=temp['tws']*area_weighting(gs)
+
+    ''' add projection system to nc '''
+    basin_tws = temp_weighted.rio.write_crs("EPSG:4326", inplace=True)
+    basin_tws = basin_tws.rio.set_spatial_dims(x_dim="lon", y_dim="lat", inplace=True)
+            
+    # mask data with shapefile
+    basin_tws = basin_tws.rio.clip(shp_basin.geometry.apply(mapping), shp_basin.crs,drop=True)
+    basin_avg_tws=basin_tws.sum(dim=('lon','lat'), skipna=True)/basin_area  #basin average tws
+
+    basin_tws=basin_tws.drop_vars('spatial_ref')
+    basin_avg_tws=basin_avg_tws.drop_vars('spatial_ref')
+
+    return basin_tws, basin_avg_tws

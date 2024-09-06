@@ -43,25 +43,28 @@
 import numpy
 
 def sc2cs(field):
-    """converts the rectangular $(L+1) \times (2L+1)$ matrix FIELD, containing
-    spherical harmonics coefficients in /S|C\ storage format into a 
-    square (L+1)x(L+1) matrix in |C\S| format.
+    """Converts SH coefficients from SC to CS format
+    
+    converts the rectangular $(L+1) * (2L+1)$ matrix FIELD, containing
+    spherical harmonics coefficients in SC storage format into a 
+    square (L+1)x(L+1) matrix in CS format.
 
-    Parameters:
-        field (numpy.ndarray()):
-            the rectangular (L+1)x(2L+1) matrix FIELD, containing
-            spherical harmonics coefficients in /S|C\ storage format
+    Parameters
+    ----------
+    field : numpy.ndarray
+    the rectangular (L+1)x(2L+1) matrix, containing the
+    spherical harmonics coefficients in SC storage format
         
-    Returns: 
-        cs (numpy.ndarray): 
-            square (L+1)x(L+1) matrix in |C\S| format
+    Returns
+    ----------
+    cs : numpy.ndarray
+        square (L+1)x(L+1) matrix in CS format
     
     References:
         See the SHBundle docs or PySHBundle docs for more info about SH coeff. storage and retrival formats being implementd.
 
     Examples:
-        >>> cs_fmt = sc2cs(field)
-        TO DO: show suitable output
+        sc2cs(field)
     """
 
     rows = len(field)

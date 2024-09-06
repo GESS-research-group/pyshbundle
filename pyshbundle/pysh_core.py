@@ -1,34 +1,82 @@
 # Core functionalities of PySHBundle
-# Curator: Abhishek Mhamane
+# Curator: Abhishek Mhamane, Vivek Kumar Yadav
+
+# - - - - - - - - - - - - - - 
+# License:
+#    This file is part of PySHbundle.
+#    PySHbundle is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# Acknowledgement Statement:
+#    Please note that PySHbundle has adapted the following code packages, 
+#    both licensed under GNU General Public License
+#       1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
+
+#       2. Downscaling GRACE Total Water Storage Change using Partial Least Squares Regression
+#          https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
+    
+# Key Papers Referred:
+#    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
+#       A data‐driven approach for repairing the hydrological catchment signal damage 
+#       due to filtering of GRACE products. Water Resources Research, 
+#       53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
+
+#    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
+#       Downscaling GRACE total water storage change using 
+#       partial least squares regression. Scientific data, 8(1), 95.
+#       https://doi.org/10.1038/s41597-021-00862-6
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
 
 import numpy as np
 import numpy.matlib as npm
 import scipy as sc
-from scipy import sparse
 from scipy import signal
 from scipy import linalg
 
 from os import chdir, getcwd
 
-from pyshbundle.conv_sh import cs2sc, sc2cs
-from pyshbundle.shutils import normalklm, PLM, iplm, eigengrav, ispec, Gaussian, naninterp, neumann
+from pyshbundle.reshape_SH_coefficients import cs2sc, sc2cs
+from pyshbundle.shutils import normalklm, plm, iplm, eigengrav, ispec, Gaussian, naninterp, neumann
 
 
-def GSHS(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
-    """GSHS - Global Spherical Harmonic Synthesis
+def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
+    """gshs - Global Spherical Harmonic Synthesis
 
-    Args:
-        field (_type_): set of SH coefficients, either in SC-triangle or CS-square format
-        quant (str, optional): defining the field quantity. Defaults to 'none'.
-        grd (str, optional): defining the grid. Defaults to 'mesh'.
-        n (int, optional): _description_. Defaults to -9999.
-        h (int, optional): _description_. Defaults to 0.
-        jflag (int, optional): _description_. Defaults to 1.
+    Parameters
+    ----------
+    field : numpy.ndarray
+        Matrix of SH coefficients, either in SC-triangle or CS-square format
+    quant : (str, optional)
+        defining the field quantity. Defaults to 'none'.
+    grd : (str, optional)
+        defining the grid. Defaults to 'mesh'.
+    n : (int, optional) 
+        Defaults to -9999.
+    h : (int, optional)
+        Defaults to 0.
+    jflag : (int, optional)
+        Defaults to 1.
     
-    Returns:
-        f (np.ndarray): the global field
-        theRAD (): vector of co-latitudes [rad]
-        lamRAD (): vector of longitudes [rad]
+    Returns
+    ----------
+    f : numpy.ndarray)
+        the global Spherical Harmonics feild field
+    theRAD numpy.array
+        vector of co-latitudes in radians
+    lamRAD : numpy.array
+        vector of longitudes in radians
 
     Raises:
         Exception: Check format of the field
@@ -47,6 +95,7 @@ def GSHS(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     
     Author:
         Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+        Vivek Kumar Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
 
     wd = getcwd()
@@ -82,11 +131,11 @@ def GSHS(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     dt = np.pi/n
     
     if grd == 'pole' or grd == 'mesh':
-        theRAD = np.arange(0, np.pi+dt*0.5, dt, dtype='longdouble')
-        lamRAD = np.arange(0, 2*np.pi, dt, dtype='longdouble')
+        theRAD = np.arange(0, np.pi+dt*0.5, dt, dtype='float')
+        lamRAD = np.arange(0, 2*np.pi, dt, dtype='float')
     elif grd == 'block' or grd == 'cell':
-        theRAD = np.arange(dt/2, np.pi + dt*0.5, dt, dtype='longdouble')
-        lamRAD = np.arange(dt/2, 2*np.pi + dt*0.5, dt, dtype='longdouble')
+        theRAD = np.arange(dt/2, np.pi + dt*0.5, dt, dtype='float')
+        lamRAD = np.arange(dt/2, 2*np.pi + dt*0.5, dt, dtype='float')
     else:
         raise Exception("Incorrect grid type input")
     
@@ -95,12 +144,12 @@ def GSHS(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     
     
 
-#    % -------------------------------------------------------------------------
-#% Preprocessing on the coefficients: 
-#%    - subtract reference field (if jflag is set)
-#%    - specific transfer
-#%    - upward continuation
-#% -------------------------------------------------------------------------
+#   -------------------------------------------------------------------------
+#   Preprocessing on the coefficients:
+        # - subtract reference field (if jflag is set)
+        # - specific transfer
+        # - upward continuation
+#   -------------------------------------------------------------------------
     
     if jflag:
         field = field - cs2sc(normalklm(lmax+1))
@@ -108,30 +157,30 @@ def GSHS(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     l = np.arange(0, lmax+1)
     transf = np.array([eigengrav(lmax, quant, h)])[0, :, :].T
     
-    field = field * np.matmul(transf, np.ones((1, 2*lmax+1)), dtype='longdouble')
+    field = field * np.matmul(transf, np.ones((1, 2*lmax+1)), dtype='float')
     
     
-    '''
-    % -------------------------------------------------------------------------
-% Size declarations and start the waitbar:
-% Note that the definition of dlam causes straight zero-padding in case N > L.
-% When N < L, there will be zero-padding up to the smallest integer multiple
-% of N larger than L. After the Fourier transformation (see below), the
-% proper samples have to be picked out, with stepsize dlam.
-% -------------------------------------------------------------------------
-    '''
+
+# -------------------------------------------------------------------------
+        # Size declarations and start the waitbar:
+        # Note that the definition of dlam causes straight zero-padding in case N > L.
+        # When N < L, there will be zero-padding up to the smallest integer multiple
+        # of N larger than L. After the Fourier transformation (see below), the
+        # proper samples have to be picked out, with stepsize dlam.
+# -------------------------------------------------------------------------
+
     
     dlam = int(np.ceil(lmax/n))             #longitude step size
     abcols = dlam*n + 1                     #columns required in A and B
-    a = np.zeros((nlat, int(abcols)), dtype='longdouble')
-    b = np.zeros((nlat, int(abcols)), dtype='longdouble')
+    a = np.zeros((nlat, int(abcols)), dtype='float')
+    b = np.zeros((nlat, int(abcols)), dtype='float')
      
 
 
     m = 0
     c = field[m:lmax+1, lmax+m] 
     l = np.array([np.arange(m,lmax+1)])
-    p = PLM(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
+    p = plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
     a[:, m] = np.dot(p,c) 
     b[:, m] = np.zeros(nlat) 
     
@@ -142,26 +191,27 @@ def GSHS(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
         s = field[m:lmax+1,lmax-m]
         
         l = np.array([np.arange(m,lmax+1)])
-        p = PLM(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
+        p = plm(l, m, theRAD, nargin = 3, nargout = 1)[:,:,0]
         a[:, m] = np.dot(p,c)
         b[:, m] = np.dot(p,s)
         
     del field
-    '''
-     -------------------------------------------------------------------------
- The second synthesis step consists of an inverse Fourier transformation
- over the rows of a and b. 
- In case of 'block', the spectrum has to be shifted first.
- When no zero-padding has been applied, the last b-coefficients must be set to
- zero. Otherwise the number of longitude samples will be 2N+1 instead of 2N.
- For N=L this corresponds to setting SLL=0!
- -------------------------------------------------------------------------
-    '''
+
+
+#   -------------------------------------------------------------------------
+        # The second synthesis step consists of an inverse Fourier transformation
+        # over the rows of a and b. 
+        # In case of 'block', the spectrum has to be shifted first.
+        # When no zero-padding has been applied, the last b-coefficients must be set to
+        # zero. Otherwise the number of longitude samples will be 2N+1 instead of 2N.
+        # For N=L this corresponds to setting SLL=0!
+#  -------------------------------------------------------------------------
+
 
     if grd =='block' or grd == 'cell': 
       m      = np.arange(0,abcols,1)
-      cshift = np.array([np.ones(nlat)], dtype='longdouble').T * np.array([np.cos(m*np.pi/2/n)], dtype='longdouble');	# cshift/sshift describe the 
-      sshift = np.array([np.ones(nlat)], dtype='longdouble').T * np.array([np.sin(m*np.pi/2/n)], dtype='longdouble');	# half-blocksize lambda shift.
+      cshift = np.array([np.ones(nlat)], dtype='float').T * np.array([np.cos(m*np.pi/2/n)], dtype='float');	# cshift/sshift describe the 
+      sshift = np.array([np.ones(nlat)], dtype='float').T * np.array([np.sin(m*np.pi/2/n)], dtype='float');	# half-blocksize lambda shift.
       atemp  =  cshift*a + sshift*b
       b      = -sshift*a + cshift*b
       a      = atemp
@@ -182,16 +232,23 @@ def GSHS(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
 
 
 def gsha(f, method: str, grid: str = None, lmax: int = -9999):
-    """ GSHA - Global Spherical Harmonic Analysis
+    """ GSHA - Global Spherical Harmonic Analysis, inverse of GSHS.
 
-    Args:
-        f (np.ndarray): global field of size $(l_{max} + 1) * 2 * l_{max}$ or $l_{max} * 2 * l_{max}$
-        method (str): method to be used
-        grid (str, optional): choose between 'block' or 'cell'. Defaults to None.
-        lmax (int, optional): maximum degree of development. Defaults to -9999.
+    Parameters
+    ----------
+    f : numpy.ndarray
+        Global field of size $(l_{max} + 1) * 2 * l_{max}$ or $l_{max} * 2 * l_{max}$
+    method : str
+        Method to be used.
+    grid : (str, optional)
+        choose between 'block' or 'cell'. Defaults to None.
+    lmax : (int, optional)
+        Maximum degree of development. Defaults to -9999.
 
-    Returns:
-        np.ndarray: Clm, Slm in |C\S| format
+    Returns
+    ----------
+    np.ndarray
+        Spherical harmonics coefficients Clm, Slm in |C\S| format
 
     Raises:
         ValueError: grid argument can only be 'block' or 'cell'
@@ -202,6 +259,11 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
         ValueError: Block mean method ONLY on a ''block''/''cell'' GRID
         ValueError: Maximum degree of development is higher than number of rows of input.
     
+    REMARKS:
+    TBD - Zlm-functions option
+        - eigengrav, GRS80
+        - When 'pole' grid, m = 1 yields singular Plm-matrix!
+
     Uses:
         `plm`, `neumann`, `iplm`, `sc2cs`
     
@@ -249,7 +311,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
             if len(gx.shape) == 1:
                 gx = gx.reshape(gx.shape[0],1)
         else:
-            raise ValueError("Grid type entered is not right")
+            raise ValueError("Grid type entered is incorrect")
     else:
         raise TypeError("Invalid size of matrix F")
     
@@ -280,8 +342,8 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
     # Init
     
     L = n
-    clm = np.zeros((L+1, L+1), dtype='longdouble')
-    slm = np.zeros((L+1, L+1), dtype='longdouble')
+    clm = np.zeros((L+1, L+1), dtype='float')
+    slm = np.zeros((L+1, L+1), dtype='float')
     
     
     # First step of analysis
@@ -328,7 +390,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
             l = np.arange(m,L+1).reshape(L+1-m, 1)
             l = l.T
             
-            p = PLM(l,m,theRAD, 3, 1)
+            p = plm(l,m,theRAD, 3, 1)
             p = p[:,:,0]
             ai = a[:, m]
             bi = b[:, m]
@@ -345,7 +407,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
             l = np.arange(m, L+1).reshape(L+1-m, 1)
             l = l.T
             
-            p = PLM(l,m,theRAD, 3, 1)
+            p = plm(l,m,theRAD, 3, 1)
             
             ai = a[:, m]
             bi = b[:, m]
@@ -360,7 +422,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
             l = np.arange(m, L+1).reshape(L+1-m, 1)
             l = l.T
             
-            p = PLM(l,m,theRAD, 3, 1)
+            p = plm(l,m,theRAD, 3, 1)
             
             ai = a[:, m]
             bi = b[:, m]
@@ -373,7 +435,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
             l = np.arange(m, L+1).reshape(L+1-m, 1)
             l = l.T
             
-            p = PLM(l,m,theRAD, 3, 1)
+            p = plm(l,m,theRAD, 3, 1)
             
             ai = a[:, m]
             bi = b[:, m]
@@ -406,8 +468,6 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
     cs = cs[:int(lmax+1), :int(lmax+1)]
     
     
-    # np.save('/path/csRb.npy',cs)
-    
     return cs
 
 
@@ -415,12 +475,17 @@ def PhaseCalc(fts, ffts):
     """calculates the phase difference between two time series based on the
     Hilbert transform method explained by Phillip et al.
 
-    Args:
-        fts (np.ndarray): _description_
-        ffts (np.ndarray): _description_
+    Parameters
+    ----------
+    fts : numpy.array
+        time-series 1
+    ffts : numpy.narray
+        time-series 2
 
-    Returns:
-        _type_: _description_
+    Returns
+    ----------
+    numpy.ndarray
+        Phase difference between the two time series
     
     References:
         1. Phillips, T., R. S. Nerem, B. Fox-Kemper, J. S. Famiglietti, and B. Rajagopalan (2012),
@@ -464,11 +529,14 @@ def PhaseCalc(fts, ffts):
 def deg_to_rad(deg: float):
     """Converts angle from degree to radian
 
-    Args:
-        deg (float): Angle in degree
+    Parameters
+    ----------
+    deg : float
+        Angle in degree
 
-    Returns:
-        float: Angle in Radian
+    Returns
+    ----------
+    float: Angle in Radian
     
     Todo:
         + Inbuilt function available in numpy module
@@ -476,33 +544,46 @@ def deg_to_rad(deg: float):
     return deg * np.pi/180
 
 def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
-    """_summary_
+    """Signal leakage correction using data-driven methods
 
-    Args:
-        F (_type_): a cell matrix with one column containing SH coefficients
-        cf (_type_): the column in F that contains SH coefficients from GRACE
-        GaussianR (_type_): radius of the Gaussian filter (recommened = 400)
-        basins (_type_): mask functions of basin, a cell data format with one
-                        column and each entry is a 360 x 720 matrix with 1 inside the
-                        catchment and 0 outside
+    When GRACE data is applied for hydrological studies, the signal leakage is a common
+    problem. This function uses data-driven methods to correct signal leakage in GRACE data.
+    Please refer to paper (1) above for more details
+
+
+    Parameters
+    ----------
+    F : numpy.ndarray
+        A cell matrix with one column containing SH coefficients
+    cf : int
+        the column in F that contains SH coefficients from GRACE
+    GaussianR : float
+        Radius of the Gaussian filter (recommened = 400)
+    basins : numpy.ndarray
+        mask functions of basin, a cell data format with one
+        column and each entry is a 360 x 720 matrix with 1 inside the
+        catchment and 0 outside
+
+    Returns
+    ----------
+    (every output has a size (number of months x basins))
+    RecoveredTWS : numpy.ndarray
+        Corrected data-driven time-series (Least Squares fit method)
+    RecoveredTWS2 : numpy.ndarray
+        Corrected data-driven time-series (shift and amplify method)
+    FilteredTS : numpy.ndarray
+        Gaussian filtered GRACE TWS time-series for all the basins. 
 
     Raises:
         Exception: corrected data-driven time-series (Least Squares fit method)
         Exception: corrected data-driven time-series (shift and amplify method)
         Exception: gaussian filtered GRACE TWS time-series for all the basins.
 
-    Returns:
-        _type_: _description_
-    
-    Todo:
-        + TypeError
-    
+
     Author:
         Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
     deg = 0.5
-    deg_rad = deg_to_rad(deg)
-    
     x = np.linspace(0, 360-deg, int(360/deg))
     y = np.linspace(0, 180-deg, int(180/deg))
     x1 = np.linspace(deg, 360, int(360/deg))
@@ -553,17 +634,17 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
     if l == cfield:
         for m in range(r):
             if flag_cs == 0:
-                Ft = cs2sc(f[m][0]).astype('longdouble') 
+                Ft = cs2sc(f[m][0]).astype('double') 
             else:
-                Ft = f[m][0].astype('longdouble') 
+                Ft = f[m][0].astype('double') 
                 
            
-            fFld__, _, _ = GSHS(Ft * filter_, qty, 'cell', int(180/deg), 0, 0) 
-            ffFld__, _, _ = GSHS((Ft * filter_ * filter_), qty, 'cell', int(180/deg), 0, 0)
+            fFld__, _, _ = gshs(Ft * filter_, qty, 'cell', int(180/deg), 0, 0) 
+            ffFld__, _, _ = gshs((Ft * filter_ * filter_), qty, 'cell', int(180/deg), 0, 0)
             
             if m == 0:
-                fFld = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble') 
-                ffFld = np.zeros((r, ffFld__.shape[0], ffFld__.shape[1]), dtype = 'longdouble')
+                fFld = np.zeros((r,fFld__.shape[0],fFld__.shape[1]), dtype='double') 
+                ffFld = np.zeros((r, ffFld__.shape[0], ffFld__.shape[1]), dtype='double')
                 
             fFld[m] = fFld__
             ffFld[m] = ffFld__
@@ -577,22 +658,22 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
         
     #Declaration of size of the vectors:
     cid = len(basins) #Here basins is a dictionary with each element storing nd array
-    tsleaktotalf = np.zeros([r, cid], dtype = 'longdouble')
-    tsleaktotalff = np.zeros([r, cid], dtype = 'longdouble')
+    tsleaktotalf = np.zeros([r, cid], dtype='double')
+    tsleaktotalff = np.zeros([r, cid], dtype='double')
     
-    ftsleaktotal = np.zeros([r, cid], dtype = 'longdouble')
-    fftsleaktotal = np.zeros([r, cid], dtype = 'longdouble')
+    ftsleaktotal = np.zeros([r, cid], dtype='double')
+    fftsleaktotal = np.zeros([r, cid], dtype='double')
     
-    lhat = np.zeros([r, cid], dtype = 'longdouble')
+    lhat = np.zeros([r, cid], dtype='double')
     
-    bfDevRegAv = np.zeros([r, cid], dtype = 'longdouble')
-    bbfDevRegAv = np.zeros([r, cid], dtype = 'longdouble')
+    bfDevRegAv = np.zeros([r, cid], dtype='double')
+    bbfDevRegAv = np.zeros([r, cid], dtype='double')
 
-    FilteredTS = np.zeros([r, cid], dtype = 'longdouble')
-    filfilts = np.zeros([r, cid], dtype = 'longdouble')
+    FilteredTS = np.zeros([r, cid], dtype='double')
+    filfilts = np.zeros([r, cid], dtype='double')
 
-    leakage = np.zeros([r, cid], dtype = 'longdouble')
-    leakager = np.zeros([r, cid], dtype = 'longdouble')   
+    leakage = np.zeros([r, cid], dtype='double')
+    leakager = np.zeros([r, cid], dtype='double')   
     
 
     
@@ -603,14 +684,14 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
         Rb = basins[rbasin][0] 
         csRb = gsha(Rb, 'mean', 'block', long/2) 
         csF = cs2sc(csRb[0:l, 0:l]) 
-        filRb_ = GSHS(csF * filter_, 'none', 'cell', int(long/2), 0, 0) 
+        filRb_ = gshs(csF * filter_, 'none', 'cell', int(long/2), 0, 0) 
         filRb = filRb_[0]
         kappa = (1-Rb) * filRb
          
         
     
-        fF = np.zeros((fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble')
-        ffF = np.zeros((fFld__.shape[0],fFld__.shape[1]), dtype = 'longdouble')
+        fF = np.zeros((fFld__.shape[0],fFld__.shape[1]), dtype='double')
+        ffF = np.zeros((fFld__.shape[0],fFld__.shape[1]), dtype='double')
         for m in range(0,r):
             
             
@@ -729,5 +810,3 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
     RecoveredTWS2 = FilteredTS - lhat - devint
     
     return RecoveredTWS, RecoveredTWS2, FilteredTS
-        
-          

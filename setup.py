@@ -2,58 +2,40 @@
 
 """The setup script."""
 
-import io
-from os import path as op
 from setuptools import setup, find_packages
 
 with open('README.md', encoding='utf8') as readme_file:
     readme = readme_file.read()
 
-here = op.abspath(op.dirname(__file__))
-
-# get the dependencies and installs
-with io.open(op.join(here, "requirements.txt"), encoding="utf-8") as f:
-    all_reqs = f.read().split("\n")
-
-install_requires = [x.strip() for x in all_reqs if "git+" not in x]
-dependency_links = [x.strip().replace("git+", "") for x in all_reqs if "git+" not in x]
-
-requirements = [ ]
-
-setup_requirements = [ ]
-
-test_requirements = [ ]
-
+install_requires = ['pip', 'numpy', 'pandas','netCDF4', 'scipy',
+                    'xarray', 'julian', 'geopandas',
+                    'matplotlib', 'rasterio', 'shapely', 'tqdm','cartopy', 
+                    'ipykernel', 'jupyterlab', 'rioxarray',],
 setup(
-    author="Amin Shakya",
-    author_email='aminshk50@gmail.com',
-    python_requires='>=3.7',
-    classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
-        'Natural Language :: English',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: 3.10',
-    ],
+    name='pyshbundle',
+    version='0.3.0',
+    python_requires='>=3.9',
+    packages=find_packages(include=['pyshbundle', 'pyshbundle.*']),
     description="PySHbundle: A Python implementation of GRACE Spherical Harmonics Synthesis MATLAB codes SHbundle",
-    package_data={"my_package": ["data/*"]},
-    install_requires=install_requires,
-    dependency_links=dependency_links,
     license="GNU General Public License v3",
+    author="Vivek Kumar Yadav",
+    author_email='viveky@iisc.ac.in',
+    url='https://github.com/lsmvivek/pyshbundle',
+    install_requires=install_requires,
     long_description=readme,
     long_description_content_type='text/markdown',
+    package_data={'pyshbundle': ['data/*/*',],},
     include_package_data=True,
-    keywords='pyshbundle',
-    name='pyshbundle',
-    packages=find_packages(include=['pyshbundle', 'pyshbundle.*']),
-    setup_requires=setup_requirements,
+    keywords=['pyshbundle', 'GRACE', 'Spherical Harmonics', 'Synthesis Harmonics Synthesis', 'Spherical Harmonics Analysis'],
     test_suite='tests',
-    tests_require=test_requirements,
-    url='https://github.com/mn5hk/pyshbundle',
-    version='1.0.0',
+    tests_require=install_requires,
     zip_safe=False,
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.12',
+    ],
 )

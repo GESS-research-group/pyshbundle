@@ -1,62 +1,482 @@
 # new implementationhek for reading files - combining some asspects from existing reader_replacer codes
 # Author: Abhishek Mhamane, MS-Research Geoinformatics, IIT Kanpur
+# 2024-06-10, cleaned, updated: Vivek Kumar Yadav, IISc Bengaluru
 
+# - - - - - - - - - - - - - - 
+# License:
+#    This file is part of PySHbundle.
+#    PySHbundle is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
 
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# Acknowledgement Statement:
+#    Please note that PySHbundle has adapted the following code packages, 
+#    both licensed under GNU General Public License
+#       1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
+
+#       2. Downscaling GRACE Total Water Storage Change using Partial Least Squares Regression
+#          https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
+    
+# Key Papers Referred:
+#    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
+#       A data‐driven approach for repairing the hydrological catchment signal damage 
+#       due to filtering of GRACE products. Water Resources Research, 
+#       53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
+
+#    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
+#       Downscaling GRACE total water storage change using 
+#       partial least squares regression. Scientific data, 8(1), 95.
+#       https://doi.org/10.1038/s41597-021-00862-6
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+from tqdm import tqdm, trange
+from datetime import datetime, timedelta
+# from pyshbundle.reshape_SH_coefficients import sc2cs
 import julian
 import gzip
+import numpy as np
 import re
 import pkg_resources
 
-import numpy as np
-from copy import deepcopy
-from datetime import datetime, timedelta
+def extract_SH_data(file_path, source):
+    """Extracts the spherical harmonic coefficients from all the given files
 
-'''
-def clm2cs_new(data):
-    """This is an other implementation of clm2cs which uses the clm2sc and then converts using
-    sc2cs functions
+    Currently supports JPL, CSR, and ITSG data sources ONLY.
+    Extracts the spherical harmonic coefficients from the given file and returns them in a dictionary.
+    Uses the degree and order of a coefficient as the key and the coefficient values as the value.
     
-    Args:
-        data (_type_): _description_
-    
-    Returns:
-        numpy.ndarray: Spherical harmonic coefficients in |C\S| format
-        numpy.ndarray: Standard deviations associated with SH data arranged in |C\S| format
+    Parameters
+    ----------
+    file_path : str
+        Absolute path to the file
+    source : str
+        Source of the data (JPL, CSR, or ITSG)
+
+    Returns
+    ----------
+    dict
+        Dictionary containing the coefficients and time coverage start and end dates
     """
-    # read the data from clm to sc format
-    sc_mat, devsc_mat = clm2sc(data)
+    # Initialize an empty dictionary to store the coefficients and dates
+    data = {
+        'coefficients': {},
+        'time_coverage_start': None,
+        'time_coverage_end': None
+    }
 
-    # number of files stacked
-    num_files = np.shape(sc_mat)[0]
-    r, c = np.shape(sc_mat)[1:]
 
-    # cs will be a square matrix
-    cs_mat = np.zeros((num_files, r, r))
-    devcs_mat = np.zeros((num_files, r, r))
+    # Regular expression pattern to match the lines with coefficients
+    coeff_pattern_csr = re.compile(r'^GRCOF2\s+(\d+)\s+(\d+)\s+([-+]?\d*\.\d+E[-+]?\d+)\s+([-+]?\d*\.\d+E[-+]?\d+)\s+([-+]?\d*\.\d+E[-+]?\d+)\s+([-+]?\d*\.\d+E[-+]?\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)\s+')
+    coeff_pattern_jpl = re.compile(r'^GRCOF2\s+(\d+)\s+(\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)')
+    coeff_pattern_itsg = re.compile(r'^gfc\s+(\d+)\s+(\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)$')
 
-    for ith_file in range(num_files):
-        cs_mat[ith_file, :, :] = sc2cs(sc_mat[ith_file, :, :])
-        devcs_mat[ith_file, :, :] = sc2cs(devsc_mat[ith_file, :, :])
 
-    return cs_mat, devcs_mat
-'''
+    if source=='jpl': coeff_pattern=coeff_pattern_jpl
+    elif source=='csr': coeff_pattern=coeff_pattern_csr
+    elif source=='itsg': coeff_pattern=coeff_pattern_itsg
+    else: raise ValueError("Invalid source, pyshbundle only supports JPL, CSR, and ITSG")
 
-def read_jpl(file_path: str):
+
+    # Regular expression patterns to match the time coverage start and end lines
+    start_pattern = re.compile(r'time_coverage_start\s*:\s*([\d\-T:.]+)')
+    end_pattern = re.compile(r'time_coverage_end\s*:\s*([\d\-T:.]+)')
+    timeindex_itsg = re.compile(r'^modelname\s+(.+)$')
+
+
+    # Open and read the gzipped file to extract the time coverage start and end dates
+    if source=='itsg':
+        with open(file_path, 'rt') as file:
+            for line in file:
+                # Strip any leading/trailing whitespace characters
+                line = line.strip()
+
+                # Search for time coverage start
+                start_match = timeindex_itsg.search(line)
+                if start_match:
+                    data['time_coverage_start'] = start_match.group(1)
+                
+                # Break the loop if both dates are found
+                if data['time_coverage_start']:
+                    break
+            # File is automatically closed here due to the 'with' statement
+        with open(file_path, 'rt') as file:
+            for line in file:
+                # Strip any leading/trailing whitespace characters
+                line = line.strip()
+                # print(line)
+
+                # Search for the coefficient pattern in the line
+                coeff_match = coeff_pattern.search(line)
+                if coeff_match:
+                    # Extract degree, order, Clm, and Slm
+                    degree = int(coeff_match.group(1))
+                    order = int(coeff_match.group(2))
+                    clm = np.double(coeff_match.group(3))
+                    slm = np.double(coeff_match.group(4))
+                    clm_sdev = np.double(coeff_match.group(5))
+                    slm_sdev = np.double(coeff_match.group(6))
+                    
+                    # Store the coefficients in the dictionary
+                    data['coefficients'][(degree, order)] = {'Clm': clm, 'Slm': slm,
+                                                            'Clm_sdev': clm_sdev, 'Slm_sdev': slm_sdev}
+
+
+
+    elif source=='csr' or source=='jpl':
+        with gzip.open(file_path, 'rt') as file:   # gzip.open
+            for line in file:
+                # Strip any leading/trailing whitespace characters
+                line = line.strip()
+
+                # Search for time coverage start
+                start_match = start_pattern.search(line)
+                if start_match:
+                    data['time_coverage_start'] = start_match.group(1)
+                
+                # Search for time coverage end
+                end_match = end_pattern.search(line)
+                if end_match:
+                    data['time_coverage_end'] = end_match.group(1)
+                
+                # Break the loop if both dates are found
+                if data['time_coverage_start'] and data['time_coverage_end']:
+                    break
+            # File is automatically closed here due to the 'with' statement
+
+
+        # Open and read the gzipped file again to extract the coefficients
+        with gzip.open(file_path, 'rt') as file:
+            for line in file:
+                # Strip any leading/trailing whitespace characters
+                line = line.strip()
+                # print(line)
+
+                # Search for the coefficient pattern in the line
+                coeff_match = coeff_pattern.search(line)
+                if coeff_match:
+                    # Extract degree, order, Clm, and Slm
+                    degree = int(coeff_match.group(1))
+                    order = int(coeff_match.group(2))
+                    clm = np.double(coeff_match.group(3))
+                    slm = np.double(coeff_match.group(4))
+                    clm_sdev = np.double(coeff_match.group(5))
+                    slm_sdev = np.double(coeff_match.group(6))
+                    
+                    # Store the coefficients in the dictionary
+                    data['coefficients'][(degree, order)] = {'Clm': clm, 'Slm': slm,
+                                                            'Clm_sdev': clm_sdev, 'Slm_sdev': slm_sdev}
+    return data
+
+
+def extract_deg1_coeff_tn13(file_path):
+    """Extracts the degree 1 coefficients from the given TN-13 file
+
+    Ensure the TN-13 file used is the one recommended by respective data centres (JPL, CSR, or ITSG).
+    Similar to extract_SH_data, but specifically for TN-13 files.
+    Returns degree 1 replacement coefficients as a dictionary.
+    Uses the degree and order of a coefficient as the key and the coefficient values as the value.
+    
+    Parameters
+    ----------
+    file_path : str
+        Absolute path to the file
+    
+    Returns
+    ----------
+    dict
+        Dictionary containing the degree 1 (order 1) coefficients and time coverage start and end dates
+    """
+
+    data_dict = {}
+    
+    with open(file_path, 'rt') as file:
+        lines = file.readlines()
+        for line in lines:
+
+            # Extract data using regex
+            pattern = re.compile(r'^GRCOF2\s+(\d+)\s+(\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+([-+]?\d*\.\d+e[-+]?\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)')
+            match = pattern.match(line)
+            
+            if match:
+                degree = int(match.group(1))
+                order = int(match.group(2))
+                Clm = float(match.group(3))
+                Slm = float(match.group(4))
+                Clm_sdev = np.double(match.group(5))
+                Slm_sdev = np.double(match.group(6))
+                epoch_begin = match.group(7)
+                epoch_end = match.group(8)
+
+                # Use epoch start as key but in yyyy-mm-dd format
+                epoch_key=datetime.strptime(epoch_begin, '%Y%m%d.%H%M%S').strftime('%Y-%m')
+                data_dict[epoch_key, degree, order] = {
+                    'degree': degree,
+                    'order': order,
+                    'Clm': Clm,
+                    'Slm': Slm,
+                    'Clm_sdev': Clm_sdev,
+                    'Slm_sdev': Slm_sdev,
+                    'epoch_begin': epoch_begin,
+                    'epoch_end': epoch_end,
+                }
+    # Print a sample of the data to check if it's parsed correctly
+    # for key in sorted(data_dict.keys())[:5]:  # print first 5 entries
+    #     print(f"{key}: {data_dict[key]}")
+    return data_dict
+
+def extract_deg2_3_coeff_tn14(file_path):
+    """Extracts the degree 2 and 3 coefficients from the given file
+
+    Ensure the TN-14 file used is the one recommended by respective data centres (JPL, CSR, or ITSG).
+    Similar to extract_SH_data, but specifically for TN-14 files.
+    Returns degree 2, 3 replacement coefficients as a dictionary.
+    Uses the degree and order of a coefficient as the key and the coefficient values as the value.
+    
+    Parameters
+    ----------
+    file_path : str
+        Absolute path to the file
+    
+    Returns
+    ----------
+    dict
+        Dictionary containing the degree 2,3 (order 0) coefficients and time coverage start and end dates
+    """
+    data_dict = {}
+    
+    with open(file_path, 'rt') as file:
+        lines = file.readlines()
+        for line in lines:
+
+            # Extract data using regex
+            pattern = re.compile(
+                r'(\d+\.\d+)\s+(\d+\.\d+)\s+([-\d.eE+]+)\s+([-\d.eE+]+)\s+([-\d.eE+]+)\s+([-\d.eE+]+|NaN)?\s+([-\d.eE+]+|NaN)?\s+([-\d.eE+]+|NaN)?\s+(\d+\.\d+)\s+(\d+\.\d+)')
+            match = pattern.match(line)
+            
+            if match:
+                mjd_start = float(match.group(1))
+                year_frac_start = float(match.group(2))
+                c20 = np.double(match.group(3))
+                c20_mean_diff = np.double(match.group(4))
+                c20_sigma = np.double(match.group(5))
+                c30 = match.group(6)
+                c30_mean_diff = match.group(7)
+                c30_sigma = match.group(8)
+                mjd_end = float(match.group(9))
+                year_frac_end = float(match.group(10))
+
+                # Only add C30 if it exists (not)
+                if c30.lower() != 'nan':
+                    c30 = np.double(c30)
+                    c30_mean_diff = np.double(c30_mean_diff)
+                    c30_sigma = np.double(c30_sigma)
+                else:
+                    c30 = None
+                    c30_mean_diff = None
+                    c30_sigma = None
+
+                # Use mjd as key but in yyyy-mm-dd format
+                mjd_key = julian.from_jd(mjd_start, fmt='mjd').date().strftime('%Y-%m')
+                data_dict[mjd_key] = {
+                    'year_frac_start': year_frac_start,
+                    'mjd_start': mjd_start,
+                    'c20': c20,
+                    'c20_mean_diff': c20_mean_diff,
+                    'c20_sigma': c20_sigma,
+                    'c30': c30,
+                    'c30_mean_diff': c30_mean_diff,
+                    'c30_sigma': c30_sigma,
+                    'mjd_end': mjd_end,
+                    'year_frac_end': year_frac_end
+                }
+    # Print a sample of the data to check if it's parsed correctly
+    # for key in sorted(data_dict.keys())[:5]:  # print first 5 entries
+    #     print(f"{key}: {data_dict[key]}")
+    return data_dict
+
+
+# def clm2cs_new(data):
+#     """This is an other implementation of clm2cs which uses the clm2sc and then converts using
+#     sc2cs functions
+
+#     Args:
+#         data (_type_): _description_
+#     """
+#     # read the data from clm to sc format
+#     sc_mat, devsc_mat = clm2sc(data)
+
+#     # number of files stacked
+#     num_files = np.shape(sc_mat)[0]
+#     r, c = np.shape(sc_mat)[1:]
+
+#     # cs will be a square matrix
+#     cs_mat = np.zeros((num_files, r, r))
+#     devcs_mat = np.zeros((num_files, r, r))
+
+#     for ith_file in range(num_files):
+#         cs_mat[ith_file, :, :] = sc2cs.sc2cs(sc_mat[ith_file, :, :])
+#         devcs_mat[ith_file, :, :] = sc2cs.sc2cs(devsc_mat[ith_file, :, :])
+    
+    
+#     return cs_mat, devcs_mat
+
+
+
+def read_GRACE_SH_paths(use_sample_files = 0):
+
+    """Returns path of data files, path of tn13 and path of tn14 replacement files
+
+    Parameters
+    ----------
+    use_sample_files : (int, optional)
+        Defaults to 0.
+
+    Raises:
+        Exception: _description_
+
+    Returns
+    ----------
+    path_sh, path_tn13, path_tn14, source : str
+        Path of data files, path of tn13 and path of tn14 replacement files, 
+        source of the SH files (JPL, ITSG or CSR)
+    
+    Remarks:
+        The purpose of this script is to,
+        firstly read what the data source is (JPL, CSR or ITSG)
+        read file path for GRACE L2 spherical harmonics inputs,
+        read replacement files for tn13 and tn14
+        source of the SH files (JPL, ITSG or CSR)
+    """
+    #Created on Fri Feb  17 2023
+    #@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+    
+    print("This program supports working with GRACE L2 Spherical harmonics data from the following centers: CSR, JPL and ITSG")
+    print("Instructions to download data may be referred to in https://github.com/mn5hk/pyshbundle/blob/main/docs/index.md#how-to-download-data")
+    source = str(input("Enter the source of L2 SH coeffs code(jpl, csr, gfz): "))
+
+    if use_sample_files ==1:
+        
+        print("You have chosen to use sample replacement files.")
+        print("The replacement files for the TN13 and TN14 Args have been preloaded into the program")
+        print("Due to the size of the GRACE SH files, these have not been preloaded into the program")
+        print("You may download the GRACE SH L2 files from the link below. Please ensure to download the files as per your selection of source in the prior step")
+        print("Download sample files from: https://github.com/mn5hk/pyshbundle/tree/main/sample_input_data")
+    path_sh = str(input("Enter the path to the folder with SH L2 data"))
+
+    
+    if str.upper(source) == 'JPL':
+        if use_sample_files == 1:
+            path_tn13 = pkg_resources.resource_filename('pyshbundle', 'data/sample_JPL_TN_files/TN-13_GEOC_JPL_RL06.txt')
+            path_tn14 = pkg_resources.resource_filename('pyshbundle', 'data/sample_JPL_TN_files/TN-14_C30_C20_GSFC_SLR.txt')
+            print("Successfully loaded preloaded TN13 and TN14 replacement files for JPL")
+        else:
+            path_tn13 = str(input("Enter the path to the file for tn13 replacement in .txt format"))
+            path_tn14 = str(input("Enter the path to the file for tn14 replacement in .txt format"))
+            print("Successfully loaded TN13 and TN14 replacement files for JPL")
+
+    elif str.upper(source) == 'CSR':
+        if use_sample_files == 1:
+            path_tn13 = pkg_resources.resource_filename('pyshbundle', 'data/sample_CSR_TN_files/TN-14_C30_C20_SLR_GSFC.txt')
+            path_tn14 = pkg_resources.resource_filename('pyshbundle', 'data/sample_CSR_TN_files/TN-13_GEOC_CSR_RL06.1.txt')
+            print("Successfully loaded preloaded TN13 and TN14 replacement files for CSR")
+        else:
+            path_tn13 = str(input("Enter the path to the file for tn13 replacement in .txt format"))
+            path_tn14 = str(input("Enter the path to the file for tn14 replacement in .txt format"))
+            print("Successfully loaded TN13 and TN14 replacement files for CSR")
+
+    elif str.upper(source) == 'ITSG':
+        if use_sample_files == 1:
+            path_tn13 = pkg_resources.resource_filename('pyshbundle', 'data/sample_ITSG_TN_files/TN-13_GEOC_CSR_RL06.1.txt')
+            path_tn14 = pkg_resources.resource_filename('pyshbundle', 'data/sample_ITSG_TN_files/TN-14_C30_C20_SLR_GSFC.txt')
+            print("Successfully loaded preloaded TN13 and TN14 replacement files for ITSG")
+        else:
+            path_tn13 = str(input("Enter the path to the file for tn13 replacement in .txt format"))
+            path_tn14 = str(input("Enter the path to the file for tn14 replacement in .txt format"))
+            print("Successfully loaded TN13 and TN14 replacement files for ITSG")
+    else:
+        raise Exception("Source selection is incorrect. Please select between JPL, CSR or gfz")
+
+    return path_sh, path_tn13, path_tn14, source
+
+
+
+def load_longterm_mean(source = "", use_sample_mean = 0):
+    """Loads the long term mean values for the GRACE SH data
+
+    Parameters
+    ----------
+    source (str, optional): 
+        Source of data. Defaults to "".
+    use_sample_mean (int, optional)
+        Whether to use default long-mean values provided with the data. Defaults to 0.
+
+    Raises:
+        Exception: _description_
+
+    Returns
+    ----------
+    long_mean : str
+        path of the appropriate long term mean file
+    
+    Todo:
+        + Not sure if using "source = ''" is all right
+        + instead of base eception is can be ValueError
+    """
+    # @author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+    """The purpose of this script is to,
+        load longterm mean for our GRACE SH data
+
+        For this, we need to input the GRACE data source as well as the path to the longterm mean values
+        Data source may be CSR, JPL or ITSG.
+
+        For RL06, example data have been provided within the package. In case this option is chosen, the program directly returns the longterm mean values.
+
+        Returns the long_mean path
+    """
+
+    if use_sample_mean == 1:
+        print("Loading preloaded RL06 long term mean values")
+        print("Please ensure that your data is RL06 \nIf not, please manually input long term mean by setting use_sample_mean = 0")
+
+        if str.upper(source) == 'CSR':
+            long_mean = pkg_resources.resource_filename('pyshbundle', 'data/RL06_long_mean/SH_long_mean_csr.npy')
+        elif str.upper(source) == 'JPL':
+            long_mean = pkg_resources.resource_filename('pyshbundle', 'data/RL06_long_mean/SH_long_mean_itsg.npy')
+        elif str.upper(source) == 'ITSG':
+            long_mean = pkg_resources.resource_filename('pyshbundle', 'data/RL06_long_mean/SH_long_mean_jpl.npy')
+        else:
+            raise Exception("Incorrect selection of source")
+        print("Successfully loaded preloaded longterm means")
+    else:
+        print("Please download and provide the longterm GRACE SH mean values")
+        print("Instructions to download the longterm GRACE SH mean values may be referred to in https://github.com/mn5hk/pyshbundle/blob/main/docs/index.md#how-to-download-data")
+        long_mean = str(input("Enter the longterm mean for the SH values in the numpy (.npy) format"))
+        print("Successfully loaded path to long term mean:", long_mean)
+
+    return long_mean
+
+def parse_jpl_file(file_path: str):
     """Reads the spherical harmonic data provided by JPL
 
-    Args:
-        file_path (str): Absolute path to the file
-    
-    Returns:
-        dict: Header info in a structured dictionary
-        np.ndarray: SH coefficient data in form of a numpy n-dim array. Format is CLM.
-        set: Epoch start and end times as per the GRACE datafile. (eg. 20020519.0)
-
+    Parameters
+    ----------
+    file_path : str
+        Absolute path to the file
     """
     # ensure that the file path is valid then proceed
-
+    
     source = 'JPL'
-
+    
     # check if the file is ziped or not
 
     if file_path[-3:] == '.gz':
@@ -73,76 +493,69 @@ def read_jpl(file_path: str):
                     end_of_header_idx = i
                     break
 
-        # everything after the header is the numerical data
+        # everything after the header is the numerical data    
         header_info = info_lines[:end_of_header_idx]
-        jpl_data = info_lines[end_of_header_idx+1:]
 
         # parse the header strings to extract relavant metadata info
         jpl_header = parse_jpl_header(header_info)
 
-        # call the parse data function and create a dictionary or matrix
-        clm_mat, start_date, end_date = parse_jpl_data(jpl_data)
+        # parse the header strings to extract relavant metadata info
+        jpl_data = extract_SH_data(file_path, source='itsg')
 
-        # build a dictionary
+    return jpl_header, jpl_data
 
-        # Organize the data into either matrix, dataframe or dictionary format
+def parse_jpl_header(header_info):
 
-    return jpl_header, clm_mat, start_date, end_date
-
-
-def parse_jpl_header(header_info: list):
-    """Parses the header info and returns important metadata as a dictionary 
-
-    Args:
-        header_info (list): list of string representing each of the lines 
-    
-    Returns:
-        dict: Important/Relevant header info as a structured dictionary
-    """
-
-        # parse the header info passed by the reader in as list of bytes
+    # parse the header info passed by the reader in as list of bytes
     # create a dictionary with key = important params from header file
 
     header = {}
-
+    
     # important info from header file
-
+    # Dimension - Degree and Order
+    # normalization info
+    # permanent_tide_flag
+    # earth_gravity_param - G*M_earth with units and value
+    # mean_equator_radius - units and value
+    # processing_level
+    # product_version
+    # conventions
+    # institution
+    # title
+    # time_coverage_start
+    # time_coverage_end
+    # unused_days
+    
     normal_keys = ['title', 'institution', 'product_version',
-                   'processing_level', 'normalization', 'permanent_tide_flag',
-                   ]
+                     'processing_level', 'normalization', 'permanent_tide_flag',
+                    ]
     dimension_keys = ['degree', 'order']
-    date_time_keys = ['time_coverage_start',
-                      'time_coverage_end', 'unused_days']
+    date_time_keys = ['time_coverage_start', 'time_coverage_end', 'unused_days']
     physical_constant_keys = ['earth_gravity_param', 'mean_equator_radius']
-
+    
     for key in normal_keys:
         key_index_in_header = find_word(header_info, key)
         # print(f"{key} - header line = {key_index_in_header +1} value= {' '.join(parse_lines(header_info[key_index_in_header])[3:])[: -3]}")
-        header[key] = ' '.join(parse_lines(
-            header_info[key_index_in_header])[3:])[: -3]
+        header[key] = ' '.join(parse_lines(header_info[key_index_in_header])[3:])[: -3]
 
     for key in dimension_keys:
         key_index_in_header = find_word(header_info, key)
-        val = int(" ".join(parse_lines(
-            header_info[key_index_in_header], parse_fmt='\s+')[3:])[: -3])
+        val = int(" ".join(parse_lines(header_info[key_index_in_header], parse_fmt='\s+')[3:])[: -3])
         # print(f"{key} - {val}")
         header[key] = val
-
+    
     for key in date_time_keys:
-        # TODO: Look back and find what you meant....
+        # TODO: Look back and find what you meant.... 
         key_index_in_header = find_word(header_info, key)
         # find a way to make it date time object so it can be used later
         pass
-
+    
     for key in physical_constant_keys:
         key_index_in_header = find_word(header_info, key)
-
-        const_long_name = ' '.join(parse_lines(
-            header_info[key_index_in_header + 1])[3:])[: -3]
-        const_units = ' '.join(parse_lines(
-            header_info[key_index_in_header + 2])[3:])[: -3]
-        const_value = float(' '.join(parse_lines(
-            header_info[key_index_in_header + 3])[3:])[: -3])
+        
+        const_long_name = ' '.join(parse_lines(header_info[key_index_in_header + 1])[3:])[: -3]
+        const_units = ' '.join(parse_lines(header_info[key_index_in_header + 2])[3:])[: -3]
+        const_value = float(' '.join(parse_lines(header_info[key_index_in_header + 3])[3:])[: -3])
         const_dict = {'units': const_units, 'value': const_value}
         # returning a dict with value and corresponding units
         header[key] = const_dict
@@ -150,58 +563,7 @@ def parse_jpl_header(header_info: list):
     return header
 
 
-def parse_jpl_data(jpl_data: list):
-    """parses the numerical data from the list of strings read from the file
-
-    Args:
-        jpl_data (list): linewise data strings read from the file
-
-    Returns:
-        np.ndarray: A (n x 6) 2-d matrix representing the [degrer_l, order_m, C_lm, S_lm, sig_C_lm, sig_S_lm]
-        set: Epoch begin and stop dates stored as float (eg. 20020519.0)
-    """
-
-    column_headers = ['record_key', 'degree_index', 'order_index', 'clm', 'slm',
-                      'clm_std_dev', 'slm_std_dev', 'epoch_begin_time',
-                      'epoch_stop_time', 'solution_flags', 'solution_comment']
-
-    degree_index = []
-    order_index = []
-    clm = []
-    slm = []
-    clm_std_dev = []
-    slm_std_dev = []
-
-    # date format used is YYYYMMDD
-    # using set to avoid duplicates
-    epoch_begin_time = set()
-    epoch_stop_time = set()
-
-    for line in (jpl_data):
-        parsed_array = parse_lines(line, parse_fmt='\s+')
-
-        degree_index.append(int(parsed_array[1]))
-        order_index.append(int(parsed_array[2]))
-        clm.append(float(parsed_array[3]))
-        slm.append(float(parsed_array[4]))
-        clm_std_dev.append(float(parsed_array[5]))
-        slm_std_dev.append(float(parsed_array[6]))
-        # NOTE: YYYYMMDD strings typecasted to float values
-        epoch_begin_time.add(float(parsed_array[7]))
-        epoch_stop_time.add(float(parsed_array[8]))
-
-    clm_matrix = np.array([degree_index, order_index, clm, slm,
-                           clm_std_dev, slm_std_dev])
-
-    # output will be a [x, 6] rectangular matrix
-    # Taking transpose to achieve required shape
-
-    return clm_matrix.T, epoch_begin_time, epoch_stop_time
-
-
 def parse_lines(line, parse_fmt='\s+'):
-    # HELPER FUNCTIONS
-
     #  parses the liness and reutrns an array
     # '\s+' returns array with no whitespace
 
@@ -209,9 +571,7 @@ def parse_lines(line, parse_fmt='\s+'):
 
     return parsed_array
 
-
-def find_word(info_lines: list, search_key: str):
-    # HELPER FUNCTIONS
+def find_word(info_lines, search_key):
     # finding the target word in the read lines
 
     for i in range(len(info_lines)):
@@ -219,25 +579,15 @@ def find_word(info_lines: list, search_key: str):
         if search_key in parsed_array:
             search_idx = i
             break
-
+    
     return search_idx
 
 
-def read_csr(file_path: str):
-    """Reads the spherical harmonic data provided by CSR
-
-    Args:
-        file_path (str): Absolute path to the GRACE data file from CSR
-    
-    Returns:
-        dict: Header info in a structured dictionary
-        np.ndarray: SH coefficient data in form of a numpy n-dim array. Format is KLM
-        set: Epoch begin and stop dates stored as float (eg. 20020519.0)
-    """
+def parse_csr_file(file_path: str):
     # ensure that the file path is valid then proceed
-
+    
     source = 'CSR'
-
+    
     # check if the file is ziped or not
     if file_path[-3:] == '.gz':
         # open the file and read the lines
@@ -252,153 +602,38 @@ def read_csr(file_path: str):
                 if str(info_lines[i]) == str(b'# End of YAML header\n',):
                     end_of_header_idx = i
                     break
-
+        
         header_info = info_lines[:end_of_header_idx]
-        # everything below header info is the sought after numeric data
-        csr_data = info_lines[end_of_header_idx+1:]
 
         # parse the header strings to extract relavant metadata info
-        csr_header = parse_jpl_header(header_info)
+        csr_header = header_info # parse_jpl_header(header_info)
 
         # parse the data strings to extract numeric data in suitable matrix fmt
-        klm_mat, start_time, stop_time = parse_csr_data(csr_data)
+        csr_data = extract_SH_data(file_path, source='csr')
 
-        # Organize the data into either matrix, dataframe or dictionary format
+        # Organize the data into either matrix, dataframe or dictionary format      
 
-    return csr_header, klm_mat, start_time, stop_time
+    return csr_header, csr_data
 
 
-def parse_csr_header(header_info):
-    """Parses the CSR header info and returns important metadata as a dictionary 
-
-    Args:
-        header_info (list): list of string representing each of the lines 
-    
-    Returns:
-        dict: Header info in a structured dictionary
-    """
+def parse_csr_header():
 
     # similar to JPL one
-
-    # parse the header info passed by the reader in as list of bytes
-    # create a dictionary with key = important params from header file
-
-    header = {}
-
-    # important info from header file
-
-    normal_keys = ['title', 'institution', 'product_version',
-                   'processing_level', 'normalization', 'permanent_tide_flag',
-                   ]
     
-    dimension_keys = ['degree', 'order']
-    
-    date_time_keys = ['time_coverage_start',
-                      'time_coverage_end', 'unused_days']
-    
-    physical_constant_keys = ['earth_gravity_param', 'mean_equator_radius']
-
-    for key in normal_keys:
-        key_index_in_header = find_word(header_info, key)
-        # print(f"{key} - header line = {key_index_in_header +1} value= {' '.join(parse_lines(header_info[key_index_in_header])[3:])[: -3]}")
-        header[key] = ' '.join(parse_lines(
-            header_info[key_index_in_header])[3:])[: -3]
-
-    for key in dimension_keys:
-        key_index_in_header = find_word(header_info, key)
-        val = int(" ".join(parse_lines(
-            header_info[key_index_in_header], parse_fmt='\s+')[3:])[: -3])
-        # print(f"{key} - {val}")
-        header[key] = val
-
-    for key in date_time_keys:
-        # TODO: Look back and find what you meant....
-        key_index_in_header = find_word(header_info, key)
-        # find a way to make it date time object so it can be used later
-        pass
-
-    for key in physical_constant_keys:
-        key_index_in_header = find_word(header_info, key)
-
-        const_long_name = ' '.join(parse_lines(
-            header_info[key_index_in_header + 1])[3:])[: -3]
-        const_units = ' '.join(parse_lines(
-            header_info[key_index_in_header + 2])[3:])[: -3]
-        const_value = float(' '.join(parse_lines(
-            header_info[key_index_in_header + 3])[3:])[: -3])
-        const_dict = {'units': const_units, 'value': const_value}
-        # returning a dict with value and corresponding units
-        header[key] = const_dict
-
-    return header
+    raise NotImplementedError("Similar to `parse_jpl_header`... not yet implemented seperately.")
 
 
-def parse_csr_data(csr_data: list):
-    """parses the numerical data from the list of strings read from the file
-
-    Args:
-        csr_data (list): linewise data strings read from the file
-
-    Returns:
-        np.ndarray: A (n x 6) 2-d matrix representing the [degrer_l, order_m, C_lm, S_lm, sig_C_lm, sig_S_lm]
-        set: Epoch begin and stop dates stored as float (eg. 20020519.0)
-    """
-
-    file_column_headers = ['record_key', 'degree_index', 'order_index', 'clm', 'slm',
-                      'clm_std_dev', 'slm_std_dev', 'epoch_begin_time',
-                      'epoch_stop_time', 'solution_flags', 'solution_comment']
-
-    degree_index = []
-    order_index = []
-    clm = []
-    slm = []
-    clm_std_dev = []
-    slm_std_dev = []
-    epoch_begin_time = set()
-    epoch_stop_time = set()
-
-    for line in (csr_data):
-        parsed_array = parse_lines(line, parse_fmt='\s+')
-
-        degree_index.append(int(parsed_array[1]))
-        order_index.append(int(parsed_array[2]))
-        clm.append(float(parsed_array[3]))
-        slm.append(float(parsed_array[4]))
-        clm_std_dev.append(float(parsed_array[5]))
-        slm_std_dev.append(float(parsed_array[6]))
-        # begin and end time being a set object
-        epoch_begin_time.add(float(parsed_array[7]))
-        epoch_stop_time.add(float(parsed_array[8]))
-
-    klm_matrix = np.array([degree_index, order_index, clm, slm,
-                           clm_std_dev, slm_std_dev])
-
-    # output will be a [..., 6] rectangular matrix
-
-    return klm_matrix.T, epoch_begin_time, epoch_stop_time
-
-
-def read_itsg(file_path: str):
-    """Reads the spherical harmonic data provided by ITSG
-
-    Args:
-        file_path (str): Absolute path to the file
-    
-    Returns:
-        dict: Header info in a structured dictionary
-        np.ndarray: SH coefficient data in form of a numpy n-dim array. Format is KLM
-        str: date of the data acquisition
-    """
+def parse_itsg_file(file_path):
 
     # ensure that the file path is valid then proceed
-
-    source = 'ITSG'
-
+    
+    source = 'CSR'
+    
     # check if the file is ziped or not
 
     # open the file and read the lines
     if file_path[-4:] == '.gfc':
-        with open(file_path, 'r', encoding='utf8') as file:
+        with open(file_path, 'r') as file:
 
             # read the file line wise -> obtain a list of bytes
             info_lines = file.readlines()
@@ -409,459 +644,164 @@ def read_itsg(file_path: str):
                     end_of_header_idx = i
                     break
 
-        header_info = info_lines[:end_of_header_idx]
-        itsg_data = info_lines[end_of_header_idx+1:]
+        istg_header = info_lines[:end_of_header_idx]
 
-        # call the parse header info functon and create a metadata dictionary
-        header_dict, date_str = parse_itsg_header(header_info)
+        # parse the header strings to extract relavant metadata info
+        itsg_data = extract_SH_data(file_path, source='itsg')
 
-        # call the parse data function and create a dictionary or matrix
-        itsg_clm_mat = parse_itsg_data(itsg_data)
-
-        # Organize the data into either matrix, dataframe or dictionary format
-
-    return header_dict, itsg_clm_mat, date_str
-
+    return istg_header, itsg_data
 
 def parse_itsg_header(header_info: list):
-    """Parses the ITSG header info and returns important metadata as a dictionary
-
-    Args:
-        header_info (list): list of string representing each of the lines
-
-    Returns:
-        dict: Important/Relevant header info as a structured dictionary
-        str: date of the ITSG file straight out of the file name
-    """
 
     normal_keys = ['modelname', 'product_type',
-                   'norm', 'tide_system', 'errors', 'earth_gravity_constant', 'radius',
-                   'max_degree']
-
+                     'norm', 'tide_system', 'errors', 'earth_gravity_constant', 'radius',
+                     'max_degree'
+                    ]
+    
     # physical_constant_keys = ['earth_gravity_constant', 'radius', ]
-
+    
     for key in normal_keys:
-
+        
         key_index_in_header = find_word(header_info, key)
         #print(f"{key} - header line = {key_index_in_header} value= {parse_lines(header_info[key_index_in_header])[1]}")
 
     model_name_idx = find_word(header_info, 'modelname')
     date_str = parse_lines(header_info[model_name_idx])[1][-7:]
 
-    title = header_info[0].split('\n')[0]
-    cite_info = ''
-    for line in header_info[3:7]:
-        cite_info += (line.split('\n')[0] + ' ')
-    
-    model_name = " ".join(str(header_info[10]).split()).split(" ")[-1]
-    product_type = " ".join(str(header_info[11]).split()).split(" ")[-1]
-    earth_gravity_constant = " ".join(str(header_info[12]).split()).split(" ")[-1]
-    radius = " ".join(str(header_info[13]).split()).split(" ")[-1]
-    max_degree = " ".join(str(header_info[14]).split()).split(" ")[-1]
-    norm = " ".join(str(header_info[15]).split()).split(" ")[-1]
-    tide_system = " ".join(str(header_info[16]).split()).split(" ")[-1]
-    errors = " ".join(str(header_info[17]).split()).split(" ")[-1]
-    itsg_header_dict = {'modelname': model_name, 'product': product_type,
-                    'EarthGravityConst': earth_gravity_constant, 'radius': radius,
-                    'MaxDegree': max_degree, 'norm': norm, 'tide_system': tide_system, 'error': errors, 'units': "SI",
-                      'citeInfo': cite_info}
+    header_dict = {}
+    '''
+    for key in physical_constant_keys:
+        key_index_in_header = find_word(header_info, key)
+        
+        const_long_name = parse_lines(header_info[key_index_in_header])[0]
+        const_value = float(parse_lines(header_info[key_index_in_header])[1])
+        const_dict = {'long_name': const_long_name, 'value': const_value}
+        print(const_dict)
 
-    return itsg_header_dict, date_str
-
-
-def parse_itsg_data(itsg_data: list):
-    """parses the numerical data from the list of strings read from the file
-
-    Args:
-        itsg_data (list): linewise data strings read from the file
-
-    Returns:
-        np.ndarray: A (n x 6) 2-d matrix representing the [degrer_l, order_m, C_lm, S_lm, sig_C_lm, sig_S_lm]
-    """
-
-    data_column_headers = ['key', 'L', 'M', 'C', 'S', 'sigma_C', 'sigma_S']
-
-    order_index = []
-    degree_index = []
-    clm = []
-    slm = []
-    clm_std_dev = []
-    slm_std_dev = []
-
-    for line in (itsg_data):
-        parsed_array = parse_lines(line, parse_fmt='\s+')
-
-        degree_index.append(int(parsed_array[1]))
-        order_index.append(int(parsed_array[2]))
-        clm.append(float(parsed_array[3]))
-        slm.append(float(parsed_array[4]))
-        clm_std_dev.append(float(parsed_array[5]))
-        slm_std_dev.append(float(parsed_array[6]))
-
-    clm_matrix = np.array([degree_index, order_index, clm, slm,
-                           clm_std_dev, slm_std_dev])
-
-    # output will be a [..., 6] rectangular matrix
-
-    return clm_matrix.T
-
-
-def read_tn13(file_path):
-    """_summary_
-
-    Args:
-        file_path (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
-
-    # check if file exists at given path
-
-    # check the file format - txt of zipped
-
-    if file_path[-4:] == '.txt':
-        with open(file_path, 'r', encoding='utf8') as file:
-
-            # read the file line wise -> obtain a list of bytes
-            info_lines = file.readlines()
-            num_lines = len(info_lines)
-
-            # find the end of header
-            for i in range(len(info_lines)):
-                if info_lines[i] == 'end of header ===============================================================================\n':
-                    end_of_header_idx = i
-                    break
-
-        header_info = info_lines[:end_of_header_idx]
-        tn13_data = info_lines[end_of_header_idx+1:]
-
-        # call the parse header info functon and create a metadata dictionary
-
-        # call the parse data function and create a dictionary or matrix
-        tn13_clm_mat = parse_tn13_data(tn13_data)
-
-        # Organize the data into either matrix, dataframe or dictionary format
-
-    return tn13_clm_mat
+    '''
+    return header_dict, date_str
 
 
 def parse_tn13_header(header_info):
-    """_summary_
-
-    Args:
-        header_info (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
 
     # IMP Info
-    # - Title
-    # - Last reported data point
+        # - Title
+        # - Last reported data point
     # Special Notes
-    # - 1, 2, 3, 4, 5
+        # - 1, 2, 3, 4, 5
 
     # finding the index of important sub-headers like Title and Notes
     for i in range(len(header_info)):
         if 'TITLE' in header_info[i]:
             title_idx = i
             break
-
+    
     for i in range(len(header_info)):
         if 'SPECIAL NOTES' in header_info[i]:
             notes_idx = i
             break
-
+    
     # The tile is
-    title = ' '.join(re.split("\s+", header_info[title_idx + 1])[1:-1]) + ' '.join(re.split(
-        "\s+", header_info[title_idx+2])[1:-1]) + ' '.join(re.split("\s+", header_info[title_idx+3])[1:-1])
-
+    title = ' '.join(re.split("\s+", header_info[title_idx +1])[1:-1]) + ' '.join (re.split("\s+", header_info[title_idx+2])[1:-1]) + ' '.join(re.split("\s+", header_info[title_idx+3])[1:-1])
+    
     # TODO: later convert the str object to a date-time object
     last_reported_date = (re.split("\s+", header_info[title_idx+3])[-2])[:-1]
 
-   #special_notes = []
-    simplified_header = {'title': title, "last_updated": last_reported_date}
+    special_notes = []
 
     # add parsing for special notes later
+    
+    return title, last_reported_date
 
-    return simplified_header
-
-
-
-def parse_tn13_data(tn13_data):
-    """_summary_
-
-    Args:
-        tn13_data (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
-
-    data_column_headers = ['record_key', 'degree_index', 'order_index', 'clm', 'slm',
-                           'clm_std_dev', 'slm_std_dev', 'epoch_begin_time', 'epoch_stop_time',
-                           'solution_flag']
-
-    # initiate empty lists for each of the column
-    order_index = []
-    degree_index = []
-    clm = []
-    slm = []
-    clm_std_dev = []
-    slm_std_dev = []
-    epoch_begin_time = []
-    epoch_stop_time = []
-
-    for line in (tn13_data):
-        parsed_array = parse_lines(line, parse_fmt='\s+')
-
-        degree_index.append(int(parsed_array[1]))
-        order_index.append(int(parsed_array[2]))
-        clm.append(float(parsed_array[3]))
-        slm.append(float(parsed_array[4]))
-        clm_std_dev.append(float(parsed_array[5]))
-        slm_std_dev.append(float(parsed_array[6]))
-        # this will be important and will be helpful while searching
-        # Converting to date-time object is avoided -> numpy matrix needs homogeneous data
-        # datetime.strptime(parsed_array[7], '%Y/%m/%d').date() can be used later-on in later stages
-
-        epoch_begin_time.append(float(parsed_array[7]))
-        epoch_stop_time.append(float(parsed_array[8]))
-
-    clm_matrix = np.array([degree_index, order_index, clm, slm,
-                           clm_std_dev, slm_std_dev, epoch_begin_time, epoch_stop_time])
-
-    # output will be a [..., 6] rectangular matrix
-
-    return clm_matrix.T
-
-
-def read_tn14(file_path):
-    """_summary_
-
-    Args:
-        file_path (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
-
-    # check the file extension - '.txt' or some zipped format
-
-    # read the data into a list
-    if file_path[-4:] == '.txt':
-        with open(file_path, 'r', encoding='utf8') as file:
-
-            # read the file line wise -> obtain a list of bytes
-            info_lines = file.readlines()
-
-            # find the end of header
-            for i in range(len(info_lines)):
-                if info_lines[i] == 'Product:\n':
-                    end_of_header_idx = i
-                    break
-
-        header_info = info_lines[:end_of_header_idx]
-        tn14_data = info_lines[end_of_header_idx+1:]
-
-        # parse the data
-        tn14_raplacement_mat = parse_tn14_data(tn14_data)
-
-    return tn14_raplacement_mat
-
-
-
-def parse_tn14_header(header_info):
+def parse_tn14_header():
 
     # Key info
-    # - Title
-    title = header_info[0].split(':')[1].split('\n')[0]
-    # - Version
-    version = header_info[1].split(':')[1].split('\n')[0]
-    # - Date Span
-    created_date = header_info[2].split(':')[1].split('\n')[0]
-    date_span = header_info[3].split(':')[1].split('\n')[0]
-    # - Notes:
-    description = ''
-    for line in header_info[7:13]:
-        description += line.lstrip().split("\n")[0] + ' '
+        # - Title
+        # - Version
+        # - Date Span
+        # - Notes:
+
 
     # Constants
-    # - Mean C20
-    # - Mean C30
-    # - GM
-    # R
-    header_dict = {'title': title, 'version': version, 'created_date': created_date,
-                   'date_span': date_span, 'description': description}
-    return header_dict
+        # - Mean C20
+        # - Mean C30
+        # - GM
+        # R
+    
+    
+
+    pass
 
 
-def parse_tn14_data(tn14_data):
-    """_summary_
-
-    Args:
-        tn14_data (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
-
-    data_column_headers = ['begin_MJD', 'begin_frac_date', 'C20', 'C20_sub_mean_C20',
-                           'sigma_C20', 'C30', 'C30_sub_mean_C30', 'sigma_C30',
-                           'end_MJD', 'end_frac_date']
-
-    # initialise placeholder lists
-    # actually either the MJD or fraction date can be used
-    # Going ahead with MJD only for sake of consistency
-    begin_MJD, end_MJD = [], []
-    C20, C20_sub_mean_C20, sigma_C20 = [], [], []
-    C30, C30_sub_mean_C30, sigma_C30 = [], [], []
-
-    for data_line in tn14_data:
-        parsed_array = parse_lines(data_line, parse_fmt='\s+')
-        begin_MJD.append(float(parsed_array[0]))
-
-        C20.append(float(parsed_array[2]))
-        C20_sub_mean_C20.append(float(parsed_array[3]) * 1e-10)
-        sigma_C20.append(float(parsed_array[4]) * 1e-10)
-
-        # some of the values are NaN look for it
-        C30.append(float(parsed_array[5]))
-        C30_sub_mean_C30.append(float(parsed_array[6]) * 1e-10)
-        sigma_C30.append(float(parsed_array[7]) * 1e-10)
-
-        end_MJD.append(float(parsed_array[8]))
-
-    # reorganizing the matrix so its similar to TN-13 matrix
-    replacement_mat = np.array(
-        [C20, sigma_C20, C30, sigma_C30, C20_sub_mean_C20, C30_sub_mean_C30, begin_MJD, end_MJD])
-
-    return replacement_mat.T
-
-
-def find_date_in_replacemnt_file(replacemnt_mat,file_type: str, source: str, epoch_begin):
-    """_summary_
-
-    Args:
-        replacemnt_mat (_type_): _description_
-        file_type (str): _description_
-        source (str): _description_
-        epoch_begin (_type_): _description_
-
-    Raises:
-        ValueError: _description_
-
-    Returns:
-        _type_: _description_
-    """
+def find_date_in_replacemnt_file(replacemnt_mat, file_type: str, epoch_begin, epoch_end=None):
 
     # epoch_begin and epoch_end -> date from the grace data file
     # begin_date and end_data -> date from the replacement file (tn-13 or tn-14)
 
-    
     rows, cols = replacemnt_mat.shape
+
     if file_type == 'tn-13':
         time_buffer_itsg = timedelta(days=23)
-        time_buffer_csr = timedelta(days=5)
         date_idxs = set()
         # think of a rather efficient searching scheme
         for i in range(rows):
-            begin_date = datetime.strptime(
-                str(int(replacemnt_mat[i][-2])), '%Y%m%d').date()
-            end_date = datetime.strptime(
-                str(int(replacemnt_mat[i][-1])), '%Y%m%d').date()
+            begin_date = datetime.strptime(str(int(replacemnt_mat[i][-2])), '%Y%m%d').date()
+            end_date = datetime.strptime(str(int(replacemnt_mat[i][-1])), '%Y%m%d').date()
 
-            if source == 'jpl':
+            if epoch_end:
                 # for jpl and csr
-                if begin_date == epoch_begin:
+                if begin_date == epoch_begin and end_date == epoch_end:
                     date_idxs.add(i)
-                    #print(
-                    #    f"epoch-begin: {epoch_begin}, start: {begin_date}, end: {end_date}")
-            
-            elif source == 'itsg':
+                    print(f"epoch-begin: {epoch_begin}, epoch-end: {epoch_end}, start: {begin_date}, end: {end_date}")
+            else:
                 # for itsg
                 #begin_date = f"{begin_date.year}-{str(begin_date.month).zfill(2)}"
-                
                 if type(epoch_begin) == str:
-                    epoch_begin = datetime.strptime(
-                        epoch_begin, "%Y-%m").date()
-                
+                    epoch_begin = datetime.strptime(epoch_begin, "%Y-%m").date()
+
                 if begin_date - time_buffer_itsg <= epoch_begin <= begin_date + time_buffer_itsg:
                     date_idxs.add(i)
-                    print(f"Data Date - {epoch_begin}, replacemnt date(tn-13) = {begin_date}")
+                    print(f"start: {begin_date - time_buffer_itsg}, epoch-begin: {epoch_begin}, UB:{begin_date + time_buffer_itsg}")
+
             
-            elif source == 'csr':
-                if begin_date-time_buffer_csr <= epoch_begin <= begin_date+time_buffer_csr:
-                    date_idxs.add(i)
-                    print(
-                        f"GRACE Data File - epoch-begin: {epoch_begin}, epoch-end:; TN13-Products start: {begin_date}, end: {end_date}")
-
-                pass
-            # Add bit more error handling statments
+            # Add bit more error handling statments 
             # rest is fine -> if inputs's right - output is right
-
+    
     elif file_type == "tn-14":
-        time_buffer_itsg = timedelta(days=23)
-        time_buffer_csr = timedelta(days=5)
         # there will be only one row per month -> for sake of consistency using set
         # print("TN-14 Replacement file")
         date_idxs = set()
         # think of a rather efficient searching scheme
+        time_buffer = timedelta(days=5)
+        time_buffer_itsg = timedelta(days=23)
         for i in range(rows):
-            begin_date = julian.from_jd(
-                replacemnt_mat[i][-2], fmt='mjd').date()
+            begin_date = julian.from_jd(replacemnt_mat[i][-2], fmt='mjd').date()
             end_date = julian.from_jd(replacemnt_mat[i][-1], fmt='mjd').date()
 
-            if source == 'jpl':
-                if begin_date == epoch_begin:
+
+            if epoch_end:
+                if begin_date >= epoch_begin - time_buffer and end_date <= epoch_end + time_buffer:
                     date_idxs.add(i)
-                    print(
-                        f"start: {begin_date}, epoch-begin: {epoch_begin}, LB:{epoch_begin }, UB: , end: {end_date}, epoch-end:")
-            
-            elif source == 'itsg':
+                    print(f"start: {begin_date}, epoch-begin: {epoch_begin}, LB:{epoch_begin - time_buffer}, UB: {epoch_end + time_buffer}, end: {end_date}, epoch-end: {epoch_end}")
+            else:
                 # for itsg
                 if type(epoch_begin) == str:
-                    epoch_begin = datetime.strptime(
-                        epoch_begin, "%Y-%m").date()
-                    
+                    epoch_begin = datetime.strptime(epoch_begin, "%Y-%m").date()
                 if begin_date - time_buffer_itsg <= epoch_begin <= begin_date + time_buffer_itsg:
                     date_idxs.add(i)
-                    print(f"Data Date - {epoch_begin}, replacemnt date (tn-14)_ = {begin_date}")
+                    print(f"start: {begin_date - time_buffer_itsg}, epoch-begin: {epoch_begin}, UB:{begin_date + time_buffer_itsg}")
 
-            elif source == 'csr':
-                if begin_date-time_buffer_csr <= epoch_begin <= begin_date+time_buffer_csr:
-                    date_idxs.add(i)
-                    print(
-                        f"start: {begin_date}, epoch-begin: {epoch_begin}, LB:{epoch_begin - time_buffer_csr}, UB: , end: {end_date}, epoch-end:")
-            
-                    # Add bit more error handling statments
+                        # Add bit more error handling statments 
             # rest is fine -> if inputs's right - output is right
-
+            
     else:
-        raise ValueError(
-            "Technical Note-13 (tn-13) and Technical Note 14 (tn-14) supported...")
-
+        raise ValueError("Technical Note-13 (tn-13) and Technical Note 14 (tn-14) supported...")
+    
+        
     return list(date_idxs)
-
-
-
+    
 
 def extract_C10_11_replcmnt_coeff(data_tn13, source, epoch_begin, epoch_end=None):
-    """_summary_
-
-    Args:
-        data_tn13 (_type_): _description_
-        source (_type_): _description_
-        epoch_begin (_type_): _description_
-        epoch_end (_type_, optional): _description_. Defaults to None.
-
-    Raises:
-        ValueError: _description_
-
-    Returns:
-        _type_: _description_
-    """
 
     # match the date
     file_type = 'tn-13'
@@ -870,12 +810,11 @@ def extract_C10_11_replcmnt_coeff(data_tn13, source, epoch_begin, epoch_end=None
         end_epoch = epoch_end
     else:
         end_epoch = None
-
-    if source == 'jpl':
+    
+    if source == 'jpl' or source == 'csr':
 
         # find the necessary indxes
-        replcmnt_idxs = find_date_in_replacemnt_file(
-            data_tn13, file_type='tn-13', source='jpl', epoch_begin=epoch_begin)
+        replcmnt_idxs = find_date_in_replacemnt_file(data_tn13, file_type, epoch_begin, end_epoch)
         # extract the coeff from tn13 for required dates
 
         C10 = data_tn13[replcmnt_idxs[0], :-2]
@@ -884,127 +823,61 @@ def extract_C10_11_replcmnt_coeff(data_tn13, source, epoch_begin, epoch_end=None
         C11 = data_tn13[replcmnt_idxs[1], :-2]
 
     elif source == 'itsg':
-
-        replcmnt_idxs = find_date_in_replacemnt_file(
-            data_tn13, file_type='tn-13', source='itsg', epoch_begin=f"{epoch_begin.year}-{str(epoch_begin.month).zfill(2)}")
+        
+        replcmnt_idxs = find_date_in_replacemnt_file(data_tn13, file_type, f"{epoch_begin.year}-{str(epoch_begin.month).zfill(2)}", end_epoch)
         # extract the coeff from tn13 for required dates
 
         C10 = data_tn13[replcmnt_idxs[0], :-2]
         # extract the coeff from tn13 for required dates
 
         C11 = data_tn13[replcmnt_idxs[1], :-2]
-    
-    elif source == 'csr':
-
-        # find the necessary indxes
-        replcmnt_idxs = find_date_in_replacemnt_file(
-            data_tn13, file_type='tn-13', source='csr', epoch_begin=epoch_begin)
-        # extract the coeff from tn13 for required dates
-
-        C10 = data_tn13[replcmnt_idxs[0], :-2]
-        # extract the coeff from tn13 for required dates
-
-        C11 = data_tn13[replcmnt_idxs[1], :-2]
-
 
     else:
-        raise ValueError(
-            "Invalid Source. The sources recoginized are CSR, ITSG and JPL")
+        raise ValueError("Invalid Source. The sources recoginized are CSR, ITSG and JPL")
 
     return C10, C11
 
 
 def extract_C20_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end=None):
-    """_summary_
-
-    Args:
-        data_tn14 (_type_): _description_
-        source (_type_): _description_
-        epoch_begin (_type_): _description_
-        epoch_end (_type_, optional): _description_. Defaults to None.
-
-    Returns:
-        _type_: _description_
-    """
-    # For JPL
+    # For JPL 
     # generating a CLM array for C20 and C30
     # NOTE: Zonal coeff. does not have Slm - its taken as 0
-    if source == 'jpl':
+    if source == 'jpl' or source == 'csr':
+        
+        replcmnt_idxs  = find_date_in_replacemnt_file(data_tn14, 'tn-14', epoch_begin, epoch_end)
 
-        replcmnt_idxs = find_date_in_replacemnt_file(
-            data_tn14, file_type='tn-14', source='jpl', epoch_begin=epoch_begin)
-
-        C20 = np.array([2, 0, data_tn14[replcmnt_idxs[0], 0:2]
-                       [0], data_tn14[replcmnt_idxs[0], 0:2][1], 0, 0])
-
-    elif source == 'itsg':
-        replcmnt_idxs = find_date_in_replacemnt_file(
-            data_tn14, file_type='tn-14', source='itsg', epoch_begin=epoch_begin)
-
-        C20 = np.array([2, 0, data_tn14[replcmnt_idxs[0], 0:2]
-                       [0], data_tn14[replcmnt_idxs[0], 0:2][1], 0, 0])
+        C20 = np.array([2, 0, data_tn14[replcmnt_idxs[0], 0:2][0], data_tn14[replcmnt_idxs[0], 0:2][1], 0, 0])
     
-    elif source == 'csr':
-        replcmnt_idxs = find_date_in_replacemnt_file(
-            data_tn14, file_type='tn-14', source='csr', epoch_begin=epoch_begin)
+    elif source == 'itsg':
+        replcmnt_idxs  = find_date_in_replacemnt_file(data_tn14, 'tn-14', epoch_begin, epoch_end=None)
 
-        C20 = np.array([2, 0, data_tn14[replcmnt_idxs[0], 0:2]
-                       [0], data_tn14[replcmnt_idxs[0], 0:2][1], 0, 0])
+        C20 = np.array([2, 0, data_tn14[replcmnt_idxs[0], 0:2][0], data_tn14[replcmnt_idxs[0], 0:2][1], 0, 0])
+
 
     return C20
 
-
 def extract_C30_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end=None):
-    """_summary_
-
-    Args:
-        data_tn14 (_type_): _description_
-        source (_type_): _description_
-        epoch_begin (_type_): _description_
-        epoch_end (_type_, optional): _description_. Defaults to None.
-
-    Returns:
-        _type_: _description_
-    """
-    if source == 'jpl':
-
-        replcmnt_idxs = find_date_in_replacemnt_file(
-            data_tn14, file_type='tn-14', source='jpl', epoch_begin=epoch_begin)
+    if source == 'jpl' or source == 'csr':
+            
+        replcmnt_idxs  = find_date_in_replacemnt_file(data_tn14, 'tn-14', epoch_begin, epoch_end)
 
         # think about handling nan values while replacing and its impact
         # handle the nan issue
 
-        # C30 data in TN-14 files for initial few years does not require any replacemnt indicated by NaN value
-        if np.isnan(data_tn14[replcmnt_idxs[0], 2:4][0]) and np.isnan(data_tn14[replcmnt_idxs[0], 2:4][1]):
-            return None
-        else:
-            C30 = np.array([3, 0, data_tn14[replcmnt_idxs[0], 2:4]
-                       [0], data_tn14[replcmnt_idxs[0], 2:4][1], 0, 0])       
+        C30 = np.array([3, 0, data_tn14[replcmnt_idxs[0], 2:4][0], data_tn14[replcmnt_idxs[0], 2:4][1], 0, 0])
+
+        # replace nan values with zeros
+        C30[np.isnan(C30)] = 0
 
     elif source == 'itsg':
-        replcmnt_idxs = find_date_in_replacemnt_file(
-            data_tn14, file_type='tn-14', source='itsg', epoch_begin=epoch_begin)
+        replcmnt_idxs  = find_date_in_replacemnt_file(data_tn14, 'tn-14', epoch_begin, epoch_end=None)
 
-        if np.isnan(data_tn14[replcmnt_idxs[0], 2:4][0]) and np.isnan(data_tn14[replcmnt_idxs[0], 2:4][1]):
-            return None
-        else:
-            C30 = np.array([3, 0, data_tn14[replcmnt_idxs[0], 2:4][0], data_tn14[replcmnt_idxs[0], 2:4][1], 0, 0])       
+        C30 = np.array([3, 0, data_tn14[replcmnt_idxs[0], 2:4][0], data_tn14[replcmnt_idxs[0], 2:4][1], 0, 0])
+
+        # replace nan values with zeros
+        C30[np.isnan(C30)] = 0
     
-    elif source == 'csr':
-        replcmnt_idxs = find_date_in_replacemnt_file(
-            data_tn14, file_type='tn-14', source='csr', epoch_begin=epoch_begin)
-
-        # think about handling nan values while replacing and its impact
-        # handle the nan issue
-
-        if np.isnan(data_tn14[replcmnt_idxs[0], 2:4][0]) and np.isnan(data_tn14[replcmnt_idxs[0], 2:4][1]):
-            return None
-        else:
-            C30 = np.array([3, 0, data_tn14[replcmnt_idxs[0], 2:4]
-                       [0], data_tn14[replcmnt_idxs[0], 2:4][1], 0, 0])   
-
     return C30
-
 
 def replace_zonal_coeff(data_mat, source, lmax, data_tn13, data_tn14, epoch_begin: float, epoch_end: float):
     """_summary_
@@ -1136,7 +1009,7 @@ def sub2ind(array_shape, rows, cols):
 
 
 def cklm2sc_new(clm_mat, lmax: int):
-    """Transforms the spherical harmonics coefficients data in clm or klm format into a /S|C\ matrix
+    """Transforms the spherical harmonics coefficients data in clm or klm format into a SC matrix
 
         clm data - [l, m, c_lm, s_lm]
 
@@ -1153,34 +1026,33 @@ def cklm2sc_new(clm_mat, lmax: int):
     dev_sc_mat = np.zeros([lmax+1, 2*lmax + 1])
 
     # navigating the maze of indices
-
+    
     # Use logical indices
 
     # sc mat requires padding - Taken care of by the earlier initialisation
-    #
+    # 
     # filling the value at appropriate locaation is the key
-    #
+    # 
     # Approach-1
-    # run through rows(degree) and fill the cols(order) respectively
+        # run through rows(degree) and fill the cols(order) respectively
 
     # Approach -2
-    # create a row_func s.t. [....., C22, C21, C20, S21, S22, .......]
-    # then stack the rows
-
+        # create a row_func s.t. [....., C22, C21, C20, S21, S22, .......]
+        # then stack the rows
+    
     # First flatten the SC matrix - column wise aka Fortran style
-    # get the flattented idx to be raplaced using sub2ind
-    # replace the indices at those locations using
+    # get the flattented idx to be raplaced using sub2ind 
+    # replace the indices at those locations using 
     # unflatten the matrix
 
     shape_sc = sc_mat.shape
 
     # following the approach similar to Octave implementation
     # using matrix operations to improve the time efficiency as compared to looping
-    idx_s = sub2ind(sc_mat.shape, clm_mat[:, 0].astype(
-        'i'), (lmax - clm_mat[:, 1]).astype('i')).astype('i')
-    idx_c = sub2ind(sc_mat.shape, clm_mat[:, 0].astype(
-        'i'), (lmax + clm_mat[:, 1]).astype('i')).astype('i')
+    idx_s = sub2ind(sc_mat.shape, clm_mat[:, 0].astype('i'), (lmax - clm_mat[:, 1]).astype('i')).astype('i')
+    idx_c = sub2ind(sc_mat.shape, clm_mat[:, 0].astype('i'), (lmax + clm_mat[:, 1]).astype('i')).astype('i')
 
+    
     flat_sc = sc_mat.flatten("F")
     # Attention first place the slm coeff. or else it will relace zonal clm coeff.
     flat_sc[idx_s] = clm_mat[:, 3]
@@ -1194,49 +1066,6 @@ def cklm2sc_new(clm_mat, lmax: int):
 
     scmat = flat_sc.reshape(shape_sc)
 
-    # with one flag include for
+    # with one flag include for 
 
     return scmat, dev_scmat
-
-
-def check_format(scmat):
-    
-    raise NotImplementedError()
-
-def load_longterm_mean(source = "", use_sample_mean = 0):
-    """_summary_
-
-    Args:
-        source (str, optional): _description_. Defaults to "".
-        use_sample_mean (int, optional): _description_. Defaults to 0.
-
-    Raises:
-        Exception: _description_
-
-    Returns:
-        _type_: _description_
-    
-    Todo:
-        + Not sure if using "source = ''" is all right
-        + instead of base eception is can be ValueError
-    """
-    if use_sample_mean == 1:
-        print("Loading preloaded RL06 long term mean values")
-        print("Please ensure that your data is RL06 \nIf not, please manually input long term mean by setting use_sample_mean = 0")
-
-        if str.upper(source) == 'CSR':
-            long_mean = pkg_resources.resource_filename('pyshbundle', 'data/RL06_long_mean/SH_long_mean_csr.npy')
-        elif str.upper(source) == 'JPL':
-            long_mean = pkg_resources.resource_filename('pyshbundle', 'data/RL06_long_mean/SH_long_mean_itsg.npy')
-        elif str.upper(source) == 'ITSG':
-            long_mean = pkg_resources.resource_filename('pyshbundle', 'data/RL06_long_mean/SH_long_mean_jpl.npy')
-        else:
-            raise Exception("Incorrect selection of source")
-        print("Successfully loaded preloaded longterm means")
-    else:
-        print("Please download and provide the longterm GRACE SH mean values")
-        print("Instructions to download the longterm GRACE SH mean values may be referred to in https://github.com/mn5hk/pyshbundle/blob/main/docs/index.md#how-to-download-data")
-        long_mean = str(input("Enter the longterm mean for the SH values in the numpy (.npy) format"))
-        print("Successfully loaded path to long term mean:", long_mean)
-
-    return long_mean

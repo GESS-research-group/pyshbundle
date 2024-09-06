@@ -18,15 +18,19 @@ PySHBundle is a tool to process GRACE L2 data and re-implements the popular [SHB
 The module can be installed via pip python package manager. Follow the follwing steps to setup a virtual environment and start exploring the GRACE Gravity Field data.
 
 ```shell
+# clone the repository in order to access the notebooks and data
+$ git clone https://github.com/lsmvivek/pyshbundle.git
+$ pip install .
+
+
+# The package is available on pip but not updated to the latest version
+# Please avoid installing via pip till we fix that
 # creating a new virtual environment
 $ python3 -m venv <name-env>
 # activate the virtual environment environment
 $ source </location-of-virt-env/name-env/bin/activate>
 # install package into virtual environment
 $ pip install pyshbundle
-
-# clone the repository in order to access the notebooks and data
-$ git clone git@github.com:mn5hk/pyshbundle.git
 ```
 
 ### 1.2 For Devs/Contributors
@@ -151,10 +155,10 @@ Please note that PySHbundle has adapted the following code packages,both license
     
 
 ## How to Cite?
-TODO: Add citing info
-
+Coming soon!
 
 
 ## Follow the Research Group
-
-<a href="https://ultra-pluto-7f6d1.netlify.app" rel="Geodesy for Earth system science (GESS) research Group at ICWaR, IISc">![Geodesy for Earth system science (GESS) research Group at ICWaR, IISc](../notebooks/imgs/logoGESS.jpg)</a>
+<a href="https://ultra-pluto-7f6d1.netlify.app" rel="Geodesy for Earth system science (GESS) research Group at ICWaR, IISc">
+    <img src="./examples/imgs/logoGESS.jpg" alt="Geodesy for Earth system science (GESS) research Group at ICWaR, IISc" width="300" height="300">
+</a>

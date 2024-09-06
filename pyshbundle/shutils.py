@@ -49,35 +49,42 @@ from scipy.interpolate import PchipInterpolator
 from pyshbundle import GRACEpy as GB
 from pyshbundle import GRACEconstants as GC
 
-def PLM(l: np.array, m:int, thetaRAD, nargin, nargout): 
-    """PLM Fully normalized associated Legendre functions for a selected order M
 
-    Args:
-        l (np.array): Degree, but not necessarily monotonic.
-               For l < m a vector of zeros will be returned.
-        m (int): order (scalar). If absent, m = 0 is assumed.
-        thetaRAD (np.array): co-latitude [rad] (vector)
-        nargin (int): number of input argument
-        nargout (int): number of output argument
-    Returns:
-        (np.array): PLM fully normalized
+def plm(l: np.array, m:int, thetaRAD, nargin, nargout): 
+    """plm Fully normalized associated Legendre functions for a selected order M
+
+    Parameters
+    ----------
+    l : numpy.array
+        Degree, but not necessarily monotonic.
+            For l < m a vector of zeros will be returned.
+    m : int
+        order. If absent, m = 0 is assumed.
+    thetaRAD : numpy.array
+        Co-latitude in radians
+    nargin : int
+        number of input argument
+    nargout : int
+        number of output argument
+    Returns
+    ----------
+    p : array
+        plm fully normalized Legendre functions
+    dp : array
+        first derivative of plm
+    ddp : array
+        second derivative of plm
     
     Author:
-        Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+        Vivek Kumar Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
-    
+
     if  min(l.shape) != 1:
-        print('Degree l must be a vector (or scalar)') 
-        sys.exit([])
+        raise ValueError('Degree l must be a vector (or scalar)') 
     if  np.remainder(l,1).all() != 0:
-        print('Vector l contains non-integers !!') 
-        sys.exit([])
-    # if 
-    #     print('Order m must be a scalar') 
-    #     sys.exit([])
+        raise ValueError('Vector l contains non-integers !!') 
     if  np.remainder(m,1) != 0:
-        print('Order must be integer')
-        sys.exit([])
+        raise ValueError('Order must be integer')
 
 # PRELIMINARIES
     lcol = len(l)
@@ -85,9 +92,9 @@ def PLM(l: np.array, m:int, thetaRAD, nargin, nargout):
     lmax = int(max(l[0,:]))
     
     if lmax < m:
-        p = np.zeros([len(thetaRAD), len(l)], dtype='longdouble')
-        dp = np.zeros([len(thetaRAD), len(l)], dtype='longdouble')
-        ddp = np.zeros([len(thetaRAD), len(l)], dtype='longdouble')
+        p = np.zeros([len(thetaRAD), len(l)], dtype='float')
+        dp = np.zeros([len(thetaRAD), len(l)], dtype='float')
+        ddp = np.zeros([len(thetaRAD), len(l)], dtype='float')
         sys.exit([])
     
     n = thetaRAD.size                                                               # number of latitudes
@@ -105,15 +112,15 @@ def PLM(l: np.array, m:int, thetaRAD, nargin, nargout):
     # ptmp will contain zeros, which is useful for assignments when l < m.
     ptmp = np.zeros((n,lmax + 2 - m))
     if nargout >= 2:                                                                #  first derivative needs also P_{n,m+1} and P_{n,m-1}
-        ptmp_m1 = np.zeros((n,lmax + 3 - m), dtype='longdouble')
-        ptmp_p1 = np.zeros((n,lmax + 1 -m), dtype='longdouble')        
-        dptmp = np.zeros((n,lmax + 2 - m), dtype='longdouble') 
+        ptmp_m1 = np.zeros((n,lmax + 3 - m), dtype='float')
+        ptmp_p1 = np.zeros((n,lmax + 1 -m), dtype='float')        
+        dptmp = np.zeros((n,lmax + 2 - m), dtype='float') 
     if nargout == 3:                                                                # second derivative needs also dP_{n,m+1} and dP_{n,m-1}
-        dptmp_m1 = np.zeros((n,lmax + 3 -m), dtype='longdouble')
-        dptmp_p1 = np.zeros((n,lmax + 1 -m), dtype='longdouble')
-        ptmp_m2 = np.zeros((n,lmax + 4 -m), dtype='longdouble')                                         # but these first derivative need dP_{n,m+2} and dP_{n,m-2}
-        ptmp_p2 = np.zeros((n,lmax - m), dtype='longdouble')
-        ddptmp = np.zeros((n,lmax + 2 -m), dtype='longdouble')
+        dptmp_m1 = np.zeros((n,lmax + 3 -m), dtype='float')
+        dptmp_p1 = np.zeros((n,lmax + 1 -m), dtype='float')
+        ptmp_m2 = np.zeros((n,lmax + 4 -m), dtype='float')                                         # but these first derivative need dP_{n,m+2} and dP_{n,m-2}
+        ptmp_p2 = np.zeros((n,lmax - m), dtype='float')
+        ddptmp = np.zeros((n,lmax + 2 -m), dtype='float')
      
     # sectorial recursion: PM (non-recursive, though)
     ptmp[:,0] = secrecur(m,y)
@@ -153,12 +160,12 @@ def PLM(l: np.array, m:int, thetaRAD, nargin, nargout):
         ddptmp = derivALF(ddptmp,dptmp_m1,dptmp_p1,m,lmax)
     
     
-    # %--------------------------------------------------------------------
-    # % The Legendre functions have been computed. What remains to be done, is to
-    # % extract the proper columns from ptmp, corresponding to the vector lvec. 
-    # % If l or thetaRAD is scalar the output matrix p reduces to a vector. It should
-    # % have the shape of respectively thetaRAD or l in that case.
-    # %--------------------------------------------------------------------
+# --------------------------------------------------------------------
+        # The Legendre functions have been computed. What remains to be done, is to
+        # extract the proper columns from ptmp, corresponding to the vector lvec. 
+        # If l or thetaRAD is scalar the output matrix p reduces to a vector. It should
+        # have the shape of respectively thetaRAD or l in that case.
+# --------------------------------------------------------------------
     lind       = (lvec < m)   	 # index into l < m
     pcol       = lvec - m + 0			                                            # index into columns of ptmp
     pcol[lind] = np.ndarray((lmax-m+2-6)*np.ones((sum(sum(lind)),1)))	            # Now l < m points to last col.
@@ -187,17 +194,23 @@ def PLM(l: np.array, m:int, thetaRAD, nargin, nargout):
     if nargout == 3: 
         return p, dp, ddp
     
- # INLINE FUNCTIONS
- # function for the sectorial recursion, non-recursive though
+
+  
 def secrecur(m, y):
-    """Helper Function: 
+    """Helper Function for sectorial recursion.
 
-    Args:
-        m (_type_): _description_
-        y (_type_): _description_
+    This function computes the sectorial recursion for given parameters.
 
-    Returns:
-        _type_: _description_
+    Parameters
+    ----------
+    m : int
+        The order of the recursion.
+    y : numpy.ndarray
+        The input array for which the recursion is computed.
+
+    Returns
+    ----------
+        numpy.ndarray: The result of the sectorial recursion.
     """
     if m == 0:
        fac = 1
@@ -209,16 +222,19 @@ def secrecur(m, y):
 
 
 # % function for the l-recursion
+
 def lrecur(inn, x, m, lmax):
     """[Helper Function]  
 
-    Args:
-        inn (_type_): _description_
-        x (_type_): _description_
-        m (_type_): _description_
-        lmax (_type_): _description_
+    Parameters
+    ----------
+    inn (int): _description_
+    x (int): _description_
+    m (int): _description_
+    lmax (int): _description_
 
-    Returns:
+    Returns
+    ----------
         _type_: _description_
     """
     for ll in np.arange(int(m)+1,lmax+1,1):
@@ -236,21 +252,23 @@ def lrecur(inn, x, m, lmax):
 
 
 # function to calculate the derivate
+
 def derivALF(inn, miin, plin, m, lmax):
-    """HelpeFunction
+    """Function to calculate the derivate of the associated Legendre functions
 
-    Args:
-        inn (_type_): _description_
-        miin (_type_): _description_
-        plin (_type_): _description_
-        m (_type_): _description_
-        lmax (_type_): _description_
+    Parameters
+    ----------
+    inn (numpy.ndarray): _description_
+    miin (numpy.ndarray): _description_
+    plin (numpy.ndarray): _description_
+    m (int): order of associated legendre functions
+    lmax (int): maximum degree
 
-    Returns:
-        _type_: _description_
+    Returns
+    -------
+        numpy.ndarray: derivatives of the associated Legendre functions
     """
     l = np.arange(m,lmax+2,1)
-    #l=l.reshape(l.shape[0],1)
     if m == 0:
         inn[:,0] = 0
         if lmax > m:             
@@ -269,69 +287,65 @@ def derivALF(inn, miin, plin, m, lmax):
 
 
 def iplm(l, m:int, theRAD, dt=-9999):
-    """IPLM Integrals of the fully normalized associated Legendre functions
+    """iplm Integrals of the fully normalized associated Legendre functions
         over blocks for a selected order M. 
 
-    Args:
-        l (_type_): degree (vector). Integer, but not necessarily monotonic.
-                For l < m a vector of zeros will be returned.
-        m (int): order (scalar)
-        theRAD (np.array): co-latitude [rad] (vector)
-        dt (int, optional): integration block-size [rad] (scalar). Defaults to -9999.
+    Parameters
+    ----------
+    l : numpy.array
+        degree (vector). Integer, but not necessarily monotonic.
+        For l < m a vector of zeros will be returned.
+    m : int
+        Order of the Legendre function. If absent, m = 0 is assumed.
+    theRAD : numpy.array 
+        co-latitude in radian
+    dt : (int, optional)
+        integration block-size [rad] (scalar). Defaults to -9999.
     
-    Returns:
-        np.ndarray: Matrix with integrated Legendre functions.
-                Functions are integrated from theRAD(i)-dt/2 till theRAD(i)+dt/2.
-                The matrix has length(TH) rows and length(L) columns, unless L 
-                or TH is scalar. Then the output vector follows the shape of 
-                respectively L or TH.
-    
+    Returns
+    ----------
+    numpy.ndarray
+        Matrix with integrated Legendre functions.
+        Functions are integrated from theRAD(i)-dt/2 till theRAD(i)+dt/2.
+        The matrix has length(TH) rows and length(L) columns, unless L 
+        or TH is scalar. Then the output vector follows the shape of 
+        respectively L or TH.
+
     Notes:
         The blocks at the pole might become too large under circumstances.
         This is not treated separately, i.e. unwanted output may appear.
         In case TH is scalar, dt will be 1 (arbitrarily).
-    
-    TO DO:
-        Instead of using sys.exit() we could raise exceptions - that would be a better way of error handling
-    
+        
     Uses:
         `plm`
     
     Author:
-        Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+        Vivek Kumar Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
+
     if dt == -9999:
-        if len(theRAD) == 1:
-            dt = np.pi/180
-        else:
-            dt = theRAD[1] - theRAD[0]
-    if  min(l.shape) != 1:
-        print('Degree l must be a vector (or scalar)') 
-        sys.exit([])
-    if  np.remainder(l,1).all() != 0:
-        print('Vector l contains non-integers !!') 
-        sys.exit([])
-    # if 
-    #     print('Order m must be a scalar') 
-    #     sys.exit([])
-    if  np.remainder(m,1) != 0:
-        print('Order must be integer')
-        sys.exit([])
-    # if min(dt.shape) !=1:
-    #     print('Block size DT must be scalar.') 
-        sys.exit([])
-    if dt == 0: 
-        print('DT cannot be zero') 
-        sys.exit([])
-        
-    # init
+        dt = np.pi / 180 if len(theRAD) == 1 else theRAD[1] - theRAD[0]
+
+    if min(l.shape) != 1:
+        raise ValueError('Degree l must be a vector (or scalar)')
+
+    if not np.all(np.remainder(l, 1) == 0):
+        raise ValueError('Vector l contains non-integers !!')
+
+    if not np.remainder(m, 1) == 0:
+        raise ValueError('Order must be integer')
+
+    if dt == 0:
+        raise ValueError('DT cannot be zero')
+
+
     lcol = len(l)
     trow = len(theRAD)
     n = len(theRAD)
     theRAD.T
     if min(theRAD) < 0 or max(theRAD) > np.pi:
-        print('Is the co-latitude ''theta'' given in radian?')
-        sys.exit([])
+        raise ValueError('Is the co-latitude ''theta'' given in radian?')
+
     lmax = max(l[0])
     mfix = m
     lvec = np.transpose(l) 
@@ -344,8 +358,8 @@ def iplm(l, m:int, theRAD, dt=-9999):
     ctmin   = np.cos(theRAD-dt/2)
     plmplus = np.ones([n,lmax+1])
     plmmin = np.ones([n,lmax + 1])
-    plmplus[:,l] = PLM(np.array([l]),mfix,(theRAD + dt/2),3,1)[:,:,0]                  # Tesserals
-    plmmin[:,l] = PLM(np.array([l]),mfix,(theRAD - dt/2),3,1)[:,:,0] 
+    plmplus[:,l] = plm(np.array([l]),mfix,(theRAD + dt/2),3,1)[:,:,0]                  # Tesserals
+    plmmin[:,l] = plm(np.array([l]),mfix,(theRAD - dt/2),3,1)[:,:,0] 
     if mfix > 0:
         m = np.arange(1,mfix + 1,1)
         mm = 2*m
@@ -393,11 +407,12 @@ def iplm(l, m:int, theRAD, dt=-9999):
                 root1nm = np.sqrt( (2*l-1) * (2*l-3) / (l-1+mfix) / (l-1-mfix) )
                 ptmp[:,l] = rootnm/(l+1)*( (l-2)*ptmp[:,l-2].T/root1nm + np.power(stplus,2)*plmplus[:,l-1].T -np.power(stmin,2)*plmmin[:,l-1].T)
 
-
-# The integrated functions have been computed. What remains to be done, is to
-# extract the proper columns from ptmp, corresponding to the vector lvec. 
-# If l or theta is scalar the output matrix p reduces to a vector. It should
-# have the shape of respectively theta or l in that case.
+# --------------------------------------------------------------------
+        # The integrated functions have been computed. What remains to be done, is to
+        # extract the proper columns from ptmp, corresponding to the vector lvec. 
+        # If l or theta is scalar the output matrix p reduces to a vector. It should
+        # have the shape of respectively theta or l in that case.
+# --------------------------------------------------------------------
 
 # p     = zeros(n, length(lvec))
     lind = np.argwhere(lvec<mfix)[:,0]      #index into l < m
@@ -415,12 +430,16 @@ def iplm(l, m:int, theRAD, dt=-9999):
 def ispec(a,b = -9999):
     """Returns the function F from the spectra A and B
 
-    Args:
-        a (_type_): cosine coefficients
-        b (int, optional): sine coefficients. Defaults to -9999.
+    Parameters
+    ----------
+    a : int 
+        cosine coefficients
+    b : (int, optional)
+        sine coefficients. Defaults to -9999.
 
-    Returns:
-        f (_type_): _description_
+    Returns
+    ----------
+        f (numpy.ndarray: **fill**
 
     See Also:
         `spec`
@@ -447,27 +466,42 @@ def ispec(a,b = -9999):
     f = np.real(ifft(fs.T).T)
     return f
 
-# @author: Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+
 def eigengrav(lmax: int, fstr: str, h: float):
-    """_summary_
+    """
+    
+    Returns the isotropic spectral transfer (or: eigenvalues) of several gravity related quantities. 
+    Upward continuation may be included.
 
-    Args:
-        lmax (int): Maximum degree of Spherical Coefficients
-        fstr (str): gravity quantity, options: 'None', 'geoid', 'potential', 'gravity', 'tr', 'trr', 'slope'
-                    'water', 'smd', 'height'
-        h (float): _description_
+    Parameters
+    ----------
+    lmax : int
+        Maximum degree of Spherical Coefficients
+    fstr : str
+        denoting the functional under consideration:
+        'none', 
+        'geoid',
+        'dg', 'gravity' ... gravity anomaly,
+        'potential', 
+        'tr' .............. gravity disturbance, 
+        'trr' ............. (d^2/dr^2)
+        'slope' ........... size of surface gradient, 
+        'water' ........... equivalent water thickness, 
+        'smd' ............. surface mass density.
+        'height' .......... vertical displacements
+        h (float): height above Earth mean radius [m].
 
-    Returns:
-        _type_: _description_
+    Returns
+    ----------
+    numpy.ndarray
+        Transfer matrix. Size and shape equal to lmax. Units are respectively 
+            [none], [m], [mGal], [mGal], [E], [m^2/s^2], [rad], [m], [kg/m^2].
+                                                           [n x 1]
+    Uses:
+        upwcon, lovenr, uberall/constants, uberall/isint
 
     Raises:
         TypeError: Enter a valid lmax value
-
-    Author: Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
-
-    TO DO:
-        Can we think about the raising a ValueError instead of instantly terminating the function
-        Adding comments as variable names are not much descriptive
     
     Author:
         Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
@@ -518,11 +552,10 @@ def eigengrav(lmax: int, fstr: str, h: float):
             5517*r, np.add(range(0, 2*lmax + 1, 2), 1)), np.multiply(3, (1+ln)))
         tf = tf.reshape((1, lmax+1))
     elif fstr == 'height':
-        # not sure aobut heights - kept it unchanged ... abhishek
         kl, hl, ll = GB.lovenrPREM(90, 'CF')
         tf = np.divide(np.multiply(hl, (GC.ae*1000)), np.add(kl, 1))
     else:
-        ValueError('Please choose a valid quantity for fstr')
+        ValueError('Requested functional FSTR not available.')
 
     if h > 0:
         upConTerm = GB.upwcon(lmax, h)
@@ -530,16 +563,22 @@ def eigengrav(lmax: int, fstr: str, h: float):
 
     return(tf)
 
+
 def grule(n: int):
     """This function computes Gauss base points and weight factors
     using the algorithm-see Reference
 
-    Args:
-        n (int): number of base points required
+    Parameters
+    ----------
+    n : int 
+        number of base points required
 
-    Returns:
-        np.array: cosine of the base points
-        np.array: weight factors for computing integrals and such
+    Returns
+    ----------
+    bp : numpy.array 
+        cosine of the base points
+    wf : numpy.array
+        weight factors for computing integrals and such
     
     References:
         1. 'Methods of Numerical Integration' by Davis and Rabinowitz, page 365, Academic Press, 1975.
@@ -608,17 +647,22 @@ def grule(n: int):
 def neumann(inn):
     """Returns the weights and nodes for Neumann's numerical integration
 
-    Args:
-        inn (int, np.array): base points (nodes) in the interval [-1;1]
+    Parameters
+    ----------
+    inn : int or numpy.array
+        base points (nodes) in the interval [-1;1]
 
+    Returns
+    ----------
+    w : array
+        quadrature weights
+    x : array
+        base points (nodes) in the interval [-1;1]
+    
     Raises:
         TypeError: Integer input argument required
         ValueError: Error in input dimensions
 
-    Returns:
-        _type_: quadrature weights
-        _type_: base points (nodes) in the interval [-1;1]
-    
     Remarks:
         * 1st N.-method: see Sneeuw (1994) GJI 118, pp 707-716, eq. 19.5
         * 2nd N.-method: see uberall/GRULE
@@ -628,9 +672,6 @@ def neumann(inn):
     
     Uses:
         `grule`, `plm`
-
-    Examples:
-        >>> TO DO: write example how to use the function
     
     Author:
         Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
@@ -650,7 +691,7 @@ def neumann(inn):
             x = inn
             theRAD = np.arccos(x) #x in radian
             l = np.array(list(range(len(x))))
-            pp = PLM(l, theRAD)
+            pp = plm(l, theRAD)
             
             rr = list([2])
             for i in len(x-1):
@@ -668,19 +709,25 @@ def neumann(inn):
     return w, x
 
 
+
 def normalklm(lmax: int, typ: str = 'wgs84'):
     """ NORMALKLM returns an ellipsoidal normal field
     consisting of normalized -Jn, n=0,2,4,6,8
 
-    Args:
-        lmax (int): maximum degree
-        typ (str): Ellipsoids can be either 
-                    'wgs84' - World Geodetic System 84, 
-                    'grs80' - , 
-                    'he' - hydrostatic equilibrium ellipsoid
+    Parameters
+    ----------
+    lmax : int
+        Maximum degree of the spherical harmonics
+    typ : (str, optional) 
+        Ellipsoids can be either 
+            'wgs84' - World Geodetic System 84, 
+            'grs80' - , 
+            'he' - hydrostatic equilibrium ellipsoid
     
-    Returns:
-        nklm (np.array): normal field in CS-format (sparse array - [1, -J2, -J4, -J6, -J8])
+    Returns
+    ----------
+    nklm : numpy.array
+         normal field in CS-format (sparse array - [1, -J2, -J4, -J6, -J8])
     
     TODO: 
         Find type of nklm; I think raising TypeError, VlueError or NameError instad of general Exception
@@ -749,17 +796,24 @@ def normalklm(lmax: int, typ: str = 'wgs84'):
 
 
 def Gaussian(L: int, cap: int):
-    """The program delivers the spherical harmonic coefficients of a gaussian
+    """Generates values for a Gaussian smoothing filter
+    
+    The program delivers the spherical harmonic coefficients of a gaussian
     smoothing filter. The coefficients are calculated according to Wahr et. al.(1998)
     equation (34) and Swenson and Wahr equation (34)
 
 
-    Args:
-        L (int): maximum degree
-        cap (int): half width of Gaussian smoothing function [km]
+    Parameters
+    ----------
+    L : int
+        Maximum degree of the spherical harmonics
+    cap : int
+        half width of Gaussian smoothing function [km]
 
-    Returns:
-        np.ndarray: smoothing coefficients
+    Returns
+    -------
+    W: numpy.ndarray
+        smoothing coefficients
     
     Raises:
         TypeError: Degree must be integer
@@ -805,14 +859,16 @@ def Gaussian(L: int, cap: int):
 def naninterp(X):
     """This function uses cubic interpolation to replace NaNs
 
-    Args:
-        X (_type_): _description_
+    Parameters
+    ----------
+    X : (numpy.array)
+        array with NaN values
 
-    Returns:
-        _type_: _description_
+    Returns
+    ----------
+    numpy.array
+        cubic interpolated array
     """
-
-    nan = np.nan
     
     ok = ~np.isnan(X)
     xp = ok.ravel().nonzero()[0] #Indices of xs with values

@@ -36,64 +36,37 @@ Key Papers Referred:
     partial least squares regression. Scientific data, 8(1), 95.
     https://doi.org/10.1038/s41597-021-00862-6 
     """
+# 2024-06-10, updated: Vivek Kumar Yadav, IISc Bengaluru
 
-__author__ = """Amin Shakya"""
-__email__ = 'aminshk50@gmail.com'
-__version__ = '0.2.1'
+__author__ = """Vivek Kumar Yadav"""
+__email__ = 'viveky@iisc.ac.in'
+__version__ = '0.3.0'
 
 # __init__.py with initialization code
-print("Initializing PySHbundle v0.2.1")
+print("Initializing PySHbundle v0.3.0")
 
 # __init__.py with __all__
 __all__ = ['GRACEpy',
-           'load_longterm_mean',
            'io',
-           'read_GRACE_SH_paths',
-           'reader_replacer',
-           'reader_replacer_csr',
-           'reader_replacer_itsg',
-           'reader_replacer_jpl',
            'viz_utils',
-           'conv_sh',
+           'reshape_SH_coefficients',
            'shutils',
            'hydro',
            'pysh_core'
            ]
 
-#Import individual modules
-#from .basin_avg import BasinAvg
-#from .clm2cs import clm2cs
-#from .clm2sc import clm2sc
-# from .delta_sc import eigengrav
-#rom .eigengrav import eigengrav
-#from .gaussian import Gaussian
-#from .GRACE_Data_Driven_Correction_Vishwakarma import deg_to_rad, GRACE_Data_Driven_Correction_Vishwakarma
-# from .GRACEconstants import 
+
 from .GRACEpy import upwcon, lovenr, lovenrPREM
-#from .grule import grule
-#from .gsha import gsha
-#from .gshs import GSHS
-#from .iplm import iplm
-#from .ispec import ispec
-#from .klm2sc import klm2sc #, klm2sc_new
-from .load_longterm_mean import load_longterm_mean
-#from .naninterp import naninterp
-#from .neumann import neumann
-from .io import read_jpl, parse_jpl_header, parse_jpl_data, parse_lines, read_csr, parse_csr_header, parse_csr_data, read_itsg, parse_itsg_header, parse_itsg_data, read_tn13, parse_tn13_header, parse_tn13_data, read_tn14, parse_tn14_header, parse_tn14_data, find_date_in_replacemnt_file, extract_C10_11_replcmnt_coeff, extract_C20_replcmnt_coeff, extract_C30_replcmnt_coeff, replace_zonal_coeff, cklm2sc_new, check_format
-#from .normalklm import normalklm
-#from .Phase_calc import PhaseCalc
-#from .plm import PLM, secrecur, lrecur, derivALF
-# from .pyshbundle import 
-from .read_GRACE_SH_paths import read_GRACE_SH_paths
-from .reader_replacer import reader, TIME, last_4chars, reader_replacer
-from .reader_replacer_csr import reader_replacer_csr 
-from .reader_replacer_itsg import reader_replacer_itsg 
-from .reader_replacer_jpl import reader_replacer_jpl
-#from .sc2cs import sc2cs
-from .conv_sh import sc2cs, clm2cs, clm2sc, cs2sc, klm2sc
-#from .tws_cal import TWSCalc
-# from .tws_py import 
-from .hydro import TWSCalc, BasinAvg
-from .shutils import PLM, iplm, ispec, eigengrav, grule, Gaussian, neumann, naninterp, normalklm
-from .pysh_core import GSHS, gsha, GRACE_Data_Driven_Correction_Vishwakarma, PhaseCalc
+from .io import extract_SH_data, extract_deg1_coeff_tn13, extract_deg2_3_coeff_tn14, \
+    parse_lines, \
+    parse_jpl_file, parse_csr_file, parse_itsg_file, parse_jpl_header, parse_csr_header, parse_itsg_header, \
+    parse_tn13_header, parse_tn14_header, \
+    find_date_in_replacemnt_file, extract_C10_11_replcmnt_coeff, extract_C20_replcmnt_coeff, \
+    extract_C30_replcmnt_coeff, cklm2sc_new, \
+    read_GRACE_SH_paths, load_longterm_mean
+from .sc2cs import sc2cs
+from .reshape_SH_coefficients import sc2cs, clm2cs, clm2sc, cs2sc, klm2sc
+from .hydro import TWSCalc, area_weighting, Basinaverage
+from .shutils import plm, iplm, ispec, eigengrav, grule, Gaussian, neumann, naninterp, normalklm
+from .pysh_core import gshs, gsha, GRACE_Data_Driven_Correction_Vishwakarma, PhaseCalc
 from .viz_utils import sc_triplot, cs_sqplot, polar_plot, mapfield, ylm, ylm_plot, gshs_prepare

@@ -1,7 +1,9 @@
-notebooks/.ipynb_checkpoints
-notebooks/.ipynb_checkpoints/*
-pyshbundle.egg-info/PKG-INFO
-pyshbundle/.ipynb_checkoutpoints/
-pyshbundle/.ipynb_checkpoints/*
-pyshbundle/__pycache__/
-pyshbundle/__pycache__/*
+.DS_Store
+dist
+build
+pyshbundle.egg-info
+develloping_progress.txt
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+paper_org.md
+pyproject.toml
