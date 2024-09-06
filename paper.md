@@ -75,7 +75,7 @@ Some GRACE data processing tools are available based on the python programming l
  
 # Statement of need
 
-Processing choices introduce subtle differences in the final `L3` product, potentially affecting results. Processing `L2` data offers flexibility for users to explore GRACE data for specific applications. This software aims to simplify access to `L2` products, allowing users to select different processing options.
+Processing choices introduce subtle differences in the final product, potentially affecting results. Processing `L2` data offers flexibility for users to explore GRACE data for specific applications. This software aims to simplify access to `L2` products, allowing users to select different processing options.
 
 The software processes widely used `L2` products from CSR, JPL, and GFZ. It closely follows the structure of the Matlab-based [`SHbundle`](https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle) and [`GRACE Data Driven Correction (GDDC)`](https://doi.org/10.1002/2017WR021150)[@vishwakarma2017data] codes, enabling cross-compatibility between Python and Matlab users.
 
