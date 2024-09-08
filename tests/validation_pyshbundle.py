@@ -28,7 +28,7 @@ sys.path.append(parent_dir)
 
 # Add the necessary paths
 sys.path.append(os.path.join(parent_dir, 'pyshbundle'))
-sys.path.append(os.path.join(parent_dir, 'sample_input_data'))
+sys.path.append(os.path.join(parent_dir, 'data'))
 
 # Rest of the code...
 def validation_pyshbundle():
