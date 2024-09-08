@@ -1,0 +1,53 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+[project]
+name = "pyshbundle"
+version = "0.3.0"
+dependencies=[
+    "pip",
+    "numpy",
+    "pandas",
+    "netCDF4",
+    "scipy",
+    "xarray",
+    "julian",
+    "scipy",
+    "geopandas",
+    "matplotlib",
+    "rasterio",
+    "shapely",
+    "tqdm",
+    "cartopy",
+    "ipykernel",
+    "jupyterlab",
+    "rioxarray",
+]
+authors = [
+  { name="Amin Shakya", email="aminshk50@outlook.com"},
+]
+maintainers =  [
+    {name="Abhishek Mhamane", email="vabhi.mhamane30@gmail.com"}, 
+    {name="Vivek Kumar Yadav", email="viveky@iisc.ac.in"},
+]
+
+description = "PySHbundle: A Python implementation of GRACE Spherical Harmonics Synthesis MATLAB codes SHbundle"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers=[
+    'Development Status :: 4 - Beta',
+    'Intended Audience :: Science/Research',
+    'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+    'Natural Language :: English',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.12',
+]
+keywords = ["Spherical Harmonics", "Geodesy", "Hydrology"]
+license={file = "LICENSE.md"}
+
+
+[project.urls]
+Homepage = "https://github.com/lsmvivek/pyshbundle"
+Issues = "https://github.com/lsmvivek/pyshbundle/issues"
