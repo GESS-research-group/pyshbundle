@@ -99,7 +99,7 @@ Based on the main modules, we provide examples as jupyter notebooks for understa
 
 # Acknowledgements
 
-The authors would like to thank Dr.-Ing. Markus Antoni and Clara Buetzler, Institute of Geodesy, University of Stuttgart, Germany, for early feedback. We are grateful to the financial support from IISc-ISRO Space Technology Cell for funding the project titled "Improving the spatial resolution of GRACE TWS for India using remote sensing datasets and modeling approach" under grant number STC0437.
+The authors would like to thank Dr.-Ing. Markus Antoni and Clara Buetzler, Institute of Geodesy, University of Stuttgart, Germany, for early feedback. We are grateful for the financial support from IISc-ISRO Space Technology Cell for funding the project titled "Improving the spatial resolution of GRACE TWS for India using remote sensing datasets and modeling approach" under grant number STC0437. BDV would like to acknowledge the financial support from Science and Engineering Research Board, Government of India, under the grand agreement number SRG/2022/000625 for the MATRA project.
 
 # Future Plan
 
