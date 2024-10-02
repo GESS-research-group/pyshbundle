@@ -68,7 +68,7 @@ Data for trying out this new tool is included in the repo. After installing and 
 
 ## Docs
 
-Please find the docs here - [PySHBundle](https://abhimhamane.github.io/pyshbundle/)
+Please find the docs here - [PySHBundle](https://gess-research-group.github.io/pyshbundle/)
 
 
 ## Contributing
