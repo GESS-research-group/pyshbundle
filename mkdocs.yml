@@ -2,7 +2,7 @@ site_name: pyshbundle
 
 site_url: https://abhimhamane.github.io/pyshbundle
 
-repo_url: https://github.com/abhimhamane/pyshbundle
+repo_url: https://github.com/GESS-research-group/pyshbundle
 
 theme:
       name: material
@@ -45,7 +45,7 @@ nav:
     - Contributing: contributing.md
     - FAQ: faq.md
     - Changelog: changelog.md
-    - Report Issues: https://github.com/mn5hk/pyshbundle/issues
+    - Report Issues: https://github.com/GESS-research-group/pyshbundle/issues
     - Reference Manual:
             - pyshbundle Introduction: pyshbundle.md
             - Load Data: load_data.md
