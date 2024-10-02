@@ -9,7 +9,7 @@ You can contribute in many ways.
 
 ### Report Bugs
 
-Report bugs at <https://github.com/mn5hk/pyshbundle/issues>.
+Report bugs at <https://github.com/GESS-research-group/pyshbundle/issues>.
 
 If you are reporting a bug, please include:
 
@@ -38,7 +38,7 @@ Another prefered way is to create explainatory tutorials. Using the `PySHBundle`
 ### Feedback
 
 The best way to send feedback is to file an issue at
-<https://github.com/mn5hk/pyshbundle/issues>.
+<https://github.com/GESS-research-group/pyshbundle/issues>.
 
 If you are proposing a feature:
 
