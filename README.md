@@ -23,7 +23,7 @@ $ git clone https://github.com/lsmvivek/pyshbundle.git
 $ pip install .
 
 
-# The package is available on pip but not updated to the latest version
+# The package is available on pip but is BROKEN
 # Please avoid installing via pip till we fix that
 # creating a new virtual environment
 $ python3 -m venv <name-env>
@@ -68,7 +68,7 @@ Data for trying out this new tool is included in the repo. After installing and 
 
 ## Docs
 
-Please find the docs here - [PySHBundle](https://mn5hk.github.io/pyshbundle/)
+Please find the docs here - [PySHBundle](https://abhimhamane.github.io/pyshbundle/)
 
 
 ## Contributing
