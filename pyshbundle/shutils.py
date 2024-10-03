@@ -224,18 +224,23 @@ def secrecur(m, y):
 # % function for the l-recursion
 
 def lrecur(inn, x, m, lmax):
-    """[Helper Function]  
+    """Helper Function
 
     Parameters
     ----------
-    inn (int): _description_
-    x (int): _description_
-    m (int): _description_
-    lmax (int): _description_
+    inn : int
+        _description_
+    x : int
+        _description_
+    m : int
+        _description_
+    lmax : int
+        _description_
 
     Returns
     ----------
-        _type_: _description_
+    inn : 
+        _description_
     """
     for ll in np.arange(int(m)+1,lmax+1,1):
        col   = ll - m+1			                                                # points to the next collumn of ptmp
@@ -258,15 +263,15 @@ def derivALF(inn, miin, plin, m, lmax):
 
     Parameters
     ----------
-    inn (numpy.ndarray): _description_
-    miin (numpy.ndarray): _description_
-    plin (numpy.ndarray): _description_
-    m (int): order of associated legendre functions
-    lmax (int): maximum degree
+    inn (numpy.ndarray) : _description_
+    miin (numpy.ndarray) : _description_
+    plin (numpy.ndarray) : _description_
+    m (int) : order of associated legendre functions
+    lmax (int) : maximum degree
 
     Returns
     -------
-        numpy.ndarray: derivatives of the associated Legendre functions
+        numpy.ndarray : derivatives of the associated Legendre functions
     """
     l = np.arange(m,lmax+2,1)
     if m == 0:
