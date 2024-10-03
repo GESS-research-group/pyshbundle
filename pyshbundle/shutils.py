@@ -66,8 +66,9 @@ def plm(l: np.array, m:int, thetaRAD, nargin, nargout):
         number of input argument
     nargout : int
         number of output argument
+
     Returns
-    ----------
+    -------
     p : array
         plm fully normalized Legendre functions
     dp : array
@@ -197,8 +198,8 @@ def plm(l: np.array, m:int, thetaRAD, nargin, nargout):
 
   
 def secrecur(m, y):
-    """Helper Function for sectorial recursion.
-
+    """
+    Helper Function for sectorial recursion.
     This function computes the sectorial recursion for given parameters.
 
     Parameters
@@ -209,7 +210,7 @@ def secrecur(m, y):
         The input array for which the recursion is computed.
 
     Returns
-    ----------
+    -------
         numpy.ndarray: The result of the sectorial recursion.
     """
     if m == 0:
@@ -224,23 +225,23 @@ def secrecur(m, y):
 # % function for the l-recursion
 
 def lrecur(inn, x, m, lmax):
-    """Helper Function
+    """Helper function for recursion.
 
     Parameters
     ----------
     inn : int
-        _description_
+        Input value representing the initial condition.
     x : int
-        _description_
+        The current value for the recursion.
     m : int
-        _description_
+        Order of the recursion.
     lmax : int
-        _description_
+        Maximum value for recursion.
 
     Returns
-    ----------
-    inn : 
-        _description_
+    -------
+    inn : int
+        Updated value after performing the recursion based on parameters.
     """
     for ll in np.arange(int(m)+1,lmax+1,1):
        col   = ll - m+1			                                                # points to the next collumn of ptmp
@@ -263,15 +264,21 @@ def derivALF(inn, miin, plin, m, lmax):
 
     Parameters
     ----------
-    inn (numpy.ndarray) : _description_
-    miin (numpy.ndarray) : _description_
-    plin (numpy.ndarray) : _description_
-    m (int) : order of associated legendre functions
-    lmax (int) : maximum degree
+    inn : np.ndarray 
+        _description_
+    miin : np.ndarray
+        _description_
+    plin : np.ndarray
+        _description_
+    m : int 
+        order of associated legendre functions
+    lmax : int 
+        maximum degree
 
     Returns
     -------
-        numpy.ndarray : derivatives of the associated Legendre functions
+    inn : np.ndarray
+        derivatives of the associated Legendre functions
     """
     l = np.arange(m,lmax+2,1)
     if m == 0:
@@ -292,8 +299,8 @@ def derivALF(inn, miin, plin, m, lmax):
 
 
 def iplm(l, m:int, theRAD, dt=-9999):
-    """iplm Integrals of the fully normalized associated Legendre functions
-        over blocks for a selected order M. 
+    """
+    iplm Integrals of the fully normalized associated Legendre functions over blocks for a selected order M. 
 
     Parameters
     ----------
@@ -308,8 +315,8 @@ def iplm(l, m:int, theRAD, dt=-9999):
         integration block-size [rad] (scalar). Defaults to -9999.
     
     Returns
-    ----------
-    numpy.ndarray
+    -------
+    p : np.ndarray
         Matrix with integrated Legendre functions.
         Functions are integrated from theRAD(i)-dt/2 till theRAD(i)+dt/2.
         The matrix has length(TH) rows and length(L) columns, unless L 
@@ -443,7 +450,7 @@ def ispec(a,b = -9999):
         sine coefficients. Defaults to -9999.
 
     Returns
-    ----------
+    -------
         f (numpy.ndarray: **fill**
 
     See Also:
@@ -474,7 +481,6 @@ def ispec(a,b = -9999):
 
 def eigengrav(lmax: int, fstr: str, h: float):
     """
-    
     Returns the isotropic spectral transfer (or: eigenvalues) of several gravity related quantities. 
     Upward continuation may be included.
 
@@ -497,8 +503,8 @@ def eigengrav(lmax: int, fstr: str, h: float):
         h (float): height above Earth mean radius [m].
 
     Returns
-    ----------
-    numpy.ndarray
+    -------
+    np.ndarray
         Transfer matrix. Size and shape equal to lmax. Units are respectively 
             [none], [m], [mGal], [mGal], [E], [m^2/s^2], [rad], [m], [kg/m^2].
                                                            [n x 1]
@@ -570,8 +576,7 @@ def eigengrav(lmax: int, fstr: str, h: float):
 
 
 def grule(n: int):
-    """This function computes Gauss base points and weight factors
-    using the algorithm-see Reference
+    """This function computes Gauss base points and weight factors using the algorithm-see Reference
 
     Parameters
     ----------
@@ -579,10 +584,10 @@ def grule(n: int):
         number of base points required
 
     Returns
-    ----------
-    bp : numpy.array 
+    -------
+    bp : np.array 
         cosine of the base points
-    wf : numpy.array
+    wf : np.array
         weight factors for computing integrals and such
     
     References:
@@ -658,7 +663,7 @@ def neumann(inn):
         base points (nodes) in the interval [-1;1]
 
     Returns
-    ----------
+    -------
     w : array
         quadrature weights
     x : array
@@ -730,7 +735,7 @@ def normalklm(lmax: int, typ: str = 'wgs84'):
             'he' - hydrostatic equilibrium ellipsoid
     
     Returns
-    ----------
+    -------
     nklm : numpy.array
          normal field in CS-format (sparse array - [1, -J2, -J4, -J6, -J8])
     
@@ -870,7 +875,7 @@ def naninterp(X):
         array with NaN values
 
     Returns
-    ----------
+    -------
     numpy.array
         cubic interpolated array
     """
