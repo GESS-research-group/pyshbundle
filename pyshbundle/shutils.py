@@ -813,14 +813,14 @@ def Gaussian(L: int, cap: int):
     equation (34) and Swenson and Wahr equation (34)
 
 
-    Parameters
+    Parameters:
     ----------
     L : int
         Maximum degree of the spherical harmonics
     cap : int
         half width of Gaussian smoothing function [km]
 
-    Returns
+    Returns:
     -------
     W: numpy.ndarray
         smoothing coefficients

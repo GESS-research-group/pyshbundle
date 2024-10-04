@@ -12,6 +12,14 @@ It is hoped the contribution will make GRACE L2 data processing more accessible 
 
 ## How to install <br>
 ```shell
+# clone the repository in order to access the notebooks and data
+$ git clone https://github.com/lsmvivek/pyshbundle.git
+$ pip install .
+
+
+# The package is available on pip but is broken
+# Please AVOID installing via pip till we fix that
+
 # creating a new virtual environment
 $ python3 -m venv <name-env>
 # activate the virtual environment environment
@@ -20,7 +28,7 @@ $ source </location-of-virt-env/name-env/bin/activate>
 $ pip install pyshbundle
 
 # clone the repository in order to access the notebooks and data
-$ git clone git@github.com:mn5hk/pyshbundle.git
+$ git clone https://github.com/lsmvivek/pyshbundle.git
 ```
 For more details refer to the installation section.
 
