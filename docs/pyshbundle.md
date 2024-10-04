@@ -8,6 +8,6 @@
   + [Core functionality](core_functionality.md)
   + [Auxillary codes](auxillary_codes.md)
 
-  ![Schematic diagram of code workflow](img/01_flowchart_20240327.jpg)
+  ![Schematic diagram of code workflow](img/pyshbundle_structure.png)
 
   Navigate the Reference Manual based on the following schematic
