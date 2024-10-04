@@ -51,31 +51,25 @@ from pyshbundle.pysh_core import gshs
 
 
 def TWSCalc(data, lmax: int, gs: float, r:float, m: int):
-    """Spherical Harmonics Synthesis for Total Water Storage (TWS) calculation.
-    
+    """
+    Spherical Harmonics Synthesis for Total Water Storage (TWS) calculation.
+
     Calculate the total water storage (TWS) from spherical harmonics coefficients.
     Uses spherical harmonics synthesis to go from harmonics to gridded domain.
 
-    Parameters
-    ----------
-    data : numpy.ndarray
-        Spherical harmonics coefficients in SC format
-    lmax : int
-        Maximum degree of the spherical harmonics coefficients
-    gs : float 
-        grid size
-    r : float
-        half-width of the Gaussian filter
-    m : int
-        number of time steps
+    Args:
+        data (numpy.ndarray): Spherical harmonics coefficients in SC format.
+        lmax (int): Maximum degree of the spherical harmonics coefficients.
+        gs (float): Grid size.
+        r (float): Half-width of the Gaussian filter.
+        m (int): Number of time steps.
 
-    Returns
-    ----------
-    numpy.ndarray
-        Gridded TWS data
+    Returns:
+        (numpy.ndarray): Gridded TWS data.
 
-    Uses:    
-        'Gaussian', 'gshs',
+    Uses:
+        'Gaussian', 'gshs'
+
     Author:
         Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
@@ -108,21 +102,16 @@ def TWSCalc(data, lmax: int, gs: float, r:float, m: int):
     return(tws_f)
 
 def apply_gaussian(sc_coeff, gaussian_coeff, lmax):
-    """Apply Gaussian filter on the spherical harmonics coefficients.
-    
-    Parameters
-    ----------
-    sc_coeff : numpy.ndarray 
-        Spherical harmonics coefficients in SC format
-    gaussian_coeff : numpy.ndarray 
-        Gaussian filter weights
-    lmax : int 
-        Maximum degree of the spherical harmonics coefficients
+    """
+    Apply Gaussian filter on the spherical harmonics coefficients.
 
-    Returns
-    ----------
-    numpy.ndarray
-        Filtered spherical harmonics coefficients in SC format
+    Args:
+        sc_coeff (numpy.ndarray): Spherical harmonics coefficients in SC format.
+        gaussian_coeff (numpy.ndarray): Gaussian filter weights.
+        lmax (int): Maximum degree of the spherical harmonics coefficients.
+
+    Returns:
+        (numpy.ndarray): Filtered spherical harmonics coefficients in SC format.
     """
     
     # filtered SH Coeff
@@ -135,18 +124,16 @@ def apply_gaussian(sc_coeff, gaussian_coeff, lmax):
     return shfil
 
 def area_weighting(grid_resolution):
-    """Calculate the area of each grid corresponding to the latitudes and longitudes.
- 
-    Parameters
-    ----------
-    grid_resolution : float
-        The resolution of the grid in grid_resolutionrees.
- 
-     Returns
-    ----------
-    numpy.ndarray
-        The area of each grid in square meters.
-     """
+    """
+    Calculate the area of each grid, globally, corresponding to the latitudes and longitudes.
+
+    Args:
+        grid_resolution (float): The resolution of the grid in degrees.
+
+    Returns:
+        (numpy.ndarray): A matrirx of area of each grid on the surface of the Earth in m^2.
+    """
+    
     longitude_grid = np.linspace(0, 359+(1-grid_resolution), int(360/grid_resolution), dtype='float');
     latitude_grid = np.linspace(0, 179+(1-grid_resolution), int(180/grid_resolution), dtype='float');
     longitude_grid1 = np.linspace(1*grid_resolution, 360, int(360/grid_resolution), dtype='float');
@@ -163,29 +150,22 @@ def area_weighting(grid_resolution):
     return area
 
 def Basinaverage(temp, gs, shp_basin, basin_area):
-    """Calculate the basin average of the total water storage (TWS) from the gridded TWS data.
+    """
+    Calculate the basin average of the total water storage (TWS) from the gridded TWS data.
 
     Applies area weighting to the gridded TWS data and then clips the data to the basin shapefile.
-    Followed by summation of data over the latitude and longitude dimensions, divides it by basin-
+    Followed by summation of data over the latitude and longitude dimensions, divides it by basin
     area to get the basin average TWS.
-    
-    Parameters
-    ----------
-    temp : xarray.DataArray 
-        Gridded total water storage data
-    gs : float
-        grid size
-    shp_basin : geopandas.GeoDataFrame
-        Shapefile of the basin
-    basin_area : float
-        Area of the basin in square meters
 
-    Returns
-    ----------
-    xarray.DataArray
-        Total water storage data clipped to the basin
-    xarray.DataArray
-        Basin average total water storage
+    Args:
+        temp (xarray.DataArray): Gridded total water storage data.
+        gs (float): Grid size.
+        shp_basin (geopandas.GeoDataFrame): Shapefile of the basin.
+        basin_area (float): Area of the basin in square meters.
+
+    Returns:
+        basin_tws (xarray.DataArray): Total water storage data clipped to the basin.
+        basin_avg_tws (xarray.DataArray): Basin average total water storage.
     """
 
     from pyshbundle.hydro import area_weighting

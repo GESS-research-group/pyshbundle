@@ -1,8 +1,6 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 # Spherical Harmonics Utilities
 # Curator: Abhishek Mhamane
-
+# Updated: Vivek, 2024-10-04
 # - - - - - - - - - - - - - - 
 # License:
 #    This file is part of PySHbundle.
@@ -51,33 +49,23 @@ from pyshbundle import GRACEconstants as GC
 
 
 def plm(l: np.array, m:int, thetaRAD, nargin, nargout): 
-    """plm Fully normalized associated Legendre functions for a selected order M
+    """
+    Fully normalized associated Legendre functions for a selected order M.
 
-    Parameters
-    ----------
-    l : numpy.array
-        Degree, but not necessarily monotonic.
-            For l < m a vector of zeros will be returned.
-    m : int
-        order. If absent, m = 0 is assumed.
-    thetaRAD : numpy.array
-        Co-latitude in radians
-    nargin : int
-        number of input argument
-    nargout : int
-        number of output argument
+    Args:
+        l (numpy.array): Degree, but not necessarily monotonic. For l < m a vector of zeros will be returned.
+        m (int): Order. If absent, m = 0 is assumed.
+        thetaRAD (numpy.array): Co-latitude in radians.
+        nargin (int): Number of input arguments.
+        nargout (int): Number of output arguments.
 
-    Returns
-    -------
-    p : array
-        plm fully normalized Legendre functions
-    dp : array
-        first derivative of plm
-    ddp : array
-        second derivative of plm
-    
+    Returns:
+        (numpy.array): Fully normalized Legendre functions.
+        (numpy.array): First derivative of the Legendre functions.
+        (numpy.array): Second derivative of the Legendre functions.
+
     Author:
-        Vivek Kumar Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+        Vivek Kumar Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc).
     """
 
     if  min(l.shape) != 1:
@@ -202,15 +190,11 @@ def secrecur(m, y):
     Helper Function for sectorial recursion.
     This function computes the sectorial recursion for given parameters.
 
-    Parameters
-    ----------
-    m : int
-        The order of the recursion.
-    y : numpy.ndarray
-        The input array for which the recursion is computed.
+    Args:
+        m (int): The order of the recursion.
+        y (numpy.ndarray): The input array for which the recursion is computed.
 
-    Returns
-    -------
+    Returns:
         numpy.ndarray: The result of the sectorial recursion.
     """
     if m == 0:
@@ -225,23 +209,17 @@ def secrecur(m, y):
 # % function for the l-recursion
 
 def lrecur(inn, x, m, lmax):
-    """Helper function for recursion.
+    """
+    Helper function for recursion.
 
-    Parameters
-    ----------
-    inn : int
-        Input value representing the initial condition.
-    x : int
-        The current value for the recursion.
-    m : int
-        Order of the recursion.
-    lmax : int
-        Maximum value for recursion.
+    Args:
+        inn (int): Input value representing the initial condition.
+        x (int): The current value for the recursion.
+        m (int): Order of the recursion.
+        lmax (int): Maximum value for recursion.
 
-    Returns
-    -------
-    inn : int
-        Updated value after performing the recursion based on parameters.
+    Returns:
+        (int): Updated value after performing the recursion based on parameters.
     """
     for ll in np.arange(int(m)+1,lmax+1,1):
        col   = ll - m+1			                                                # points to the next collumn of ptmp
@@ -260,25 +238,18 @@ def lrecur(inn, x, m, lmax):
 # function to calculate the derivate
 
 def derivALF(inn, miin, plin, m, lmax):
-    """Function to calculate the derivate of the associated Legendre functions
+    """
+    Function to calculate the derivative of the associated Legendre functions.
 
-    Parameters
-    ----------
-    inn : np.ndarray 
-        _description_
-    miin : np.ndarray
-        _description_
-    plin : np.ndarray
-        _description_
-    m : int 
-        order of associated legendre functions
-    lmax : int 
-        maximum degree
+    Args:
+        inn (np.ndarray): Input array representing the initial condition.
+        miin (np.ndarray): Array for the preceding elements in the recursion.
+        plin (np.ndarray): Array for the subsequent elements in the recursion.
+        m (int): Order of the associated Legendre functions.
+        lmax (int): Maximum degree.
 
-    Returns
-    -------
-    inn : np.ndarray
-        derivatives of the associated Legendre functions
+    Returns:
+        (numpy.ndarray): Derivatives of the associated Legendre functions.
     """
     l = np.arange(m,lmax+2,1)
     if m == 0:
@@ -300,37 +271,30 @@ def derivALF(inn, miin, plin, m, lmax):
 
 def iplm(l, m:int, theRAD, dt=-9999):
     """
-    iplm Integrals of the fully normalized associated Legendre functions over blocks for a selected order M. 
+    Integrals of the fully normalized associated Legendre functions over blocks for a selected order M.
 
-    Parameters
-    ----------
-    l : numpy.array
-        degree (vector). Integer, but not necessarily monotonic.
-        For l < m a vector of zeros will be returned.
-    m : int
-        Order of the Legendre function. If absent, m = 0 is assumed.
-    theRAD : numpy.array 
-        co-latitude in radian
-    dt : (int, optional)
-        integration block-size [rad] (scalar). Defaults to -9999.
-    
-    Returns
-    -------
-    p : np.ndarray
-        Matrix with integrated Legendre functions.
-        Functions are integrated from theRAD(i)-dt/2 till theRAD(i)+dt/2.
-        The matrix has length(TH) rows and length(L) columns, unless L 
-        or TH is scalar. Then the output vector follows the shape of 
-        respectively L or TH.
+    Args:
+        l (numpy.array): Degree (vector). Integer, but not necessarily monotonic.
+            For l < m a vector of zeros will be returned.
+        m (int): Order of the Legendre function. If absent, m = 0 is assumed.
+        theRAD (numpy.array): Co-latitude in radians.
+        dt (int, optional): Integration block-size [rad] (scalar). Defaults to -9999.
+
+    Returns:
+        (numpy.ndarray): Matrix with integrated Legendre functions.
+            Functions are integrated from theRAD(i)-dt/2 till theRAD(i)+dt/2.
+            The matrix has length(TH) rows and length(L) columns, unless L 
+            or TH is scalar. Then the output vector follows the shape of 
+            respectively L or TH.
 
     Notes:
         The blocks at the pole might become too large under circumstances.
         This is not treated separately, i.e. unwanted output may appear.
         In case TH is scalar, dt will be 1 (arbitrarily).
-        
+
     Uses:
         `plm`
-    
+
     Author:
         Vivek Kumar Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
@@ -440,24 +404,21 @@ def iplm(l, m:int, theRAD, dt=-9999):
 
 
 def ispec(a,b = -9999):
-    """Returns the function F from the spectra A and B
+    """
+    Returns the function F from the spectra A and B.
 
-    Parameters
-    ----------
-    a : int 
-        cosine coefficients
-    b : (int, optional)
-        sine coefficients. Defaults to -9999.
+    Args:
+        a (numpy.ndarray): Cosine coefficients.
+        b (numpy.ndarray, optional): Sine coefficients. Defaults to -9999.
 
-    Returns
-    -------
-        f (numpy.ndarray: **fill**
+    Returns:
+        (numpy.ndarray): The function F computed from the spectra A and B.
 
     See Also:
         `spec`
-    
+
     Author:
-        Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+        Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc).
     """
     
     n2 = a.shape[0]
@@ -484,38 +445,33 @@ def eigengrav(lmax: int, fstr: str, h: float):
     Returns the isotropic spectral transfer (or: eigenvalues) of several gravity related quantities. 
     Upward continuation may be included.
 
-    Parameters
-    ----------
-    lmax : int
-        Maximum degree of Spherical Coefficients
-    fstr : str
-        denoting the functional under consideration:
-        'none', 
-        'geoid',
-        'dg', 'gravity' ... gravity anomaly,
-        'potential', 
-        'tr' .............. gravity disturbance, 
-        'trr' ............. (d^2/dr^2)
-        'slope' ........... size of surface gradient, 
-        'water' ........... equivalent water thickness, 
-        'smd' ............. surface mass density.
-        'height' .......... vertical displacements
-        h (float): height above Earth mean radius [m].
+    Args:
+        lmax (int): Maximum degree of Spherical Coefficients.
+        fstr (str): Denoting the functional under consideration:
+            'none', 
+            'geoid',
+            'dg', 'gravity' ... gravity anomaly,
+            'potential', 
+            'tr' .............. gravity disturbance, 
+            'trr' ............. (d^2/dr^2)
+            'slope' ........... size of surface gradient, 
+            'water' ........... equivalent water thickness, 
+            'smd' ............. surface mass density.
+            'height' .......... vertical displacements.
+        h (float): Height above Earth mean radius [m].
 
-    Returns
-    -------
-    np.ndarray
-        Transfer matrix. Size and shape equal to lmax. Units are respectively 
-            [none], [m], [mGal], [mGal], [E], [m^2/s^2], [rad], [m], [kg/m^2].
-                                                           [n x 1]
+    Returns:
+        (np.ndarray): Transfer matrix. Size and shape equal to lmax. 
+                    Units are respectively [none], [m], [mGal], [mGal], [E], [m^2/s^2], [rad], [m], [kg/m^2] [n x 1]
+
     Uses:
         upwcon, lovenr, uberall/constants, uberall/isint
 
     Raises:
-        TypeError: Enter a valid lmax value
+        TypeError: Enter a valid lmax value.
     
     Author:
-        Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+        Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc).
     """
 
     if type(lmax) == int:
@@ -576,23 +532,20 @@ def eigengrav(lmax: int, fstr: str, h: float):
 
 
 def grule(n: int):
-    """This function computes Gauss base points and weight factors using the algorithm-see Reference
+    """
+    Computes Gauss base points and weight factors using the algorithm.
 
-    Parameters
-    ----------
-    n : int 
-        number of base points required
+    Args:
+        n (int): Number of base points required.
 
-    Returns
-    -------
-    bp : np.array 
-        cosine of the base points
-    wf : np.array
-        weight factors for computing integrals and such
-    
+    Returns:
+        tuple: A tuple containing:
+            - bp (numpy.ndarray): Cosine of the base points.
+            - wf (numpy.ndarray): Weight factors for computing integrals and such.
+
     References:
-        1. 'Methods of Numerical Integration' by Davis and Rabinowitz, page 365, Academic Press, 1975.
-    
+        - 'Methods of Numerical Integration' by Davis and Rabinowitz, page 365, Academic Press, 1975.
+
     Author:
         Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
@@ -655,36 +608,33 @@ def grule(n: int):
 
 
 def neumann(inn):
-    """Returns the weights and nodes for Neumann's numerical integration
+    """
+    Returns the weights and nodes for Neumann's numerical integration.
 
-    Parameters
-    ----------
-    inn : int or numpy.array
-        base points (nodes) in the interval [-1;1]
+    Args:
+        inn (int or numpy.array): Base points (nodes) in the interval [-1;1].
 
-    Returns
-    -------
-    w : array
-        quadrature weights
-    x : array
-        base points (nodes) in the interval [-1;1]
-    
+    Returns:
+        tuple: A tuple containing:
+            - w (numpy.array): Quadrature weights.
+            - x (numpy.array): Base points (nodes) in the interval [-1;1].
+
     Raises:
-        TypeError: Integer input argument required
-        ValueError: Error in input dimensions
+        TypeError: If the input argument is not an integer.
+        ValueError: If there is an error in input dimensions.
 
     Remarks:
-        * 1st N.-method: see Sneeuw (1994) GJI 118, pp 707-716, eq. 19.5
-        * 2nd N.-method: see uberall/GRULE
-    
-    Todo: 
-        + TypeError is more relavant and shape error from np
-    
+        * 1st N.-method: see Sneeuw (1994) GJI 118, pp 707-716, eq. 19.5.
+        * 2nd N.-method: see uberall/GRULE.
+
+    Todo:
+        + TypeError is more relevant and shape error from numpy.
+
     Uses:
-        `grule`, `plm`
-    
+        `grule`, `plm`.
+
     Author:
-        Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+        Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc).
     """
 
     try: #if input is an integer
@@ -721,38 +671,28 @@ def neumann(inn):
 
 
 def normalklm(lmax: int, typ: str = 'wgs84'):
-    """ NORMALKLM returns an ellipsoidal normal field
-    consisting of normalized -Jn, n=0,2,4,6,8
+    """
+    Returns an ellipsoidal normal field consisting of normalized -Jn, n=0,2,4,6,8.
 
-    Parameters
-    ----------
-    lmax : int
-        Maximum degree of the spherical harmonics
-    typ : (str, optional) 
-        Ellipsoids can be either 
-            'wgs84' - World Geodetic System 84, 
-            'grs80' - , 
-            'he' - hydrostatic equilibrium ellipsoid
-    
-    Returns
-    -------
-    nklm : numpy.array
-         normal field in CS-format (sparse array - [1, -J2, -J4, -J6, -J8])
-    
-    TODO: 
-        Find type of nklm; I think raising TypeError, VlueError or NameError instad of general Exception
+    Args:
+        lmax (int): Maximum degree of the spherical harmonics.
+        typ (str, optional): Ellipsoids can be either 'wgs84' (World Geodetic System 84), 
+                             'grs80', or 'he' (hydrostatic equilibrium ellipsoid).
+
+    Returns:
+        (numpy.array): Normal field in CS-format (sparse array - [1, -J2, -J4, -J6, -J8]).
 
     Raises:
-        TypeError: lmax should be an integer
-        ValueError: lmax should be positive
-        ValueError: Unknown type of ellipsoid, supports 'wgs84', `GRS80` and 'he'
-    
+        TypeError: If `lmax` is not an integer.
+        ValueError: If `lmax` is not positive.
+        ValueError: If `typ` is an unknown ellipsoid type. Supports 'wgs84', 'grs80', and 'he'.
+
     References:
-        1. J2,J4 values for hydrostatic equilibrium ellipsoid from Lambeck (1988)
-        "Geophysical Geodesy", p.18 
-    
+        1. J2, J4 values for hydrostatic equilibrium ellipsoid from Lambeck (1988)
+           "Geophysical Geodesy", p.18.
+
     Author:
-        Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+        Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc).
     """
     
     if type(lmax) != int:
@@ -806,35 +746,29 @@ def normalklm(lmax: int, typ: str = 'wgs84'):
 
 
 def Gaussian(L: int, cap: int):
-    """Generates values for a Gaussian smoothing filter
-    
-    The program delivers the spherical harmonic coefficients of a gaussian
-    smoothing filter. The coefficients are calculated according to Wahr et. al.(1998)
-    equation (34) and Swenson and Wahr equation (34)
+    """Generates values for a Gaussian smoothing filter.
 
+    The program delivers the spherical harmonic coefficients of a Gaussian
+    smoothing filter. The coefficients are calculated according to Wahr et al. (1998)
+    equation (34) and Swenson and Wahr equation (34).
 
-    Parameters:
-    ----------
-    L : int
-        Maximum degree of the spherical harmonics
-    cap : int
-        half width of Gaussian smoothing function [km]
+    Args:
+        L (int): Maximum degree of the spherical harmonics.
+        cap (int): Half width of Gaussian smoothing function [km].
 
     Returns:
-    -------
-    W: numpy.ndarray
-        smoothing coefficients
-    
+        (np.ndarray): Smoothing coefficients of the Gausiann filter.
+
     Raises:
-        TypeError: Degree must be integer
-        ValueError: Maximum degree must be higher than 2
-        TypeError: Cap size must be an integer
-    
+        TypeError: If `L` is not an integer.
+        ValueError: If `L` is less than or equal to 2.
+        TypeError: If `cap` is not an integer.
+
     References:
-        Wahr et.al. (1998) equation (34) and Swenson and Wahr equation (34)
-    
+        Wahr et al. (1998) equation (34) and Swenson and Wahr equation (34).
+
     Author:
-        Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+        Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc).
     """
     
     #Check input
@@ -867,17 +801,14 @@ def Gaussian(L: int, cap: int):
 
 
 def naninterp(X):
-    """This function uses cubic interpolation to replace NaNs
+    """
+    This function uses cubic interpolation to replace NaNs.
 
-    Parameters
-    ----------
-    X : (numpy.array)
-        array with NaN values
+    Args:
+        X (numpy.array): Array with NaN values.
 
-    Returns
-    -------
-    numpy.array
-        cubic interpolated array
+    Returns:
+        numpy.array: Cubic interpolated array.
     """
     
     ok = ~np.isnan(X)

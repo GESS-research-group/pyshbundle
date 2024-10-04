@@ -62,10 +62,10 @@ from .io import extract_SH_data, extract_deg1_coeff_tn13, extract_deg2_3_coeff_t
     parse_jpl_file, parse_csr_file, parse_itsg_file, parse_jpl_header, parse_csr_header, parse_itsg_header, \
     parse_tn13_header, parse_tn14_header, \
     find_date_in_replacemnt_file, extract_C10_11_replcmnt_coeff, extract_C20_replcmnt_coeff, \
-    extract_C30_replcmnt_coeff, cklm2sc_new, \
+    extract_C30_replcmnt_coeff, \
     read_GRACE_SH_paths, load_longterm_mean
 from .sc2cs import sc2cs
-from .reshape_SH_coefficients import sc2cs, clm2cs, clm2sc, cs2sc, klm2sc
+from .reshape_SH_coefficients import sc2cs, clm2cs, clm2sc, cs2sc, klm2sc, cklm2sc_new
 from .hydro import TWSCalc, area_weighting, Basinaverage
 from .shutils import plm, iplm, ispec, eigengrav, grule, Gaussian, neumann, naninterp, normalklm
 from .pysh_core import gshs, gsha, GRACE_Data_Driven_Correction_Vishwakarma, PhaseCalc
