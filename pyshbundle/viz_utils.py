@@ -51,24 +51,18 @@ from pyshbundle.shutils import plm
 from pyshbundle.pysh_core import gshs
 
 def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
-    """Visualize the SH coeff. in SC triangular matrix format
+    """
+    Visualize the SH coefficients in SC triangular matrix format.
 
-    Parameters
-    ----------
-    scmat : numpy.ndarray 
-        SC matrix data (see clm2sc)
-    lmax : int
-        Maximum degree of SH expansion
-    title : str
-        Title of the figure
-    vmin : (flaot | int)
-        Minimum value for the colorbar
-    vmax : (float | int)
-        Maximum value for the colorbar
+    Args:
+        scmat (numpy.ndarray): SC matrix data (see clm2sc).
+        lmax (int): Maximum degree of SH expansion.
+        title (str): Title of the figure.
+        vmin (float | int): Minimum value for the colorbar.
+        vmax (float | int): Maximum value for the colorbar.
 
-    Returns
-    ----------
-        matplotlib.axes._axes.Axes: Plot axes
+    Returns:
+        (matplotlib.axes._axes.Axes): Plot axes.
     """
     fig, ax = plt.subplots(1, 1, figsize=(25, 10))
     im = ax.imshow(np.ma.log10(abs(scmat)), extent=[-lmax, lmax, lmax, 0], cmap='Spectral_r',vmin=vmin, vmax=vmax)
@@ -89,24 +83,18 @@ def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
     return ax
 
 def cs_sqplot(csmat: np.ndarray, lmax: int, title: str, vmin, vmax):
-    """ Visualize the SH coeff. in CS square matrix format
+    """
+    Visualize the SH coefficients in CS square matrix format.
 
-    Parameters
-    ----------
-    csmat : numpy.ndarray 
-        CS matrix data (see clm2cs or sc2cs)
-    lmax : int
-        maximum degree of SH expansion
-    title : str 
-        Title of the figure
-    vmin : float
-        miniumum value for the colorbar
-    vmax : float
-        maximum value for the colorbar
+    Args:
+        csmat (numpy.ndarray): CS matrix data (see clm2cs or sc2cs).
+        lmax (int): Maximum degree of SH expansion.
+        title (str): Title of the figure.
+        vmin (float): Minimum value for the colorbar.
+        vmax (float): Maximum value for the colorbar.
 
-    Returns
-    ----------
-        matplotlib.axes._axes.Axes: Plot axes
+    Returns:
+        (matplotlib.axes._axes.Axes): Plot axes.
     """
     fig, ax = plt.subplots(1, 1, figsize=(10, 10))
     im = ax.imshow(np.ma.log10(abs(csmat)), extent=[0, lmax, lmax, 0], cmap='Spectral_r',vmin=vmin, vmax=vmax)
@@ -135,24 +123,18 @@ def cs_sqplot(csmat: np.ndarray, lmax: int, title: str, vmin, vmax):
 
 
 def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
-    """Visualize the polar regions of Greenland and Antarctica 
+    """
+    Visualize the polar regions of Greenland and Antarctica.
 
-    Parameters
-    ----------
-    field : numpy.ndarray
-        __description__
-    polar_loc : str
-        State the region 'greenland' or 'antarctica'
-    title : str
-        Title for the figure
-    file_name : (_type_, optional)
-        file name along with absolute path to location to be saved. Defaults to None.
-    save_flag : (bool, optional)
-        True if the figure is to be saved. Defaults to False.
+    Args:
+        field (numpy.ndarray): The data field to visualize.
+        polar_loc (str): The region to visualize, either 'greenland' or 'antarctica'.
+        title (str): The title for the figure.
+        file_name (str, optional): The file name along with the absolute path to save the figure. Defaults to None.
+        save_flag (bool, optional): If True, the figure will be saved. Defaults to False.
 
-    Returns
-    ----------
-        matplotlib.axes._axes.Axes: Plot axes
+    Returns:
+        (matplotlib.axes._axes.Axes): Plot axes.
     """
 
     if polar_loc == 'greenland':
@@ -208,21 +190,20 @@ def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
     return im
 
 def mapfield(field, img_extent, title, name=None, colorbar_bounds=None, save_flag=False):
-    """_summary_
+    """
+    Visualize a field on a global map using the Robinson projection.
 
-    Parameters
-    ----------
-    field (_type_): _description_
-    img_extent (_type_): _description_
-    title (_type_): _description_
-    name (_type_, optional): _description_. Defaults to None.
-    colorbar_bounds (_type_, optional): _description_. Defaults to None.
-    save_flag (bool, optional): _description_. Defaults to False.
+    Args:
+        field (numpy.ndarray): The data field to visualize.
+        img_extent (tuple): The extent of the image in the form (min_lon, max_lon, min_lat, max_lat).
+        title (str): The title for the figure.
+        name (str, optional): The file name along with the absolute path to save the figure. Defaults to None.
+        colorbar_bounds (tuple, optional): The bounds for the colorbar in the form (vmin, vmax). Defaults to None.
+        save_flag (bool, optional): If True, the figure will be saved. Defaults to False.
 
-    Returns
-    ----------  
-    fig (matplotlib.figure.Figure): Figure object
-    geo_ax (matplotlib.axes._axes.Axes): Plot axes
+    Returns:
+        fig (matplotlib.figure.Figure): Figure object.
+        geo_ax (matplotlib.axes._axes.Axes): Plot axes.
     """
     # Plotting and Visualization
     
@@ -265,14 +246,17 @@ def mapfield(field, img_extent, title, name=None, colorbar_bounds=None, save_fla
     return fig, geo_ax
 
 def ylm(l: int, m: int):
-    """_summary_
+
+    """
+    Compute the spherical harmonics Ylm.
 
     Args:
-        l (int): Degree
-        m (int): Order
-
+        l (int): Degree, must be non-negative.
+        m (int): Order, must be non-negative and less than or equal to l.
     Returns:
-        _type_: _description_
+        tuple: A tuple containing two numpy arrays:
+            - ylmc (numpy.ndarray): The real part of the spherical harmonics.
+            - ylms (numpy.ndarray): The imaginary part of the spherical harmonics.
     """
 
     # input handling
@@ -302,11 +286,16 @@ def ylm(l: int, m: int):
 
 
 def ylm_plot(l: int, m: int):
-    """_summary_
+    """
+    Plot the spherical harmonics Ylm.
 
     Args:
-        l (int): _description_
-        m (int): _description_
+        l (int): Degree, must be non-negative.
+        m (int): Order, must be non-negative and less than or equal to l.
+
+    Returns:
+        None
+        Plot the spherical harmonics Ylm.
     """
     ylmc, ylms = ylm(l, m)
 
@@ -346,19 +335,20 @@ def ylm_plot(l: int, m: int):
     plt.title(f"Visualization of Spherical Harmonics - degree: {l} order: {m}")
 
 def gshs_prepare(lmax, gs, quant, grd, h, jflag, sc_coeff):
-    """_summary_
+    """
+    Prepare the grid for the given spherical harmonics coefficients.
 
     Args:
-        lmax (_type_): _description_
-        gs (_type_): _description_
-        quant (_type_): _description_
-        grd (_type_): _description_
-        h (_type_): _description_
-        jflag (_type_): _description_
-        sc_coeff (_type_): _description_
+        lmax (int): Maximum degree of spherical harmonics.
+        gs (float): Grid spacing in degrees.
+        quant (int): Quantization level.
+        grd (int): Grid type.
+        h (float): Height parameter.
+        jflag (int): Flag for the computation method.
+        sc_coeff (numpy.ndarray): Spherical harmonics coefficients.
 
     Returns:
-        _type_: _description_
+        (numpy.ndarray): The prepared grid field.
     """
     n = int(180/gs)
     

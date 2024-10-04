@@ -52,47 +52,36 @@ from pyshbundle.shutils import normalklm, plm, iplm, eigengrav, ispec, Gaussian,
 
 
 def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
-    """gshs - Global Spherical Harmonic Synthesis
+    """
+    Global Spherical Harmonic Synthesis
 
-    Parameters
-    ----------
-    field : numpy.ndarray
-        Matrix of SH coefficients, either in SC-triangle or CS-square format
-    quant : (str, optional)
-        defining the field quantity. Defaults to 'none'.
-    grd : (str, optional)
-        defining the grid. Defaults to 'mesh'.
-    n : (int, optional) 
-        Defaults to -9999.
-    h : (int, optional)
-        Defaults to 0.
-    jflag : (int, optional)
-        Defaults to 1.
-    
-    Returns
-    ----------
-    f : numpy.ndarray)
-        the global Spherical Harmonics feild field
-    theRAD numpy.array
-        vector of co-latitudes in radians
-    lamRAD : numpy.array
-        vector of longitudes in radians
+    Args:
+        field (numpy.ndarray): Matrix of SH coefficients, either in SC-triangle or CS-square format.
+        quant (str, optional): Defining the field quantity. Defaults to 'none'.
+        grd (str, optional): Defining the grid. Defaults to 'mesh'.
+        n (int, optional): Defaults to -9999.
+        h (int, optional): Defaults to 0.
+        jflag (int, optional): Defaults to 1.
+
+    Returns:
+        (numpy.ndarray): The global Spherical Harmonics field.
+        (numpy.ndarray): Vector of co-latitudes in radians.
+        (numpy.ndarray): Vector of longitudes in radians.
 
     Raises:
-        Exception: Check format of the field
-        Exception: n must be scalar
-        Exception: n must be integer
-        Exception: Grid argument must be string
-        Exception: _description_
-    
+        Exception: If the format of the field is incorrect.
+        Exception: If n is not scalar.
+        Exception: If n is not an integer.
+        Exception: If the grid argument is not a string.
+
     Uses:
         `cs2sc`, `normalklm`, `plm`, `eigengrav`, `ispec`
 
-    Todo: 
-        * Change general exceptions to specific and descriptive built-in ones
-        + using the not and then check is not always advisable
-        + Check how to document valid options
-    
+    Todo:
+        * Change general exceptions to specific and descriptive built-in ones.
+        * Using the not and then check is not always advisable.
+        * Check how to document valid options.
+
     Author:
         Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
         Vivek Kumar Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
@@ -232,41 +221,35 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
 
 
 def gsha(f, method: str, grid: str = None, lmax: int = -9999):
-    """ GSHA - Global Spherical Harmonic Analysis, inverse of GSHS.
+    """
+    Global Spherical Harmonic Analysis, inverse of GSHS.
 
-    Parameters
-    ----------
-    f : numpy.ndarray
-        Global field of size $(l_{max} + 1) * 2 * l_{max}$ or $l_{max} * 2 * l_{max}$
-    method : str
-        Method to be used.
-    grid : (str, optional)
-        choose between 'block' or 'cell'. Defaults to None.
-    lmax : (int, optional)
-        Maximum degree of development. Defaults to -9999.
+    Args:
+        f (numpy.ndarray): Global field of size $(l_{max} + 1) * 2 * l_{max}$ or $l_{max} * 2 * l_{max}$.
+        method (str): Method to be used.
+        grid (str, optional): Choose between 'block' or 'cell'. Defaults to None.
+        lmax (int, optional): Maximum degree of development. Defaults to -9999.
 
-    Returns
-    ----------
-    np.ndarray
-        Spherical harmonics coefficients Clm, Slm in |C\S| format
+    Returns:
+        (numpy.ndarray): Spherical harmonics coefficients Clm, Slm in |C\S| format.
 
     Raises:
-        ValueError: grid argument can only be 'block' or 'cell'
-        ValueError: Grid type entered is not right
-        TypeError: Invalid size of matrix F
-        TypeError: GRID and METHOD must be strings
-        ValueError: 2nd Neumann method ONLY on a ''neumann''/''gauss'' GRID'
-        ValueError: Block mean method ONLY on a ''block''/''cell'' GRID
-        ValueError: Maximum degree of development is higher than number of rows of input.
-    
-    REMARKS:
-    TBD - Zlm-functions option
-        - eigengrav, GRS80
-        - When 'pole' grid, m = 1 yields singular Plm-matrix!
+        ValueError: If grid argument can only be 'block' or 'cell'.
+        ValueError: If grid type entered is not right.
+        TypeError: If invalid size of matrix F.
+        TypeError: If GRID and METHOD are not strings.
+        ValueError: If 2nd Neumann method ONLY on a 'neumann'/'gauss' GRID.
+        ValueError: If Block mean method ONLY on a 'block'/'cell' GRID.
+        ValueError: If maximum degree of development is higher than number of rows of input.
+
+    Remarks:
+        TBD - Zlm-functions option
+            - eigengrav, GRS80
+            - When 'pole' grid, m = 1 yields singular Plm-matrix!
 
     Uses:
         `plm`, `neumann`, `iplm`, `sc2cs`
-    
+
     Author:
         Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
@@ -472,23 +455,19 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
 
 
 def PhaseCalc(fts, ffts):
-    """calculates the phase difference between two time series based on the
+    """
+    Calculates the phase difference between two time series based on the
     Hilbert transform method explained by Phillip et al.
 
-    Parameters
-    ----------
-    fts : numpy.array
-        time-series 1
-    ffts : numpy.narray
-        time-series 2
+    Args:
+        fts (numpy.ndarray): Time-series 1.
+        ffts (numpy.ndarray): Time-series 2.
 
-    Returns
-    ----------
-    numpy.ndarray
-        Phase difference between the two time series
+    Returns:
+        (numpy.ndarray): Phase difference between the two time series.
     
     References:
-        1. Phillips, T., R. S. Nerem, B. Fox-Kemper, J. S. Famiglietti, and B. Rajagopalan (2012),
+        Phillips, T., R. S. Nerem, B. Fox-Kemper, J. S. Famiglietti, and B. Rajagopalan (2012),
         The influence of ENSO on global terrestrial water storage using GRACE, Geophysical
         Research Letters, 39 (16), L16,705, doi:10.1029/2012GL052495.
     
@@ -527,58 +506,45 @@ def PhaseCalc(fts, ffts):
 # ----------------------------- GDDC --------------------------------------------------#
 
 def deg_to_rad(deg: float):
-    """Converts angle from degree to radian
+    """Converts angle from degree to radian.
 
-    Parameters
-    ----------
-    deg : float
-        Angle in degree
+    Args:
+        deg (float): Angle in degree.
 
-    Returns
-    ----------
-    float: Angle in Radian
-    
+    Returns:
+        float: Angle in radian.
+
     Todo:
-        + Inbuilt function available in numpy module
+        - Inbuilt function available in numpy module.
     """
     return deg * np.pi/180
 
 def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
-    """Signal leakage correction using data-driven methods
+    """
+    Signal leakage correction using data-driven methods.
 
     When GRACE data is applied for hydrological studies, the signal leakage is a common
     problem. This function uses data-driven methods to correct signal leakage in GRACE data.
-    Please refer to paper (1) above for more details
+    Please refer to paper (1) above for more details.
 
+    Args:
+        F (numpy.ndarray): A cell matrix with one column containing SH coefficients.
+        cf (int): The column in F that contains SH coefficients from GRACE.
+        GaussianR (float): Radius of the Gaussian filter (recommended = 400).
+        basins (numpy.ndarray): Mask functions of basin, a cell data format with one
+            column and each entry is a 360 x 720 matrix with 1 inside the
+            catchment and 0 outside.
 
-    Parameters
-    ----------
-    F : numpy.ndarray
-        A cell matrix with one column containing SH coefficients
-    cf : int
-        the column in F that contains SH coefficients from GRACE
-    GaussianR : float
-        Radius of the Gaussian filter (recommened = 400)
-    basins : numpy.ndarray
-        mask functions of basin, a cell data format with one
-        column and each entry is a 360 x 720 matrix with 1 inside the
-        catchment and 0 outside
-
-    Returns
-    ----------
-    (every output has a size (number of months x basins))
-    RecoveredTWS : numpy.ndarray
-        Corrected data-driven time-series (Least Squares fit method)
-    RecoveredTWS2 : numpy.ndarray
-        Corrected data-driven time-series (shift and amplify method)
-    FilteredTS : numpy.ndarray
-        Gaussian filtered GRACE TWS time-series for all the basins. 
+    Returns:
+        tuple: A tuple containing:
+            - RecoveredTWS (numpy.ndarray): Corrected data-driven time-series (Least Squares fit method).
+            - RecoveredTWS2 (numpy.ndarray): Corrected data-driven time-series (shift and amplify method).
+            - FilteredTS (numpy.ndarray): Gaussian filtered GRACE TWS time-series for all the basins.
 
     Raises:
-        Exception: corrected data-driven time-series (Least Squares fit method)
-        Exception: corrected data-driven time-series (shift and amplify method)
-        Exception: gaussian filtered GRACE TWS time-series for all the basins.
-
+        Exception: If there is an error in the corrected data-driven time-series (Least Squares fit method).
+        Exception: If there is an error in the corrected data-driven time-series (shift and amplify method).
+        Exception: If there is an error in the Gaussian filtered GRACE TWS time-series for all the basins.
 
     Author:
         Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)

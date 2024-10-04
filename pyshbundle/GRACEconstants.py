@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 # Created on Sat May  9 18:49:45 2022
 # This file contains some basic constants:
 #  - physical

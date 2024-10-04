@@ -41,32 +41,26 @@ from pyshbundle import GRACEconstants as GC
 """
 
 def upwcon(degree: int, height):
-    """Returns the upward continuation $(R/r)^l$
+    """
+    Returns the upward continuation $(R/r)^l$.
 
-    Parameters
-    ----------
-    degree :int
-        Spherical harmonic degree
-    height : int
-        Height above mean Earth radius [m] [scalar/vector]
-    
-    Returns
-    -------
-        uc : array
-            Upward continuation terms
-    
+    Args:
+        degree (int): Spherical harmonic degree.
+        height (int): Height above mean Earth radius [m] [scalar/vector].
+
+    Returns:
+        (numpy.ndarray): Upward continuation terms.
+
     Uses:
         `GRACEconstants.GC`
-    
-    REMARKS:
+
+    Remarks:
         If both degree and height are vectors, degree will be(come) a row vector
-        and height a column vector.
-        load necessary constants
-        
+        and height a column vector. Load necessary constants.
+
     Todo:
-        + Add input checking functionality and raise exceptions
-        + Add reference to formula
-    # Created on Sat May  9 18:49:45 2022
+        - Add input checking functionality and raise exceptions.
+        - Add reference to formula.
     """
     rr = numpy.divide(GC.ae, numpy.add(GC.ae,height))
     uc = numpy.power(rr, degree)
@@ -74,27 +68,26 @@ def upwcon(degree: int, height):
     return(uc)    
 
 def lovenr(lmax: int):
-    """LOVENR gives the LOVE number of the elastic earth for a certain degree n
+    """
+    LOVENR gives the LOVE number of the elastic earth for a certain degree n.
 
-    Parameters
-    ----------
-    lmax : int
-        Spherical harmonic degree (up to 200)
-    
+    Args:
+        lmax (int): Spherical harmonic degree (up to 200).
+
     Returns:
-    ----------
-    kn : int
-        LOVE number of degree lmax
+        numpy.ndarray: LOVE number of degree lmax.
 
-    REMARKS:
-    The elastic LOVE numbers are taken from the paper by WAHR et al., 
-    "Time variability of the earth's gravity field: hydrological and 
-    oceanic effects and their possible detection using GRACE",  
-    JGR, Vol. 103, No. B12, p 30205-30229, 1998
+    Remarks:
+        The elastic LOVE numbers are taken from the paper by WAHR et al.,
+        "Time variability of the earth's gravity field: hydrological and
+        oceanic effects and their possible detection using GRACE",
+        JGR, Vol. 103, No. B12, p 30205-30229, 1998.
 
-    Created on Mon May 11 11:09:28 2022
-    
-    _author_: Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+    Created on:
+        Mon May 11 11:09:28 2022
+
+    Author:
+        Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
     l  = [0,  1,    2,    3,    4,    5,   6,   7,   8,   9,  10,  12,  15,  20,  30,  40,  50,  70, 100, 150, 200]
     kl = numpy.divide([0,270,-3030,-1940,-1320,-1040,-890,-810,-760,-720,-690,-640,-580,-510,-400,-330,-270,-200,-140,-100, -700],1e4)
@@ -103,28 +96,29 @@ def lovenr(lmax: int):
     return(kn)
 
 def lovenrPREM(lmax:int, frame):
-    """ 
+    """
+    Calculates the LOVE and Shida number of the elastic earth for a certain degree n in different reference frames.
     
-    lovenrprem calculates the LOVE and Shida number of the elastic earth for a
-    certain degree n in different reference frame
-    values in given degrees for LOVE numbers as provided by Olivier Francis 
-    from the PREM Earth model for selected degrees
+    Values are given in degrees for LOVE numbers as provided by Olivier Francis from the PREM Earth model for selected degrees.
     
-    Parameters
-    ----------
-    lmax : int
-        Spherical harmonic degree (up to 200)
-
-    Returns
-    ----------
-    kn,hn,ln: int
-        load LOVE number of degree n
-
-    REMARKS:
-        see also lovenr
-    Created on Mon May 11 11:51:29 2022
+    Args:
+        lmax (int): Spherical harmonic degree (up to 200).
+        frame (str): Reference frame, one of 'CM', 'CF', or 'CE'.
     
-    @author:  Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
+    Returns:
+        tuple: A tuple containing:
+            - kn (numpy.ndarray): Load LOVE number of degree n.
+            - hn (numpy.ndarray): LOVE number of degree n.
+            - ln (numpy.ndarray): Shida number of degree n.
+    
+    Remarks:
+        See also lovenr.
+    
+    Created on:
+        Mon May 11 11:51:29 2022
+    
+    Author:
+        Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
     
     data = numpy.array([[ 1,  -0.28476,   0.00000,   0.10462],

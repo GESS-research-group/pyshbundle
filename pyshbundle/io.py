@@ -49,23 +49,19 @@ import re
 import pkg_resources
 
 def extract_SH_data(file_path, source):
-    """Extracts the spherical harmonic coefficients from all the given files
+    """
+    Extracts the spherical harmonic coefficients from all the given files.
 
-    Currently supports JPL, CSR, and ITSG data sources ONLY.
-    Extracts the spherical harmonic coefficients from the given file and returns them in a dictionary.
-    Uses the degree and order of a coefficient as the key and the coefficient values as the value.
+    Currently supports JPL, CSR, and ITSG data sources ONLY. Extracts the spherical harmonic 
+    coefficients from the given file and returns them in a dictionary. Uses the degree and 
+    order of a coefficient as the key and the coefficient values as the value.
     
-    Parameters
-    ----------
-    file_path : str
-        Absolute path to the file
-    source : str
-        Source of the data (JPL, CSR, or ITSG)
+    Args:
+        file_path (str): Absolute path to the file.
+        source (str): Source of the data (JPL, CSR, or ITSG).
 
-    Returns
-    ----------
-    dict
-        Dictionary containing the coefficients and time coverage start and end dates
+    Returns:
+        (dict): Dictionary containing the coefficients and time coverage start and end dates.
     """
     # Initialize an empty dictionary to store the coefficients and dates
     data = {
@@ -179,22 +175,19 @@ def extract_SH_data(file_path, source):
 
 
 def extract_deg1_coeff_tn13(file_path):
-    """Extracts the degree 1 coefficients from the given TN-13 file
+    """
+    Extracts the degree 1 coefficients from the given TN-13 file.
 
     Ensure the TN-13 file used is the one recommended by respective data centres (JPL, CSR, or ITSG).
     Similar to extract_SH_data, but specifically for TN-13 files.
     Returns degree 1 replacement coefficients as a dictionary.
     Uses the degree and order of a coefficient as the key and the coefficient values as the value.
     
-    Parameters
-    ----------
-    file_path : str
-        Absolute path to the file
+    Args:
+        file_path (str): Absolute path to the file.
     
-    Returns
-    ----------
-    dict
-        Dictionary containing the degree 1 (order 1) coefficients and time coverage start and end dates
+    Returns:
+        (dict): Dictionary containing the degree 1 (order 1) coefficients and time coverage start and end dates.
     """
 
     data_dict = {}
@@ -235,22 +228,19 @@ def extract_deg1_coeff_tn13(file_path):
     return data_dict
 
 def extract_deg2_3_coeff_tn14(file_path):
-    """Extracts the degree 2 and 3 coefficients from the given file
+    """
+    Extracts the degree 2 and 3 coefficients from the given file.
 
     Ensure the TN-14 file used is the one recommended by respective data centres (JPL, CSR, or ITSG).
     Similar to extract_SH_data, but specifically for TN-14 files.
     Returns degree 2, 3 replacement coefficients as a dictionary.
     Uses the degree and order of a coefficient as the key and the coefficient values as the value.
     
-    Parameters
-    ----------
-    file_path : str
-        Absolute path to the file
+    Args:
+        file_path (str): Absolute path to the file.
     
-    Returns
-    ----------
-    dict
-        Dictionary containing the degree 2,3 (order 0) coefficients and time coverage start and end dates
+    Returns:
+        (dict): Dictionary containing the degree 2, 3 (order 0) coefficients and time coverage start and end dates.
     """
     data_dict = {}
     
@@ -333,29 +323,28 @@ def extract_deg2_3_coeff_tn14(file_path):
 
 
 def read_GRACE_SH_paths(use_sample_files = 0):
+    """
+    Returns path of data files, path of tn13 and path of tn14 replacement files.
 
-    """Returns path of data files, path of tn13 and path of tn14 replacement files
-
-    Parameters
-    ----------
-    use_sample_files : (int, optional)
-        Defaults to 0.
+    Args:
+        use_sample_files (int, optional): Defaults to 0.
 
     Raises:
-        Exception: _description_
+        Exception: If the source selection is incorrect.
 
-    Returns
-    ----------
-    path_sh, path_tn13, path_tn14, source : str
-        Path of data files, path of tn13 and path of tn14 replacement files, 
-        source of the SH files (JPL, ITSG or CSR)
-    
+    Returns:
+        tuple: 
+            - path_sh (str): Path of data files.
+            - path_tn13 (str): Path of tn13 replacement file.
+            - path_tn14 (str): Path of tn14 replacement file.
+            - source (str): Source of the SH files (JPL, ITSG, or CSR).
+
     Remarks:
-        The purpose of this script is to,
-        firstly read what the data source is (JPL, CSR or ITSG)
-        read file path for GRACE L2 spherical harmonics inputs,
-        read replacement files for tn13 and tn14
-        source of the SH files (JPL, ITSG or CSR)
+        The purpose of this script is to:
+        - Read what the data source is (JPL, CSR, or ITSG).
+        - Read file path for GRACE L2 spherical harmonics inputs.
+        - Read replacement files for tn13 and tn14.
+        - Identify the source of the SH files (JPL, ITSG, or CSR).
     """
     #Created on Fri Feb  17 2023
     #@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
@@ -411,38 +400,24 @@ def read_GRACE_SH_paths(use_sample_files = 0):
 
 
 def load_longterm_mean(source = "", use_sample_mean = 0):
-    """Loads the long term mean values for the GRACE SH data
+    """
+    Loads the long term mean values for the GRACE SH data.
 
-    Parameters
-    ----------
-    source (str, optional): 
-        Source of data. Defaults to "".
-    use_sample_mean (int, optional)
-        Whether to use default long-mean values provided with the data. Defaults to 0.
+    Args:
+        source (str, optional): Source of data. Defaults to "".
+        use_sample_mean (int, optional): Whether to use default long-mean values provided with the data. Defaults to 0.
 
     Raises:
-        Exception: _description_
+        ValueError: If the source selection is incorrect.
 
-    Returns
-    ----------
-    long_mean : str
-        path of the appropriate long term mean file
-    
+    Returns:
+        str: Path of the appropriate long term mean file.
+
     Todo:
-        + Not sure if using "source = ''" is all right
-        + instead of base eception is can be ValueError
+        + Not sure if using "source = ''" is all right.
+        + Instead of base exception, it can be ValueError.
     """
-    # @author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
-    """The purpose of this script is to,
-        load longterm mean for our GRACE SH data
-
-        For this, we need to input the GRACE data source as well as the path to the longterm mean values
-        Data source may be CSR, JPL or ITSG.
-
-        For RL06, example data have been provided within the package. In case this option is chosen, the program directly returns the longterm mean values.
-
-        Returns the long_mean path
-    """
+# @author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
 
     if use_sample_mean == 1:
         print("Loading preloaded RL06 long term mean values")
@@ -466,12 +441,16 @@ def load_longterm_mean(source = "", use_sample_mean = 0):
     return long_mean
 
 def parse_jpl_file(file_path: str):
-    """Reads the spherical harmonic data provided by JPL
+    """
+    Reads the spherical harmonic data provided by JPL.
 
-    Parameters
-    ----------
-    file_path : str
-        Absolute path to the file
+    Args:
+        file_path (str): Absolute path to the file.
+
+    Returns:
+        tuple: A tuple containing:
+            - jpl_header (dict): Parsed header information.
+            - jpl_data (dict): Extracted spherical harmonic coefficients data.
     """
     # ensure that the file path is valid then proceed
     
@@ -880,19 +859,21 @@ def extract_C30_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end=None):
     return C30
 
 def replace_zonal_coeff(data_mat, source, lmax, data_tn13, data_tn14, epoch_begin: float, epoch_end: float):
-    """_summary_
+    """
+    Replaces the zonal coefficients in the given data matrix with the replacement coefficients 
+    from the provided TN-13 and TN-14 data.
 
     Args:
-        data_mat (_type_): _description_
-        source (_type_): _description_
-        lmax (_type_): _description_
-        data_tn13 (_type_): _description_
-        data_tn14 (_type_): _description_
-        epoch_begin (float): _description_
-        epoch_end (float): _description_
+        data_mat (numpy.ndarray): The original data matrix containing spherical harmonic coefficients.
+        source (str): The source of the data ('jpl', 'csr', or 'itsg').
+        lmax (int): The maximum degree of the spherical harmonic expansion.
+        data_tn13 (numpy.ndarray): The TN-13 replacement coefficients data.
+        data_tn14 (numpy.ndarray): The TN-14 replacement coefficients data.
+        epoch_begin (float): The start date of the epoch in YYYYMMDD format.
+        epoch_end (float, optional): The end date of the epoch in YYYYMMDD format. Defaults to None.
 
     Returns:
-        _type_: _description_
+        (numpy.ndarray): The data matrix with the zonal coefficients replaced.
     """
 
     data_mat_copy = deepcopy(data_mat)
@@ -976,96 +957,41 @@ def replace_zonal_coeff(data_mat, source, lmax, data_tn13, data_tn14, epoch_begi
 
     return data_mat_copy
 
-
-'''
-def klm2sc_new(data_mat, lmax: int):
-    sc_mat = np.zeros((lmax+1, 2*lmax + 2))
-    dev_sc_mat = np.zeros((lmax+1, 2*lmax + 2))
-    clm = data_mat[:, 2]
-    slm = data_mat[:, 3]
-    clm_std_dev = data_mat[:, 4]
-    slm_std_dev = data_mat[:, 5]
-    
-    # first place the slm and then clm
-    index2 =0
-    for index1 in range(0,lmax+1,1):
-        sc_mat[index1:, lmax-index1] = slm[(index2):(index2 + lmax-index1+1)]
-        sc_mat[index1:, index1+lmax] = clm[(index2):(index2 + lmax-index1+1)]
-
-        dev_sc_mat[index1:, lmax-index1] = slm_std_dev[(index2):(index2 + lmax-index1+1)]
-        dev_sc_mat[index1:, index1+lmax] = clm_std_dev[(index2):(index2 + lmax-index1+1)]
-        
-        index2 = index2 + lmax-index1+1
-
-    sc_mat=np.delete(sc_mat,lmax,axis=1)
-    dev_sc_mat=np.delete(dev_sc_mat,lmax,axis=1)
-
-    return sc_mat, dev_sc_mat
-'''
-
 def sub2ind(array_shape, rows, cols):
+    """
+    Convert row and column subscripts to linear indices.
+
+    Args:
+        array_shape (tuple): Shape of the array as a tuple (num_rows, num_cols).
+        rows (int or array-like): Row indices.
+        cols (int or array-like): Column indices.
+
+    Returns:
+        int or array-like: Linear indices corresponding to the row and column subscripts.
+    """
     # rows, list need to be linear array
     return rows*array_shape[1] + cols
 
-
-def cklm2sc_new(clm_mat, lmax: int):
-    """Transforms the spherical harmonics coefficients data in clm or klm format into a SC matrix
-
-        clm data - [l, m, c_lm, s_lm]
-
-    Args:
-        clm_mat (np.ndarray): _description_
-        lmax (int): maximum degree of spherical harmonic expansion
-
-    Returns:
-        _type_: _description_
-    """
-
-    # initialise an empty sc matrix
-    sc_mat = np.zeros([lmax+1, 2*lmax + 1])
-    dev_sc_mat = np.zeros([lmax+1, 2*lmax + 1])
-
-    # navigating the maze of indices
+# def klm2sc_new(data_mat, lmax: int):
+#     sc_mat = np.zeros((lmax+1, 2*lmax + 2))
+#     dev_sc_mat = np.zeros((lmax+1, 2*lmax + 2))
+#     clm = data_mat[:, 2]
+#     slm = data_mat[:, 3]
+#     clm_std_dev = data_mat[:, 4]
+#     slm_std_dev = data_mat[:, 5]
     
-    # Use logical indices
+#     # first place the slm and then clm
+#     index2 =0
+#     for index1 in range(0,lmax+1,1):
+#         sc_mat[index1:, lmax-index1] = slm[(index2):(index2 + lmax-index1+1)]
+#         sc_mat[index1:, index1+lmax] = clm[(index2):(index2 + lmax-index1+1)]
 
-    # sc mat requires padding - Taken care of by the earlier initialisation
-    # 
-    # filling the value at appropriate locaation is the key
-    # 
-    # Approach-1
-        # run through rows(degree) and fill the cols(order) respectively
+#         dev_sc_mat[index1:, lmax-index1] = slm_std_dev[(index2):(index2 + lmax-index1+1)]
+#         dev_sc_mat[index1:, index1+lmax] = clm_std_dev[(index2):(index2 + lmax-index1+1)]
+        
+#         index2 = index2 + lmax-index1+1
 
-    # Approach -2
-        # create a row_func s.t. [....., C22, C21, C20, S21, S22, .......]
-        # then stack the rows
-    
-    # First flatten the SC matrix - column wise aka Fortran style
-    # get the flattented idx to be raplaced using sub2ind 
-    # replace the indices at those locations using 
-    # unflatten the matrix
+#     sc_mat=np.delete(sc_mat,lmax,axis=1)
+#     dev_sc_mat=np.delete(dev_sc_mat,lmax,axis=1)
 
-    shape_sc = sc_mat.shape
-
-    # following the approach similar to Octave implementation
-    # using matrix operations to improve the time efficiency as compared to looping
-    idx_s = sub2ind(sc_mat.shape, clm_mat[:, 0].astype('i'), (lmax - clm_mat[:, 1]).astype('i')).astype('i')
-    idx_c = sub2ind(sc_mat.shape, clm_mat[:, 0].astype('i'), (lmax + clm_mat[:, 1]).astype('i')).astype('i')
-
-    
-    flat_sc = sc_mat.flatten("F")
-    # Attention first place the slm coeff. or else it will relace zonal clm coeff.
-    flat_sc[idx_s] = clm_mat[:, 3]
-    flat_sc[idx_c] = clm_mat[:, 2]
-
-    flat_sc2 = dev_sc_mat.flatten("F")
-    flat_sc2[idx_s] = clm_mat[:, 5]
-    flat_sc2[idx_c] = clm_mat[:, 4]
-
-    dev_scmat = flat_sc2.reshape(shape_sc)
-
-    scmat = flat_sc.reshape(shape_sc)
-
-    # with one flag include for 
-
-    return scmat, dev_scmat
+#     return sc_mat, dev_sc_mat
