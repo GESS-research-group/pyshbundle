@@ -57,18 +57,18 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
 
     Args:
         field (numpy.ndarray): Matrix of SH coefficients, either in SC-triangle or CS-square format.
-        quant (str, optional): Defines the field quantity. Defaults to 'none'. Options:
-            - 'geoid': geoid height [m]
-            - 'potential': potential [m^2/s^2]
-            - 'dg', 'gravity': gravity anomaly [mGal]
-            - 'tr': grav. disturbance, 1st rad. derivative [mGal]
-            - 'trr': 2nd rad. derivative [1/s^2]
-            - 'water': equivalent water height [m]
-            - 'smd': surface mass density [kg/m^2]
+        quant (str, optional): Defines the field quantity. Defaults to 'none'. One of:
+            'geoid': geoid height [m]
+            'potential': potential [m^2/s^2]
+            'dg', 'gravity': gravity anomaly [mGal]
+            'tr': grav. disturbance, 1st rad. derivative [mGal]
+            'trr': 2nd rad. derivative [1/s^2]
+            'water': equivalent water height [m]
+            'smd': surface mass density [kg/m^2]
         grd (str, optional): Defines the grid. Defaults to 'mesh'. Options:
-            - 'pole', 'mesh': equi-angular (n+1)*2n, includes poles/Greenwich meridian.
-            - 'block', 'cell': equi-angular block midpoints, n*2n.
-            - 'neumann', 'gauss': Gauss-grid (n+1)*2n.
+            'pole', 'mesh': equi-angular (n+1)*2n, includes poles/Greenwich meridian.
+            'block', 'cell': equi-angular block midpoints, n*2n.
+            'neumann', 'gauss': Gauss-grid (n+1)*2n.
         n (int, optional): Degree of harmonics. Defaults to -9999 (lmax).
         h (int, optional): Height above Earth mean radius [m]. Defaults to 0.
         jflag (int, optional): Subtracts GRS80 when set. Defaults to 1.
@@ -77,7 +77,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
         numpy.ndarray: The global Spherical Harmonics field.
         numpy.ndarray: Vector of co-latitudes in radians.
         numpy.ndarray: Vector of longitudes in radians.
-        
+
     Raises:
         Exception: If the format of the field is incorrect.
         Exception: If n is not scalar.
@@ -235,24 +235,36 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
     Global Spherical Harmonic Analysis, inverse of GSHS.
 
     Args:
-        f (numpy.ndarray): Global field of size $(l_{max} + 1) * 2 * l_{max}$ or $l_{max} * 2 * l_{max}$.
-        method (str): Method to be used.
-        grid (str, optional): Choose between 'block' or 'cell'. Defaults to None.
+        f (numpy.ndarray): Global field of size (l_max + 1) * 2 * l_max or l_max * 2 * l_max.
+        method (str): Method to be used. One of:
+            'ls': least squares
+            'wls': weighted least squares
+            'aq': approximate quadrature
+            'fnm': first Neumann method
+            'snm': second Neumann method
+            'mean': block mean values (use of integrated Plm)
+        grid (str, optional): Choose between 'block' or 'cell'. Defaults to None. One of:
+            'pole': equi-angular (l_max+1)*2*l_max, including poles and Greenwich meridian.
+            'mesh': equi-angular (l_max+1)*2*l_max, including poles and Greenwich meridian.
+            'block': equi-angular block midpoints l_max*2*l_max
+            'cell': equi-angular block midpoints l_max*2*l_max
+            'neumann': Gauss-Neumann grid (l_max+1)*2*l_max
+            'gauss': Gauss-Neumann grid (l_max+1)*2*l_max
         lmax (int, optional): Maximum degree of development. Defaults to -9999.
 
     Returns:
         (numpy.ndarray): Spherical harmonics coefficients Clm, Slm in |C\S| format.
 
     Raises:
-        ValueError: If grid argument can only be 'block' or 'cell'.
-        ValueError: If grid type entered is not right.
+        ValueError: If grid argument is not 'block' or 'cell'.
+        ValueError: If grid type is not recognized.
         TypeError: If invalid size of matrix F.
         TypeError: If GRID and METHOD are not strings.
-        ValueError: If 2nd Neumann method ONLY on a 'neumann'/'gauss' GRID.
-        ValueError: If Block mean method ONLY on a 'block'/'cell' GRID.
+        ValueError: If 2nd Neumann method is used on a non-'neumann'/'gauss' GRID.
+        ValueError: If Block mean method is used on a non-'block'/'cell' GRID.
         ValueError: If maximum degree of development is higher than number of rows of input.
 
-    Remarks:
+    Notes:
         TBD - Zlm-functions option
             - eigengrav, GRS80
             - When 'pole' grid, m = 1 yields singular Plm-matrix!
