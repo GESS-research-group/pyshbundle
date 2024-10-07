@@ -1,0 +1,1003 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://gess-research-group.github.io/pyshbundle/theory/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../installation/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>Theoretical Background - pyshbundle</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#theoretical-background" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="pyshbundle" class="md-header__button md-logo" aria-label="pyshbundle" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pyshbundle
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Theoretical Background
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/GESS-research-group/pyshbundle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="pyshbundle" class="md-nav__button md-logo" aria-label="pyshbundle" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    pyshbundle
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/GESS-research-group/pyshbundle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Theoretical Background
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Theoretical Background
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mathematics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mathematics
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#grace-data-levels" class="md-nav__link">
+    <span class="md-ellipsis">
+      GRACE Data Levels
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spherical-harmonics-data-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      Spherical Harmonics Data Formats
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Spherical Harmonics Data Formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clm-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      clm-format
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#klm-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      klm-format
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#left-c-backslash-s-right-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      \(\left | C \backslash S \right |\) format
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#left-s-c-right-backslash-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      \(\left / S | C \right \backslash\) format
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tutorials
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/GESS-research-group/pyshbundle/issues" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Report Issues
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Reference Manual
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Reference Manual
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pyshbundle/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pyshbundle Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../load_data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Load Data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../convert_data_formats/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Convert Data Formats
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core_functionality/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Core Functionality
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../auxillary_codes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Auxillary Codes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../acknowledgement/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Acknowledgement
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../license/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    License
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mathematics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mathematics
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#grace-data-levels" class="md-nav__link">
+    <span class="md-ellipsis">
+      GRACE Data Levels
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spherical-harmonics-data-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      Spherical Harmonics Data Formats
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Spherical Harmonics Data Formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clm-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      clm-format
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#klm-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      klm-format
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#left-c-backslash-s-right-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      \(\left | C \backslash S \right |\) format
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#left-s-c-right-backslash-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      \(\left / S | C \right \backslash\) format
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="theoretical-background">Theoretical Background<a class="headerlink" href="#theoretical-background" title="Permanent link">&para;</a></h1>
+<h2 id="mathematics">Mathematics<a class="headerlink" href="#mathematics" title="Permanent link">&para;</a></h2>
+<p>In this section, we present a mathematical representation of the spherical harmonics analysis. According to potential theory, the gravitational field of a body fulfils the Laplace equation <span class="arithmatex">\(\nabla^2\phi = 0\)</span>. Laplace's equation in spherical coordinates can be written as follows: </p>
+<div class="arithmatex">\[\begin{equation}
+    \frac{1}{r^2}\frac{\partial}{\partial r}\bigg( r^2\frac{\partial \phi}{\partial r}\bigg)  
+    +
+    \frac{1}{r^2\sin\vartheta}\frac{\partial}{\partial \vartheta}\bigg(\sin\vartheta\frac{\partial \phi}{\partial \vartheta}\bigg) 
+    +
+    \frac{1}{r^2\sin^2\vartheta}\frac{\partial^2 \phi}{\partial \lambda^2}
+    = 0 ,
+\end{equation}\]</div>
+<p>where 
+<span class="arithmatex">\(\phi\)</span> is the potential, 
+<span class="arithmatex">\(r\)</span> is the radius, 
+<span class="arithmatex">\(\vartheta\)</span> is the co-latitude and 
+<span class="arithmatex">\(\lambda\)</span> is the longitude. </p>
+<p>We perform a separation of variables and insert <span class="arithmatex">\(\phi(r, \vartheta, \lambda) =f(r)g(\vartheta)h(\lambda)\)</span> into the Laplace equation to get three independent equations:</p>
+<div class="arithmatex">\[\begin{equation}
+r^2\frac{d^2f}{dr^2}+2r\frac{df}{dr} - n(n+1)f = 0,
+\end{equation}\]</div>
+<div class="arithmatex">\[\begin{equation}
+\frac{d^2g}{d\vartheta^2}
++
+\frac{dg}{d\vartheta}\cot\vartheta
++
+\bigg(  n(n+1) - \frac{m^2}{\sin^2\vartheta}   \bigg) g = 0 ,
+\end{equation}\]</div>
+<div class="arithmatex">\[\begin{equation}
+\frac{d^2h}{d\lambda^2} + m^2h = 0,
+\end{equation}\]</div>
+<p>where <span class="arithmatex">\(m\)</span> and <span class="arithmatex">\(n\)</span> are the degree and order respectively. Solving <span class="arithmatex">\((2), (3)\)</span> and <span class="arithmatex">\((4)\)</span>, we obtain: </p>
+<div class="arithmatex">\[\begin{equation}
+f(r) \in \{r^n, r^{-(n+1)}\},
+\end{equation}\]</div>
+<div class="arithmatex">\[\begin{equation}
+g(\vartheta) \in \{P_{n,m}(\cos \vartheta), Q_{n,m}(\cos \vartheta)\} ,
+\end{equation}\]</div>
+<p>\begin{equation}
+h(\lambda) \in {\cos m\lambda, \sin m\lambda}.
+\end{equation}\</p>
+<p>Thus, the Laplace equation's solution takes the following form: </p>
+<div class="arithmatex">\[\begin{equation}
+\phi(r, \vartheta, \lambda) = \sum_{n=0}^{\infty} \sum_{m=0}^{n} 
+\alpha_{n,m}
+\begin{Bmatrix}
+P_{n,m}(\cos\vartheta)\\
+Q_{n,m}(\cos\vartheta)\\
+\end{Bmatrix}
+\dot{•}
+\begin{Bmatrix}
+\cos m\lambda\\
+\sin m\lambda\\
+\end{Bmatrix}
+\dot{•}
+\begin{Bmatrix}
+r^n\\
+r^{(n+1)}\\
+\end{Bmatrix}
+.
+\end{equation}\]</div>
+<p>Solutions for <span class="arithmatex">\(f(r)\)</span> and <span class="arithmatex">\(h(\lambda)\)</span> are fairly straightforward. Eq - (3) for <span class="arithmatex">\(g(\vartheta)\)</span> is in the form of a Legendre differential equation and its solutions are <span class="arithmatex">\(P_{n,m}(\cos \vartheta)\)</span> and <span class="arithmatex">\(Q_{n,m}(\cos \vartheta)\)</span>, the associated Legendre functions of the first and second kind. We now apply two constraints to the solution:</p>
+<ul>
+<li><span class="arithmatex">\(\phi \rightarrow 0\)</span> when <span class="arithmatex">\(r \rightarrow \infty\)</span>,</li>
+<li><span class="arithmatex">\(\phi\)</span> is limited on the sphere,</li>
+</ul>
+<p>which leads us to eliminate <span class="arithmatex">\(Q_{n,m}(\cos \vartheta)\)</span> and <span class="arithmatex">\(r^n\)</span>.The <span class="arithmatex">\(4\pi\)</span> normalization of the Associated Legendre functions [8] is utilized in our package and is given by: </p>
+<div class="arithmatex">\[\begin{equation}
+\bar{P}_{n,m}(\cos\vartheta) = P_{n,m}(\cos\vartheta)\sqrt{(2-\delta_{m0})(2n+1)\frac{(n-m)!}{(n+m)!}},
+\end{equation}\]</div>
+<p>where <span class="arithmatex">\(\delta_{m0}\)</span> is the Kronecker delta function,</p>
+<div class="arithmatex">\[\begin{equation}
+P_{n,m}(t) = (1-t^2)^{\frac{m}{2}}\frac{d^mP_n(t)}{dt^m},
+\end{equation}\]</div>
+<p>and </p>
+<div class="arithmatex">\[\begin{equation}
+nP_n(t)=-(n-1)P_{n-2}(t) + (2n-1)tP_{n-1}(t).
+\end{equation}\]</div>
+<p>Spherical harmonics are the angular portion of a set of solutions to Laplace's equation. They take into account <span class="arithmatex">\(\vartheta\)</span> and <span class="arithmatex">\(\lambda\)</span>. They are functions modelled on the surface of a sphere, denoted by <span class="arithmatex">\(Y_{n,m}(\vartheta,\lambda)\)</span>. They are of three kinds: </p>
+<ul>
+<li>Zonal harmonics: <span class="arithmatex">\(m=0\)</span> - they are only latitude dependent,</li>
+<li>Tesseral harmonics: <span class="arithmatex">\(0 &lt; m &lt; n\)</span>, and </li>
+<li>Sectorial harmonics: <span class="arithmatex">\(m=n\)</span>.</li>
+</ul>
+<p>Quantities like the gravitational potential, height of water column, gravity anomaly and so on are the functionals of the gravity field which are obtained by differentiating the potential <span class="arithmatex">\(\phi\)</span> with respect to the spherical coordinates. </p>
+<p>The gravitational potential anomaly <span class="arithmatex">\(V\)</span> is given by:</p>
+<div class="arithmatex">\[\begin{equation}
+    V(r, \vartheta, \lambda) = 
+    \frac{GM}{r} \sum_{n=0} ^{N_{max}} \sum_{m=0} ^{n} 
+    \left(\frac{R}{r}\right) ^{n+1}
+    \bar{P}_{n,m}(\cos \vartheta) [C_{n,m}\cos m\lambda+S_{n,m}\sin m\lambda].
+\end{equation}\]</div>
+<p>Here, <span class="arithmatex">\(R\)</span> refers to the radius of the Earth,
+<span class="arithmatex">\(\bar{P}_ {n,m}\)</span> refers to the Associated Legendre functions with <span class="arithmatex">\(4\pi\)</span> normalization,
+<span class="arithmatex">\(C_{lm}\)</span> and  <span class="arithmatex">\(S_{lm}\)</span> refer to the spherical harmonic coefficients. Similarly, another functional, the change in surface mass density, is represented by:</p>
+<div class="arithmatex">\[\begin{equation}
+    \Delta\sigma(\vartheta, \lambda) = 
+    \frac{a\rho_{ave}}{3} 
+    \sum_{n=0}^{N_{max}}\sum_{m=0}^{n} 
+    \left(\frac{R}{r}\right)^{n+1} 
+    \bar{P}_{n,m}(\cos\vartheta)
+    \frac{2n+1}{1+k_l}
+    [C_{n,m}\cos m\lambda + S_{n,m}\sin m\lambda],
+\end{equation}\]</div>
+<p>where
+<span class="arithmatex">\(\rho_{ave}\)</span> refers to the average density of the Earth in <span class="arithmatex">\(g/cm^3\)</span> and
+<span class="arithmatex">\(k_n\)</span> refers to the load Love number of degree <span class="arithmatex">\(n\)</span>.</p>
+<h2 id="grace-data-levels">GRACE Data Levels<a class="headerlink" href="#grace-data-levels" title="Permanent link">&para;</a></h2>
+<p>The <code>GRACE</code> data products are being developed, processed  and archieved in a shared Science Data System between the <code>Jet Propulsion Laboratory(JPL)</code>, the <code>University of Texas Center for Space Research (UT-CSR)</code> and <code>GeoForschungsZentrum Potsdam (GFZ)</code>.</p>
+<ul>
+<li>
+<p>Level 0:<br>
+    The level-0 data are the result of the data reception, collection and decommutation by the Raw Data Center (RDC) of the Mission Operation System (MOS) located in Neustrelitz, Germany. The MOS receives twice per day using its Weilheim and Neustrelitz tracking antennae the science instrument and housekeeping data from each GRACE satellite which will be stored in two appropriate files in the level-0 rolling archive at DFD/Neustrelitz. The SDS retrieves these files and extracts and reformats the orresponding instrument and ancillary housekeeping data like GPS navigation solutions,space segment temperatures or thruster firing events. Level-0 products are available 24-hours after data reception.</p>
+</li>
+<li>
+<p>Level 1:<br>
+    The level-1 data are the preprocessed, time-tagged and normal-pointed instrument data. These are the K-band ranging, accelerometer, star camera and GPS data of both satellites. Additionally the preliminary orbits of both GRACE satellites will be generated. Level-1 data processing software is developed by JPL with support from GFZ (e.g. accelerometer data preprocessing). Processing of level-1 products is done primarily at JPL. An identical processing system (hardware/software) is installed at GFZ to serve as a backup system in case of hardware or network problems. This double implementation is necessary to guarantee the envisaged level-1 product delay of 5 days. All level-1 products are archived at JPL’s Physical Oceanography Distributed Active Data Center(PODAAC) and at GFZ’s Integrated System Data Center (ISDC) . Both archives are harmonized on a sub-daily timeframe.</p>
+</li>
+<li>
+<p>Level 2: <code>Spherical Harmonic Coefficients</code> for the geopotential</p>
+<p>Level-2 data include the short term (30 days) and mean gravity field derived from calibrated and validated GRACE level-1 data products. This level also includes ancillary data sets (temperature and pressure fields, ocean bottom pressure, and hydrological data) which are necessary to eliminate time variabilities in gravity field solutions. Additionally the precise orbits of both GRACE satellites are generated. All level-2 products are archived at JPL’s PODAAC and at GFZs ISDC and are available 60 days after data taking. The level-2 processing software were developed independently by all three processing centres using already existing but completely independent software packages which were upgraded for GRACE specific tasks. Common data file interfaces guarantees a strong product validation. Routine processing is done at UTCSR and GFZ, while JPL only generate level-2 products at times for verification purposes.</p>
+</li>
+<li>
+<p>Level 3: <code>Mascons</code><br>
+    consists of mass anomalies or other standardized products such as Monthly Ocean/Land Water Equivalent Thickness, Surface-Mass Anomaly. Similarly mass concentration blocks or <code>mascons</code> are also available.</p>
+</li>
+<li>
+<p>Level 4: <code>Time Series</code><br>
+    Time-series of catchment level hydrological estimates of TWSA</p>
+</li>
+</ul>
+<p><code>PySHBundle</code> provides the capability to obtain grided Total Water Storage Anomaly(TWSA) from Level 2 data.</p>
+<p>Spherical harmonic functions or coefficients, Legendre functions and their derivatives can be arranged in different ways. There are multiple functions in SHBundle for reordering from one format to another. Some of them have been translated to Python in PySHBundle. Couple of new ones have also been added.</p>
+<h2 id="spherical-harmonics-data-formats">Spherical Harmonics Data Formats<a class="headerlink" href="#spherical-harmonics-data-formats" title="Permanent link">&para;</a></h2>
+<h3 id="clm-format">clm-format<a class="headerlink" href="#clm-format" title="Permanent link">&para;</a></h3>
+<p>This is a standard format to store spherical harmonic coefficients in the indexed column-vector-format (abbreviatedL clm-format)</p>
+<div class="arithmatex">\[\begin{equation}
+  \left( n, m, \overline{C}_{n, m}, \overline{S}_{n, m}, \left[ \sigma_{\overline{C}_{n, m}}, \sigma_{\overline{S}_{n, m}} \right] \right)
+\end{equation}\]</div>
+<p>The first column represents the degree <span class="arithmatex">\(n\)</span>, the second column represents the order <span class="arithmatex">\(m\)</span> (both n,m are integers), followed by the coefficients <span class="arithmatex">\(\overline{C}_{n, m}, \overline{S}_{n, m}\)</span> and the last two columns contain their respective standard deviations <span class="arithmatex">\(\sigma_{\overline{C}_{n, m}}, \sigma_{\overline{S}_{n, m}}\)</span></p>
+<h3 id="klm-format">klm-format<a class="headerlink" href="#klm-format" title="Permanent link">&para;</a></h3>
+<p>This is a variation of the clm-format for compact notation with just 3 or 4 columns. The coefficients are sorted first w.r.t. degree and then the order, particularly the sine-coefficients are arranged starting first with negative orders. The following matrix represents the klm-format:</p>
+<div class="arithmatex">\[\begin{bmatrix}
+    0 &amp; 0 &amp; \overline{C}_{0, 0} &amp; \sigma_{\overline{C}_{0, 0}} \\
+    0 &amp; 0 &amp; \overline{C}_{0, 0} &amp; \sigma_{\overline{C}_{0, 0}} \\
+    0 &amp; 0 &amp; \overline{C}_{0, 0} &amp; \sigma_{\overline{C}_{0, 0}} \\ 
+    0 &amp; 0 &amp; \overline{C}_{0, 0} &amp; \sigma_{\overline{C}_{0, 0}} \\ 
+    0 &amp; 0 &amp; \overline{C}_{0, 0} &amp; \sigma_{\overline{C}_{0, 0}} \\ 
+    0 &amp; 0 &amp; \overline{C}_{0, 0} &amp; \sigma_{\overline{C}_{0, 0}} \\ 
+    0 &amp; 0 &amp; \overline{C}_{0, 0} &amp; \sigma_{\overline{C}_{0, 0}} \\ 
+    0 &amp; 0 &amp; \overline{C}_{0, 0} &amp; \sigma_{\overline{C}_{0, 0}} \\
+    0 &amp; 0 &amp; \overline{C}_{0, 0} &amp; \sigma_{\overline{C}_{0, 0}} \\ 
+    \vdots &amp; &amp; &amp; \vdots \\ N_{max} &amp; N_{max} &amp; \overline{C}_{N_{max}, N_{max}} &amp; \sigma_{\overline{C}_{N_max}, N_{max}} \\
+ \end{bmatrix}\]</div>
+<h3 id="left-c-backslash-s-right-format"><span class="arithmatex">\(\left | C \backslash S \right |\)</span> format<a class="headerlink" href="#left-c-backslash-s-right-format" title="Permanent link">&para;</a></h3>
+<p>This is another well known arrangement of Spherical Harmonic coefficients. This is a square matrix of size <span class="arithmatex">\(n_{max}, n_{max}\)</span>.</p>
+<p>The lower traingular terms are made of the cosine terms</p>
+<h3 id="left-s-c-right-backslash-format"><span class="arithmatex">\(\left / S | C \right \backslash\)</span> format<a class="headerlink" href="#left-s-c-right-backslash-format" title="Permanent link">&para;</a></h3>
+<p>This is yet another popular format where the sine-coefficients are flipped from left to right, to obtain a triangular arrangement which is completed by zeros.</p>
+<p>The following figure illustrates the  <span class="arithmatex">\(\left | C \backslash S \right |\)</span> and  <span class="arithmatex">\(\left / S | C \right \backslash\)</span> format respectively.</p>
+<p><img alt="Spherical Harmonic Formats" src="../img/sh_formats.png" /></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
