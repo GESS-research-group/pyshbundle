@@ -65,7 +65,7 @@ def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
             'trr': 2nd rad. derivative [1/s^2]
             'water': equivalent water height [m]
             'smd': surface mass density [kg/m^2]
-        grd (str, optional): Defines the grid. Defaults to 'mesh'. Options:
+        grd (str, optional): Defines the grid. Defaults to 'mesh'. One of:
             'pole', 'mesh': equi-angular (n+1)*2n, includes poles/Greenwich meridian.
             'block', 'cell': equi-angular block midpoints, n*2n.
             'neumann', 'gauss': Gauss-grid (n+1)*2n.
