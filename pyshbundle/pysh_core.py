@@ -53,21 +53,31 @@ from pyshbundle.shutils import normalklm, plm, iplm, eigengrav, ispec, Gaussian,
 
 def gshs(field, quant = 'none', grd = 'mesh', n = -9999, h = 0, jflag = 1):
     """
-    Global Spherical Harmonic Synthesis
+    Global Spherical Harmonic Synthesis.
 
     Args:
         field (numpy.ndarray): Matrix of SH coefficients, either in SC-triangle or CS-square format.
-        quant (str, optional): Defining the field quantity. Defaults to 'none'.
-        grd (str, optional): Defining the grid. Defaults to 'mesh'.
-        n (int, optional): Defaults to -9999.
-        h (int, optional): Defaults to 0.
-        jflag (int, optional): Defaults to 1.
+        quant (str, optional): Defines the field quantity. Defaults to 'none'. Options:
+            - 'geoid': geoid height [m]
+            - 'potential': potential [m^2/s^2]
+            - 'dg', 'gravity': gravity anomaly [mGal]
+            - 'tr': grav. disturbance, 1st rad. derivative [mGal]
+            - 'trr': 2nd rad. derivative [1/s^2]
+            - 'water': equivalent water height [m]
+            - 'smd': surface mass density [kg/m^2]
+        grd (str, optional): Defines the grid. Defaults to 'mesh'. Options:
+            - 'pole', 'mesh': equi-angular (n+1)*2n, includes poles/Greenwich meridian.
+            - 'block', 'cell': equi-angular block midpoints, n*2n.
+            - 'neumann', 'gauss': Gauss-grid (n+1)*2n.
+        n (int, optional): Degree of harmonics. Defaults to -9999 (lmax).
+        h (int, optional): Height above Earth mean radius [m]. Defaults to 0.
+        jflag (int, optional): Subtracts GRS80 when set. Defaults to 1.
 
     Returns:
-        (numpy.ndarray): The global Spherical Harmonics field.
-        (numpy.ndarray): Vector of co-latitudes in radians.
-        (numpy.ndarray): Vector of longitudes in radians.
-
+        numpy.ndarray: The global Spherical Harmonics field.
+        numpy.ndarray: Vector of co-latitudes in radians.
+        numpy.ndarray: Vector of longitudes in radians.
+        
     Raises:
         Exception: If the format of the field is incorrect.
         Exception: If n is not scalar.
