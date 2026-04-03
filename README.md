@@ -19,7 +19,13 @@ PySHBundle is a tool to process GRACE L2 data and re-implements the popular [SHB
 
 ## 1. How to install <br>
 ### 1.1 For Users
-The recommended installation method is to clone the repository and install locally. This also gives you access to the example notebooks and data.
+The simplest way to install is via pip:
+
+```shell
+$ pip install pyshbundle
+```
+
+To also access the example notebooks and data, clone the repository:
 
 ```shell
 # Clone the repository
@@ -33,9 +39,6 @@ $ source <name-env>/bin/activate  # On Windows: <name-env>\Scripts\activate
 # Install the package
 $ pip install .
 ```
-
-> **Note:** The package is available on PyPI but is currently broken.
-> Please avoid installing via `pip install pyshbundle` until this is resolved.
 
 ### 1.2 For Devs/Contributors
 ```shell
