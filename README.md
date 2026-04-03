@@ -3,7 +3,6 @@
 ![](https://visitor-badge.glitch.me/badge?page_id=GESS-research-group.pyshbundle)
 [![Build and Test](https://github.com/GESS-research-group/pyshbundle/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/GESS-research-group/pyshbundle/actions/workflows/python-package-conda.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Python 3.9 | 3.12](https://img.shields.io/badge/python-3.9%20%7C%203.12-blue)](https://www.python.org)
 [![PyPI version](https://img.shields.io/pypi/v/pyshbundle)](https://pypi.org/project/pyshbundle/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyshbundle)](https://pypi.org/project/pyshbundle/)
 [![Documentation](https://img.shields.io/badge/docs-github.io-green)](https://gess-research-group.github.io/pyshbundle/) <br>
