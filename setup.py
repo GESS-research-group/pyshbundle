@@ -13,7 +13,7 @@ install_requires = ['numpy', 'pandas', 'netCDF4', 'scipy',
                     'ipykernel', 'jupyterlab', 'rioxarray']
 setup(
     name='pyshbundle',
-    version='0.3.0',
+    version='1.3.0',
     python_requires='>=3.9',
     packages=find_packages(include=['pyshbundle', 'pyshbundle.*']),
     description="PySHbundle: A Python implementation of GRACE Spherical Harmonics Synthesis MATLAB codes SHbundle",

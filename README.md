@@ -1,5 +1,15 @@
 # PySHbundle: A Python implementation of GRACE Spherical Harmonics Synthesis MATLAB codes SHbundle <br>
 
+> **`pypi-release` branch** — This branch tracks `main` but holds the PyPI release version.
+> To sync with `main` while preserving version files:
+> ```shell
+> git checkout pypi-release
+> git merge main
+> git checkout HEAD -- setup.py pyproject.toml setup.cfg pyshbundle/__init__.py
+> git commit -m "sync from main, preserve version"
+> git push
+> ```
+
 ![](https://visitor-badge.glitch.me/badge?page_id=mn5hk.mat2py)
 [![Build and Test](https://github.com/GESS-research-group/pyshbundle/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/GESS-research-group/pyshbundle/actions/workflows/python-package-conda.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
