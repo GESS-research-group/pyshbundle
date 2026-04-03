@@ -1,53 +1,40 @@
 # Installation
 
-## Stable release
+## For Users
 
-To install pyshbundle, run this command in your terminal:
-
-This is the preferred method to install pyshbundle, as it will always install the most recent stable release.
-
-If you don't have [pip](https://pip.pypa.io) installed, this [Python installation guide](http://docs.python-guide.org/en/latest/starting/installation/) can guide you through the process.
+The recommended installation method is to clone the repository and install locally. This also gives you access to the example notebooks and data.
 
 ```shell
-# clone the repository in order to access the notebooks and data
-$ git clone https://github.com/lsmvivek/pyshbundle.git
-$ pip install .
+# Clone the repository
+$ git clone https://github.com/GESS-research-group/pyshbundle.git
+$ cd pyshbundle
 
-
-# The package is available on pip but is BROKEN
-# Please avoid installing via pip till we fix that
-
-# creating a new virtual environment
+# Create and activate a virtual environment
 $ python3 -m venv <name-env>
-# activate the virtual environment environment
-$ source </location-of-virt-env/name-env/bin/activate>
-# install package into virtual environment
-$ pip install pyshbundle
+$ source <name-env>/bin/activate  # On Windows: <name-env>\Scripts\activate
 
-# clone the repository in order to access the notebooks and data
-$ git clone https://github.com/lsmvivek/pyshbundle.git
+# Install the package
+$ pip install .
 ```
 
-## From the source - for Devs/Contributors
+> **Note:** The package is available on PyPI but is currently broken.
+> Please avoid installing via `pip install pyshbundle` until this is resolved.
 
-Developers can access the latest development branch and 
+## From Source — For Devs/Contributors
 
 ```shell
-# clone the repo and fetch the dev branch
-$ git clone https://github.com/lsmvivek/pyshbundle.git
+# Clone the repository
+$ git clone https://github.com/GESS-research-group/pyshbundle.git
+$ cd pyshbundle
 
-# creating a new virtual environment
+# Create and activate a virtual environment
 $ python3 -m venv <name-env>
+$ source <name-env>/bin/activate  # On Windows: <name-env>\Scripts\activate
 
-# install the dependencies from the requirements-dev file
-$ pip install -r ../pyshbundle/requirements-dev.txt
+# Install the package in editable mode with dev dependencies
+$ pip install -r requirements-dev.txt
+$ pip install -e .
 
-# activate the virtual environment environment
-$ source </location-of-virt-env/name-env/bin/activate>
-
-# install package into virtual environment
-$ pip install ../pyshbundle/dist/<required-version>.tar.gz
-
-# you also have the option to build the module using, be careful of 
-$ python setup.py sdist
+# To build a source distribution
+$ python -m build
 ```

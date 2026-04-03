@@ -55,7 +55,7 @@ Ready to contribute? Here's how to set up pyshbundle for local development.
 2.  Setup a seperate development environment.
     ```shell
     # clone the repo and fetch the dev branch
-    $ git clone git@github.com:mn5hk/pyshbundle.git
+    $ git clone git@github.com:GESS-research-group/pyshbundle.git
 
     # creating a new virtual environment
     $ python3 -m venv <name-env>

@@ -1,6 +1,6 @@
 # PySHbundle: A Python implementation of GRACE Spherical Harmonics Synthesis MATLAB codes SHbundle <br>
 
-![](https://visitor-badge.glitch.me/badge?page_id=mn5hk.mat2py)
+![](https://visitor-badge.glitch.me/badge?page_id=GESS-research-group.pyshbundle)
 [![Build and Test](https://github.com/GESS-research-group/pyshbundle/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/GESS-research-group/pyshbundle/actions/workflows/python-package-conda.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Python 3.9 | 3.12](https://img.shields.io/badge/python-3.9%20%7C%203.12-blue)](https://www.python.org)
@@ -116,7 +116,7 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report bugs at [GitHub Issues](https://github.com/mn5hk/pyshbundle/issues)
+Report bugs at [GitHub Issues](https://github.com/GESS-research-group/pyshbundle/issues)
 
 
 If you are reporting a bug, please include:
@@ -144,7 +144,7 @@ in docstrings, or even on the web in blog posts, articles, and such.
 ### Submit Feedback
 
 The best way to send feedback is to file an issue at
-[GitHub Issues](https://github.com/mn5hk/pyshbundle/issues)
+[GitHub Issues](https://github.com/GESS-research-group/pyshbundle/issues)
 
 If you are proposing a feature:
 

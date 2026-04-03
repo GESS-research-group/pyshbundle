@@ -46,8 +46,8 @@ dependencies=[
 ]
 
 [project.urls]
-Homepage = "https://github.com/lsmvivek/pyshbundle"
-Issues = "https://github.com/lsmvivek/pyshbundle/issues"
+Homepage = "https://github.com/GESS-research-group/pyshbundle"
+Issues = "https://github.com/GESS-research-group/pyshbundle/issues"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
