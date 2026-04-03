@@ -2,7 +2,7 @@ name: Draft PDF
 
 on:
   push:
-    branches: ["main", "apr-fixes"]
+    branches: ["main", "joss-review-7550"]
     paths:
       - "paper.md"
       - "paper.bib"
