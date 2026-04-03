@@ -28,7 +28,7 @@ def read_GRACE_SH_paths(use_sample_files = 0):
     #@author: Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     
     print("This program supports working with GRACE L2 Spherical harmonics data from the following centers: CSR, JPL and ITSG")
-    print("Instructions to download data may be referred to in https://github.com/mn5hk/pyshbundle/blob/main/docs/index.md#how-to-download-data")
+    print("Instructions to download data may be referred to in https://github.com/GESS-research-group/pyshbundle/blob/main/docs/index.md#how-to-download-data")
     source = str(input("Enter the source of L2 SH coeffs code(jpl, csr, gfz): "))
 
     if use_sample_files ==1:
@@ -37,7 +37,7 @@ def read_GRACE_SH_paths(use_sample_files = 0):
         print("The replacement files for the TN13 and TN14 Args have been preloaded into the program")
         print("Due to the size of the GRACE SH files, these have not been preloaded into the program")
         print("You may download the GRACE SH L2 files from the link below. Please ensure to download the files as per your selection of source in the prior step")
-        print("Download sample files from: https://github.com/mn5hk/pyshbundle/tree/main/sample_input_data")
+        print("Download sample files from: https://github.com/GESS-research-group/pyshbundle/tree/main/sample_input_data")
     path_sh = str(input("Enter the path to the folder with SH L2 data"))
 
     
@@ -116,7 +116,7 @@ def load_longterm_mean(source = "", use_sample_mean = 0):
         print("Successfully loaded preloaded longterm means")
     else:
         print("Please download and provide the longterm GRACE SH mean values")
-        print("Instructions to download the longterm GRACE SH mean values may be referred to in https://github.com/mn5hk/pyshbundle/blob/main/docs/index.md#how-to-download-data")
+        print("Instructions to download the longterm GRACE SH mean values may be referred to in https://github.com/GESS-research-group/pyshbundle/blob/main/docs/index.md#how-to-download-data")
         long_mean = str(input("Enter the longterm mean for the SH values in the numpy (.npy) format"))
         print("Successfully loaded path to long term mean:", long_mean)
 
