@@ -3,7 +3,7 @@
 # Updated: Vivek, 2024-05-20, added the function Basinaverage, area_weighting.
 # Updated: Vivek, 2024-07-28.
 
-# - - - - - - - - - - - - - - 
+# - - - - - - - - - - - - - -
 # License:
 #    This file is part of PySHbundle.
 #    PySHbundle is free software: you can redistribute it and/or modify
@@ -18,27 +18,27 @@
 
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Acknowledgement Statement:
-#    Please note that PySHbundle has adapted the following code packages, 
+#    Please note that PySHbundle has adapted the following code packages,
 #    both licensed under GNU General Public License
 #       1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
 
 #       2. Downscaling GRACE Total Water Storage Change using Partial Least Squares Regression
-#          https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
-    
+#          https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564
+
 # Key Papers Referred:
-#    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
-#       A data‐driven approach for repairing the hydrological catchment signal damage 
-#       due to filtering of GRACE products. Water Resources Research, 
+#    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017).
+#       A data‐driven approach for repairing the hydrological catchment signal damage
+#       due to filtering of GRACE products. Water Resources Research,
 #       53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
 
-#    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
-#       Downscaling GRACE total water storage change using 
+#    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021).
+#       Downscaling GRACE total water storage change using
 #       partial least squares regression. Scientific data, 8(1), 95.
 #       https://doi.org/10.1038/s41597-021-00862-6
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -50,7 +50,7 @@ from pyshbundle.shutils import Gaussian
 from pyshbundle.pysh_core import gshs
 
 
-def TWSCalc(data, lmax: int, gs: float, r:float, m: int):
+def TWSCalc(data, lmax: int, gs: float, r: float, m: int) -> np.ndarray:
     """
     Spherical Harmonics Synthesis for Total Water Storage (TWS) calculation.
 
@@ -74,32 +74,33 @@ def TWSCalc(data, lmax: int, gs: float, r:float, m: int):
         Vivek Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
     SC = data
-    
-    gfilter = Gaussian(lmax,r)
-    grid_y = int(180/gs)
-    grid_x = int(360/gs)
-    tws_f = np.zeros([m,grid_y,grid_x], dtype ='float')
-    for i in tqdm(range(0,m,1)):
-        field = SC[i,0:lmax+1,96-lmax:96+lmax+1]
-        shfil = np.zeros([lmax+1,2*lmax+1])
 
-        for j in range(0,2*lmax+1,1):
-            shfil[:,j] = gfilter[:,0] * field[:,j]
-        
-        quant = 'water' 
-        grd = 'cell'
-        n = int(180/gs) 
-        h = 0 
+    gfilter = Gaussian(lmax, r)
+    grid_y = int(180 / gs)
+    grid_x = int(360 / gs)
+    tws_f = np.zeros([m, grid_y, grid_x], dtype="float")
+    for i in tqdm(range(0, m, 1)):
+        field = SC[i, 0 : lmax + 1, 96 - lmax : 96 + lmax + 1]
+        shfil = np.zeros([lmax + 1, 2 * lmax + 1])
+
+        for j in range(0, 2 * lmax + 1, 1):
+            shfil[:, j] = gfilter[:, 0] * field[:, j]
+
+        quant = "water"
+        grd = "cell"
+        n = int(180 / gs)
+        h = 0
         jflag = 0
-        
+
         ff = gshs(shfil, quant, grd, n, h, jflag)[0]
-        
-        ff = ff*1000    # convert units from m to mm
-        tws_f[i,:,0:int(grid_x/2)] = ff[:,int(grid_x/2):]
-        tws_f[i,:,int(grid_x/2):] = ff[:,0:int(grid_x/2)]   
-    
-    plt.imshow(tws_f[0,:,:])
-    return(tws_f)
+
+        ff = ff * 1000  # convert units from m to mm
+        tws_f[i, :, 0 : int(grid_x / 2)] = ff[:, int(grid_x / 2) :]
+        tws_f[i, :, int(grid_x / 2) :] = ff[:, 0 : int(grid_x / 2)]
+
+    plt.imshow(tws_f[0, :, :])
+    return tws_f
+
 
 def apply_gaussian(sc_coeff, gaussian_coeff, lmax):
     """
@@ -113,15 +114,16 @@ def apply_gaussian(sc_coeff, gaussian_coeff, lmax):
     Returns:
         (numpy.ndarray): Filtered spherical harmonics coefficients in SC format.
     """
-    
+
     # filtered SH Coeff
-    shfil = np.zeros([lmax+1, 2 * lmax+1])
+    shfil = np.zeros([lmax + 1, 2 * lmax + 1])
 
     # applying filter on substracted coeff
-    for j in range(0, 2*lmax+1, 1):
-        shfil[:,j] = gaussian_coeff[:,0] * sc_coeff[:,j]
-    
+    for j in range(0, 2 * lmax + 1, 1):
+        shfil[:, j] = gaussian_coeff[:, 0] * sc_coeff[:, j]
+
     return shfil
+
 
 def area_weighting(grid_resolution):
     """
@@ -133,21 +135,31 @@ def area_weighting(grid_resolution):
     Returns:
         (numpy.ndarray): A matrirx of area of each grid on the surface of the Earth in m^2.
     """
-    
-    longitude_grid = np.linspace(0, 359+(1-grid_resolution), int(360/grid_resolution), dtype='float');
-    latitude_grid = np.linspace(0, 179+(1-grid_resolution), int(180/grid_resolution), dtype='float');
-    longitude_grid1 = np.linspace(1*grid_resolution, 360, int(360/grid_resolution), dtype='float');
-    latitude_grid1 = np.linspace(1*grid_resolution, 180, int(180/grid_resolution), dtype='float');
-    
-    lambd,theta = np.meshgrid(longitude_grid,latitude_grid)  
-    lambd1,theta1 = np.meshgrid(longitude_grid1,latitude_grid1)
-    
-    delta_latitude = np.sin(np.deg2rad(90-theta))-np.sin(np.deg2rad(90-theta1))
-    delta_longitude = (lambd1 - lambd)*np.pi/180
+
+    longitude_grid = np.linspace(
+        0, 359 + (1 - grid_resolution), int(360 / grid_resolution), dtype="float"
+    )
+    latitude_grid = np.linspace(
+        0, 179 + (1 - grid_resolution), int(180 / grid_resolution), dtype="float"
+    )
+    longitude_grid1 = np.linspace(
+        1 * grid_resolution, 360, int(360 / grid_resolution), dtype="float"
+    )
+    latitude_grid1 = np.linspace(
+        1 * grid_resolution, 180, int(180 / grid_resolution), dtype="float"
+    )
+    lambd, theta = np.meshgrid(longitude_grid, latitude_grid)
+    lambd1, theta1 = np.meshgrid(longitude_grid1, latitude_grid1)
+
+    delta_latitude = np.sin(np.deg2rad(90 - theta)) - np.sin(np.deg2rad(90 - theta1))
+    delta_longitude = (lambd1 - lambd) * np.pi / 180
 
     # Area of each grid
-    area = (6378.137**2)*pow(10,6)*(np.multiply(delta_latitude,delta_longitude)) # units m^2
+    area = (
+        (6378.137**2) * pow(10, 6) * (np.multiply(delta_latitude, delta_longitude))
+    )  # units m^2
     return area
+
 
 def Basinaverage(temp, gs, shp_basin, basin_area):
     """
@@ -169,19 +181,24 @@ def Basinaverage(temp, gs, shp_basin, basin_area):
     """
 
     from pyshbundle.hydro import area_weighting
-    # area_weighting returns the area of each grid in m^2 for the grid resolution specified
-    temp_weighted=temp.copy()
-    temp_weighted['tws']=temp['tws']*area_weighting(gs)
 
-    ''' add projection system to nc '''
+    # area_weighting returns the area of each grid in m^2 for the grid resolution specified
+    temp_weighted = temp.copy()
+    temp_weighted["tws"] = temp["tws"] * area_weighting(gs)
+
+    """ add projection system to nc """
     basin_tws = temp_weighted.rio.write_crs("EPSG:4326", inplace=True)
     basin_tws = basin_tws.rio.set_spatial_dims(x_dim="lon", y_dim="lat", inplace=True)
-            
-    # mask data with shapefile
-    basin_tws = basin_tws.rio.clip(shp_basin.geometry.apply(mapping), shp_basin.crs,drop=True)
-    basin_avg_tws=basin_tws.sum(dim=('lon','lat'), skipna=True)/basin_area  #basin average tws
 
-    basin_tws=basin_tws.drop_vars('spatial_ref')
-    basin_avg_tws=basin_avg_tws.drop_vars('spatial_ref')
+    # mask data with shapefile
+    basin_tws = basin_tws.rio.clip(
+        shp_basin.geometry.apply(mapping), shp_basin.crs, drop=True
+    )
+    basin_avg_tws = (
+        basin_tws.sum(dim=("lon", "lat"), skipna=True) / basin_area
+    )  # basin average tws
+
+    basin_tws = basin_tws.drop_vars("spatial_ref")
+    basin_avg_tws = basin_avg_tws.drop_vars("spatial_ref")
 
     return basin_tws, basin_avg_tws

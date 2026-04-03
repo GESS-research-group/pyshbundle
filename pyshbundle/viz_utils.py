@@ -1,7 +1,7 @@
 # Visualisation Utilities for PySHBundle
 # Author: Abhishek Mhamane, MS-Research Geoinformatics, IIT Kanpur (India)
 # 2024-06-10, updated: Vivek Kumar Yadav, IISc Bengaluru
-# - - - - - - - - - - - - - - 
+# - - - - - - - - - - - - - -
 # License:
 #    This file is part of PySHbundle.
 #    PySHbundle is free software: you can redistribute it and/or modify
@@ -16,27 +16,27 @@
 
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Acknowledgement Statement:
-#    Please note that PySHbundle has adapted the following code packages, 
+#    Please note that PySHbundle has adapted the following code packages,
 #    both licensed under GNU General Public License
 #       1. SHbundle: https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle/
 
 #       2. Downscaling GRACE Total Water Storage Change using Partial Least Squares Regression
-#          https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564 
-    
+#          https://springernature.figshare.com/collections/Downscaling_GRACE_Total_Water_Storage_Change_using_Partial_Least_Squares_Regression/5054564
+
 # Key Papers Referred:
-#    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017). 
-#       A data‐driven approach for repairing the hydrological catchment signal damage 
-#       due to filtering of GRACE products. Water Resources Research, 
+#    1. Vishwakarma, B. D., Horwath, M., Devaraju, B., Groh, A., & Sneeuw, N. (2017).
+#       A data‐driven approach for repairing the hydrological catchment signal damage
+#       due to filtering of GRACE products. Water Resources Research,
 #       53(11), 9824-9844. https://doi.org/10.1002/2017WR021150
 
-#    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021). 
-#       Downscaling GRACE total water storage change using 
+#    2. Vishwakarma, B. D., Zhang, J., & Sneeuw, N. (2021).
+#       Downscaling GRACE total water storage change using
 #       partial least squares regression. Scientific data, 8(1), 95.
 #       https://doi.org/10.1038/s41597-021-00862-6
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 import calendar
 from datetime import datetime
@@ -49,6 +49,7 @@ import matplotlib.patches as mpatches
 
 from pyshbundle.shutils import plm
 from pyshbundle.pysh_core import gshs
+
 
 def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
     """
@@ -65,22 +66,33 @@ def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
         (matplotlib.axes._axes.Axes): Plot axes.
     """
     fig, ax = plt.subplots(1, 1, figsize=(25, 10))
-    im = ax.imshow(np.ma.log10(abs(scmat)), extent=[-lmax, lmax, lmax, 0], cmap='Spectral_r',vmin=vmin, vmax=vmax)
+    im = ax.imshow(
+        np.ma.log10(abs(scmat)),
+        extent=[-lmax, lmax, lmax, 0],
+        cmap="Spectral_r",
+        vmin=vmin,
+        vmax=vmax,
+    )
     ax.grid()
     # plt.colorbar()
-    x_vec = np.arange(-lmax, lmax+1, 6)
+    x_vec = np.arange(-lmax, lmax + 1, 6)
     y_vec = np.arange(lmax, -2, -6)
 
-    x_st = 0*y_vec
+    x_st = 0 * y_vec
 
     # vertical line
-    ax.plot(x_st, y_vec, "black") 
+    ax.plot(x_st, y_vec, "black")
 
-    plt.xticks(x_vec,)
+    plt.xticks(
+        x_vec,
+    )
     plt.yticks(y_vec)
     plt.title(title)
-    fig.colorbar(im,)    
+    fig.colorbar(
+        im,
+    )
     return ax
+
 
 def cs_sqplot(csmat: np.ndarray, lmax: int, title: str, vmin, vmax):
     """
@@ -97,29 +109,36 @@ def cs_sqplot(csmat: np.ndarray, lmax: int, title: str, vmin, vmax):
         (matplotlib.axes._axes.Axes): Plot axes.
     """
     fig, ax = plt.subplots(1, 1, figsize=(10, 10))
-    im = ax.imshow(np.ma.log10(abs(csmat)), extent=[0, lmax, lmax, 0], cmap='Spectral_r',vmin=vmin, vmax=vmax)
+    im = ax.imshow(
+        np.ma.log10(abs(csmat)),
+        extent=[0, lmax, lmax, 0],
+        cmap="Spectral_r",
+        vmin=vmin,
+        vmax=vmax,
+    )
     ax.grid()
-    ax.set_aspect('equal')
+    ax.set_aspect("equal")
 
     # plt.colorbar()
-    x_vec = np.arange(0, lmax+1, 6)
+    x_vec = np.arange(0, lmax + 1, 6)
     y_vec = np.arange(lmax, -2, -6)
 
     # diagonal line
-    ax.plot(x_vec, np.flip(y_vec), "black") 
+    ax.plot(x_vec, np.flip(y_vec), "black")
 
     # formating
-    plt.xticks(x_vec,)
+    plt.xticks(
+        x_vec,
+    )
     plt.yticks(y_vec)
     plt.title(title)
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("bottom", size="5%", pad=0.45)
-    
+
     # Plot horizontal colorbar
     fig.colorbar(im, orientation="horizontal", cax=cax)
-    
-    return ax
 
+    return ax
 
 
 def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
@@ -137,28 +156,44 @@ def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
         (matplotlib.axes._axes.Axes): Plot axes.
     """
 
-    if polar_loc == 'greenland':
+    if polar_loc == "greenland":
         extent = (-75, -5, 55, 85)
 
-        # setting the 
+        # setting the
         fig = plt.figure()
-        ax = plt.axes(projection=ccrs.LambertConformal(central_latitude=72,central_longitude=-42.0))
+        ax = plt.axes(
+            projection=ccrs.LambertConformal(
+                central_latitude=72, central_longitude=-42.0
+            )
+        )
 
-        im = ax.imshow(field, origin='upper', cmap='Spectral', transform=ccrs.PlateCarree(), )
+        im = ax.imshow(
+            field,
+            origin="upper",
+            cmap="Spectral",
+            transform=ccrs.PlateCarree(),
+        )
 
         ax.set_extent((-75, -5, 55, 85))
-        gl = ax.gridlines(crs = ccrs.PlateCarree(), draw_labels=True, x_inline=False, y_inline=False, color='gray', alpha=0.9, linestyle='--')
+        gl = ax.gridlines(
+            crs=ccrs.PlateCarree(),
+            draw_labels=True,
+            x_inline=False,
+            y_inline=False,
+            color="gray",
+            alpha=0.9,
+            linestyle="--",
+        )
 
         gl.top_labels = False
         ax.coastlines()
-        plt.colorbar(im, orientation='vertical', shrink=1.0, pad=0.1,label=f"[...]")
+        plt.colorbar(im, orientation="vertical", shrink=1.0, pad=0.1, label=f"[...]")
 
         plt.title(f"{title}")
         if save_flag:
             plt.savefig(f"{file_name}.jpg")
 
-    
-    elif polar_loc == 'antarctica':
+    elif polar_loc == "antarctica":
         extent = [-180, 180, -85, -60]
 
         fig = plt.figure(1, figsize=(7, 7))
@@ -166,30 +201,46 @@ def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
         ax = plt.axes(projection=ccrs.SouthPolarStereo())
 
         # plotting the matrix field
-        im = ax.imshow(field, origin='upper', cmap='RdYlBu', transform=ccrs.PlateCarree(),)
+        im = ax.imshow(
+            field,
+            origin="upper",
+            cmap="RdYlBu",
+            transform=ccrs.PlateCarree(),
+        )
 
         # setting the gridlines and continental boundary
         ax.set_extent(extent, ccrs.PlateCarree())
-        gl = ax.gridlines(crs = ccrs.PlateCarree(), draw_labels=True, x_inline=False, y_inline=False, color='gray', alpha=0.9, linestyle='--')
-        #gl.top_labels = False
-        
+        gl = ax.gridlines(
+            crs=ccrs.PlateCarree(),
+            draw_labels=True,
+            x_inline=False,
+            y_inline=False,
+            color="gray",
+            alpha=0.9,
+            linestyle="--",
+        )
+        # gl.top_labels = False
+
         ax.coastlines()
 
         # to plot the circular plot boundary
-        theta = np.linspace(0, 2*np.pi, 100)
+        theta = np.linspace(0, 2 * np.pi, 100)
         center, radius = [0.5, 0.5], 0.5
         verts = np.vstack([np.sin(theta), np.cos(theta)]).T
         circle = mpath.Path(verts * radius + center)
 
         ax.set_boundary(circle, transform=ax.transAxes)
-        plt.colorbar(im, orientation='vertical', shrink=1.0, pad=0.1,label=f"[...]")
+        plt.colorbar(im, orientation="vertical", shrink=1.0, pad=0.1, label=f"[...]")
         plt.title(f"{title}")
 
         if save_flag:
             plt.savefig(f"{file_name}.jpg")
     return im
 
-def mapfield(field, img_extent, title, name=None, colorbar_bounds=None, save_flag=False):
+
+def mapfield(
+    field, img_extent, title, name=None, colorbar_bounds=None, save_flag=False
+):
     """
     Visualize a field on a global map using the Robinson projection.
 
@@ -206,28 +257,50 @@ def mapfield(field, img_extent, title, name=None, colorbar_bounds=None, save_fla
         geo_ax (matplotlib.axes._axes.Axes): Plot axes.
     """
     # Plotting and Visualization
-    
-    fig = plt.figure(figsize=(16, 7.5))
-    geo_ax = plt.axes(projection = ccrs.Robinson())
 
-    
+    fig = plt.figure(figsize=(16, 7.5))
+    geo_ax = plt.axes(projection=ccrs.Robinson())
 
     # plot the data
     if colorbar_bounds is not None:
         vmin = colorbar_bounds[0]
         vmax = colorbar_bounds[1]
-        im = geo_ax.imshow(field, origin='upper', extent=img_extent, cmap='Greens', transform=ccrs.PlateCarree(), vmin=vmin, vmax=vmax)
+        im = geo_ax.imshow(
+            field,
+            origin="upper",
+            extent=img_extent,
+            cmap="Greens",
+            transform=ccrs.PlateCarree(),
+            vmin=vmin,
+            vmax=vmax,
+        )
     else:
-        im = geo_ax.imshow(field, origin='upper', extent=img_extent, cmap='Greens', transform=ccrs.PlateCarree(), )
+        im = geo_ax.imshow(
+            field,
+            origin="upper",
+            extent=img_extent,
+            cmap="Greens",
+            transform=ccrs.PlateCarree(),
+        )
 
     plt.xlabel("Longitude")
     plt.ylabel("Latitude")
     # setting gridlines
-    gl = geo_ax.gridlines(crs = ccrs.PlateCarree(), draw_labels=True, x_inline=False, y_inline=False, color='gray', alpha=0.9, linestyle='--')
+    gl = geo_ax.gridlines(
+        crs=ccrs.PlateCarree(),
+        draw_labels=True,
+        x_inline=False,
+        y_inline=False,
+        color="gray",
+        alpha=0.9,
+        linestyle="--",
+    )
     # remove top x label
     gl.top_labels = False
     # change x label styles - font size ad colour
-    gl.xlabel_style = {'size':12,}
+    gl.xlabel_style = {
+        "size": 12,
+    }
     # left and right labels
     gl.left_labels = True
     gl.right_labels = False
@@ -235,18 +308,23 @@ def mapfield(field, img_extent, title, name=None, colorbar_bounds=None, save_fla
     geo_ax.coastlines()
 
     # Using new axes for colorbar
-    
 
-    plt.colorbar(im, shrink=0.845, orientation='vertical', pad=0.02,label=f"gravity [...]",)
+    plt.colorbar(
+        im,
+        shrink=0.845,
+        orientation="vertical",
+        pad=0.02,
+        label=f"gravity [...]",
+    )
 
     plt.title(f"{title}")
     if save_flag:
         plt.savefig(f"{name}.jpg")
-    
+
     return fig, geo_ax
 
-def ylm(l: int, m: int):
 
+def ylm(l: int, m: int):
     """
     Compute the spherical harmonics Ylm.
 
@@ -267,16 +345,15 @@ def ylm(l: int, m: int):
     assert m <= l
 
     # main code
-    thetaRAD  = np.linspace(0,np.pi,37)
-    lambdaRAD = np.linspace(0,2*np.pi,73)
+    thetaRAD = np.linspace(0, np.pi, 37)
+    lambdaRAD = np.linspace(0, 2 * np.pi, 73)
 
-    cosml = np.cos(m*lambdaRAD)
-    sinml = np.sin(m*lambdaRAD)
+    cosml = np.cos(m * lambdaRAD)
+    sinml = np.sin(m * lambdaRAD)
 
-    arr = np.zeros((1,1))
+    arr = np.zeros((1, 1))
     arr[0] = l
-    
-    
+
     p = plm(arr, m, thetaRAD, nargin=1, nargout=1)
 
     ylmc = p * cosml
@@ -300,39 +377,60 @@ def ylm_plot(l: int, m: int):
     ylmc, ylms = ylm(l, m)
 
     fig = plt.figure(figsize=(15, 7.5))
-    ax = plt.axes(projection = ccrs.PlateCarree())
+    ax = plt.axes(projection=ccrs.PlateCarree())
 
     lons = np.linspace(-180, 180, 73)
     lats = np.linspace(-90, 90, 37)
 
     x, y = np.meshgrid(lons, lats)
 
-    if m >=0 :
+    if m >= 0:
         img_extent = (-180, 180, -90, 90)
 
         # plot the data
-        im = ax.imshow(ylmc[:, 0, :], origin='upper', extent=img_extent, transform=ccrs.PlateCarree(), cmap="Spectral")
+        im = ax.imshow(
+            ylmc[:, 0, :],
+            origin="upper",
+            extent=img_extent,
+            transform=ccrs.PlateCarree(),
+            cmap="Spectral",
+        )
     else:
-        #plt.contourf(x, y, ylms_00[:, 0, :], cmap='RdYlBu_r')
-        im = ax.imshow(ylms[:, 0, :], origin='upper', extent=img_extent, transform=ccrs.PlateCarree(), cmap="Spectral")
-
-
+        # plt.contourf(x, y, ylms_00[:, 0, :], cmap='RdYlBu_r')
+        im = ax.imshow(
+            ylms[:, 0, :],
+            origin="upper",
+            extent=img_extent,
+            transform=ccrs.PlateCarree(),
+            cmap="Spectral",
+        )
 
     # setting gridlines
-    gl = ax.gridlines(crs = ccrs.PlateCarree(), draw_labels=True, x_inline=False, y_inline=False, color='gray', alpha=0.9, linestyle='--')
+    gl = ax.gridlines(
+        crs=ccrs.PlateCarree(),
+        draw_labels=True,
+        x_inline=False,
+        y_inline=False,
+        color="gray",
+        alpha=0.9,
+        linestyle="--",
+    )
     # remove top x label
     gl.top_labels = False
     # change x label styles - font size ad colour
-    gl.xlabel_style = {'size':12,}
+    gl.xlabel_style = {
+        "size": 12,
+    }
     # left and right labels
     gl.left_labels = True
     gl.right_labels = False
     # coastlines
     ax.coastlines()
 
-    plt.colorbar(im, orientation='vertical', shrink=0.85, pad=0.02,label=f"[...]")
+    plt.colorbar(im, orientation="vertical", shrink=0.85, pad=0.02, label=f"[...]")
 
     plt.title(f"Visualization of Spherical Harmonics - degree: {l} order: {m}")
+
 
 def gshs_prepare(lmax, gs, quant, grd, h, jflag, sc_coeff):
     """
@@ -350,20 +448,21 @@ def gshs_prepare(lmax, gs, quant, grd, h, jflag, sc_coeff):
     Returns:
         (numpy.ndarray): The prepared grid field.
     """
-    n = int(180/gs)
-    
-    grid_y = int(180/gs)
-    grid_x = int(360/gs)
+    n = int(180 / gs)
+
+    grid_y = int(180 / gs)
+    grid_x = int(360 / gs)
 
     ff = gshs(sc_coeff, quant, grd, n, h, jflag)[0]
 
     # rearranging
-    field = np.zeros([grid_y,grid_x], dtype ='float')
+    field = np.zeros([grid_y, grid_x], dtype="float")
 
-    field[:,0:int(grid_x/2)] = ff[:,int(grid_x/2):]
-    field[:,int(grid_x/2):] = ff[:,0:int(grid_x/2)]  
-    
+    field[:, 0 : int(grid_x / 2)] = ff[:, int(grid_x / 2) :]
+    field[:, int(grid_x / 2) :] = ff[:, 0 : int(grid_x / 2)]
+
     return field
+
 
 # Function to plot the calendar
 def plot_calendar_months(datetime_object):
@@ -385,39 +484,52 @@ def plot_calendar_months(datetime_object):
     """
 
     # Extract months and years from dictionary keys
-    dates = [datetime.strptime(date, '%Y-%m').date() for date in datetime_object]
+    dates = [datetime.strptime(date, "%Y-%m").date() for date in datetime_object]
     months_years = {(date.year, date.month) for date in dates}
-    
+
     # Determine the range of years to plot
     years = sorted({year for year, month in months_years})
-    
-    fig, axes = plt.subplots(nrows=len(years), ncols=1, figsize=(7, 1 * len(years)), dpi=300)
+
+    fig, axes = plt.subplots(
+        nrows=len(years), ncols=1, figsize=(7, 1 * len(years)), dpi=300
+    )
 
     if len(years) == 1:
         axes = [axes]
-    
+
     for i, year in enumerate(years):
         ax = axes[i]
-        ax.set_title(f'{year}')
+        ax.set_title(f"{year}")
         ax.set_xticks([])  # Hide y-axis
         ax.set_yticks([])  # Hide x-axis
 
         # Highlight months with replacement data
         for month in range(1, 13):
             if (year, month) in months_years:
-                color = 'lightblue'
+                color = "lightblue"
             else:
-                color = 'white'
-            ax.text(month - 1, 0, calendar.month_abbr[month], ha='center', va='center', 
-                    bbox=dict(facecolor=color, edgecolor='black'))
+                color = "white"
+            ax.text(
+                month - 1,
+                0,
+                calendar.month_abbr[month],
+                ha="center",
+                va="center",
+                bbox=dict(facecolor=color, edgecolor="black"),
+            )
 
         ax.set_xlim(-0.5, 11.5)
         ax.set_ylim(-0.5, 0.5)
         ax.grid(False)
-        
+
     # # Add a legend
-    white_patch = mpatches.Patch(color='white', label='Data unavailable')
-    lightblue_patch = mpatches.Patch(color='lightblue', label='Data available')
-    axes[0].legend(handles=[white_patch, lightblue_patch], loc='lower center', bbox_to_anchor=(0.85, 1.1), fontsize='9')
+    white_patch = mpatches.Patch(color="white", label="Data unavailable")
+    lightblue_patch = mpatches.Patch(color="lightblue", label="Data available")
+    axes[0].legend(
+        handles=[white_patch, lightblue_patch],
+        loc="lower center",
+        bbox_to_anchor=(0.85, 1.1),
+        fontsize="9",
+    )
     plt.tight_layout()
     plt.show()

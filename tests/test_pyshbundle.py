@@ -6,10 +6,11 @@ from .test_validation_pyshbundle import validation_pyshbundle, load_matlab_refer
 
 # ── Constants ─────────────────────────────────────────────────────────────────
 
-RMSE_THRESHOLD  = 1e-3
+RMSE_THRESHOLD = 1e-3
 NRMSE_THRESHOLD = 1e-5
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────
+
 
 @pytest.fixture(scope="module")
 def tws_results(tmp_path_factory):
@@ -22,11 +23,16 @@ def tws_results(tmp_path_factory):
       - A data download step in the GitHub Actions workflow before tests run
     """
     import os
+
     PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    base         = os.environ.get("PYSHBUNDLE_DATA_DIR", os.path.join(PROJECT_ROOT, "data"))
-    path_sh      = os.path.join(base, "JPL_input")
-    path_tn14    = os.path.join(PROJECT_ROOT, "pyshbundle", "data", "JPL_TN_files", "TN-14_C30_C20_GSFC_SLR.txt")
-    path_tn13    = os.path.join(PROJECT_ROOT, "pyshbundle", "data", "JPL_TN_files", "TN-13_GEOC_JPL_RL06.txt")
+    base = os.environ.get("PYSHBUNDLE_DATA_DIR", os.path.join(PROJECT_ROOT, "data"))
+    path_sh = os.path.join(base, "JPL_input")
+    path_tn14 = os.path.join(
+        PROJECT_ROOT, "pyshbundle", "data", "JPL_TN_files", "TN-14_C30_C20_GSFC_SLR.txt"
+    )
+    path_tn13 = os.path.join(
+        PROJECT_ROOT, "pyshbundle", "data", "JPL_TN_files", "TN-13_GEOC_JPL_RL06.txt"
+    )
 
     if not os.path.exists(path_sh):
         pytest.fail(
@@ -34,12 +40,13 @@ def tws_results(tmp_path_factory):
             "Set PYSHBUNDLE_DATA_DIR env var or provide data/JPL_input/."
         )
 
-    tws_computed  = validation_pyshbundle(path_sh, path_tn13, path_tn14, source='jpl')
+    tws_computed = validation_pyshbundle(path_sh, path_tn13, path_tn14, source="jpl")
     tws_reference = load_matlab_reference()
     return tws_computed, tws_reference
 
 
 # ── Tests ─────────────────────────────────────────────────────────────────────
+
 
 def test_tws_output_shape(tws_results):
     """Computed and reference TWS fields must have identical shape."""
@@ -63,8 +70,8 @@ def test_gridwise_rmse(tws_results):
     """
     tws_computed, tws_reference = tws_results
     # tws_computed, tws_reference = tws_computed[0:100], tws_reference[0:100]
-    diff              = tws_reference - tws_computed
-    gridwise_rmse     = np.sqrt(np.mean(diff**2, axis=0))
+    diff = tws_reference - tws_computed
+    gridwise_rmse = np.sqrt(np.mean(diff**2, axis=0))
 
     # Report the worst offending grid point on failure
     max_rmse = np.nanmax(gridwise_rmse)
@@ -81,12 +88,12 @@ def test_gridwise_nrmse(tws_results):
     """
     tws_computed, tws_reference = tws_results
     # tws_computed, tws_reference = tws_computed[0:100], tws_reference[0:100]
-    diff          = tws_reference - tws_computed
+    diff = tws_reference - tws_computed
     gridwise_rmse = np.sqrt(np.mean(diff**2, axis=0))
-    std_ref       = np.std(tws_reference, axis=0)
+    std_ref = np.std(tws_reference, axis=0)
 
     # Guard against division by zero at invariant grid points
-    with np.errstate(invalid='ignore', divide='ignore'):
+    with np.errstate(invalid="ignore", divide="ignore"):
         gridwise_nrmse = np.where(std_ref > 0, gridwise_rmse / std_ref, 0.0)
 
     max_nrmse = np.nanmax(gridwise_nrmse)
@@ -99,12 +106,12 @@ def test_gridwise_nrmse(tws_results):
 def test_no_nan_in_output(tws_results):
     """TWS output must contain no NaN values."""
     tws_computed, _ = tws_results
-    assert not np.any(np.isnan(tws_computed)), \
-        "NaN values found in computed TWS output"
+    assert not np.any(np.isnan(tws_computed)), "NaN values found in computed TWS output"
 
 
 def test_no_nan_in_reference(tws_results):
     """Reference data sanity check — if this fails, the .mat file is corrupt."""
     _, tws_reference = tws_results
-    assert not np.any(np.isnan(tws_reference)), \
+    assert not np.any(np.isnan(tws_reference)), (
         "NaN values found in MATLAB reference data"
+    )

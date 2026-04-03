@@ -39,32 +39,32 @@
 #       partial least squares regression. Scientific data, 8(1), 95.
 #       https://doi.org/10.1038/s41597-021-00862-6
 
-""" This script contains some of the major relavant Physical and Geodetic(GRS80) constants:
+"""This script contains some of the major relavant Physical and Geodetic(GRS80) constants:
 
-    + `clight` speed of light - $2.99792458e+8$ $m/s$
-    + `G` Gravitational constant- $6.67259e-11$ $\frac{m^3} {kg \cdot s^2}$
-    + `au` astronomical unit - $149.597870691e+9$ $m$
++ `clight` speed of light - $2.99792458e+8$ $m/s$
++ `G` Gravitational constant- $6.67259e-11$ $\frac{m^3} {kg \cdot s^2}$
++ `au` astronomical unit - $149.597870691e+9$ $m$
 
-    + `ae` semi-major axis of ellipsoid `GRS 80`- $6378137$ m
-    + `GM` geocentric grav. constant `GRS 80`- $3.986005e+14$ $\frac{m^3}{s^2}$
-    + `J2` earth's dynamic form factor `GRS 80` - $1.08263e-3$ [unitless C20 unnormalized coefficient]
-    + `Omega` mean ang. velocity `GRS 80` - $7.292115e-5 $\frac{rad}{s}$
++ `ae` semi-major axis of ellipsoid `GRS 80`- $6378137$ m
++ `GM` geocentric grav. constant `GRS 80`- $3.986005e+14$ $\frac{m^3}{s^2}$
++ `J2` earth's dynamic form factor `GRS 80` - $1.08263e-3$ [unitless C20 unnormalized coefficient]
++ `Omega` mean ang. velocity `GRS 80` - $7.292115e-5 $\frac{rad}{s}$
 
-    + `flat` flattening - $\frac{1}{298.257222101}$
++ `flat` flattening - $\frac{1}{298.257222101}$
 """
 
-clight = 2.99792458e8	      # speed of light [m/s]
-G = 6.67259e-11         # gravitational constant [m^3 /(kg s^2)]
-au = 149.597870691e9     # astronomical unit [m]
+clight = 2.99792458e8  # speed of light [m/s]
+G = 6.67259e-11  # gravitational constant [m^3 /(kg s^2)]
+au = 149.597870691e9  # astronomical unit [m]
 
 # GRS80 defining constants:
-ae = 6378137             # semi-major axis of ellipsoid [m]
-GM = 3.986005e14         # geocentric grav. constant [m^3 / s^2]
-J2 = 1.08263e-3          # earth's dyn. form factor (= -C20 unnormalized)
-Omega = 7.292115e-5         # mean ang. velocity [rad/s]
+ae = 6378137  # semi-major axis of ellipsoid [m]
+GM = 3.986005e14  # geocentric grav. constant [m^3 / s^2]
+J2 = 1.08263e-3  # earth's dyn. form factor (= -C20 unnormalized)
+Omega = 7.292115e-5  # mean ang. velocity [rad/s]
 
 # GRS80 derived constants:
-flat = 1/298.257222101     # flattening
-J4 = -0.237091222e-5     # -C40 unnormalized
-J6 = 0.608347e-8        # -C60 unnormalized
-J8 = -0.1427e-10         # -C80 unnormalized
+flat = 1 / 298.257222101  # flattening
+J4 = -0.237091222e-5  # -C40 unnormalized
+J6 = 0.608347e-8  # -C60 unnormalized
+J8 = -0.1427e-10  # -C80 unnormalized

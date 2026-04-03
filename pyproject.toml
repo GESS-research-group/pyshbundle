@@ -49,6 +49,15 @@ dependencies=[
 Homepage = "https://github.com/GESS-research-group/pyshbundle"
 Issues = "https://github.com/GESS-research-group/pyshbundle/issues"
 
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+exclude = ["deprecated/", "examples/", "docs/"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["tests"]
