@@ -39,7 +39,6 @@
 #       https://doi.org/10.1038/s41597-021-00862-6
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-from copy import deepcopy
 from datetime import datetime, timedelta
 
 # from pyshbundle.reshape_SH_coefficients import sc2cs
@@ -610,7 +609,7 @@ def parse_itsg_header(header_info: list):
     model_name_idx = find_word(header_info, "modelname")
     date_str = parse_lines(header_info[model_name_idx])[1][-7:]
 
-    header_dict = {}
+    header_dict: dict = {}
     """
     for key in physical_constant_keys:
         key_index_in_header = find_word(header_info, key)
@@ -954,106 +953,6 @@ def extract_C30_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end=None):
         C30[np.isnan(C30)] = 0
 
     return C30
-
-
-def replace_zonal_coeff(
-    data_mat, source, lmax, data_tn13, data_tn14, epoch_begin: float, epoch_end: float
-):
-    """Replaces the zonal coefficients in the given data matrix with replacement coefficients from TN-13 and TN-14 data.
-
-    Args:
-        data_mat (numpy.ndarray): The original data matrix containing spherical harmonic coefficients.
-        source (str): The source of the data ('jpl', 'csr', or 'itsg').
-        lmax (int): The maximum degree of the spherical harmonic expansion.
-        data_tn13 (numpy.ndarray): The TN-13 replacement coefficients data.
-        data_tn14 (numpy.ndarray): The TN-14 replacement coefficients data.
-        epoch_begin (float): The start date of the epoch in YYYYMMDD format.
-        epoch_end (float, optional): The end date of the epoch in YYYYMMDD format. Defaults to None.
-
-    Returns:
-        (numpy.ndarray): The data matrix with the zonal coefficients replaced.
-    """
-    data_mat_copy = deepcopy(data_mat)
-
-    if source == "jpl":
-        assert epoch_end is not None, "epoch_end argument cannot be None"
-        # convert the float YYYYMMDD into datetime.date object
-        epoch_begin = datetime.strptime(str(int(epoch_begin)), "%Y%m%d").date()
-        epoch_end = datetime.strptime(str(int(epoch_end)), "%Y%m%d").date()
-
-        # Extract the C10, C11, C20 and C30 from TN-13 and TN-14
-        C10, C11 = extract_C10_11_replcmnt_coeff(
-            data_tn13, "jpl", epoch_begin, epoch_end
-        )
-        C20 = extract_C20_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end)
-        C30 = extract_C30_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end)
-
-        # For easy replacement purpose
-        # [l, m, clm, slm, clm_dev, slm_dev]
-        C00 = np.array([0, 0, 0, 0, 0, 0])
-
-        # C30 is  at index - 3 in original matrix
-        if C30 is not None:
-            data_mat_copy[3, :] = C30
-
-        # C20 is at index - 0 in original matrix
-        data_mat_copy[0, :] = C20
-
-        # stack the matrix row-wise
-        data_mat_copy = np.row_stack([C11, data_mat_copy])
-        data_mat_copy = np.row_stack([C10, data_mat_copy])
-        data_mat_copy = np.row_stack([C00, data_mat_copy])
-
-    elif source == "csr":
-        epoch_begin = datetime.strptime(str(int(epoch_begin)), "%Y%m%d").date()
-        epoch_end = datetime.strptime(str(int(epoch_end)), "%Y%m%d").date()
-
-        C10, C11 = extract_C10_11_replcmnt_coeff(
-            data_tn13, "csr", epoch_begin, epoch_end
-        )
-
-        C20 = extract_C20_replcmnt_coeff(data_tn14, "csr", epoch_begin, epoch_end)
-        C30 = extract_C30_replcmnt_coeff(data_tn14, "csr", epoch_begin, epoch_end)
-
-        # C10 is at index - 1
-        # C20 is at index - 2
-        # C30 is at index - 3
-        # C11 is at index - lmax + 1
-        data_mat_copy[lmax + 1, :] = C11
-        if C30 is not None:
-            data_mat_copy[3, :] = C30
-        data_mat_copy[2, :] = C20
-        data_mat_copy[1, :] = C10
-
-    elif source == "itsg":
-        # the CSR dates are strings to begin with
-        begin_date = datetime.strptime((epoch_begin), "%Y-%m").date()
-
-        C10, C11 = extract_C10_11_replcmnt_coeff(
-            data_tn13, "itsg", epoch_begin=begin_date, epoch_end=None
-        )
-
-        print(C10, C11)
-
-        C20 = extract_C20_replcmnt_coeff(
-            data_tn14, "itsg", epoch_begin=begin_date, epoch_end=None
-        )
-        C30 = extract_C30_replcmnt_coeff(
-            data_tn14, "itsg", epoch_begin=begin_date, epoch_end=None
-        )
-
-        # For easy replacement purpose
-        # C10 is at index 1
-        # C11 is at index 2
-        # C20 is at index 3
-        # C30 is at index 6
-        if C30 is not None:
-            data_mat_copy[6, :] = C30
-        data_mat_copy[3, :] = C20
-        data_mat_copy[2, :] = C11
-        data_mat_copy[1, :] = C10
-
-    return data_mat_copy
 
 
 def sub2ind(array_shape, rows, cols):

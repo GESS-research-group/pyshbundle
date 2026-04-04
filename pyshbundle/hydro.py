@@ -72,7 +72,7 @@ def TWSCalc(data, lmax: int, gs: float, r: float, m: int) -> np.ndarray:
     """
     SC = data
 
-    gfilter = Gaussian(lmax, r)
+    gfilter = Gaussian(lmax, int(r))
     grid_y = int(180 / gs)
     grid_x = int(360 / gs)
     tws_f = np.zeros([m, grid_y, grid_x], dtype="float")

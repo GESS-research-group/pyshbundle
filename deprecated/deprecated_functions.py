@@ -1,4 +1,7 @@
 import pkg_resources
+import numpy as np
+from copy import deepcopy
+from datetime import datetime
 
 def read_GRACE_SH_paths(use_sample_files = 0):
     """
@@ -121,3 +124,78 @@ def load_longterm_mean(source = "", use_sample_mean = 0):
         print("Successfully loaded path to long term mean:", long_mean)
 
     return long_mean
+
+
+def replace_zonal_coeff(
+    data_mat, source, lmax, data_tn13, data_tn14, epoch_begin: float, epoch_end: float
+):
+    """Replace zonal coefficients in the data matrix with TN-13 and TN-14 replacement coefficients.
+
+    Deprecated: This function is deprecated and will be removed in a future version.
+    Use the new workflow in pyshbundle.io directly.
+
+    Args:
+        data_mat (numpy.ndarray): The original data matrix containing spherical harmonic coefficients.
+        source (str): The source of the data ('jpl', 'csr', or 'itsg').
+        lmax (int): The maximum degree of the spherical harmonic expansion.
+        data_tn13 (numpy.ndarray): The TN-13 replacement coefficients data.
+        data_tn14 (numpy.ndarray): The TN-14 replacement coefficients data.
+        epoch_begin (float): The start date of the epoch in YYYYMMDD format.
+        epoch_end (float): The end date of the epoch in YYYYMMDD format.
+
+    Returns:
+        (numpy.ndarray): The data matrix with the zonal coefficients replaced.
+    """
+    from pyshbundle.io import (
+        extract_C10_11_replcmnt_coeff,
+        extract_C20_replcmnt_coeff,
+        extract_C30_replcmnt_coeff,
+    )
+
+    data_mat_copy = deepcopy(data_mat)
+
+    if source == "jpl":
+        assert epoch_end is not None, "epoch_end argument cannot be None"
+        epoch_begin = datetime.strptime(str(int(epoch_begin)), "%Y%m%d").date()
+        epoch_end = datetime.strptime(str(int(epoch_end)), "%Y%m%d").date()
+
+        C10, C11 = extract_C10_11_replcmnt_coeff(data_tn13, "jpl", epoch_begin, epoch_end)
+        C20 = extract_C20_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end)
+        C30 = extract_C30_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end)
+        C00 = np.array([0, 0, 0, 0, 0, 0])
+
+        if C30 is not None:
+            data_mat_copy[3, :] = C30
+        data_mat_copy[0, :] = C20
+        data_mat_copy = np.vstack([C11, data_mat_copy])
+        data_mat_copy = np.vstack([C10, data_mat_copy])
+        data_mat_copy = np.vstack([C00, data_mat_copy])
+
+    elif source == "csr":
+        epoch_begin = datetime.strptime(str(int(epoch_begin)), "%Y%m%d").date()
+        epoch_end = datetime.strptime(str(int(epoch_end)), "%Y%m%d").date()
+
+        C10, C11 = extract_C10_11_replcmnt_coeff(data_tn13, "csr", epoch_begin, epoch_end)
+        C20 = extract_C20_replcmnt_coeff(data_tn14, "csr", epoch_begin, epoch_end)
+        C30 = extract_C30_replcmnt_coeff(data_tn14, "csr", epoch_begin, epoch_end)
+
+        data_mat_copy[lmax + 1, :] = C11
+        if C30 is not None:
+            data_mat_copy[3, :] = C30
+        data_mat_copy[2, :] = C20
+        data_mat_copy[1, :] = C10
+
+    elif source == "itsg":
+        begin_date = datetime.strptime(str(epoch_begin), "%Y-%m").date()
+
+        C10, C11 = extract_C10_11_replcmnt_coeff(data_tn13, "itsg", epoch_begin=begin_date, epoch_end=None)
+        C20 = extract_C20_replcmnt_coeff(data_tn14, "itsg", epoch_begin=begin_date, epoch_end=None)
+        C30 = extract_C30_replcmnt_coeff(data_tn14, "itsg", epoch_begin=begin_date, epoch_end=None)
+
+        if C30 is not None:
+            data_mat_copy[6, :] = C30
+        data_mat_copy[3, :] = C20
+        data_mat_copy[2, :] = C11
+        data_mat_copy[1, :] = C10
+
+    return data_mat_copy

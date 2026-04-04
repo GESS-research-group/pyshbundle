@@ -386,79 +386,69 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
     # Second step of analysis: Clm and Slm
 
     if method == "ls":
-        for m in range(L + 1):
-            #            l = np.arange(m,L+1)
-            l = np.arange(m, L + 1).reshape(L + 1 - m, 1)
-            l = l.T
+        for mi in range(L + 1):
+            l = np.arange(mi, L + 1).reshape(1, L + 1 - mi)
 
-            p = plm(l, m, theRAD, 3, 1)
+            p = plm(l, mi, theRAD, 3, 1)
             p = p[:, :, 0]
-            ai = a[:, m]
-            bi = b[:, m]
+            ai = a[:, mi]
+            bi = b[:, mi]
 
-            clm[m + 1 : L + 2, m + 1] = linalg.lstsq(p, ai)
-            slm[m + 1 : L + 2, m + 1] = linalg.lstsq(p, bi)
+            clm[mi + 1 : L + 2, mi + 1] = linalg.lstsq(p, ai)
+            slm[mi + 1 : L + 2, mi + 1] = linalg.lstsq(p, bi)
 
     elif method == "aq":  # Approximate Quadrature
         si = np.sin(theRAD)
         si = 2 * si / np.sum(si)
 
-        for m in range(L + 1):
-            l = np.arange(m, L + 1).reshape(L + 1 - m, 1)
-            l = l.T
+        for mi in range(L + 1):
+            l = np.arange(mi, L + 1).reshape(1, L + 1 - mi)
 
-            p = plm(l, m, theRAD, 3, 1)
+            p = plm(l, mi, theRAD, 3, 1)
 
-            ai = a[:, m]
-            bi = b[:, m]
+            ai = a[:, mi]
+            bi = b[:, mi]
 
-            clm[m : L + 1, m] = (1 + (m == 0)) / 4 * p.T @ (si * ai)
-            slm[m : L + 1, m] = (1 + (m == 0)) / 4 * p.T @ (si * bi)
+            clm[mi : L + 1, mi] = (1 + (mi == 0)) / 4 * p.T @ (si * ai)
+            slm[mi : L + 1, mi] = (1 + (mi == 0)) / 4 * p.T @ (si * bi)
 
     elif method == "fnm":  # 1st Neumann method (exact upto L/2)
         w = neumann(np.cos(theRAD))
 
-        for m in range(L + 1):
-            l = np.arange(m, L + 1).reshape(L + 1 - m, 1)
-            l = l.T
+        for mi in range(L + 1):
+            l = np.arange(mi, L + 1).reshape(1, L + 1 - mi)
 
-            p = plm(l, m, theRAD, 3, 1)
+            p = plm(l, mi, theRAD, 3, 1)
 
-            ai = a[:, m]
-            bi = b[:, m]
+            ai = a[:, mi]
+            bi = b[:, mi]
 
-            clm[m : L + 1, m] = (1 + (m == 0)) / 4 * p.T @ (w * ai)
-            slm[m : L + 1, m] = (1 + (m == 0)) / 4 * p.T @ (w * bi)
+            clm[mi : L + 1, mi] = (1 + (mi == 0)) / 4 * p.T @ (w * ai)
+            slm[mi : L + 1, mi] = (1 + (mi == 0)) / 4 * p.T @ (w * bi)
 
     elif method == "snm":  # 2nd Neumann method (exact)
-        for m in range(L + 1):
-            l = np.arange(m, L + 1).reshape(L + 1 - m, 1)
-            l = l.T
+        for mi in range(L + 1):
+            l = np.arange(mi, L + 1).reshape(1, L + 1 - mi)
 
-            p = plm(l, m, theRAD, 3, 1)
+            p = plm(l, mi, theRAD, 3, 1)
 
-            ai = a[:, m]
-            bi = b[:, m]
+            ai = a[:, mi]
+            bi = b[:, mi]
 
-            clm[m : L + 1, m] = (1 + (m == 0)) / 4 * p.T @ (gw * ai)
-            slm[m : L + 1, m] = (1 + (m == 0)) / 4 * p.T @ (gw * bi)
+            clm[mi : L + 1, mi] = (1 + (mi == 0)) / 4 * p.T @ (gw * ai)
+            slm[mi : L + 1, mi] = (1 + (mi == 0)) / 4 * p.T @ (gw * bi)
 
     elif method == "mean":
-        for m in range(L + 1):
-            print(m)
-            # l = np.arange(m,L+1).reshape(L+1-m,1)
-            # l = l.T
+        for mi in range(L + 1):
+            print(mi)
+            l = np.array([np.arange(mi, L + 1, 1)])
 
-            l = np.array([np.arange(m, L + 1, 1)])
-            # l = np.array([[m]])
+            p = iplm(l, mi, theRAD)
+            ai = a[:, mi]
+            bi = b[:, mi]
 
-            p = iplm(l, m, theRAD)
-            # p = p[:,-1]
-            ai = a[:, m]
-            bi = b[:, m]
-
-            clm[m : L + 1, m] = (1 + (m == 0)) / 4 * p.T @ ai
-            slm[m : L + 1, m] = (1 + (m == 0)) / 4 * p.T @ bi
+            clm[mi : L + 1, mi] = (1 + (mi == 0)) / 4 * p.T @ ai
+            slm[mi : L + 1, mi] = (1 + (mi == 0)) / 4 * p.T @ bi
 
     # Write the coefficients Clm & Slm in |C\\S| format
 

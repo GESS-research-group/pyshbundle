@@ -67,7 +67,7 @@ def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
     fig, ax = plt.subplots(1, 1, figsize=(25, 10))
     im = ax.imshow(
         np.ma.log10(abs(scmat)),
-        extent=[-lmax, lmax, lmax, 0],
+        extent=(-lmax, lmax, lmax, 0),
         cmap="Spectral_r",
         vmin=vmin,
         vmax=vmax,
@@ -109,7 +109,7 @@ def cs_sqplot(csmat: np.ndarray, lmax: int, title: str, vmin, vmax):
     fig, ax = plt.subplots(1, 1, figsize=(10, 10))
     im = ax.imshow(
         np.ma.log10(abs(csmat)),
-        extent=[0, lmax, lmax, 0],
+        extent=(0, lmax, lmax, 0),
         cmap="Spectral_r",
         vmin=vmin,
         vmax=vmax,
@@ -170,8 +170,8 @@ def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
             transform=ccrs.PlateCarree(),
         )
 
-        ax.set_extent((-75, -5, 55, 85))
-        gl = ax.gridlines(
+        ax.set_extent((-75, -5, 55, 85))  # type: ignore[attr-defined]
+        gl = ax.gridlines(  # type: ignore[attr-defined]
             crs=ccrs.PlateCarree(),
             draw_labels=True,
             x_inline=False,
@@ -182,7 +182,7 @@ def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
         )
 
         gl.top_labels = False
-        ax.coastlines()
+        ax.coastlines()  # type: ignore[attr-defined]
         plt.colorbar(im, orientation="vertical", shrink=1.0, pad=0.1, label=f"[...]")
 
         plt.title(f"{title}")
@@ -190,7 +190,7 @@ def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
             plt.savefig(f"{file_name}.jpg")
 
     elif polar_loc == "antarctica":
-        extent = [-180, 180, -85, -60]
+        extent = (-180, 180, -85, -60)
 
         fig = plt.figure(1, figsize=(7, 7))
         # setting the projection for polar plot
@@ -205,8 +205,8 @@ def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
         )
 
         # setting the gridlines and continental boundary
-        ax.set_extent(extent, ccrs.PlateCarree())
-        gl = ax.gridlines(
+        ax.set_extent(extent, ccrs.PlateCarree())  # type: ignore[attr-defined]
+        gl = ax.gridlines(  # type: ignore[attr-defined]
             crs=ccrs.PlateCarree(),
             draw_labels=True,
             x_inline=False,
@@ -217,7 +217,7 @@ def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
         )
         # gl.top_labels = False
 
-        ax.coastlines()
+        ax.coastlines()  # type: ignore[attr-defined]
 
         # to plot the circular plot boundary
         theta = np.linspace(0, 2 * np.pi, 100)
@@ -225,7 +225,7 @@ def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
         verts = np.vstack([np.sin(theta), np.cos(theta)]).T
         circle = mpath.Path(verts * radius + center)
 
-        ax.set_boundary(circle, transform=ax.transAxes)
+        ax.set_boundary(circle, transform=ax.transAxes)  # type: ignore[attr-defined]
         plt.colorbar(im, orientation="vertical", shrink=1.0, pad=0.1, label="[...]")
         plt.title(f"{title}")
 
@@ -377,9 +377,9 @@ def ylm_plot(l: int, m: int):
 
     x, y = np.meshgrid(lons, lats)
 
-    if m >= 0:
-        img_extent = (-180, 180, -90, 90)
+    img_extent = (-180, 180, -90, 90)
 
+    if m >= 0:
         # plot the data
         im = ax.imshow(
             ylmc[:, 0, :],
@@ -399,7 +399,7 @@ def ylm_plot(l: int, m: int):
         )
 
     # setting gridlines
-    gl = ax.gridlines(
+    gl = ax.gridlines(  # type: ignore[attr-defined]
         crs=ccrs.PlateCarree(),
         draw_labels=True,
         x_inline=False,
@@ -418,7 +418,7 @@ def ylm_plot(l: int, m: int):
     gl.left_labels = True
     gl.right_labels = False
     # coastlines
-    ax.coastlines()
+    ax.coastlines()  # type: ignore[attr-defined]
 
     plt.colorbar(im, orientation="vertical", shrink=0.85, pad=0.02, label="[...]")
 

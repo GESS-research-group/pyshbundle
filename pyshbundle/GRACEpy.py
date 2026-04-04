@@ -222,7 +222,7 @@ def lovenrPREM(lmax: int, frame: str) -> tuple[np.ndarray, np.ndarray, np.ndarra
     elif frame == "CE":
         print("Love numbers are in center of solid Earth frame")
     else:
-        lovenrPREM.exit(
+        raise ValueError(
             "Please choose a compatible frame of reference: one of CM, CF, or CE"
         )
 

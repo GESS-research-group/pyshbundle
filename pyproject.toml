@@ -65,6 +65,11 @@ convention = "google"
 quote-style = "double"
 indent-style = "space"
 
+[tool.mypy]
+ignore_missing_imports = true
+no_strict_optional = true
+exclude = ["deprecated/", "examples/", "docs/"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["tests"]

@@ -48,7 +48,7 @@ from pyshbundle import GRACEpy as GB
 from pyshbundle import GRACEconstants as GC
 
 
-def plm(l: np.array, m: int, thetaRAD, nargin, nargout):
+def plm(l: np.ndarray, m: int, thetaRAD, nargin, nargout):
     """Fully normalized associated Legendre functions for a selected order M.
 
     Args:
@@ -82,14 +82,13 @@ def plm(l: np.array, m: int, thetaRAD, nargin, nargout):
         p = np.zeros([len(thetaRAD), len(l)], dtype="float")
         dp = np.zeros([len(thetaRAD), len(l)], dtype="float")
         ddp = np.zeros([len(thetaRAD), len(l)], dtype="float")
-        sys.exit([])
+        sys.exit()
 
     n = thetaRAD.size  # number of latitudes
     t = thetaRAD[:]
     x = np.cos(t)
     y = np.sin(t)
-    lvec = np.transpose(l)
-    lvec = np.intc(lvec)  # l can now be used as running index
+    lvec: np.ndarray = np.intc(np.transpose(l))  # type: ignore[assignment]  # l can now be used as running index
 
     if min(t).all() < 0 and max(t).all() > np.pi:
         print("Warning: Is co-latitude in radians ?")
@@ -157,7 +156,7 @@ def plm(l: np.array, m: int, thetaRAD, nargin, nargout):
     lind = lvec < m  # index into l < m
     pcol = lvec - m + 0  # index into columns of ptmp
     pcol[lind] = np.ndarray(
-        (lmax - m + 2 - 6) * np.ones((sum(sum(lind)), 1))
+        (lmax - m + 2 - 6) * np.ones((sum(sum(lind)), 1))  # type: ignore[call-overload]
     )  # Now l < m points to last col.
     p = ptmp[:, pcol]  # proper column extraction
     if nargout >= 2:
@@ -348,13 +347,13 @@ def iplm(l, m: int, theRAD, dt=-9999):
     ]  # Tesserals
     plmmin[:, l] = plm(np.array([l]), mfix, (theRAD - dt / 2), 3, 1)[:, :, 0]
     if mfix > 0:
-        m = np.arange(1, mfix + 1, 1)
-        mm = 2 * m
+        mi = np.arange(1, mfix + 1, 1)
+        mm = 2 * mi
         fac = np.sqrt(2 * np.cumprod((mm + 1) / mm))
-        mgr, stp = np.meshgrid(m, stplus)
+        mgr, stp = np.meshgrid(mi, stplus)
         fgr, stm = np.meshgrid(fac, stmin)
-        plmplus[:, m] = fgr * np.power(stp, mgr)
-        plmmin[:, m] = fgr * np.power(stm, mgr)
+        plmplus[:, mi] = fgr * np.power(stp, mgr)
+        plmmin[:, mi] = fgr * np.power(stm, mgr)
     ptmp = np.zeros([n, lmax + 2])
     ptmp00 = np.cos(theRAD - dt / 2) - ctplus
     ptmp11 = np.sqrt(3) / 2 * (dt - ctplus * stplus + ctmin * stmin)
@@ -520,7 +519,7 @@ def eigengrav(lmax: int, fstr: str, h: float):
     if type(lmax) == int:
         rows = 1
     else:
-        rows = len(lmax)
+        rows = len(lmax)  # type: ignore[arg-type]
     # rows = len(l)
 
     if rows > 1 or lmax < 0:
@@ -572,7 +571,7 @@ def eigengrav(lmax: int, fstr: str, h: float):
         ValueError("Requested functional FSTR not available.")
 
     if h > 0:
-        upConTerm = GB.upwcon(lmax, h)
+        upConTerm = GB.upwcon(lmax, int(h))
         tf = np.multiply(tf, upConTerm)
 
     return tf
