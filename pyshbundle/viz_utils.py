@@ -52,8 +52,7 @@ from pyshbundle.pysh_core import gshs
 
 
 def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
-    """
-    Visualize the SH coefficients in SC triangular matrix format.
+    """Visualize the SH coefficients in SC triangular matrix format.
 
     Args:
         scmat (numpy.ndarray): SC matrix data (see clm2sc).
@@ -95,8 +94,7 @@ def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
 
 
 def cs_sqplot(csmat: np.ndarray, lmax: int, title: str, vmin, vmax):
-    """
-    Visualize the SH coefficients in CS square matrix format.
+    """Visualize the SH coefficients in CS square matrix format.
 
     Args:
         csmat (numpy.ndarray): CS matrix data (see clm2cs or sc2cs).
@@ -142,8 +140,7 @@ def cs_sqplot(csmat: np.ndarray, lmax: int, title: str, vmin, vmax):
 
 
 def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
-    """
-    Visualize the polar regions of Greenland and Antarctica.
+    """Visualize the polar regions of Greenland and Antarctica.
 
     Args:
         field (numpy.ndarray): The data field to visualize.
@@ -155,7 +152,6 @@ def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
     Returns:
         (matplotlib.axes._axes.Axes): Plot axes.
     """
-
     if polar_loc == "greenland":
         extent = (-75, -5, 55, 85)
 
@@ -241,8 +237,7 @@ def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
 def mapfield(
     field, img_extent, title, name=None, colorbar_bounds=None, save_flag=False
 ):
-    """
-    Visualize a field on a global map using the Robinson projection.
+    """Visualize a field on a global map using the Robinson projection.
 
     Args:
         field (numpy.ndarray): The data field to visualize.
@@ -325,18 +320,17 @@ def mapfield(
 
 
 def ylm(l: int, m: int):
-    """
-    Compute the spherical harmonics Ylm.
+    """Compute the spherical harmonics Ylm.
 
     Args:
         l (int): Degree, must be non-negative.
         m (int): Order, must be non-negative and less than or equal to l.
+
     Returns:
         tuple: A tuple containing two numpy arrays:
             - ylmc (numpy.ndarray): The real part of the spherical harmonics.
             - ylms (numpy.ndarray): The imaginary part of the spherical harmonics.
     """
-
     # input handling
     assert l >= 0
 
@@ -363,8 +357,7 @@ def ylm(l: int, m: int):
 
 
 def ylm_plot(l: int, m: int):
-    """
-    Plot the spherical harmonics Ylm.
+    """Plot the spherical harmonics Ylm.
 
     Args:
         l (int): Degree, must be non-negative.
@@ -433,8 +426,7 @@ def ylm_plot(l: int, m: int):
 
 
 def gshs_prepare(lmax, gs, quant, grd, h, jflag, sc_coeff):
-    """
-    Prepare the grid for the given spherical harmonics coefficients.
+    """Prepare the grid for the given spherical harmonics coefficients.
 
     Args:
         lmax (int): Maximum degree of spherical harmonics.
@@ -466,8 +458,7 @@ def gshs_prepare(lmax, gs, quant, grd, h, jflag, sc_coeff):
 
 # Function to plot the calendar
 def plot_calendar_months(datetime_object):
-    """
-    Plot a calendar for each year in the given list of datetime objects.
+    """Plot a calendar for each year in the given list of datetime objects.
 
     Args:
         datetime_object (list): A list of datetime objects in the format '%Y-%m'.
@@ -482,7 +473,6 @@ def plot_calendar_months(datetime_object):
     The function then highlights the months with replacement data by coloring the month names in the calendar.
     The color of the month names is 'lightblue' if the month is present in the given datetime objects, otherwise it is 'white'.
     """
-
     # Extract months and years from dictionary keys
     dates = [datetime.strptime(date, "%Y-%m").date() for date in datetime_object]
     months_years = {(date.year, date.month) for date in dates}

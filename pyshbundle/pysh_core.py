@@ -62,8 +62,7 @@ from pyshbundle.shutils import (
 
 
 def gshs(field, quant="none", grd="mesh", n=-9999, h=0, jflag=1):
-    """
-    Global Spherical Harmonic Synthesis.
+    """Global Spherical Harmonic Synthesis.
 
     Args:
         field (numpy.ndarray): Matrix of SH coefficients, either in SC-triangle or CS-square format.
@@ -106,7 +105,6 @@ def gshs(field, quant="none", grd="mesh", n=-9999, h=0, jflag=1):
         Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
         Vivek Kumar Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
-
     wd = getcwd()
     chdir(wd)
 
@@ -232,8 +230,7 @@ def gshs(field, quant="none", grd="mesh", n=-9999, h=0, jflag=1):
 
 
 def gsha(f, method: str, grid: str = None, lmax: int = -9999):
-    """
-    Global Spherical Harmonic Analysis, inverse of GSHS.
+    r"""Global Spherical Harmonic Analysis, inverse of GSHS.
 
     Args:
         f (numpy.ndarray): Global field of size (l_max + 1) * 2 * l_max or l_max * 2 * l_max.
@@ -473,9 +470,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
 
 
 def PhaseCalc(fts, ffts):
-    """
-    Calculates the phase difference between two time series based on the
-    Hilbert transform method explained by Phillip et al.
+    """Calculates the phase difference between two time series based on the Hilbert transform method explained by Phillip et al.
 
     Args:
         fts (numpy.ndarray): Time-series 1.
@@ -548,8 +543,7 @@ def deg_to_rad(deg: float):
 
 
 def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
-    """
-    Signal leakage correction using data-driven methods.
+    """Signal leakage correction using data-driven methods.
 
     When GRACE data is applied for hydrological studies, the signal leakage is a common
     problem. This function uses data-driven methods to correct signal leakage in GRACE data.

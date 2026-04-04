@@ -54,6 +54,13 @@ line-length = 88
 target-version = "py39"
 exclude = ["deprecated/", "examples/", "docs/"]
 
+[tool.ruff.lint]
+select = ["D"]
+ignore = ["D100", "D104", "D203", "D213"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"

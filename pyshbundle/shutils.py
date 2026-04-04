@@ -49,8 +49,7 @@ from pyshbundle import GRACEconstants as GC
 
 
 def plm(l: np.array, m: int, thetaRAD, nargin, nargout):
-    """
-    Fully normalized associated Legendre functions for a selected order M.
+    """Fully normalized associated Legendre functions for a selected order M.
 
     Args:
         l (numpy.array): Degree, but not necessarily monotonic. For l < m a vector of zeros will be returned.
@@ -67,7 +66,6 @@ def plm(l: np.array, m: int, thetaRAD, nargin, nargout):
     Author:
         Vivek Kumar Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc).
     """
-
     if min(l.shape) != 1:
         raise ValueError("Degree l must be a vector (or scalar)")
     if np.remainder(l, 1).all() != 0:
@@ -188,8 +186,8 @@ def plm(l: np.array, m: int, thetaRAD, nargin, nargout):
 
 
 def secrecur(m, y):
-    """
-    Helper Function for sectorial recursion.
+    """Helper Function for sectorial recursion.
+
     This function computes the sectorial recursion for given parameters.
 
     Args:
@@ -212,8 +210,7 @@ def secrecur(m, y):
 
 
 def lrecur(inn, x, m, lmax):
-    """
-    Helper function for recursion.
+    """Helper function for recursion.
 
     Args:
         inn (int): Input value representing the initial condition.
@@ -248,8 +245,7 @@ def lrecur(inn, x, m, lmax):
 
 
 def derivALF(inn, miin, plin, m, lmax):
-    """
-    Function to calculate the derivative of the associated Legendre functions.
+    """Function to calculate the derivative of the associated Legendre functions.
 
     Args:
         inn (np.ndarray): Input array representing the initial condition.
@@ -286,8 +282,7 @@ def derivALF(inn, miin, plin, m, lmax):
 
 
 def iplm(l, m: int, theRAD, dt=-9999):
-    """
-    Integrals of the fully normalized associated Legendre functions over blocks for a selected order M.
+    """Integrals of the fully normalized associated Legendre functions over blocks for a selected order M.
 
     Args:
         l (numpy.array): Degree (vector). Integer, but not necessarily monotonic.
@@ -314,7 +309,6 @@ def iplm(l, m: int, theRAD, dt=-9999):
     Author:
         Vivek Kumar Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
-
     if dt == -9999:
         dt = np.pi / 180 if len(theRAD) == 1 else theRAD[1] - theRAD[0]
 
@@ -453,8 +447,7 @@ def iplm(l, m: int, theRAD, dt=-9999):
 
 
 def ispec(a, b=-9999):
-    """
-    Returns the function F from the spectra A and B.
+    """Returns the function F from the spectra A and B.
 
     Args:
         a (numpy.ndarray): Cosine coefficients.
@@ -469,7 +462,6 @@ def ispec(a, b=-9999):
     Author:
         Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc).
     """
-
     n2 = a.shape[0]
     a[0, :] = a[0, :] * 2
 
@@ -493,8 +485,8 @@ def ispec(a, b=-9999):
 
 
 def eigengrav(lmax: int, fstr: str, h: float):
-    """
-    Returns the isotropic spectral transfer (or: eigenvalues) of several gravity related quantities.
+    """Returns the isotropic spectral transfer (or: eigenvalues) of several gravity related quantities.
+
     Upward continuation may be included.
 
     Args:
@@ -525,7 +517,6 @@ def eigengrav(lmax: int, fstr: str, h: float):
     Author:
         Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc).
     """
-
     if type(lmax) == int:
         rows = 1
     else:
@@ -588,8 +579,7 @@ def eigengrav(lmax: int, fstr: str, h: float):
 
 
 def grule(n: int):
-    """
-    Computes Gauss base points and weight factors using the algorithm.
+    """Computes Gauss base points and weight factors using the algorithm.
 
     Args:
         n (int): Number of base points required.
@@ -662,8 +652,7 @@ def grule(n: int):
 
 
 def neumann(inn):
-    """
-    Returns the weights and nodes for Neumann's numerical integration.
+    """Returns the weights and nodes for Neumann's numerical integration.
 
     Args:
         inn (int or numpy.array): Base points (nodes) in the interval [-1;1].
@@ -690,7 +679,6 @@ def neumann(inn):
     Author:
         Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc).
     """
-
     try:  # if input is an integer
         x, w = grule(inn)
     except:  # if input is an array
@@ -726,8 +714,7 @@ def neumann(inn):
 
 
 def normalklm(lmax: int, typ: str = "wgs84"):
-    """
-    Returns an ellipsoidal normal field consisting of normalized -Jn, n=0,2,4,6,8.
+    """Returns an ellipsoidal normal field consisting of normalized -Jn, n=0,2,4,6,8.
 
     Args:
         lmax (int): Maximum degree of the spherical harmonics.
@@ -749,7 +736,6 @@ def normalklm(lmax: int, typ: str = "wgs84"):
     Author:
         Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc).
     """
-
     if type(lmax) != int:
         raise TypeError("lmax should be integer")
 
@@ -823,7 +809,6 @@ def Gaussian(L: int, cap: int):
     Author:
         Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc).
     """
-
     # Check input
     if not isinstance(L, int):
         raise TypeError("Degree must be integer")
@@ -856,8 +841,7 @@ def Gaussian(L: int, cap: int):
 
 
 def naninterp(X):
-    """
-    This function uses cubic interpolation to replace NaNs.
+    """This function uses cubic interpolation to replace NaNs.
 
     Args:
         X (numpy.array): Array with NaN values.
@@ -865,7 +849,6 @@ def naninterp(X):
     Returns:
         numpy.array: Cubic interpolated array.
     """
-
     ok = ~np.isnan(X)
     xp = ok.ravel().nonzero()[0]  # Indices of xs with values
     fp = X[~np.isnan(X)]

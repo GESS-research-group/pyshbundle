@@ -46,8 +46,7 @@ from pyshbundle.io import sub2ind
 
 
 def sc2cs(field):
-    """
-    Converts SH coefficients from SC to CS format.
+    """Converts SH coefficients from SC to CS format.
 
     Converts the rectangular (L+1) x (2L+1) matrix `field`, containing
     spherical harmonics coefficients in SC storage format, into a
@@ -66,7 +65,6 @@ def sc2cs(field):
     Examples:
         sc2cs(field)
     """
-
     rows = len(field)
     cols = len(field[0])
 
@@ -85,8 +83,7 @@ def sc2cs(field):
 
 
 def clm2cs(data_mat: np.ndarray, lmax: int, sigma_flag=False):
-    """
-    Converts the format from CLM to CS.
+    """Converts the format from CLM to CS.
 
     Under the hood uses the `clm2sc` and `sc2cs` functions.
 
@@ -107,8 +104,7 @@ def clm2cs(data_mat: np.ndarray, lmax: int, sigma_flag=False):
 
 
 def clm2sc(data_mat: np.ndarray, lmax: int, sigma_flag=False):
-    """
-    Converts the spherical harmonic coefficients from CLM format to SC format.
+    """Converts the spherical harmonic coefficients from CLM format to SC format.
 
     Args:
         data_mat (numpy.ndarray): List containing [degree, order, clm, slm, delta clm, delta slm, start date, end date].
@@ -121,7 +117,6 @@ def clm2sc(data_mat: np.ndarray, lmax: int, sigma_flag=False):
     References:
         Refer to the SHBundle or PySHBundle docs for the different data storage and retrieval formats.
     """
-
     sc_mat = np.zeros((lmax + 1, 2 * lmax + 2))
     dev_sc_mat = np.zeros((lmax + 1, 2 * lmax + 2))
 
@@ -152,8 +147,7 @@ def clm2sc(data_mat: np.ndarray, lmax: int, sigma_flag=False):
 
 
 def cs2sc(field):
-    """
-    Converts SH coefficients from CS to SC format.
+    """Converts SH coefficients from CS to SC format.
 
     Converts the square (L+1)x(L+1) matrix `field`, containing
     spherical harmonics coefficients in CS storage format, into a
@@ -172,7 +166,6 @@ def cs2sc(field):
     Examples:
         cs2sc(field)
     """
-
     rows = len(field)
     cols = len(field[0])
 
@@ -199,8 +192,7 @@ def cs2sc(field):
 
 
 def klm2sc(data_mat: np.ndarray, lmax: int, sigma_flag=False):
-    """
-    Converts the spherical harmonic coefficients from klm format to SC format.
+    """Converts the spherical harmonic coefficients from klm format to SC format.
 
     Args:
         data_mat (numpy.ndarray): List containing [degree, order, clm, slm, delta clm, delta slm, start date, end date].
@@ -242,8 +234,7 @@ def klm2sc(data_mat: np.ndarray, lmax: int, sigma_flag=False):
 
 
 def cklm2sc_new(clm_mat, lmax: int):
-    """
-    Transforms the spherical harmonics coefficients data in clm or klm format into a SC matrix.
+    """Transforms the spherical harmonics coefficients data in clm or klm format into a SC matrix.
 
     Args:
         clm_mat (numpy.ndarray): The input matrix containing spherical harmonics coefficients.
@@ -254,7 +245,6 @@ def cklm2sc_new(clm_mat, lmax: int):
             - scmat (numpy.ndarray): The SC matrix.
             - dev_scmat (numpy.ndarray): The deviation SC matrix.
     """
-
     # initialise an empty sc matrix
     sc_mat = np.zeros([lmax + 1, 2 * lmax + 1])
     dev_sc_mat = np.zeros([lmax + 1, 2 * lmax + 1])

@@ -44,8 +44,7 @@ import numpy
 
 
 def sc2cs(field):
-    """
-    Converts SH coefficients from SC to CS format.
+    """Converts SH coefficients from SC to CS format.
 
     Converts the rectangular $(L+1) * (2L+1)$ matrix FIELD, containing
     spherical harmonics coefficients in SC storage format into a
@@ -64,7 +63,6 @@ def sc2cs(field):
     Examples:
         sc2cs(field)
     """
-
     rows = len(field)
     cols = len(field[0])
 

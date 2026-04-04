@@ -43,8 +43,7 @@ from pyshbundle import GRACEconstants as GC
 
 
 def upwcon(degree: int, height: int) -> np.ndarray:
-    """
-    Returns the upward continuation $(R/r)^l$.
+    """Returns the upward continuation $(R/r)^l$.
 
     Args:
         degree (int): Spherical harmonic degree.
@@ -71,8 +70,7 @@ def upwcon(degree: int, height: int) -> np.ndarray:
 
 
 def lovenr(lmax: int) -> np.ndarray:
-    """
-    LOVENR gives the LOVE number of the elastic earth for a certain degree n.
+    """LOVENR gives the LOVE number of the elastic earth for a certain degree n.
 
     Args:
         lmax (int): Spherical harmonic degree (up to 200).
@@ -125,8 +123,7 @@ def lovenr(lmax: int) -> np.ndarray:
 
 
 def lovenrPREM(lmax: int, frame: str) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """
-    Calculates the LOVE and Shida number of the elastic earth for a certain degree n in different reference frames.
+    """Calculates the LOVE and Shida number of the elastic earth for a certain degree n in different reference frames.
 
     Values are given in degrees for LOVE numbers as provided by Olivier Francis from the PREM Earth model for selected degrees.
 
@@ -149,7 +146,6 @@ def lovenrPREM(lmax: int, frame: str) -> tuple[np.ndarray, np.ndarray, np.ndarra
     Author:
         Dr. Bramha Dutt Vishwakarma, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc)
     """
-
     data = np.array(
         [
             [1, -0.28476, 0.00000, 0.10462],

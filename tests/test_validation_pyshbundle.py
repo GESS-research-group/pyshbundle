@@ -24,8 +24,7 @@ from importlib.resources import files, as_file
 def validation_pyshbundle(
     path_sh: str, path_tn13: str, path_tn14: str, source: str = "jpl"
 ):
-    """
-    Load spherical harmonic data, apply corrections, and compute TWS fields.
+    """Load spherical harmonic data, apply corrections, and compute TWS fields.
 
     Parameters
     ----------
@@ -34,7 +33,7 @@ def validation_pyshbundle(
     path_tn14 : path to TN-14 C20/C30 coefficient file
     source    : data centre identifier, e.g. 'jpl', 'itsg'
 
-    Returns
+    Returns:
     -------
     tws_fields : np.ndarray, float32, shape (n_months, nlat, nlon)
     """

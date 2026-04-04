@@ -50,8 +50,7 @@ import re
 
 
 def extract_SH_data(file_path, source):
-    """
-    Extracts the spherical harmonic coefficients from all the given files.
+    """Extracts the spherical harmonic coefficients from all the given files.
 
     Currently supports JPL, CSR, and ITSG data sources ONLY. Extracts the spherical harmonic
     coefficients from the given file and returns them in a dictionary. Uses the degree and
@@ -183,8 +182,7 @@ def extract_SH_data(file_path, source):
 
 
 def extract_deg1_coeff_tn13(file_path):
-    """
-    Extracts the degree 1 coefficients from the given TN-13 file.
+    """Extracts the degree 1 coefficients from the given TN-13 file.
 
     Ensure the TN-13 file used is the one recommended by respective data centres (JPL, CSR, or ITSG).
     Similar to extract_SH_data, but specifically for TN-13 files.
@@ -197,7 +195,6 @@ def extract_deg1_coeff_tn13(file_path):
     Returns:
         (dict): Dictionary containing the degree 1 (order 1) coefficients and time coverage start and end dates.
     """
-
     data_dict = {}
 
     with open(file_path, "rt") as file:
@@ -240,8 +237,7 @@ def extract_deg1_coeff_tn13(file_path):
 
 
 def extract_deg2_3_coeff_tn14(file_path):
-    """
-    Extracts the degree 2 and 3 coefficients from the given file.
+    """Extracts the degree 2 and 3 coefficients from the given file.
 
     Ensure the TN-14 file used is the one recommended by respective data centres (JPL, CSR, or ITSG).
     Similar to extract_SH_data, but specifically for TN-14 files.
@@ -334,8 +330,7 @@ def extract_deg2_3_coeff_tn14(file_path):
 
 
 def parse_jpl_file(file_path: str):
-    """
-    Reads the spherical harmonic data provided by JPL.
+    """Reads the spherical harmonic data provided by JPL.
 
     Args:
         file_path (str): Absolute path to the file.
@@ -376,7 +371,16 @@ def parse_jpl_file(file_path: str):
 
 
 def parse_jpl_header(header_info):
+    """Parse JPL GRACE file header and return a dictionary of metadata.
 
+    Args:
+        header_info (list): List of byte strings read from the JPL file header.
+
+    Returns:
+        dict: Dictionary containing parsed header fields including title, institution,
+            product_version, processing_level, normalization, permanent_tide_flag,
+            degree, order, earth_gravity_param, and mean_equator_radius.
+    """
     # parse the header info passed by the reader in as list of bytes
     # create a dictionary with key = important params from header file
 
@@ -447,6 +451,15 @@ def parse_jpl_header(header_info):
 
 
 def parse_lines(line, parse_fmt="\s+"):
+    """Split a line string using the given regex pattern.
+
+    Args:
+        line: The input line to parse (string or bytes).
+        parse_fmt (str, optional): Regex pattern used to split the line. Defaults to whitespace.
+
+    Returns:
+        list: List of substrings after splitting.
+    """
     #  parses the liness and reutrns an array
     # '\s+' returns array with no whitespace
 
@@ -456,6 +469,15 @@ def parse_lines(line, parse_fmt="\s+"):
 
 
 def find_word(info_lines, search_key):
+    """Find the index of the first line containing the given keyword.
+
+    Args:
+        info_lines (list): List of lines (strings or bytes) to search through.
+        search_key (str): The keyword to locate within the lines.
+
+    Returns:
+        int: Index of the first line that contains the search key.
+    """
     # finding the target word in the read lines
 
     for i in range(len(info_lines)):
@@ -468,6 +490,16 @@ def find_word(info_lines, search_key):
 
 
 def parse_csr_file(file_path: str):
+    """Read a CSR GRACE .gz file and return the header and spherical harmonic data.
+
+    Args:
+        file_path (str): Path to the CSR GRACE .gz file.
+
+    Returns:
+        tuple: A tuple containing:
+            - csr_header (list): Raw header lines from the file.
+            - csr_data (dict): Parsed spherical harmonic coefficients and metadata.
+    """
     # ensure that the file path is valid then proceed
 
     # check if the file is ziped or not
@@ -499,7 +531,11 @@ def parse_csr_file(file_path: str):
 
 
 def parse_csr_header():
+    """Parse CSR GRACE file header (not yet implemented).
 
+    Raises:
+        NotImplementedError: This function is not yet implemented; use parse_jpl_header as reference.
+    """
     # similar to JPL one
 
     raise NotImplementedError(
@@ -508,7 +544,16 @@ def parse_csr_header():
 
 
 def parse_itsg_file(file_path):
+    """Read an ITSG GRACE .gfc file and return the header and spherical harmonic data.
 
+    Args:
+        file_path (str): Path to the ITSG GRACE .gfc file.
+
+    Returns:
+        tuple: A tuple containing:
+            - istg_header (list): Raw header lines from the file.
+            - itsg_data (dict): Parsed spherical harmonic coefficients and metadata.
+    """
     # ensure that the file path is valid then proceed
 
     # check if the file is ziped or not
@@ -535,7 +580,16 @@ def parse_itsg_file(file_path):
 
 
 def parse_itsg_header(header_info: list):
+    """Parse ITSG GRACE file header and return a metadata dictionary and model date string.
 
+    Args:
+        header_info (list): List of header lines read from the ITSG .gfc file.
+
+    Returns:
+        tuple: A tuple containing:
+            - header_dict (dict): Dictionary of parsed header metadata.
+            - date_str (str): Date string extracted from the model name (YYYY-MM format).
+    """
     normal_keys = [
         "modelname",
         "product_type",
@@ -571,7 +625,16 @@ def parse_itsg_header(header_info: list):
 
 
 def parse_tn13_header(header_info):
+    """Parse TN-13 replacement coefficient file header and return title and last reported date.
 
+    Args:
+        header_info (list): List of header lines read from the TN-13 file.
+
+    Returns:
+        tuple: A tuple containing:
+            - title (str): Title string extracted from the header.
+            - last_reported_date (str): Last reported data point date as a string.
+    """
     # IMP Info
     # - Title
     # - Last reported data point
@@ -602,7 +665,11 @@ def parse_tn13_header(header_info):
 
 
 def parse_tn14_header():
+    """Parse TN-14 replacement coefficient file header (not yet implemented).
 
+    Raises:
+        NotImplementedError: This function is not yet implemented.
+    """
     # Key info
     # - Title
     # - Version
@@ -621,7 +688,20 @@ def parse_tn14_header():
 def find_date_in_replacemnt_file(
     replacemnt_mat, file_type: str, epoch_begin, epoch_end=None
 ):
+    """Find row indices in a replacement coefficient matrix matching the given epoch dates.
 
+    Args:
+        replacemnt_mat (numpy.ndarray): Matrix of replacement coefficients with date columns.
+        file_type (str): Type of replacement file; either 'tn-13' or 'tn-14'.
+        epoch_begin: Start date of the GRACE data epoch (date object or YYYY-MM string for ITSG).
+        epoch_end (optional): End date of the GRACE data epoch. Required for JPL/CSR sources. Defaults to None.
+
+    Returns:
+        list: List of row indices in the replacement matrix that match the given epoch.
+
+    Raises:
+        ValueError: If file_type is not 'tn-13' or 'tn-14'.
+    """
     # epoch_begin and epoch_end -> date from the grace data file
     # begin_date and end_data -> date from the replacement file (tn-13 or tn-14)
 
@@ -711,7 +791,22 @@ def find_date_in_replacemnt_file(
 
 
 def extract_C10_11_replcmnt_coeff(data_tn13, source, epoch_begin, epoch_end=None):
+    """Extract degree-1 replacement coefficients C10 and C11 from TN-13 data for the given epoch.
 
+    Args:
+        data_tn13 (numpy.ndarray): TN-13 replacement coefficient matrix.
+        source (str): Data centre identifier ('jpl', 'csr', or 'itsg').
+        epoch_begin: Start date of the GRACE epoch (date object or YYYY-MM string for ITSG).
+        epoch_end (optional): End date of the GRACE epoch. Required for JPL/CSR. Defaults to None.
+
+    Returns:
+        tuple: A tuple containing:
+            - C10 (numpy.ndarray): Replacement C10 coefficient row.
+            - C11 (numpy.ndarray): Replacement C11 coefficient row.
+
+    Raises:
+        ValueError: If source is not 'jpl', 'csr', or 'itsg'.
+    """
     # match the date
     file_type = "tn-13"
 
@@ -755,6 +850,17 @@ def extract_C10_11_replcmnt_coeff(data_tn13, source, epoch_begin, epoch_end=None
 
 
 def extract_C20_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end=None):
+    """Extract the C20 replacement coefficient from TN-14 data for the given epoch.
+
+    Args:
+        data_tn14 (numpy.ndarray): TN-14 replacement coefficient matrix.
+        source (str): Data centre identifier ('jpl', 'csr', or 'itsg').
+        epoch_begin: Start date of the GRACE epoch (date object or YYYY-MM string for ITSG).
+        epoch_end (optional): End date of the GRACE epoch. Required for JPL/CSR. Defaults to None.
+
+    Returns:
+        numpy.ndarray: Array of shape (6,) containing [l, m, Clm, Slm, Clm_sdev, Slm_sdev] for C20.
+    """
     # For JPL
     # generating a CLM array for C20 and C30
     # NOTE: Zonal coeff. does not have Slm - its taken as 0
@@ -794,6 +900,18 @@ def extract_C20_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end=None):
 
 
 def extract_C30_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end=None):
+    """Extract the C30 replacement coefficient from TN-14 data for the given epoch.
+
+    Args:
+        data_tn14 (numpy.ndarray): TN-14 replacement coefficient matrix.
+        source (str): Data centre identifier ('jpl', 'csr', or 'itsg').
+        epoch_begin: Start date of the GRACE epoch (date object or YYYY-MM string for ITSG).
+        epoch_end (optional): End date of the GRACE epoch. Required for JPL/CSR. Defaults to None.
+
+    Returns:
+        numpy.ndarray: Array of shape (6,) containing [l, m, Clm, Slm, Clm_sdev, Slm_sdev] for C30,
+            with NaN values replaced by zero.
+    """
     if source == "jpl" or source == "csr":
         replcmnt_idxs = find_date_in_replacemnt_file(
             data_tn14, "tn-14", epoch_begin, epoch_end
@@ -841,9 +959,7 @@ def extract_C30_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end=None):
 def replace_zonal_coeff(
     data_mat, source, lmax, data_tn13, data_tn14, epoch_begin: float, epoch_end: float
 ):
-    """
-    Replaces the zonal coefficients in the given data matrix with the replacement coefficients
-    from the provided TN-13 and TN-14 data.
+    """Replaces the zonal coefficients in the given data matrix with replacement coefficients from TN-13 and TN-14 data.
 
     Args:
         data_mat (numpy.ndarray): The original data matrix containing spherical harmonic coefficients.
@@ -857,7 +973,6 @@ def replace_zonal_coeff(
     Returns:
         (numpy.ndarray): The data matrix with the zonal coefficients replaced.
     """
-
     data_mat_copy = deepcopy(data_mat)
 
     if source == "jpl":
@@ -942,8 +1057,7 @@ def replace_zonal_coeff(
 
 
 def sub2ind(array_shape, rows, cols):
-    """
-    Convert row and column subscripts to linear indices.
+    """Convert row and column subscripts to linear indices.
 
     Args:
         array_shape (tuple): Shape of the array as a tuple (num_rows, num_cols).

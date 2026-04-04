@@ -1,4 +1,4 @@
-"""Main module
+"""Main module.
 
 License:
     This file is part of PySHbundle.

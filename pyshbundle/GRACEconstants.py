@@ -39,7 +39,7 @@
 #       partial least squares regression. Scientific data, 8(1), 95.
 #       https://doi.org/10.1038/s41597-021-00862-6
 
-"""This script contains some of the major relavant Physical and Geodetic(GRS80) constants:
+r"""This script contains some of the major relavant Physical and Geodetic(GRS80) constants.
 
 + `clight` speed of light - $2.99792458e+8$ $m/s$
 + `G` Gravitational constant- $6.67259e-11$ $\frac{m^3} {kg \cdot s^2}$

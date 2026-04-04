@@ -14,8 +14,8 @@ NRMSE_THRESHOLD = 1e-5
 
 @pytest.fixture(scope="module")
 def tws_results(tmp_path_factory):
-    """
-    Compute TWS once per test session.
+    """Compute TWS once per test session.
+
     scope="module" avoids re-running the expensive computation for each test.
 
     NOTE: path_sh points to external data. In CI this requires either:
@@ -64,8 +64,8 @@ def test_tws_output_dtype(tws_results):
 
 
 def test_gridwise_rmse(tws_results):
-    """
-    Gridwise RMSE between computed and reference TWS must be below 1e-3.
+    """Gridwise RMSE between computed and reference TWS must be below 1e-3.
+
     This is the primary accuracy criterion.
     """
     tws_computed, tws_reference = tws_results
@@ -82,8 +82,8 @@ def test_gridwise_rmse(tws_results):
 
 
 def test_gridwise_nrmse(tws_results):
-    """
-    Gridwise NRMSE must be below 1e-5.
+    """Gridwise NRMSE must be below 1e-5.
+
     Normalised by the std of the reference field along the time axis.
     """
     tws_computed, tws_reference = tws_results

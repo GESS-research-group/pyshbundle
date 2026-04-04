@@ -49,8 +49,7 @@ from pyshbundle.pysh_core import gshs
 
 
 def TWSCalc(data, lmax: int, gs: float, r: float, m: int) -> np.ndarray:
-    """
-    Spherical Harmonics Synthesis for Total Water Storage (TWS) calculation.
+    """Spherical Harmonics Synthesis for Total Water Storage (TWS) calculation.
 
     Calculate the total water storage (TWS) from spherical harmonics coefficients.
     Uses spherical harmonics synthesis to go from harmonics to gridded domain.
@@ -101,8 +100,7 @@ def TWSCalc(data, lmax: int, gs: float, r: float, m: int) -> np.ndarray:
 
 
 def apply_gaussian(sc_coeff, gaussian_coeff, lmax):
-    """
-    Apply Gaussian filter on the spherical harmonics coefficients.
+    """Apply Gaussian filter on the spherical harmonics coefficients.
 
     Args:
         sc_coeff (numpy.ndarray): Spherical harmonics coefficients in SC format.
@@ -112,7 +110,6 @@ def apply_gaussian(sc_coeff, gaussian_coeff, lmax):
     Returns:
         (numpy.ndarray): Filtered spherical harmonics coefficients in SC format.
     """
-
     # filtered SH Coeff
     shfil = np.zeros([lmax + 1, 2 * lmax + 1])
 
@@ -124,8 +121,7 @@ def apply_gaussian(sc_coeff, gaussian_coeff, lmax):
 
 
 def area_weighting(grid_resolution):
-    """
-    Calculate the area of each grid, globally, corresponding to the latitudes and longitudes.
+    """Calculate the area of each grid, globally, corresponding to the latitudes and longitudes.
 
     Args:
         grid_resolution (float): The resolution of the grid in degrees.
@@ -133,7 +129,6 @@ def area_weighting(grid_resolution):
     Returns:
         (numpy.ndarray): A matrirx of area of each grid on the surface of the Earth in m^2.
     """
-
     longitude_grid = np.linspace(
         0, 359 + (1 - grid_resolution), int(360 / grid_resolution), dtype="float"
     )
@@ -160,8 +155,7 @@ def area_weighting(grid_resolution):
 
 
 def Basinaverage(temp, gs, shp_basin, basin_area):
-    """
-    Calculate the basin average of the total water storage (TWS) from the gridded TWS data.
+    """Calculate the basin average of the total water storage (TWS) from the gridded TWS data.
 
     Applies area weighting to the gridded TWS data and then clips the data to the basin shapefile.
     Followed by summation of data over the latitude and longitude dimensions, divides it by basin
@@ -177,7 +171,6 @@ def Basinaverage(temp, gs, shp_basin, basin_area):
         basin_tws (xarray.DataArray): Total water storage data clipped to the basin.
         basin_avg_tws (xarray.DataArray): Basin average total water storage.
     """
-
     from pyshbundle.hydro import area_weighting
 
     # area_weighting returns the area of each grid in m^2 for the grid resolution specified
