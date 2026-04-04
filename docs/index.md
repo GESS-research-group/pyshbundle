@@ -10,26 +10,20 @@ Our package, `PySHbundle` has been developed in a modularized manner. The packag
 It is hoped the contribution will make GRACE L2 data processing more accessible to a wider audience of young researchers. Our python package is titled `PySHbundle` and the working code can be accessed at [GitHub](https://github.com/GESS-research-group/pyshbundle). <br>
 
 
-## How to install <br>
+## How to install
+
+Get started in seconds:
+
 ```shell
-# clone the repository in order to access the notebooks and data
-$ git clone https://github.com/GESS-research-group/pyshbundle.git
-$ pip install .
-
-
-# The package is available on pip but is broken
-# Please AVOID installing via pip till we fix that
-
-# creating a new virtual environment
-$ python3 -m venv <name-env>
-# activate the virtual environment environment
-$ source </location-of-virt-env/name-env/bin/activate>
-# install package into virtual environment
-$ pip install pyshbundle
-
-# clone the repository in order to access the notebooks and data
-$ git clone https://github.com/GESS-research-group/pyshbundle.git
+pip install pyshbundle
 ```
+
+To also access the example notebooks and sample data, clone the repository:
+
+```shell
+git clone https://github.com/GESS-research-group/pyshbundle.git
+```
+
 For more details refer to the installation section.
 
 
