@@ -46,6 +46,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import xarray as xr
 import geopandas as gpd
+import rioxarray  # noqa: F401 — registers the .rio accessor on xr.Dataset/DataArray
 from tqdm import tqdm
 from shapely.geometry import mapping
 from pyshbundle.shutils import Gaussian
