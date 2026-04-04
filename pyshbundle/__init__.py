@@ -42,9 +42,6 @@ __author__ = """Vivek Kumar Yadav"""
 __email__ = "viveky@iisc.ac.in"
 __version__ = "0.3.0"
 
-# __init__.py with initialization code
-print("Initializing PySHbundle v0.3.0")
-
 # __init__.py with __all__
 __all__ = [
     "GRACEpy",
@@ -56,9 +53,8 @@ __all__ = [
     "pysh_core",
 ]
 
-
-from .GRACEpy import upwcon, lovenr, lovenrPREM
-from .io import (
+from .GRACEpy import upwcon, lovenr, lovenrPREM  # noqa: F401
+from .io import (  # noqa: F401
     extract_SH_data,
     extract_deg1_coeff_tn13,
     extract_deg2_3_coeff_tn14,
@@ -76,12 +72,10 @@ from .io import (
     extract_C20_replcmnt_coeff,
     extract_C30_replcmnt_coeff,
 )
-
 # read_GRACE_SH_paths, load_longterm_mean # 2 Apr 2026 deprecated functions, moved to deprecated/deprecated_functions.py
-from .sc2cs import sc2cs
-from .reshape_SH_coefficients import sc2cs, clm2cs, clm2sc, cs2sc, klm2sc, cklm2sc_new
-from .hydro import TWSCalc, area_weighting, Basinaverage
-from .shutils import (
+from .reshape_SH_coefficients import sc2cs, clm2cs, clm2sc, cs2sc, klm2sc, cklm2sc_new  # noqa: F401
+from .hydro import TWSCalc, area_weighting, Basinaverage  # noqa: F401
+from .shutils import (  # noqa: F401
     plm,
     iplm,
     ispec,
@@ -92,8 +86,8 @@ from .shutils import (
     naninterp,
     normalklm,
 )
-from .pysh_core import gshs, gsha, GRACE_Data_Driven_Correction_Vishwakarma, PhaseCalc
-from .viz_utils import (
+from .pysh_core import gshs, gsha, GRACE_Data_Driven_Correction_Vishwakarma, PhaseCalc  # noqa: F401
+from .viz_utils import (  # noqa: F401
     sc_triplot,
     cs_sqplot,
     polar_plot,
@@ -102,3 +96,6 @@ from .viz_utils import (
     ylm_plot,
     gshs_prepare,
 )
+
+# __init__.py with initialization code
+print("Initializing PySHbundle v0.3.0")

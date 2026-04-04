@@ -825,13 +825,13 @@ def Gaussian(L: int, cap: int):
     """
 
     # Check input
-    if type(L) != int:
+    if not isinstance(L, int):
         raise TypeError("Degree must be integer")
 
     if L < 2:
         raise ValueError("Maximum degree must be higher than 2")
 
-    if type(cap) != int:
+    if not isinstance(cap, int):
         raise TypeError("Cap size must be an integer")
 
     # Calculations

@@ -39,7 +39,7 @@
 #       https://doi.org/10.1038/s41597-021-00862-6
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-from tqdm import tqdm, trange
+from copy import deepcopy
 from datetime import datetime, timedelta
 
 # from pyshbundle.reshape_SH_coefficients import sc2cs
@@ -347,8 +347,6 @@ def parse_jpl_file(file_path: str):
     """
     # ensure that the file path is valid then proceed
 
-    source = "JPL"
-
     # check if the file is ziped or not
 
     if file_path[-3:] == ".gz":
@@ -356,7 +354,6 @@ def parse_jpl_file(file_path: str):
         with gzip.open(file_path, "r") as file:
             # read the file line wise -> obtain a list of bytes
             info_lines = file.readlines()
-            num_lines = len(info_lines)
 
             for i in range(len(info_lines)):
                 # find the end of header sentence in the text file
@@ -436,9 +433,6 @@ def parse_jpl_header(header_info):
     for key in physical_constant_keys:
         key_index_in_header = find_word(header_info, key)
 
-        const_long_name = " ".join(
-            parse_lines(header_info[key_index_in_header + 1])[3:]
-        )[:-3]
         const_units = " ".join(parse_lines(header_info[key_index_in_header + 2])[3:])[
             :-3
         ]
@@ -476,15 +470,12 @@ def find_word(info_lines, search_key):
 def parse_csr_file(file_path: str):
     # ensure that the file path is valid then proceed
 
-    source = "CSR"
-
     # check if the file is ziped or not
     if file_path[-3:] == ".gz":
         # open the file and read the lines
         with gzip.open(file_path, "r") as file:
             # read the file line wise -> obtain a list of bytes
             info_lines = file.readlines()
-            num_lines = len(info_lines)
 
             for i in range(len(info_lines)):
                 # find the index of line which indicates end of header info
@@ -520,8 +511,6 @@ def parse_itsg_file(file_path):
 
     # ensure that the file path is valid then proceed
 
-    source = "CSR"
-
     # check if the file is ziped or not
 
     # open the file and read the lines
@@ -529,7 +518,6 @@ def parse_itsg_file(file_path):
         with open(file_path, "r") as file:
             # read the file line wise -> obtain a list of bytes
             info_lines = file.readlines()
-            num_lines = len(info_lines)
 
             for i in range(len(info_lines)):
                 if str(info_lines[i]) == str(
@@ -598,7 +586,6 @@ def parse_tn13_header(header_info):
 
     for i in range(len(header_info)):
         if "SPECIAL NOTES" in header_info[i]:
-            notes_idx = i
             break
 
     # The tile is
@@ -610,10 +597,6 @@ def parse_tn13_header(header_info):
 
     # TODO: later convert the str object to a date-time object
     last_reported_date = (re.split("\s+", header_info[title_idx + 3])[-2])[:-1]
-
-    special_notes = []
-
-    # add parsing for special notes later
 
     return title, last_reported_date
 
@@ -666,7 +649,7 @@ def find_date_in_replacemnt_file(
             else:
                 # for itsg
                 # begin_date = f"{begin_date.year}-{str(begin_date.month).zfill(2)}"
-                if type(epoch_begin) == str:
+                if isinstance(epoch_begin, str):
                     epoch_begin = datetime.strptime(epoch_begin, "%Y-%m").date()
 
                 if (
@@ -704,7 +687,7 @@ def find_date_in_replacemnt_file(
                     )
             else:
                 # for itsg
-                if type(epoch_begin) == str:
+                if isinstance(epoch_begin, str):
                     epoch_begin = datetime.strptime(epoch_begin, "%Y-%m").date()
                 if (
                     begin_date - time_buffer_itsg

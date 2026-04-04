@@ -43,8 +43,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-import geopandas as gpd
-import rioxarray
 from shapely.geometry import mapping
 from pyshbundle.shutils import Gaussian
 from pyshbundle.pysh_core import gshs

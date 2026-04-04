@@ -42,6 +42,7 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 import numpy as np
 from tqdm import tqdm
+from pyshbundle.io import sub2ind
 
 
 def sc2cs(field):

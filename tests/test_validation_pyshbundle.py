@@ -8,7 +8,6 @@
 import numpy as np
 import os
 import scipy.io
-import sys
 from datetime import datetime
 from collections import OrderedDict
 from pyshbundle.hydro import TWSCalc
@@ -115,13 +114,6 @@ def validation_pyshbundle(
     max_degree = np.max(
         [
             degree
-            for date in sorted_data.keys()
-            for degree, order in sorted_data[date].keys()
-        ]
-    )
-    max_order = np.max(
-        [
-            order
             for date in sorted_data.keys()
             for degree, order in sorted_data[date].keys()
         ]

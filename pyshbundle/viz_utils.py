@@ -230,7 +230,7 @@ def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
         circle = mpath.Path(verts * radius + center)
 
         ax.set_boundary(circle, transform=ax.transAxes)
-        plt.colorbar(im, orientation="vertical", shrink=1.0, pad=0.1, label=f"[...]")
+        plt.colorbar(im, orientation="vertical", shrink=1.0, pad=0.1, label="[...]")
         plt.title(f"{title}")
 
         if save_flag:
@@ -314,7 +314,7 @@ def mapfield(
         shrink=0.845,
         orientation="vertical",
         pad=0.02,
-        label=f"gravity [...]",
+        label="gravity [...]",
     )
 
     plt.title(f"{title}")
@@ -427,7 +427,7 @@ def ylm_plot(l: int, m: int):
     # coastlines
     ax.coastlines()
 
-    plt.colorbar(im, orientation="vertical", shrink=0.85, pad=0.02, label=f"[...]")
+    plt.colorbar(im, orientation="vertical", shrink=0.85, pad=0.02, label="[...]")
 
     plt.title(f"Visualization of Spherical Harmonics - degree: {l} order: {m}")
 

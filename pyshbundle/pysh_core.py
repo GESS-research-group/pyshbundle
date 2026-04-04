@@ -129,7 +129,7 @@ def gshs(field, quant="none", grd="mesh", n=-9999, h=0, jflag=1):
     if not np.issubdtype(type(n), np.integer):
         raise Exception("n must be integer")
 
-    if not type(grd) == str:
+    if not isinstance(grd, str):
         raise Exception("Grid argument must be string")
 
     grd = grd.lower()
@@ -282,7 +282,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
         if lmax == -9999:
             lmax = rows
 
-        if grid == None:
+        if grid is None:
             grid = "block"
 
         if (grid != "block") and (grid != "cell"):
@@ -296,7 +296,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
     elif cols == 2 * rows - 2:
         if lmax == -9999:
             lmax = rows - 1
-        if grid == None:
+        if grid is None:
             grid = "pole"
 
         n = rows - 1
@@ -327,7 +327,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
 
     # further diagnostics
 
-    if (type(grid) != str) or (type(method) != str):
+    if not isinstance(grid, str) or not isinstance(method, str):
         raise TypeError("GRID and METHOD must be strings.")
 
     if (method == "snm") and ((grid != "neumann") and (grid != "gauss")):
@@ -597,7 +597,7 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
 
     qty = "water"
 
-    if type(F) != np.ndarray:
+    if not isinstance(F, np.ndarray):
         raise Exception(
             "input GRACE field should be in Numpy Ndarray format, please check guidelines"
         )
