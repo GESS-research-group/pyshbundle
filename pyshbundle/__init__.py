@@ -40,7 +40,7 @@ Key Papers Referred:
 
 __author__ = """Vivek Kumar Yadav"""
 __email__ = "viveky@iisc.ac.in"
-__version__ = "1.3.2"
+__version__ = "1.3.3"
 
 # __init__.py with __all__
 __all__ = [
@@ -98,4 +98,4 @@ from .viz_utils import (  # noqa: F401
 )
 
 # __init__.py with initialization code
-print("Initializing PySHbundle v1.3.2")
+print("Initializing PySHbundle v1.3.3")
