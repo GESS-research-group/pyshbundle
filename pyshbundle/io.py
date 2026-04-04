@@ -424,7 +424,7 @@ def parse_jpl_header(header_info: list) -> dict:
         key_index_in_header = find_word(header_info, key)
         val = int(
             " ".join(
-                parse_lines(header_info[key_index_in_header], parse_fmt="\s+")[3:]
+                parse_lines(header_info[key_index_in_header], parse_fmt=r"\s+")[3:]
             )[:-3]
         )
         # print(f"{key} - {val}")
@@ -452,7 +452,7 @@ def parse_jpl_header(header_info: list) -> dict:
     return header
 
 
-def parse_lines(line: str | bytes, parse_fmt: str = "\s+") -> list:
+def parse_lines(line: str | bytes, parse_fmt: str = r"\s+") -> list:
     """Split a line string using the given regex pattern.
 
     Args:
@@ -483,7 +483,7 @@ def find_word(info_lines: list, search_key: str) -> int:
     # finding the target word in the read lines
 
     for i in range(len(info_lines)):
-        parsed_array = parse_lines(info_lines[i], parse_fmt="\s+")
+        parsed_array = parse_lines(info_lines[i], parse_fmt=r"\s+")
         if search_key in parsed_array:
             search_idx = i
             break
@@ -655,13 +655,13 @@ def parse_tn13_header(header_info: list) -> tuple[str, str]:
 
     # The tile is
     title = (
-        " ".join(re.split("\s+", header_info[title_idx + 1])[1:-1])
-        + " ".join(re.split("\s+", header_info[title_idx + 2])[1:-1])
-        + " ".join(re.split("\s+", header_info[title_idx + 3])[1:-1])
+        " ".join(re.split(r"\s+", header_info[title_idx + 1])[1:-1])
+        + " ".join(re.split(r"\s+", header_info[title_idx + 2])[1:-1])
+        + " ".join(re.split(r"\s+", header_info[title_idx + 3])[1:-1])
     )
 
     # TODO: later convert the str object to a date-time object
-    last_reported_date = (re.split("\s+", header_info[title_idx + 3])[-2])[:-1]
+    last_reported_date = (re.split(r"\s+", header_info[title_idx + 3])[-2])[:-1]
 
     return title, last_reported_date
 

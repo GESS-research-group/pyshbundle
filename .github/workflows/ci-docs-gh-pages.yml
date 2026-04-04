@@ -5,6 +5,10 @@ on:
       - main
       - joss-review-7550
 
+concurrency:
+  group: gh-pages
+  cancel-in-progress: false
+
 permissions:
   contents: write
 jobs:
