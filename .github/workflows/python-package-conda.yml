@@ -2,7 +2,7 @@ name: Build and Test
 
 on:
   push:
-    branches: ["main", "apr-fixes"]
+    branches: ["main", "joss-review-7550"]
   pull_request:
     branches: ["main"]
 
