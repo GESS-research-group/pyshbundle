@@ -40,15 +40,19 @@
 #       https://doi.org/10.1038/s41597-021-00862-6
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+from __future__ import annotations
+
 import numpy as np
 import matplotlib.pyplot as plt
+import xarray as xr
+import geopandas as gpd
 from tqdm import tqdm
 from shapely.geometry import mapping
 from pyshbundle.shutils import Gaussian
 from pyshbundle.pysh_core import gshs
 
 
-def TWSCalc(data, lmax: int, gs: float, r: float, m: int) -> np.ndarray:
+def TWSCalc(data: np.ndarray, lmax: int, gs: float, r: float, m: int) -> np.ndarray:
     """Spherical Harmonics Synthesis for Total Water Storage (TWS) calculation.
 
     Calculate the total water storage (TWS) from spherical harmonics coefficients.
@@ -99,7 +103,7 @@ def TWSCalc(data, lmax: int, gs: float, r: float, m: int) -> np.ndarray:
     return tws_f
 
 
-def apply_gaussian(sc_coeff, gaussian_coeff, lmax):
+def apply_gaussian(sc_coeff: np.ndarray, gaussian_coeff: np.ndarray, lmax: int) -> np.ndarray:
     """Apply Gaussian filter on the spherical harmonics coefficients.
 
     Args:
@@ -120,7 +124,7 @@ def apply_gaussian(sc_coeff, gaussian_coeff, lmax):
     return shfil
 
 
-def area_weighting(grid_resolution):
+def area_weighting(grid_resolution: float) -> np.ndarray:
     """Calculate the area of each grid, globally, corresponding to the latitudes and longitudes.
 
     Args:
@@ -154,7 +158,7 @@ def area_weighting(grid_resolution):
     return area
 
 
-def Basinaverage(temp, gs, shp_basin, basin_area):
+def Basinaverage(temp: xr.DataArray, gs: float, shp_basin: gpd.GeoDataFrame, basin_area: float) -> tuple[xr.DataArray, xr.DataArray]:
     """Calculate the basin average of the total water storage (TWS) from the gridded TWS data.
 
     Applies area weighting to the gridded TWS data and then clips the data to the basin shapefile.

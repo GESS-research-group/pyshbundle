@@ -40,12 +40,14 @@
 #       partial least squares regression. Scientific data, 8(1), 95.
 #       https://doi.org/10.1038/s41597-021-00862-6
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+from __future__ import annotations
+
 import numpy as np
 from tqdm import tqdm
 from pyshbundle.io import sub2ind
 
 
-def sc2cs(field):
+def sc2cs(field: np.ndarray) -> np.ndarray:
     """Converts SH coefficients from SC to CS format.
 
     Converts the rectangular (L+1) x (2L+1) matrix `field`, containing
@@ -69,7 +71,7 @@ def sc2cs(field):
     cols = len(field[0])
 
     if (rows != cols) and (cols != 2 * rows - 1):
-        sc2cs.exit("Input neither in cs nor in sc format")
+        raise ValueError("Input neither in cs nor in sc format")
     elif cols == rows:
         cs = field
     else:
@@ -82,7 +84,7 @@ def sc2cs(field):
     return cs
 
 
-def clm2cs(data_mat: np.ndarray, lmax: int, sigma_flag=False):
+def clm2cs(data_mat: np.ndarray, lmax: int, sigma_flag: bool = False) -> np.ndarray | tuple[np.ndarray, np.ndarray]:
     """Converts the format from CLM to CS.
 
     Under the hood uses the `clm2sc` and `sc2cs` functions.
@@ -100,10 +102,11 @@ def clm2cs(data_mat: np.ndarray, lmax: int, sigma_flag=False):
         return sc2cs(sc_mat), sc2cs(dev_sc)
     else:
         sc_mat = clm2sc(data_mat=data_mat, lmax=lmax, sigma_flag=False)
+        assert isinstance(sc_mat, np.ndarray)
         return sc2cs(sc_mat)
 
 
-def clm2sc(data_mat: np.ndarray, lmax: int, sigma_flag=False):
+def clm2sc(data_mat: np.ndarray, lmax: int, sigma_flag: bool = False) -> np.ndarray | tuple[np.ndarray, np.ndarray]:
     """Converts the spherical harmonic coefficients from CLM format to SC format.
 
     Args:
@@ -146,7 +149,7 @@ def clm2sc(data_mat: np.ndarray, lmax: int, sigma_flag=False):
         return sc_mat
 
 
-def cs2sc(field):
+def cs2sc(field: np.ndarray) -> np.ndarray:
     """Converts SH coefficients from CS to SC format.
 
     Converts the square (L+1)x(L+1) matrix `field`, containing
@@ -191,7 +194,7 @@ def cs2sc(field):
     return sc
 
 
-def klm2sc(data_mat: np.ndarray, lmax: int, sigma_flag=False):
+def klm2sc(data_mat: np.ndarray, lmax: int, sigma_flag: bool = False) -> np.ndarray | tuple[np.ndarray, np.ndarray]:
     """Converts the spherical harmonic coefficients from klm format to SC format.
 
     Args:
@@ -233,7 +236,7 @@ def klm2sc(data_mat: np.ndarray, lmax: int, sigma_flag=False):
         return sc_mat
 
 
-def cklm2sc_new(clm_mat, lmax: int):
+def cklm2sc_new(clm_mat: np.ndarray, lmax: int) -> tuple[np.ndarray, np.ndarray]:
     """Transforms the spherical harmonics coefficients data in clm or klm format into a SC matrix.
 
     Args:

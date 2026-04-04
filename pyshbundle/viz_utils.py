@@ -38,6 +38,8 @@
 #       https://doi.org/10.1038/s41597-021-00862-6
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+from __future__ import annotations
+
 import calendar
 from datetime import datetime
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -51,7 +53,7 @@ from pyshbundle.shutils import plm
 from pyshbundle.pysh_core import gshs
 
 
-def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
+def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin: float, vmax: float) -> plt.Axes:
     """Visualize the SH coefficients in SC triangular matrix format.
 
     Args:
@@ -93,7 +95,7 @@ def sc_triplot(scmat: np.ndarray, lmax: int, title: str, vmin, vmax):
     return ax
 
 
-def cs_sqplot(csmat: np.ndarray, lmax: int, title: str, vmin, vmax):
+def cs_sqplot(csmat: np.ndarray, lmax: int, title: str, vmin: float, vmax: float) -> plt.Axes:
     """Visualize the SH coefficients in CS square matrix format.
 
     Args:
@@ -139,7 +141,7 @@ def cs_sqplot(csmat: np.ndarray, lmax: int, title: str, vmin, vmax):
     return ax
 
 
-def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
+def polar_plot(field: np.ndarray, polar_loc: str, title: str, file_name: str | None = None, save_flag: bool = False) -> plt.Artist:
     """Visualize the polar regions of Greenland and Antarctica.
 
     Args:
@@ -235,8 +237,8 @@ def polar_plot(field, polar_loc: str, title, file_name=None, save_flag=False):
 
 
 def mapfield(
-    field, img_extent, title, name=None, colorbar_bounds=None, save_flag=False
-):
+    field: np.ndarray, img_extent: tuple, title: str, name: str | None = None, colorbar_bounds: tuple | None = None, save_flag: bool = False
+) -> tuple[plt.Figure, plt.Axes]:
     """Visualize a field on a global map using the Robinson projection.
 
     Args:
@@ -281,7 +283,7 @@ def mapfield(
     plt.xlabel("Longitude")
     plt.ylabel("Latitude")
     # setting gridlines
-    gl = geo_ax.gridlines(
+    gl = geo_ax.gridlines(  # type: ignore[attr-defined]
         crs=ccrs.PlateCarree(),
         draw_labels=True,
         x_inline=False,
@@ -300,7 +302,7 @@ def mapfield(
     gl.left_labels = True
     gl.right_labels = False
     # coastlines
-    geo_ax.coastlines()
+    geo_ax.coastlines()  # type: ignore[attr-defined]
 
     # Using new axes for colorbar
 
@@ -319,7 +321,7 @@ def mapfield(
     return fig, geo_ax
 
 
-def ylm(l: int, m: int):
+def ylm(l: int, m: int) -> tuple[np.ndarray, np.ndarray]:
     """Compute the spherical harmonics Ylm.
 
     Args:
@@ -356,7 +358,7 @@ def ylm(l: int, m: int):
     return (ylmc, ylms)
 
 
-def ylm_plot(l: int, m: int):
+def ylm_plot(l: int, m: int) -> None:
     """Plot the spherical harmonics Ylm.
 
     Args:
@@ -425,7 +427,7 @@ def ylm_plot(l: int, m: int):
     plt.title(f"Visualization of Spherical Harmonics - degree: {l} order: {m}")
 
 
-def gshs_prepare(lmax, gs, quant, grd, h, jflag, sc_coeff):
+def gshs_prepare(lmax: int, gs: float, quant: str, grd: str, h: float, jflag: int, sc_coeff: np.ndarray) -> np.ndarray:
     """Prepare the grid for the given spherical harmonics coefficients.
 
     Args:
@@ -457,7 +459,7 @@ def gshs_prepare(lmax, gs, quant, grd, h, jflag, sc_coeff):
 
 
 # Function to plot the calendar
-def plot_calendar_months(datetime_object):
+def plot_calendar_months(datetime_object: list) -> None:
     """Plot a calendar for each year in the given list of datetime objects.
 
     Args:

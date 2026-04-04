@@ -38,6 +38,8 @@
 #       https://doi.org/10.1038/s41597-021-00862-6
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+from __future__ import annotations
+
 import sys
 import numpy as np
 from scipy.fft import ifft
@@ -48,20 +50,20 @@ from pyshbundle import GRACEpy as GB
 from pyshbundle import GRACEconstants as GC
 
 
-def plm(l: np.ndarray, m: int, thetaRAD, nargin, nargout):
+def plm(l: np.ndarray, m: int, thetaRAD: np.ndarray, nargin: int, nargout: int) -> np.ndarray | tuple[np.ndarray, np.ndarray] | tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Fully normalized associated Legendre functions for a selected order M.
 
     Args:
-        l (numpy.array): Degree, but not necessarily monotonic. For l < m a vector of zeros will be returned.
+        l (numpy.ndarray): Degree, but not necessarily monotonic. For l < m a vector of zeros will be returned.
         m (int): Order. If absent, m = 0 is assumed.
-        thetaRAD (numpy.array): Co-latitude in radians.
+        thetaRAD (numpy.ndarray): Co-latitude in radians.
         nargin (int): Number of input arguments.
         nargout (int): Number of output arguments.
 
     Returns:
-        (numpy.array): Fully normalized Legendre functions.
-        (numpy.array): First derivative of the Legendre functions.
-        (numpy.array): Second derivative of the Legendre functions.
+        (numpy.ndarray): Fully normalized Legendre functions.
+        (numpy.ndarray): First derivative of the Legendre functions.
+        (numpy.ndarray): Second derivative of the Legendre functions.
 
     Author:
         Vivek Kumar Yadav, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc).
@@ -83,6 +85,7 @@ def plm(l: np.ndarray, m: int, thetaRAD, nargin, nargout):
         dp = np.zeros([len(thetaRAD), len(l)], dtype="float")
         ddp = np.zeros([len(thetaRAD), len(l)], dtype="float")
         sys.exit()
+        return p
 
     n = thetaRAD.size  # number of latitudes
     t = thetaRAD[:]
@@ -178,13 +181,15 @@ def plm(l: np.ndarray, m: int, thetaRAD, nargin, nargout):
 
     if nargout == 1:
         return p
-    if nargout == 2:
+    elif nargout == 2:
         return p, dp
-    if nargout == 3:
+    elif nargout == 3:
         return p, dp, ddp
+    else:
+        raise ValueError(f"nargout must be 1, 2, or 3, got {nargout}")
 
 
-def secrecur(m, y):
+def secrecur(m: int, y: np.ndarray) -> np.ndarray:
     """Helper Function for sectorial recursion.
 
     This function computes the sectorial recursion for given parameters.
@@ -208,17 +213,17 @@ def secrecur(m, y):
 # % function for the l-recursion
 
 
-def lrecur(inn, x, m, lmax):
+def lrecur(inn: np.ndarray, x: np.ndarray, m: int, lmax: int) -> np.ndarray:
     """Helper function for recursion.
 
     Args:
-        inn (int): Input value representing the initial condition.
-        x (int): The current value for the recursion.
+        inn (numpy.ndarray): Input value representing the initial condition.
+        x (numpy.ndarray): The current value for the recursion.
         m (int): Order of the recursion.
         lmax (int): Maximum value for recursion.
 
     Returns:
-        (int): Updated value after performing the recursion based on parameters.
+        (numpy.ndarray): Updated value after performing the recursion based on parameters.
     """
     for ll in np.arange(int(m) + 1, lmax + 1, 1):
         col = ll - m + 1  # points to the next collumn of ptmp
@@ -243,13 +248,13 @@ def lrecur(inn, x, m, lmax):
 # function to calculate the derivate
 
 
-def derivALF(inn, miin, plin, m, lmax):
+def derivALF(inn: np.ndarray, miin: np.ndarray, plin: np.ndarray, m: int, lmax: int) -> np.ndarray:
     """Function to calculate the derivative of the associated Legendre functions.
 
     Args:
-        inn (np.ndarray): Input array representing the initial condition.
-        miin (np.ndarray): Array for the preceding elements in the recursion.
-        plin (np.ndarray): Array for the subsequent elements in the recursion.
+        inn (numpy.ndarray): Input array representing the initial condition.
+        miin (numpy.ndarray): Array for the preceding elements in the recursion.
+        plin (numpy.ndarray): Array for the subsequent elements in the recursion.
         m (int): Order of the associated Legendre functions.
         lmax (int): Maximum degree.
 
@@ -280,14 +285,14 @@ def derivALF(inn, miin, plin, m, lmax):
     return inn
 
 
-def iplm(l, m: int, theRAD, dt=-9999):
+def iplm(l: np.ndarray, m: int, theRAD: np.ndarray, dt: float = -9999) -> np.ndarray:
     """Integrals of the fully normalized associated Legendre functions over blocks for a selected order M.
 
     Args:
-        l (numpy.array): Degree (vector). Integer, but not necessarily monotonic.
+        l (numpy.ndarray): Degree (vector). Integer, but not necessarily monotonic.
             For l < m a vector of zeros will be returned.
         m (int): Order of the Legendre function. If absent, m = 0 is assumed.
-        theRAD (numpy.array): Co-latitude in radians.
+        theRAD (numpy.ndarray): Co-latitude in radians.
         dt (int, optional): Integration block-size [rad] (scalar). Defaults to -9999.
 
     Returns:
@@ -342,10 +347,10 @@ def iplm(l, m: int, theRAD, dt=-9999):
     ctmin = np.cos(theRAD - dt / 2)
     plmplus = np.ones([n, lmax + 1])
     plmmin = np.ones([n, lmax + 1])
-    plmplus[:, l] = plm(np.array([l]), mfix, (theRAD + dt / 2), 3, 1)[
+    plmplus[:, l] = plm(np.array([l]), mfix, (theRAD + dt / 2), 3, 1)[  # type: ignore[call-overload]
         :, :, 0
     ]  # Tesserals
-    plmmin[:, l] = plm(np.array([l]), mfix, (theRAD - dt / 2), 3, 1)[:, :, 0]
+    plmmin[:, l] = plm(np.array([l]), mfix, (theRAD - dt / 2), 3, 1)[:, :, 0]  # type: ignore[call-overload]
     if mfix > 0:
         mi = np.arange(1, mfix + 1, 1)
         mm = 2 * mi
@@ -363,16 +368,16 @@ def iplm(l, m: int, theRAD, dt=-9999):
     # Compute first the integrals of order m == 0
     if mfix == 0:
         ptmp[:, 1] = ptmp10
-        for l in range(2, lmax + 1, 1):  # loop over the degree l
-            rootnm = np.sqrt((2 * l + 1) * (2 * l - 1) / np.power(l, 2))
-            root1nm = np.sqrt((2 * l - 1) * (2 * l - 3) / np.power(l - 1, 2))
-            ptmp[:, l] = (
+        for li in range(2, lmax + 1, 1):  # loop over the degree l
+            rootnm = np.sqrt((2 * li + 1) * (2 * li - 1) / np.power(li, 2))
+            root1nm = np.sqrt((2 * li - 1) * (2 * li - 3) / np.power(li - 1, 2))
+            ptmp[:, li] = (
                 rootnm
-                / (l + 1)
+                / (li + 1)
                 * (
-                    ((l - 2) * ptmp[:, l - 2] / root1nm).T
-                    + np.power(stplus, 2) * plmplus[:, l - 1].T
-                    - np.power(stmin, 2) * plmmin[:, l - 1].T
+                    ((li - 2) * ptmp[:, li - 2] / root1nm).T
+                    + np.power(stplus, 2) * plmplus[:, li - 1].T
+                    - np.power(stmin, 2) * plmmin[:, li - 1].T
                 )
             )
     else:
@@ -381,47 +386,46 @@ def iplm(l, m: int, theRAD, dt=-9999):
         # First we compute the diagonal element IPmm (lmax == mfix)
 
         ptmp[:, 1] = ptmp11
-        for l in range(2, mfix + 1, 1):
-            # print(l)
-            rootmm = np.sqrt((2 * l + 1) / (2 * l))
-            root1mm = np.sqrt((2 * l - 1) / (2 * l - 2))
-            if l == 2:
+        for li in range(2, mfix + 1, 1):
+            rootmm = np.sqrt((2 * li + 1) / (2 * li))
+            root1mm = np.sqrt((2 * li - 1) / (2 * li - 2))
+            if li == 2:
                 root1mm = np.sqrt(3)
 
-            ptmp[:, l] = (
+            ptmp[:, li] = (
                 rootmm
-                / (l + 1)
+                / (li + 1)
                 * (
-                    l * root1mm * ptmp[:, l - 2].T
-                    - (ctplus * plmplus[:, l].T - ctmin * plmmin[:, l].T) / rootmm
+                    li * root1mm * ptmp[:, li - 2].T
+                    - (ctplus * plmplus[:, li].T - ctmin * plmmin[:, li].T) / rootmm
                 )
             )
         # the arbitrary element IPlm ( computed only when lmax > mfix)
         if lmax > mfix:
-            l = mfix + 1
+            li = mfix + 1
             # first we do the element IPlm, for which l - m = 1
-            rootnm = np.sqrt((2 * l + 1) * (2 * l - 1) / (l + mfix) / (l - mfix))
-            ptmp[:, l] = (
+            rootnm = np.sqrt((2 * li + 1) * (2 * li - 1) / (li + mfix) / (li - mfix))
+            ptmp[:, li] = (
                 rootnm
-                / (l + 1)
+                / (li + 1)
                 * (
-                    np.power(stplus, 2) * plmplus[:, l - 1].T
-                    - np.power(stmin, 2) * plmmin[:, l - 1].T
+                    np.power(stplus, 2) * plmplus[:, li - 1].T
+                    - np.power(stmin, 2) * plmmin[:, li - 1].T
                 )
             )
             # now we do the rest
-            for l in range(mfix + 2, lmax + 1, 1):  # loop over the degree l
-                rootnm = np.sqrt((2 * l + 1) * (2 * l - 1) / (l + mfix) / (l - mfix))
+            for li in range(mfix + 2, lmax + 1, 1):  # loop over the degree l
+                rootnm = np.sqrt((2 * li + 1) * (2 * li - 1) / (li + mfix) / (li - mfix))
                 root1nm = np.sqrt(
-                    (2 * l - 1) * (2 * l - 3) / (l - 1 + mfix) / (l - 1 - mfix)
+                    (2 * li - 1) * (2 * li - 3) / (li - 1 + mfix) / (li - 1 - mfix)
                 )
-                ptmp[:, l] = (
+                ptmp[:, li] = (
                     rootnm
-                    / (l + 1)
+                    / (li + 1)
                     * (
-                        (l - 2) * ptmp[:, l - 2].T / root1nm
-                        + np.power(stplus, 2) * plmplus[:, l - 1].T
-                        - np.power(stmin, 2) * plmmin[:, l - 1].T
+                        (li - 2) * ptmp[:, li - 2].T / root1nm
+                        + np.power(stplus, 2) * plmplus[:, li - 1].T
+                        - np.power(stmin, 2) * plmmin[:, li - 1].T
                     )
                 )
 
@@ -445,7 +449,7 @@ def iplm(l, m: int, theRAD, dt=-9999):
     return p
 
 
-def ispec(a, b=-9999):
+def ispec(a: np.ndarray, b: np.ndarray | float = -9999) -> np.ndarray:
     """Returns the function F from the spectra A and B.
 
     Args:
@@ -464,7 +468,7 @@ def ispec(a, b=-9999):
     n2 = a.shape[0]
     a[0, :] = a[0, :] * 2
 
-    if (np.absolute(b[n2 - 1, :]) < 1e-10).all():
+    if (np.absolute(b[n2 - 1, :]) < 1e-10).all():  # type: ignore[index]
         n = 2 * n2 - 2
         a[n2 - 1, :] = a[n2 - 1, :] * 2
         fs = (a - 1j * b) / 2
@@ -650,16 +654,16 @@ def grule(n: int):
     return bp, wf
 
 
-def neumann(inn):
+def neumann(inn: np.ndarray | int) -> tuple[np.ndarray, np.ndarray]:
     """Returns the weights and nodes for Neumann's numerical integration.
 
     Args:
-        inn (int or numpy.array): Base points (nodes) in the interval [-1;1].
+        inn (int or numpy.ndarray): Base points (nodes) in the interval [-1;1].
 
     Returns:
         tuple: A tuple containing:
-            - w (numpy.array): Quadrature weights.
-            - x (numpy.array): Base points (nodes) in the interval [-1;1].
+            - w (numpy.ndarray): Quadrature weights.
+            - x (numpy.ndarray): Base points (nodes) in the interval [-1;1].
 
     Raises:
         TypeError: If the input argument is not an integer.
@@ -679,30 +683,30 @@ def neumann(inn):
         Amin Shakya, Interdisciplinary Center for Water Research (ICWaR), Indian Institute of Science (IISc).
     """
     try:  # if input is an integer
-        x, w = grule(inn)
+        x, w = grule(inn)  # type: ignore[arg-type]
     except:  # if input is an array
-        if len(inn) == 1:  # 2nd Neumann method
-            x, w = grule(inn)
+        if len(inn) == 1:  # type: ignore[arg-type]  # 2nd Neumann method
+            x, w = grule(inn)  # type: ignore[arg-type]
             if np.not_equal(np.mod(x, 1), 0):  # Not integer
                 raise TypeError("Integer input argument required")
 
         elif (
-            min(inn.shape) == 1
+            min(inn.shape) == 1  # type: ignore[union-attr]
         ):  # 1st Neumann method #Size gives 2 outputs for 2d array in matlab; for row and column
             x = inn
             theRAD = np.arccos(x)  # x in radian
-            l = np.array(list(range(len(x))))
-            pp = plm(l, theRAD)
+            l = np.array(list(range(len(x))))  # type: ignore[arg-type, call-overload]
+            pp = plm(l, theRAD)  # type: ignore[call-arg, arg-type]
 
             rr = list([2])
-            for i in len(x - 1):
+            for i in len(x - 1):  # type: ignore[arg-type, attr-defined]
                 rr.append(0)
             r = np.asarray(rr)
 
             w, resid, rank, s = np.linalg.lstsq(
                 pp, r
             )  # Solve system of equations; Double check this operation
-            if x.shape != w.shape:
+            if x.shape != w.shape:  # type: ignore[union-attr]
                 w = w.T
 
         else:
@@ -721,7 +725,7 @@ def normalklm(lmax: int, typ: str = "wgs84"):
                              'grs80', or 'he' (hydrostatic equilibrium ellipsoid).
 
     Returns:
-        (numpy.array): Normal field in CS-format (sparse array - [1, -J2, -J4, -J6, -J8]).
+        (numpy.ndarray): Normal field in CS-format (sparse array - [1, -J2, -J4, -J6, -J8]).
 
     Raises:
         TypeError: If `lmax` is not an integer.
@@ -839,14 +843,14 @@ def Gaussian(L: int, cap: int):
     return W
 
 
-def naninterp(X):
+def naninterp(X: np.ndarray) -> np.ndarray:
     """This function uses cubic interpolation to replace NaNs.
 
     Args:
-        X (numpy.array): Array with NaN values.
+        X (numpy.ndarray): Array with NaN values.
 
     Returns:
-        numpy.array: Cubic interpolated array.
+        numpy.ndarray: Cubic interpolated array.
     """
     ok = ~np.isnan(X)
     xp = ok.ravel().nonzero()[0]  # Indices of xs with values

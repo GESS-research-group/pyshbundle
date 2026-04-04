@@ -39,6 +39,8 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
+from __future__ import annotations
+
 import numpy as np
 
 # import numpy.matlib as npm
@@ -61,7 +63,7 @@ from pyshbundle.shutils import (
 )
 
 
-def gshs(field, quant="none", grd="mesh", n=-9999, h=0, jflag=1):
+def gshs(field: np.ndarray, quant: str = "none", grd: str = "mesh", n: int = -9999, h: float = 0, jflag: int = 1) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Global Spherical Harmonic Synthesis.
 
     Args:
@@ -180,7 +182,6 @@ def gshs(field, quant="none", grd="mesh", n=-9999, h=0, jflag=1):
     l = np.array([np.arange(m, lmax + 1)])
     p = plm(l, m, theRAD, nargin=3, nargout=1)[:, :, 0]
     a[:, m] = np.dot(p, c)
-    # a[:, m] = np.einsum('ij,j->i', p, c, optimize=False, dtype='float')
     b[:, m] = np.zeros(nlat, dtype="float")
 
     for m in range(1, lmax + 1, 1):
@@ -191,8 +192,6 @@ def gshs(field, quant="none", grd="mesh", n=-9999, h=0, jflag=1):
         p = plm(l, m, theRAD, nargin=3, nargout=1)[:, :, 0]
         a[:, m] = np.dot(p, c)
         b[:, m] = np.dot(p, s)
-        # a[:, m] = np.einsum('ij,j->i', p, c, optimize=False, dtype='float')
-        # b[:, m] = np.einsum('ij,j->i', p, s, optimize=False, dtype='float')
 
     del field
 
@@ -229,7 +228,7 @@ def gshs(field, quant="none", grd="mesh", n=-9999, h=0, jflag=1):
     return f, theRAD, lamRAD
 
 
-def gsha(f, method: str, grid: str = None, lmax: int = -9999):
+def gsha(f: np.ndarray, method: str, grid: str | None = None, lmax: int = -9999) -> np.ndarray:
     r"""Global Spherical Harmonic Analysis, inverse of GSHS.
 
     Args:
@@ -459,7 +458,7 @@ def gsha(f, method: str, grid: str = None, lmax: int = -9999):
     return cs
 
 
-def PhaseCalc(fts, ffts):
+def PhaseCalc(fts: np.ndarray, ffts: np.ndarray) -> np.ndarray:
     """Calculates the phase difference between two time series based on the Hilbert transform method explained by Phillip et al.
 
     Args:
@@ -517,7 +516,7 @@ def PhaseCalc(fts, ffts):
 # ----------------------------- GDDC --------------------------------------------------#
 
 
-def deg_to_rad(deg: float):
+def deg_to_rad(deg: float) -> float:
     """Converts angle from degree to radian.
 
     Args:
@@ -532,7 +531,7 @@ def deg_to_rad(deg: float):
     return deg * np.pi / 180
 
 
-def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
+def GRACE_Data_Driven_Correction_Vishwakarma(F: np.ndarray, cf: int, GaussianR: float, basins: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Signal leakage correction using data-driven methods.
 
     When GRACE data is applied for hydrological studies, the signal leakage is a common
@@ -784,7 +783,7 @@ def GRACE_Data_Driven_Correction_Vishwakarma(F, cf, GaussianR, basins):
 
         leakage[:, i] = z  # shifted timeseries
 
-        # Shift timeseriecs from once filtered fields in the direction of the time series from twice filtered fields, to later compute the amplitude ratio
+        # Shift timeseries from once filtered fields in the direction of the time series from twice filtered fields, to later compute the amplitude ratio
         p = ps[0, i] / r  # Fraction of a time period to shift data
         Y = np.exp(
             1j * np.pi * p * ((np.arange(r)) - r / 2) / r

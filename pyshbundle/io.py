@@ -39,7 +39,10 @@
 #       https://doi.org/10.1038/s41597-021-00862-6
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-from datetime import datetime, timedelta
+from __future__ import annotations
+
+from datetime import date, datetime, timedelta
+from typing import Any
 
 # from pyshbundle.reshape_SH_coefficients import sc2cs
 import julian
@@ -48,7 +51,7 @@ import numpy as np
 import re
 
 
-def extract_SH_data(file_path, source):
+def extract_SH_data(file_path: str, source: str) -> dict:
     """Extracts the spherical harmonic coefficients from all the given files.
 
     Currently supports JPL, CSR, and ITSG data sources ONLY. Extracts the spherical harmonic
@@ -63,7 +66,7 @@ def extract_SH_data(file_path, source):
         (dict): Dictionary containing the coefficients and time coverage start and end dates.
     """
     # Initialize an empty dictionary to store the coefficients and dates
-    data = {"coefficients": {}, "time_coverage_start": None, "time_coverage_end": None}
+    data: dict[str, Any] = {"coefficients": {}, "time_coverage_start": None, "time_coverage_end": None}
 
     # Regular expression pattern to match the lines with coefficients
     coeff_pattern_csr = re.compile(
@@ -180,7 +183,7 @@ def extract_SH_data(file_path, source):
     return data
 
 
-def extract_deg1_coeff_tn13(file_path):
+def extract_deg1_coeff_tn13(file_path: str) -> dict:
     """Extracts the degree 1 coefficients from the given TN-13 file.
 
     Ensure the TN-13 file used is the one recommended by respective data centres (JPL, CSR, or ITSG).
@@ -235,7 +238,7 @@ def extract_deg1_coeff_tn13(file_path):
     return data_dict
 
 
-def extract_deg2_3_coeff_tn14(file_path):
+def extract_deg2_3_coeff_tn14(file_path: str) -> dict:
     """Extracts the degree 2 and 3 coefficients from the given file.
 
     Ensure the TN-14 file used is the one recommended by respective data centres (JPL, CSR, or ITSG).
@@ -328,7 +331,7 @@ def extract_deg2_3_coeff_tn14(file_path):
 #     return cs_mat, devcs_mat
 
 
-def parse_jpl_file(file_path: str):
+def parse_jpl_file(file_path: str) -> tuple[dict, dict]:
     """Reads the spherical harmonic data provided by JPL.
 
     Args:
@@ -369,7 +372,7 @@ def parse_jpl_file(file_path: str):
     return jpl_header, jpl_data
 
 
-def parse_jpl_header(header_info):
+def parse_jpl_header(header_info: list) -> dict:
     """Parse JPL GRACE file header and return a dictionary of metadata.
 
     Args:
@@ -383,7 +386,7 @@ def parse_jpl_header(header_info):
     # parse the header info passed by the reader in as list of bytes
     # create a dictionary with key = important params from header file
 
-    header = {}
+    header: dict[str, Any] = {}
 
     # important info from header file
     # Dimension - Degree and Order
@@ -449,7 +452,7 @@ def parse_jpl_header(header_info):
     return header
 
 
-def parse_lines(line, parse_fmt="\s+"):
+def parse_lines(line: str | bytes, parse_fmt: str = "\s+") -> list:
     """Split a line string using the given regex pattern.
 
     Args:
@@ -467,7 +470,7 @@ def parse_lines(line, parse_fmt="\s+"):
     return parsed_array
 
 
-def find_word(info_lines, search_key):
+def find_word(info_lines: list, search_key: str) -> int:
     """Find the index of the first line containing the given keyword.
 
     Args:
@@ -488,7 +491,7 @@ def find_word(info_lines, search_key):
     return search_idx
 
 
-def parse_csr_file(file_path: str):
+def parse_csr_file(file_path: str) -> tuple[list, dict]:
     """Read a CSR GRACE .gz file and return the header and spherical harmonic data.
 
     Args:
@@ -529,7 +532,7 @@ def parse_csr_file(file_path: str):
     return csr_header, csr_data
 
 
-def parse_csr_header():
+def parse_csr_header() -> None:
     """Parse CSR GRACE file header (not yet implemented).
 
     Raises:
@@ -542,7 +545,7 @@ def parse_csr_header():
     )
 
 
-def parse_itsg_file(file_path):
+def parse_itsg_file(file_path: str) -> tuple[list, dict]:
     """Read an ITSG GRACE .gfc file and return the header and spherical harmonic data.
 
     Args:
@@ -578,7 +581,7 @@ def parse_itsg_file(file_path):
     return istg_header, itsg_data
 
 
-def parse_itsg_header(header_info: list):
+def parse_itsg_header(header_info: list) -> tuple[dict, str]:
     """Parse ITSG GRACE file header and return a metadata dictionary and model date string.
 
     Args:
@@ -623,7 +626,7 @@ def parse_itsg_header(header_info: list):
     return header_dict, date_str
 
 
-def parse_tn13_header(header_info):
+def parse_tn13_header(header_info: list) -> tuple[str, str]:
     """Parse TN-13 replacement coefficient file header and return title and last reported date.
 
     Args:
@@ -663,7 +666,7 @@ def parse_tn13_header(header_info):
     return title, last_reported_date
 
 
-def parse_tn14_header():
+def parse_tn14_header() -> None:
     """Parse TN-14 replacement coefficient file header (not yet implemented).
 
     Raises:
@@ -685,8 +688,8 @@ def parse_tn14_header():
 
 
 def find_date_in_replacemnt_file(
-    replacemnt_mat, file_type: str, epoch_begin, epoch_end=None
-):
+    replacemnt_mat: np.ndarray, file_type: str, epoch_begin: date | str, epoch_end: date | None = None
+) -> list:
     """Find row indices in a replacement coefficient matrix matching the given epoch dates.
 
     Args:
@@ -757,12 +760,12 @@ def find_date_in_replacemnt_file(
 
             if epoch_end:
                 if (
-                    begin_date >= epoch_begin - time_buffer
+                    begin_date >= epoch_begin - time_buffer  # type: ignore[operator]
                     and end_date <= epoch_end + time_buffer
                 ):
                     date_idxs.add(i)
                     print(
-                        f"start: {begin_date}, epoch-begin: {epoch_begin}, LB:{epoch_begin - time_buffer}, UB: {epoch_end + time_buffer}, end: {end_date}, epoch-end: {epoch_end}"
+                        f"start: {begin_date}, epoch-begin: {epoch_begin}, LB:{epoch_begin - time_buffer}, UB: {epoch_end + time_buffer}, end: {end_date}, epoch-end: {epoch_end}"  # type: ignore[operator]
                     )
             else:
                 # for itsg
@@ -789,7 +792,7 @@ def find_date_in_replacemnt_file(
     return list(date_idxs)
 
 
-def extract_C10_11_replcmnt_coeff(data_tn13, source, epoch_begin, epoch_end=None):
+def extract_C10_11_replcmnt_coeff(data_tn13: np.ndarray, source: str, epoch_begin: date | str, epoch_end: date | None = None) -> tuple[np.ndarray, np.ndarray]:
     """Extract degree-1 replacement coefficients C10 and C11 from TN-13 data for the given epoch.
 
     Args:
@@ -830,7 +833,7 @@ def extract_C10_11_replcmnt_coeff(data_tn13, source, epoch_begin, epoch_end=None
         replcmnt_idxs = find_date_in_replacemnt_file(
             data_tn13,
             file_type,
-            f"{epoch_begin.year}-{str(epoch_begin.month).zfill(2)}",
+            f"{epoch_begin.year}-{str(epoch_begin.month).zfill(2)}",  # type: ignore[union-attr]
             end_epoch,
         )
         # extract the coeff from tn13 for required dates
@@ -848,7 +851,7 @@ def extract_C10_11_replcmnt_coeff(data_tn13, source, epoch_begin, epoch_end=None
     return C10, C11
 
 
-def extract_C20_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end=None):
+def extract_C20_replcmnt_coeff(data_tn14: np.ndarray, source: str, epoch_begin: date | str, epoch_end: date | None = None) -> np.ndarray:
     """Extract the C20 replacement coefficient from TN-14 data for the given epoch.
 
     Args:
@@ -898,7 +901,7 @@ def extract_C20_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end=None):
     return C20
 
 
-def extract_C30_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end=None):
+def extract_C30_replcmnt_coeff(data_tn14: np.ndarray, source: str, epoch_begin: date | str, epoch_end: date | None = None) -> np.ndarray:
     """Extract the C30 replacement coefficient from TN-14 data for the given epoch.
 
     Args:
@@ -955,7 +958,7 @@ def extract_C30_replcmnt_coeff(data_tn14, source, epoch_begin, epoch_end=None):
     return C30
 
 
-def sub2ind(array_shape, rows, cols):
+def sub2ind(array_shape: tuple, rows: int | np.ndarray, cols: int | np.ndarray) -> int | np.ndarray:
     """Convert row and column subscripts to linear indices.
 
     Args:
