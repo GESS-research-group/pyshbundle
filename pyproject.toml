@@ -45,6 +45,9 @@ dependencies=[
     "rioxarray",
 ]
 
+[project.optional-dependencies]
+dev = ["pytest", "pytest-cov", "ruff", "mypy"]
+
 [project.urls]
 Homepage = "https://github.com/GESS-research-group/pyshbundle"
 Issues = "https://github.com/GESS-research-group/pyshbundle/issues"

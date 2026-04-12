@@ -1,16 +1,29 @@
+# macOS
 .DS_Store
+
+# Distribution / packaging
 dist/
 build/
-pyshbundle.egg-info/
-develloping_progress.txt
-paper_org.md
+*.egg-info/
 
 # Python cache
 **/__pycache__/
 **/*.py[co]
 
-# Test cache
+# Jupyter
+.ipynb_checkpoints/
+
+# Test / coverage
 .pytest_cache/
+.coverage
+htmlcov/
+
+# MkDocs build output
+site/
+
+# Misc
+develloping_progress.txt
+paper_org.md
 
 # Old/draft test files
 tests/old*
