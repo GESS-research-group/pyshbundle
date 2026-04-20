@@ -31,11 +31,11 @@ authors:
   - name: Bhaskar R. Nikam
     affiliation: 6
   - name: Nagesh Kumar Dasika
-    orcid: 0009-0006-9323-1191
+    orcid: 0000-0002-5294-8501
     affiliation: 7
   - name: Bramha Dutt Vishwakarma
     orcid: 0000-0003-4787-8470
-    affiliation: "2,8" # (Multiple affiliations must be quoted)
+    affiliation: "2,8"
 affiliations:
  - name: Interdisciplinary Centre for Water Research, Indian Institute of Science, India
    index: 1
@@ -57,11 +57,6 @@ affiliations:
 date: 15 November 2023
 bibliography: paper.bib
 
-# Optional fields if submitting to a AAS journal too, see this blog post:
-# https://blog.joss.theoj.org/2018/12/a-new-collaboration-with-aas-publishing
-# aas-doi: 
-# aas-journal: 
-# IMPORTANA NOTE: do not enclose the /begin{equation} tag withing $$, this leads to 'latex math ennvironment error' causing issues with compilation of manuscript. Either use $$ or /begin{equation} syntax for a equation block, and $ for inline equation.
 ---
 
 # Summary
