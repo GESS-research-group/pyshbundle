@@ -1,5 +1,5 @@
 {
-  "title": "PySHbundle: A Python implementation of GRACE Spherical Harmonics Synthesis",
+  "title": "PySHbundle: A Python tool for processing GRACE gravimetry data into global surface mass change datasets",
   "description": "PySHbundle: A Python implementation of GRACE Spherical Harmonics Synthesis MATLAB codes SHbundle",
   "license": "GPL-3.0",
   "upload_type": "software",
