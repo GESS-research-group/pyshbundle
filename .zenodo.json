@@ -1,0 +1,54 @@
+{
+  "title": "PySHbundle: A Python implementation of GRACE Spherical Harmonics Synthesis",
+  "description": "PySHbundle: A Python implementation of GRACE Spherical Harmonics Synthesis MATLAB codes SHbundle",
+  "license": "GPL-3.0",
+  "upload_type": "software",
+  "keywords": [
+    "Spherical Harmonics",
+    "Geodesy",
+    "Hydrology",
+    "GRACE",
+    "Terrestrial Water Storage",
+    "Python"
+  ],
+  "creators": [
+    {
+      "name": "Yadav, Vivek Kumar",
+      "orcid": "0009-0000-7156-4450",
+      "affiliation": "Interdisciplinary Centre for Water Research, Indian Institute of Science, India"
+    },
+    {
+      "name": "Shakya, Amin",
+      "orcid": "0000-0002-4706-826X",
+      "affiliation": "Interdisciplinary Centre for Water Research, Indian Institute of Science, India; Faculty of Geo-Information Science and Earth Observation, University of Twente, the Netherlands"
+    },
+    {
+      "name": "Mhamane, Abhishek",
+      "orcid": "0000-0001-9788-0371",
+      "affiliation": "National Centre for Geodesy, Indian Institute of Technology Kanpur, India"
+    },
+    {
+      "name": "Walling, Tsungrojungla",
+      "orcid": "0009-0006-9323-1191",
+      "affiliation": "Undergraduate Programme, Indian Institute of Science, India"
+    },
+    {
+      "name": "Chander, Shard",
+      "affiliation": "Land Hydrology Division, Space Applications Centre, Indian Space Research Organisation, India"
+    },
+    {
+      "name": "Nikam, Bhaskar R.",
+      "affiliation": "Earth Observation Applications & Disaster Management Support Programme Office (EDPO), Indian Space Research Organisation, India"
+    },
+    {
+      "name": "Dasika, Nagesh Kumar",
+      "orcid": "0000-0002-5294-8501",
+      "affiliation": "Department of Civil Engineering, Indian Institute of Science, India"
+    },
+    {
+      "name": "Vishwakarma, Bramha Dutt",
+      "orcid": "0000-0003-4787-8470",
+      "affiliation": "Interdisciplinary Centre for Water Research, Indian Institute of Science, India; Centre of Earth Science, Indian Institute of Science, India"
+    }
+  ]
+}
