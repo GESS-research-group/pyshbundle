@@ -6,7 +6,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/pyshbundle)](https://pypi.org/project/pyshbundle/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyshbundle)](https://pypi.org/project/pyshbundle/)
 [![Documentation](https://img.shields.io/badge/docs-github.io-green)](https://gess-research-group.github.io/pyshbundle/)
-[![DOI](https://zenodo.org/badge/539333610.svg)](https://doi.org/10.5281/zenodo.19681885) <br>
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19682215.svg)](https://doi.org/10.5281/zenodo.19682215) <br>
 
 This package, `PySHbundle` provides tools to process GRACE data, such as, the computation of anomalies, substitution of poor quality low degree coefficients, reducing noise in GRACE data using filtering approaches, signal leakage correction using `GDDC`, etc. In addition, the package provides a flexibility for future development and addition of further processing choices for handling GRACE data for hydrological application.
 
