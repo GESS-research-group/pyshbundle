@@ -77,7 +77,7 @@ A few GRACE data processing tools are available based on the Python programming 
 Processing choices introduce subtle differences in the final product, potentially affecting results. Processing `L2` data offers flexibility for users to explore GRACE data for specific applications. 
 
 `PySHbundle` aims to simplify access to `L2` products, allowing users to select different processing options.
-It processes widely used `L2` products from CSR, JPL, and GFZ. It closely follows the structure of the Matlab-based [`SHbundle`](https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle) and [`GRACE Data Driven Correction (GDDC)`](https://doi.org/10.1002/2017WR021150)[@vishwakarma2017data] codes, enabling cross-compatibility between Python and Matlab users.
+It processes widely used `L2` products from CSR, JPL, and GFZ. It closely follows the structure of the Matlab-based [`SHbundle`](https://www.gis.uni-stuttgart.de/en/research/downloads/shbundle) and [`GRACE Data Driven Correction (GDDC)`](https://doi.org/10.1002/2017WR021150) [@vishwakarma2017data] codes, enabling cross-compatibility between Python and Matlab users.
 
 `PySHbundle` is modular, offering tools to process GRACE data, including anomaly computation, low-degree coefficient substitution, noise reduction, handling gaps and signal leakage correction. It supports future development for hydrological applications. While excellent tools exist for spherical harmonics operation, `PySHbundle` provides a familiar environment for existing and beginner-level users by focusing on GRACE applications, and translating the legacy software (`SHbundle`, written in MATLAB).
 
