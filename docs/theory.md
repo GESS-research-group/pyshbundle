@@ -82,7 +82,7 @@ Q_{n,m}(\cos\vartheta)\\
 \dot{•}
 \begin{Bmatrix}
 r^n\\
-r^{(n+1)}\\
+r^{-(n+1)}\\
 \end{Bmatrix}
 .
 \end{equation}
